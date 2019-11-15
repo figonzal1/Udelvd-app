@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventsSwipeFragment">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_evento_detalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Evento X"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_entrevista_detalle" />
+
+            <TextView
+                android:id="@+id/tv_entrevista_detalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Entrevista 03/06/2019"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/dividerHorizontal"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_evento_detalle" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/dividerHorizontal"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_hora"
+                app:layout_constraintTop_toBottomOf="@+id/iv_hora" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/dividerHorizontal"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_hora"
+                app:layout_constraintTop_toBottomOf="@+id/iv_accion" />
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/dividerHorizontal"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_hora"
+                app:layout_constraintTop_toBottomOf="@+id/iv_emoticon" />
+
+            <ImageView
+                android:id="@+id/iv_hora"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_help_outline_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+            <TextView
+                android:id="@+id/tv_hora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Hora: 08:40"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_hora"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/iv_hora"
+                app:layout_constraintTop_toTopOf="@+id/iv_hora" />
+
+            <TextView
+                android:id="@+id/tv_accion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Accion: Ducha"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_accion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/iv_hora"
+                app:layout_constraintTop_toTopOf="@+id/iv_accion" />
+
+            <TextView
+                android:id="@+id/tv_accion2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Emoticon:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_emoticon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/iv_hora"
+                app:layout_constraintTop_toTopOf="@+id/iv_emoticon" />
+
+            <ImageView
+                android:id="@+id/iv_accion"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_directions_run_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <ImageView
+                android:id="@+id/iv_emoticon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_tag_faces_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/square_round"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_emoticon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_accion2"
+                app:layout_constraintTop_toTopOf="@+id/iv_emoticon" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever"
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.488"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Justificación"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

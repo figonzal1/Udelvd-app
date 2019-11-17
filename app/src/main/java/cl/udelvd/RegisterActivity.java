@@ -5,16 +5,22 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Objects;
+
 import cl.udelvd.model.Investigador;
 import cl.udelvd.repositorios.RegistroRepositorio;
+import cl.udelvd.viewmodel.RegistroViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -40,8 +46,11 @@ public class RegisterActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Registro");
+
+        viewModelObserver();
 
         //Instancias formulario
         //Inputs Layouts
@@ -63,9 +72,35 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                RegistroRepositorio repositorio =
-                        RegistroRepositorio.getInstance(getApplication());
-                repositorio.insertInvestigador(new Investigador());
+                if (validarCampos()) {
+
+                    Investigador investigador = new Investigador();
+                    investigador.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
+                    investigador.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
+                    investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
+                    investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
+                    investigador.setIdRol(1); //Admin id
+                    investigador.setActivado(false);
+
+                    RegistroRepositorio repositorio =
+                            RegistroRepositorio.getInstance(getApplication());
+                    repositorio.insertInvestigador(investigador);
+                }
+            }
+        });
+    }
+
+    /**
+     * Funcion encargada del manejo de ViewModels
+     */
+    private void viewModelObserver() {
+        RegistroViewModel registroViewModel =
+                ViewModelProviders.of(this).get(RegistroViewModel.class);
+
+        registroViewModel.mostrarMsgRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -82,14 +117,18 @@ public class RegisterActivity extends AppCompatActivity {
         int contador_errores = 0;
         //Comprobar nombre vacio
         if (TextUtils.isEmpty(etNombre.getText())) {
+            ilNombre.setErrorEnabled(true);
             ilNombre.setError("Campo requerido");
             contador_errores++;
+
         } else {
             ilNombre.setErrorEnabled(false);
         }
 
         //Comprobar apellido vacio
         if (TextUtils.isEmpty(etApellido.getText())) {
+
+            ilApellido.setErrorEnabled(true);
             ilApellido.setError("Campo requerido");
             contador_errores++;
         } else {
@@ -98,12 +137,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Comprobar email vacio
         if (TextUtils.isEmpty(etEmail.getText())) {
+
+            ilEmail.setErrorEnabled(true);
             ilEmail.setError("Campo requerido");
             contador_errores++;
         } else {
 
-            //Comprobar mai valido
+            //Comprobar mail valido
             if (!isValidEmail(etEmail.getText())) {
+                ilEmail.setErrorEnabled(true);
                 ilEmail.setError("Email inválido");
                 contador_errores++;
             } else {
@@ -113,25 +155,30 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Comprobar contraseña vacia
         if (TextUtils.isEmpty(etPassword.getText())) {
+            ilPassword.setErrorEnabled(true);
             ilPassword.setError("Campo requerido");
-            contador_errores++;
-        }
-        //Comprobar confirmacion vacia
-        if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
-            ilConfirmacionPassword.setError("Campo requerido");
             contador_errores++;
         }
         //Comprobar contraseña menor que 8
         else if (etPassword.getText().length() < 8) {
+            ilPassword.setErrorEnabled(true);
             ilPassword.setError("Contraseña debe tener 8 carácteres mínimo");
+            contador_errores++;
+        }
+        //Comprobar confirmacion vacia
+        else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
+            ilConfirmacionPassword.setErrorEnabled(true);
+            ilConfirmacionPassword.setError("Campo requerido");
             contador_errores++;
         } else {
 
             //Comprobar contraseñas iguales
-            if (!etPassword.getText().equals(etConfirmacionPassword.getText())) {
+            if (!etPassword.getText().toString().equals(etConfirmacionPassword.getText().toString())) {
+                ilConfirmacionPassword.setErrorEnabled(true);
                 ilConfirmacionPassword.setError("Contraseñas no coinciden");
                 contador_errores++;
             } else {
+                contador_errores = 0;
                 ilPassword.setErrorEnabled(false);
                 ilConfirmacionPassword.setErrorEnabled(false);
             }

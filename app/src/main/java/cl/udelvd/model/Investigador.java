@@ -1,5 +1,7 @@
 package cl.udelvd.model;
 
+import java.util.Objects;
+
 public class Investigador {
 
     private int id;
@@ -67,5 +69,35 @@ public class Investigador {
 
     public void setActivado(boolean activado) {
         this.activado = activado;
+    }
+
+    @Override
+    public String toString() {
+        return "Investigador{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", idRol=" + idRol +
+                ", activado=" + activado +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Investigador that = (Investigador) o;
+        return getIdRol() == that.getIdRol() &&
+                isActivado() == that.isActivado() &&
+                getNombre().equals(that.getNombre()) &&
+                getApellido().equals(that.getApellido()) &&
+                getEmail().equals(that.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNombre(), getApellido(), getEmail(), getIdRol(), isActivado());
     }
 }

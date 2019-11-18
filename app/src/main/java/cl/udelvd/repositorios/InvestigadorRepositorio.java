@@ -3,8 +3,6 @@ package cl.udelvd.repositorios;
 import android.app.Application;
 import android.util.Log;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
@@ -22,13 +20,14 @@ import java.util.Map;
 
 import cl.udelvd.model.Investigador;
 import cl.udelvd.services.VolleySingleton;
+import cl.udelvd.utils.SingleLiveEvent;
 
 public class InvestigadorRepositorio {
     private static InvestigadorRepositorio instancia;
     private Application application;
 
-    private MutableLiveData<String> responseMsg = new MutableLiveData<>();
-    private MutableLiveData<String> errorMsg = new MutableLiveData<>();
+    private SingleLiveEvent<String> responseMsg = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
     private InvestigadorRepositorio(Application application) {
         this.application = application;
@@ -47,21 +46,96 @@ public class InvestigadorRepositorio {
         return instancia;
     }
 
-    public MutableLiveData<String> getErrorMsg() {
+    public SingleLiveEvent<String> getErrorMsg() {
         return errorMsg;
     }
 
-    public MutableLiveData<String> getResponseMsg() {
+    public SingleLiveEvent<String> getResponseMsg() {
         return responseMsg;
     }
 
+
     /**
+     * Funcion encargada de insertar investigador en BD
+     *
      * @param investigador
      */
     public void insertInvestigador(Investigador investigador) {
         postRequest(investigador);
     }
 
+    /**
+     * Funcion encargada de realizar el login del investigador
+     *
+     * @param investigador
+     */
+    public void loginInvestigador(Investigador investigador) {
+        postLogin(investigador);
+    }
+
+    /**
+     * Funcion encargada de enviar peticion POST para login
+     *
+     * @param investigador
+     */
+    private void postLogin(final Investigador investigador) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("RESPONSE", response);
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+                    Log.d("JSONERROR", json);
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject("error");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        String url = "http://192.168.0.14/investigadores/login";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, responseListener,
+                errorListener) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", investigador.getEmail());
+                params.put("password", investigador.getPassword());
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        String TAG = "LoginInvestigador";
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+    }
+
+    /**
+     * Funcion encargada de enviar peticion POST para registro investigador
+     *
+     * @param investigador
+     */
     private void postRequest(final Investigador investigador) {
 
         //Definicion de listener de respuesta
@@ -74,6 +148,7 @@ public class InvestigadorRepositorio {
                             new JSONObject(response).getJSONObject("data").getJSONObject(
                                     "attributes");
 
+                    //Comparar respuesta server con objeto enviado
                     Investigador invResponse = new Investigador();
                     invResponse.setNombre(jsonObject.getString("nombre"));
                     invResponse.setApellido(jsonObject.getString("apellido"));
@@ -104,7 +179,19 @@ public class InvestigadorRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                if (error.networkResponse != null && error.networkResponse.data != null) {
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ERROR", "TIMEOUT_ERROR");
+                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ERROR", "NETWORK_ERROR");
+                    errorMsg.postValue("No tienes conexión a Internet");
+                }
+
+                //Errores cuandoel servidor si response
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
@@ -142,25 +229,12 @@ public class InvestigadorRepositorio {
                         }
 
                     }
-
-                    //Error de timeout
-                    else if (error instanceof TimeoutError) {
-                        Log.d("VOLLEY_ERROR", "TIMEOUT_ERROR: " + errorObject);
-                        errorMsg.postValue("Servidor no responde, intente más tarde");
-                    }
-
-                    //Error de conexion a internet
-                    else if (error instanceof NetworkError) {
-                        Log.d("VOLLEY_ERROR", "NETWORK_ERROR: " + errorObject);
-                        errorMsg.postValue("No tienes conexión a Internet");
-                    }
                 }
             }
         };
 
 
         String url = "http://192.168.0.14/investigadores";
-
 
         //Hacer peticion post
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -174,8 +248,6 @@ public class InvestigadorRepositorio {
                 params.put("email", investigador.getEmail());
                 params.put("password", investigador.getPassword());
                 params.put("id_rol", String.valueOf(investigador.getIdRol()));
-
-                Log.d("PARAMS_INVESTIGADOR", params.toString());
                 return params;
             }
 

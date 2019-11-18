@@ -4,9 +4,9 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
 
 import cl.udelvd.repositorios.InvestigadorRepositorio;
+import cl.udelvd.utils.SingleLiveEvent;
 
 public class InvestigadorViewModel extends AndroidViewModel {
 
@@ -16,14 +16,14 @@ public class InvestigadorViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public MutableLiveData<String> mostrarMsgRespuesta() {
+    public SingleLiveEvent<String> mostrarMsgRespuesta() {
 
         investigadorRepositorio = InvestigadorRepositorio.getInstance(getApplication());
         return investigadorRepositorio.getResponseMsg();
 
     }
 
-    public MutableLiveData<String> mostrarErrorRespuesta() {
+    public SingleLiveEvent<String> mostrarErrorRespuesta() {
         investigadorRepositorio = InvestigadorRepositorio.getInstance(getApplication());
         return investigadorRepositorio.getErrorMsg();
     }

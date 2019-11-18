@@ -23,14 +23,14 @@ import java.util.Map;
 import cl.udelvd.model.Investigador;
 import cl.udelvd.services.VolleySingleton;
 
-public class RegistroRepositorio {
-    private static RegistroRepositorio instancia;
+public class InvestigadorRepositorio {
+    private static InvestigadorRepositorio instancia;
     private Application application;
 
     private MutableLiveData<String> responseMsg = new MutableLiveData<>();
-    private MutableLiveData<String> errorMsg;
+    private MutableLiveData<String> errorMsg = new MutableLiveData<>();
 
-    private RegistroRepositorio(Application application) {
+    private InvestigadorRepositorio(Application application) {
         this.application = application;
     }
 
@@ -39,10 +39,10 @@ public class RegistroRepositorio {
      *
      * @return Instancia
      */
-    public static RegistroRepositorio getInstance(Application application) {
+    public static InvestigadorRepositorio getInstance(Application application) {
 
         if (instancia == null) {
-            instancia = new RegistroRepositorio(application);
+            instancia = new InvestigadorRepositorio(application);
         }
         return instancia;
     }
@@ -106,7 +106,6 @@ public class RegistroRepositorio {
 
                 if (error.networkResponse != null && error.networkResponse.data != null) {
 
-                    errorMsg = new MutableLiveData<>();
                     String json = new String(error.networkResponse.data);
 
                     JSONObject errorObject = null;
@@ -128,7 +127,20 @@ public class RegistroRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d("VOLLEY_ERROR", "SERVER_ERROR: " + errorObject);
-                        errorMsg.postValue("Servidor no responde, intente más tarde");
+
+                        try {
+
+                            assert errorObject != null;
+                            //Si el error es de mail repetido, postear error msg
+                            if (errorObject.get("detail").equals("Email already exists")) {
+                                errorMsg.postValue("Email ya registrado");
+                            } else {
+                                errorMsg.postValue("Servidor no responde, intente más tarde");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                     //Error de timeout

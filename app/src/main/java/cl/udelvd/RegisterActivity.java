@@ -19,8 +19,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 
 import cl.udelvd.model.Investigador;
-import cl.udelvd.repositorios.RegistroRepositorio;
-import cl.udelvd.viewmodel.RegistroViewModel;
+import cl.udelvd.repositorios.InvestigadorRepositorio;
+import cl.udelvd.utils.Utils;
+import cl.udelvd.viewmodel.InvestigadorViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -54,18 +55,18 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Instancias formulario
         //Inputs Layouts
-        ilNombre = findViewById(R.id.et_nombre_investigador);
-        ilApellido = findViewById(R.id.et_apellido_investigador);
-        ilEmail = findViewById(R.id.et_email_investigador);
-        ilPassword = findViewById(R.id.et_password_investigador);
-        ilConfirmacionPassword = findViewById(R.id.et_confirm_password_investigador);
+        ilNombre = findViewById(R.id.il_nombre_investigador);
+        ilApellido = findViewById(R.id.il_apellido_investigador);
+        ilEmail = findViewById(R.id.il_email_investigador);
+        ilPassword = findViewById(R.id.il_password_investigador);
+        ilConfirmacionPassword = findViewById(R.id.il_confirm_password_investigador);
 
         //Edit texts
-        etNombre = findViewById(R.id.it_nombre_investigador);
-        etApellido = findViewById(R.id.it_apellido_investigador);
-        etEmail = findViewById(R.id.it_email_investigador);
-        etPassword = findViewById(R.id.it_password_investigador);
-        etConfirmacionPassword = findViewById(R.id.it_confirm_password_investigador);
+        etNombre = findViewById(R.id.et_nombre_investigador);
+        etApellido = findViewById(R.id.et_apellido_investigador);
+        etEmail = findViewById(R.id.et_email_investigador);
+        etPassword = findViewById(R.id.et_password_investigador);
+        etConfirmacionPassword = findViewById(R.id.et_confirm_password_investigador);
 
         Button btnRegistrar = findViewById(R.id.btn_registrar);
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
@@ -76,16 +77,19 @@ public class RegisterActivity extends AppCompatActivity {
 
                     Investigador investigador = new Investigador();
                     investigador.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
-                    investigador.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
+                    investigador.setApellido(Objects.requireNonNull(etApellido.getText())
+                            .toString());
+
                     investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
                     investigador.setIdRol(1); //Admin id
                     investigador.setActivado(false);
 
-                    RegistroRepositorio repositorio =
-                            RegistroRepositorio.getInstance(getApplication());
+                    InvestigadorRepositorio repositorio =
+                            InvestigadorRepositorio.getInstance(getApplication());
                     repositorio.insertInvestigador(investigador);
                 }
+
             }
         });
     }
@@ -94,15 +98,33 @@ public class RegisterActivity extends AppCompatActivity {
      * Funcion encargada del manejo de ViewModels
      */
     private void viewModelObserver() {
-        RegistroViewModel registroViewModel =
-                ViewModelProviders.of(this).get(RegistroViewModel.class);
 
-        registroViewModel.mostrarMsgRespuesta().observe(this, new Observer<String>() {
+        InvestigadorViewModel investigadorViewModel =
+                ViewModelProviders.of(this).get(InvestigadorViewModel.class);
+
+        //Observador mensaje positivo
+        investigadorViewModel.mostrarMsgRespuesta().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                //Si el registro fue correcto cerrar la actividad
+                if (s.equals("¡Estas registrado!")) {
+                    finish();
+                }
+            }
+        });
+
+        //Observador mensaje error
+        investigadorViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Log.d("VIEW_MODE", "ONCHANGE" + s);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
 
@@ -144,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
 
             //Comprobar mail valido
-            if (!isValidEmail(etEmail.getText())) {
+            if (!Utils.isValidEmail(etEmail.getText())) {
                 ilEmail.setErrorEnabled(true);
                 ilEmail.setError("Email inválido");
                 contador_errores++;
@@ -190,18 +212,5 @@ public class RegisterActivity extends AppCompatActivity {
             return status;
         }
         return status;
-    }
-
-    /**
-     * Funcion que verifica validez de Email
-     *
-     * @param target Email objetivo
-     * @return True|False según sea el caso
-     */
-    private boolean isValidEmail(CharSequence target) {
-        boolean result =
-                !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        Log.d("EMAIL_VALIDO", String.valueOf(result));
-        return result;
     }
 }

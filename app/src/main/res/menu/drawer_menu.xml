@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
         android:id="@+id/group_help"
@@ -31,7 +30,7 @@
                 <item
                     android:id="@+id/menu_actions"
                     android:checkable="true"
-                    android:icon="@drawable/ic_playlist_add_check_black_24dp"
+                    android:icon="@drawable/ic_directions_run_black_24dp"
                     android:title="Acciones" />
 
                 <item

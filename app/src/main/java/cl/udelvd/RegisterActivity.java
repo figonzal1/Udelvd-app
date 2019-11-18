@@ -90,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
-                    investigador.setIdRol(1); //Admin id
+                    investigador.setIdRol(0); //Admin id
                     investigador.setActivado(false);
 
                     InvestigadorRepositorio repositorio =
@@ -111,10 +111,11 @@ public class RegisterActivity extends AppCompatActivity {
                 ViewModelProviders.of(this).get(InvestigadorViewModel.class);
 
         //Observador mensaje positivo
-
         investigadorViewModel.mostrarMsgRespuesta().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
+                Log.d("VIEW_MODEL", "MSG_RESPONSE: " + s);
 
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();

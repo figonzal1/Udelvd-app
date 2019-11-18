@@ -83,17 +83,47 @@ public class InvestigadorRepositorio {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
+
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(response).getJSONObject("data");
+
+
+                    String status = jsonObject.getString("status");
+
+                    if (status.equals("Correct")) {
+                        String token = jsonObject.getString("token");
+                        Log.d("TOKEN_LOGIN", token);
+
+                        responseMsg.postValue("¡Bienvenido!");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ERROR", "TIMEOUT_ERROR");
+                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ERROR", "NETWORK_ERROR");
+                    errorMsg.postValue("No tienes conexión a Internet");
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
-                    Log.d("JSONERROR", json);
+
                     JSONObject errorObject = null;
 
                     //Obtener json error
@@ -102,6 +132,44 @@ public class InvestigadorRepositorio {
                         errorObject = jsonObject.getJSONObject("error");
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }
+
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d("VOLLEY_ERROR", "AUTHENTICATION_ERROR: " + errorObject);
+
+                        try {
+                            assert errorObject != null;
+
+                            if (errorObject.get("detail").equals("Please check your credentials")) {
+                                errorMsg.postValue("Login fallido, revisa tus datos");
+                            } else {
+                                errorMsg.postValue("Acceso no autorizado");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d("VOLLEY_ERROR", "SERVER_ERROR: " + errorObject);
+
+                        try {
+                            assert errorObject != null;
+
+                            //Si el error es de email no existente
+                            if (errorObject.get("detail").equals("Email does not exist")) {
+                                errorMsg.postValue("Email no registrado");
+                            } else {
+                                errorMsg.postValue("Servidor no responde, intente más tarde");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
                 }
             }

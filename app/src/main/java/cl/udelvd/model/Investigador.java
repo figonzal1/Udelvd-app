@@ -1,5 +1,7 @@
 package cl.udelvd.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public class Investigador {
@@ -71,6 +73,7 @@ public class Investigador {
         this.activado = activado;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Investigador{" +

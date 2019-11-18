@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -37,6 +38,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText etPassword;
     private TextInputEditText etConfirmacionPassword;
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +71,17 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password_investigador);
         etConfirmacionPassword = findViewById(R.id.et_confirm_password_investigador);
 
+        //ProgressBar
+        progressBar = findViewById(R.id.progress_horizontal_registro);
+
         Button btnRegistrar = findViewById(R.id.btn_registrar);
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (validarCampos()) {
+
+                    progressBar.setVisibility(View.VISIBLE);
 
                     Investigador investigador = new Investigador();
                     investigador.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
@@ -99,14 +107,16 @@ public class RegisterActivity extends AppCompatActivity {
      */
     private void viewModelObserver() {
 
-        InvestigadorViewModel investigadorViewModel =
+        final InvestigadorViewModel investigadorViewModel =
                 ViewModelProviders.of(this).get(InvestigadorViewModel.class);
 
         //Observador mensaje positivo
+
         investigadorViewModel.mostrarMsgRespuesta().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
                 //Si el registro fue correcto cerrar la actividad
@@ -120,13 +130,14 @@ public class RegisterActivity extends AppCompatActivity {
         investigadorViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.d("VIEW_MODE", "ONCHANGE" + s);
+
+                progressBar.setVisibility(View.INVISIBLE);
+                Log.d("VIEW_MODEL", "MSG_ERROR: " + s);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });
 
     }
-
 
     /**
      * Funcion para validaciond e campos

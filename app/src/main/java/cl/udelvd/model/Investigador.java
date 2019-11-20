@@ -1,7 +1,5 @@
 package cl.udelvd.model;
 
-import androidx.annotation.NonNull;
-
 import java.util.Objects;
 
 public class Investigador {
@@ -12,6 +10,7 @@ public class Investigador {
     private String email;
     private String password;
     private int idRol;
+    private String nombreRol;
     private boolean activado;
 
     public Investigador() {
@@ -73,7 +72,7 @@ public class Investigador {
         this.activado = activado;
     }
 
-    @NonNull
+
     @Override
     public String toString() {
         return "Investigador{" +
@@ -83,6 +82,7 @@ public class Investigador {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", idRol=" + idRol +
+                ", nombreRol='" + nombreRol + '\'' +
                 ", activado=" + activado +
                 '}';
     }
@@ -102,5 +102,13 @@ public class Investigador {
     @Override
     public int hashCode() {
         return Objects.hash(getNombre(), getApellido(), getEmail(), getIdRol(), isActivado());
+    }
+
+    public String getNombreRol() {
+        return nombreRol;
+    }
+
+    public void setNombreRol(String nombreRol) {
+        this.nombreRol = nombreRol;
     }
 }

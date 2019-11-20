@@ -1,5 +1,12 @@
 package cl.udelvd;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,9 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
-
-import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -45,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
-
         //Drawer Navigation
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
@@ -54,6 +57,30 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(tabLayout.getTabAt(0)).select();
         navigationView.setCheckedItem(R.id.menu_adult_list);
 
+        //Obtener header de navigation drawer
+        View header = navigationView.getHeaderView(0);
+        TextView tv_nombre_apellido_investigador =
+                header.findViewById(R.id.tv_header_nombre_apellido_usuario);
+        TextView tv_email_investigador = header.findViewById(R.id.tv_header_email_usuario);
+        TextView tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
+
+        String nombreInvestigador = sharedPreferences.getString("nombre_investigador", "");
+        String apellidoInvestigador = sharedPreferences.getString("apellido_investigador", "");
+        String nombreRolInvestigador = sharedPreferences.getString("nombre_rol_investigador", "");
+        String emailInvestigador = sharedPreferences.getString("email_investigador", "");
+
+
+        tv_nombre_apellido_investigador.setText(nombreInvestigador + " " + apellidoInvestigador);
+        tv_email_investigador.setText(emailInvestigador);
+        tv_nombre_rol_investigador.setText(nombreRolInvestigador);
+
+
+        navigationView.getMenu().findItem(R.id.group_admin).setVisible(false);
+
+        //Menu listener de navigations
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -88,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Menu listener de tabs
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

@@ -66,8 +66,8 @@ public class InvestigadorRepositorio {
      *
      * @param investigador
      */
-    public void insertInvestigador(Investigador investigador) {
-        postRequest(investigador);
+    public void registrarInvestigador(Investigador investigador) {
+        enviarPostRegistro(investigador);
     }
 
     /**
@@ -76,16 +76,16 @@ public class InvestigadorRepositorio {
      * @param investigador
      */
     public void loginInvestigador(Investigador investigador, Context context) {
-        postLogin(investigador, context);
+        enviarPostLogin(investigador, context);
     }
 
     /**
      * Funcion encargada de enviar peticion POST para login
      *
-     * @param investigador
-     * @param context
+     * @param investigador Datos del investigador enviados via POST
+     * @param context Contexto de la app para utilizar recursos
      */
-    private void postLogin(final Investigador investigador, final Context context) {
+    private void enviarPostLogin(final Investigador investigador, final Context context) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -247,7 +247,7 @@ public class InvestigadorRepositorio {
      *
      * @param investigador
      */
-    private void postRequest(final Investigador investigador) {
+    private void enviarPostRegistro(final Investigador investigador) {
 
         //Definicion de listener de respuesta
         final Response.Listener<String> responseListener = new Response.Listener<String>() {

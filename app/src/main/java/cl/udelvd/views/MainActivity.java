@@ -1,8 +1,10 @@
-package cl.udelvd;
+package cl.udelvd.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -13,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
@@ -20,16 +24,91 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
+import cl.udelvd.FragmentPageAdapter;
+import cl.udelvd.R;
+import cl.udelvd.viewmodel.UsuarioViewModel;
+
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
+    private TextView tv_nombre_apellido_investigador;
+    private TextView tv_email_investigador;
+    private TextView tv_nombre_rol_investigador;
+    private String nombreRolInvestigador;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setearToolbarViewPagerTabsDrawer();
+
+        viewModelObserver();
+
+    }
+
+    /**
+     * Funcion encargada de realizar la observacion del token de autentificacion
+     */
+    private void viewModelObserver() {
+
+        //TODO: Valicacion de token deberia tener su propio viewmodel
+        UsuarioViewModel usuarioViewModel = ViewModelProviders.of(this).get(UsuarioViewModel.class);
+
+        usuarioViewModel.checkearTokenLogin().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (!aBoolean) {
+                    Log.d("TOKEN_MAINACTIVITY", "TOKEN INVALIDO - Abriendo Login Activity");
+
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                } else {
+                    Log.d("TOKEN_MAINACTIVITY", "VALIDADO");
+                }
+            }
+        });
+
+        //Llamado de datos (LLamado hacerlo en fragment)
+        //UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance(getApplication());
+        //usuarioRepositorio.getUsuarios();
+    }
+
+    /**
+     * Funcion encargada de setear el nombre del investigador logueado  en el header del drawer
+     */
+    private void configurarDrawerHeader() {
+
+        //Obtener header de navigation drawer
+        View header = navigationView.getHeaderView(0);
+        tv_nombre_apellido_investigador =
+                header.findViewById(R.id.tv_header_nombre_apellido_usuario);
+        tv_email_investigador = header.findViewById(R.id.tv_header_email_usuario);
+        tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
+
+        //Obtener datos usuario logeado
+        SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
+
+        String nombreInvestigador = sharedPreferences.getString("nombre_investigador", "");
+        String apellidoInvestigador = sharedPreferences.getString("apellido_investigador", "");
+        nombreRolInvestigador = sharedPreferences.getString("nombre_rol_investigador", "");
+        String emailInvestigador = sharedPreferences.getString("email_investigador", "");
+
+        //Setear datos en pantalla
+        tv_nombre_apellido_investigador.setText(nombreInvestigador + " " + apellidoInvestigador);
+        tv_email_investigador.setText(emailInvestigador);
+        tv_nombre_rol_investigador.setText(nombreRolInvestigador);
+    }
+
+    /**
+     * Funcion encargada de configurar elementos de UI
+     */
+    private void setearToolbarViewPagerTabsDrawer() {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-
         //Drawer Navigation
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
@@ -57,28 +135,12 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(tabLayout.getTabAt(0)).select();
         navigationView.setCheckedItem(R.id.menu_adult_list);
 
-        //Obtener header de navigation drawer
-        View header = navigationView.getHeaderView(0);
-        TextView tv_nombre_apellido_investigador =
-                header.findViewById(R.id.tv_header_nombre_apellido_usuario);
-        TextView tv_email_investigador = header.findViewById(R.id.tv_header_email_usuario);
-        TextView tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
+        configurarDrawerHeader();
 
-
-        SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
-
-        String nombreInvestigador = sharedPreferences.getString("nombre_investigador", "");
-        String apellidoInvestigador = sharedPreferences.getString("apellido_investigador", "");
-        String nombreRolInvestigador = sharedPreferences.getString("nombre_rol_investigador", "");
-        String emailInvestigador = sharedPreferences.getString("email_investigador", "");
-
-
-        tv_nombre_apellido_investigador.setText(nombreInvestigador + " " + apellidoInvestigador);
-        tv_email_investigador.setText(emailInvestigador);
-        tv_nombre_rol_investigador.setText(nombreRolInvestigador);
-
-
-        navigationView.getMenu().findItem(R.id.group_admin).setVisible(false);
+        //Si el usuario no es admin, ocultar panel
+        if (!nombreRolInvestigador.equals("Administrador")) {
+            navigationView.getMenu().findItem(R.id.group_admin).setVisible(false);
+        }
 
         //Menu listener de navigations
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -154,5 +216,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
     }
 }

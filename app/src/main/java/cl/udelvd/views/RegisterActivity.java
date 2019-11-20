@@ -1,4 +1,4 @@
-package cl.udelvd;
+package cl.udelvd.views;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
+import cl.udelvd.R;
 import cl.udelvd.model.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utils.Utils;
@@ -45,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -55,6 +55,15 @@ public class RegisterActivity extends AppCompatActivity {
         actionBar.setTitle("Registro");
 
         viewModelObserver();
+
+        setearViews();
+
+    }
+
+    /**
+     * Funcion encargada de configurar las views de la ista Registro
+     */
+    private void setearViews() {
 
         //Instancias formulario
         //Inputs Layouts
@@ -74,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
         //ProgressBar
         progressBar = findViewById(R.id.progress_horizontal_registro);
 
+        //Boton registro
         Button btnRegistrar = findViewById(R.id.btn_registrar);
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     progressBar.setVisibility(View.VISIBLE);
 
+                    //Recibir datos desde formulario
                     Investigador investigador = new Investigador();
                     investigador.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
                     investigador.setApellido(Objects.requireNonNull(etApellido.getText())
@@ -95,7 +106,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                     InvestigadorRepositorio repositorio =
                             InvestigadorRepositorio.getInstance(getApplication());
-                    repositorio.insertInvestigador(investigador);
+
+                    //Hacer registro del investigador
+                    repositorio.registrarInvestigador(investigador);
                 }
 
             }

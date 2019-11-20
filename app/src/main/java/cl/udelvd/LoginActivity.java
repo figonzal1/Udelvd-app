@@ -1,6 +1,8 @@
 package cl.udelvd;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -21,6 +23,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.model.Investigador;
@@ -51,20 +54,44 @@ public class LoginActivity extends AppCompatActivity {
         InvestigadorViewModel investigadorViewModel =
                 ViewModelProviders.of(this).get(InvestigadorViewModel.class);
 
-        investigadorViewModel.mostrarMsgRespuesta().observe(this, new Observer<String>() {
+        investigadorViewModel.mostrarMsgRespuestaLogin().observe(this, new Observer<Map<String,
+                Object>>() {
             @Override
-            public void onChanged(String s) {
+            public void onChanged(Map<String, Object> stringObjectMap) {
 
-                progressBar.setVisibility(View.INVISIBLE);
-                Log.d("VIEW_MODEL", "MSG_RESPONSE: " + s);
+                Investigador investigador = (Investigador) stringObjectMap.get("investigador");
 
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                SharedPreferences sharedPreferences = getSharedPreferences("udelvd",
+                        Context.MODE_PRIVATE);
 
-                if (s.equals("¡Bienvenido!")) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (investigador != null) {
+                    editor.putInt("id_investigador", investigador.getId());
+                    editor.putString("nombre_investigador", investigador.getNombre());
+                    editor.putString("apellido_investigador", investigador.getApellido());
+                    editor.putString("email_investigador", investigador.getEmail());
+                    editor.putInt("id_rol_investigador", investigador.getIdRol());
+                    editor.putString("nombre_rol_investigador", investigador.getNombreRol());
+                    editor.putBoolean("activado_investigador", investigador.isActivado());
+
+                    editor.apply();
+
+                    String msg_login = (String) stringObjectMap.get("mensaje_login");
+
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Log.d("OBSERVER_LOGIN", "MSG_RESPONSE_LOGIN: " + msg_login);
+
+                    assert msg_login != null;
+                    if (msg_login.equals("¡Bienvenido!")) {
+
+                        //Mostrar mensaje en pantalla
+                        Toast.makeText(getApplicationContext(), msg_login, Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
-
             }
         });
 
@@ -103,7 +130,8 @@ public class LoginActivity extends AppCompatActivity {
                     InvestigadorRepositorio investigadorRepositorio =
                             InvestigadorRepositorio.getInstance(getApplication());
 
-                    investigadorRepositorio.loginInvestigador(investigador);
+                    investigadorRepositorio.loginInvestigador(investigador,
+                            getApplicationContext());
                 }
             }
         });

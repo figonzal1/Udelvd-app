@@ -1,6 +1,8 @@
 package cl.udelvd.repositorios;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -26,7 +28,8 @@ public class InvestigadorRepositorio {
     private static InvestigadorRepositorio instancia;
     private Application application;
 
-    private SingleLiveEvent<String> responseMsg = new SingleLiveEvent<>();
+    private SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
     private InvestigadorRepositorio(Application application) {
@@ -50,10 +53,13 @@ public class InvestigadorRepositorio {
         return errorMsg;
     }
 
-    public SingleLiveEvent<String> getResponseMsg() {
-        return responseMsg;
+    public SingleLiveEvent<Map<String, Object>> getResponseMsgLogin() {
+        return responseMsgLogin;
     }
 
+    public SingleLiveEvent<String> getResponseMsgRegistro() {
+        return responseMsgRegistro;
+    }
 
     /**
      * Funcion encargada de insertar investigador en BD
@@ -69,34 +75,71 @@ public class InvestigadorRepositorio {
      *
      * @param investigador
      */
-    public void loginInvestigador(Investigador investigador) {
-        postLogin(investigador);
+    public void loginInvestigador(Investigador investigador, Context context) {
+        postLogin(investigador, context);
     }
 
     /**
      * Funcion encargada de enviar peticion POST para login
      *
      * @param investigador
+     * @param context
      */
-    private void postLogin(final Investigador investigador) {
+    private void postLogin(final Investigador investigador, final Context context) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d("RESPONSE", response);
+                Log.d("RESPONSE", response);
 
-                JSONObject jsonObject;
+                JSONObject jsonObjectLogin, jsonObjectData;
                 try {
-                    jsonObject = new JSONObject(response).getJSONObject("data");
+                    jsonObjectLogin = new JSONObject(response).getJSONObject("login");
+                    jsonObjectData = new JSONObject(response).getJSONObject("data");
 
 
-                    String status = jsonObject.getString("status");
+                    String status = jsonObjectLogin.getString("status");
 
                     if (status.equals("Correct")) {
-                        String token = jsonObject.getString("token");
+
+                        String token = jsonObjectLogin.getString("token");
                         Log.d("TOKEN_LOGIN", token);
 
-                        responseMsg.postValue("¡Bienvenido!");
+                        //Guardar token
+                        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                                "udelvd", Context.MODE_PRIVATE);
+
+                        //Guardar token en shared pref
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("TOKEN_LOGIN", token);
+                        editor.apply();
+
+                        //Obtener datos investigador post login
+                        Investigador investigador = new Investigador();
+
+                        investigador.setId(jsonObjectData.getInt("id"));
+
+                        JSONObject jsonObjectAttributes = jsonObjectData.getJSONObject(
+                                "attributes");
+                        investigador.setEmail(jsonObjectAttributes.getString("email"));
+                        investigador.setNombre(jsonObjectAttributes.getString("nombre"));
+                        investigador.setApellido(jsonObjectAttributes.getString("apellido"));
+
+                        if (jsonObjectAttributes.getInt("activado") == 0) {
+                            investigador.setActivado(false);
+                        } else if (jsonObjectAttributes.getInt("activado") == 1) {
+                            investigador.setActivado(true);
+                        }
+
+                        investigador.setIdRol(jsonObjectAttributes.getInt("id_rol"));
+                        investigador.setNombreRol(jsonObjectAttributes.getString("nombre_rol"));
+
+                        //Enviar investigador y mensaje para toast
+                        Map<String, Object> result = new HashMap<>();
+                        result.put("investigador", investigador);
+                        result.put("mensaje_login", "¡Bienvenido!");
+
+                        responseMsgLogin.postValue(result);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -233,7 +276,7 @@ public class InvestigadorRepositorio {
                     Log.d("INTERNET", invResponse.toString());
 
                     if (investigador.equals(invResponse)) {
-                        responseMsg.postValue("¡Estas registrado!");
+                        responseMsgRegistro.postValue("¡Estas registrado!");
                     }
 
                 } catch (JSONException e) {

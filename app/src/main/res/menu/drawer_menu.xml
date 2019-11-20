@@ -22,10 +22,11 @@
     </group>
 
     <item
+        android:id="@+id/group_admin"
         android:orderInCategory="2"
         android:title="Administración">
         <menu>
-            <group android:id="@+id/group_admin">
+            <group>
 
                 <item
                     android:id="@+id/menu_actions"
@@ -45,10 +46,11 @@
     </item>
 
     <item
+        android:id="@+id/group_general"
         android:orderInCategory="1"
         android:title="General">
         <menu>
-            <group android:id="@+id/group_general">
+            <group>
 
                 <item
                     android:id="@+id/menu_profile"

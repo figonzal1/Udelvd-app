@@ -22,14 +22,12 @@ import java.util.Map;
 
 import cl.udelvd.model.Usuario;
 import cl.udelvd.services.VolleySingleton;
-import cl.udelvd.utils.SingleLiveEvent;
 
 public class UsuarioRepositorio {
 
     private static UsuarioRepositorio instancia;
     private Application application;
     private MutableLiveData<List<Usuario>> mutableUsuariosList = new MutableLiveData<>();
-    private SingleLiveEvent<Boolean> validToken = new SingleLiveEvent<>();
     private List<Usuario> usuarioList;
 
     private UsuarioRepositorio(Application application) {
@@ -50,17 +48,12 @@ public class UsuarioRepositorio {
         return null;
     }
 
-    public SingleLiveEvent<Boolean> isValidToken() {
-        return validToken;
-    }
-
     private void sendGetUsuarios() {
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("RESPONSE", response);
-                validToken.postValue(true);
             }
         };
 
@@ -68,6 +61,7 @@ public class UsuarioRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                //TODO: Finalizar error listener para obtener lista usuarios
                 if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
@@ -81,9 +75,6 @@ public class UsuarioRepositorio {
 
                         String detail_error = jsonError.getString("detail");
 
-                        if (detail_error.equals("Token invalid")) {
-                            validToken.postValue(false);
-                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

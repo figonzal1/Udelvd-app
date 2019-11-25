@@ -10,7 +10,6 @@ import java.util.List;
 
 import cl.udelvd.model.Usuario;
 import cl.udelvd.repositorios.UsuarioRepositorio;
-import cl.udelvd.utils.SingleLiveEvent;
 
 public class UsuarioViewModel extends AndroidViewModel {
 
@@ -23,11 +22,6 @@ public class UsuarioViewModel extends AndroidViewModel {
     public MutableLiveData<List<Usuario>> mostrarListaUsuarios() {
         usuarioRepositorio = UsuarioRepositorio.getInstance(getApplication());
         return usuarioRepositorio.getUsuarios();
-    }
-
-    public SingleLiveEvent<Boolean> checkearTokenLogin() {
-        usuarioRepositorio = UsuarioRepositorio.getInstance(getApplication());
-        return usuarioRepositorio.isValidToken();
     }
 
 }

@@ -52,7 +52,7 @@ public class Utils {
             assert jti != null;
             assert issuer != null;
             Log.d("JWT_ISSUER", issuer);
-            Log.d("JWT_AUDIENCe", audience);
+            Log.d("JWT_AUDIENCE", audience);
             Log.d("JWT_JTI", jti);
             Log.d("JWT_CLAIM_UID", Objects.requireNonNull(claim.asString()));
 
@@ -69,7 +69,7 @@ public class Utils {
                 Log.d("JWT_DATE_EXP", date_s);
 
                 boolean expired = jwt.isExpired(10);
-                Log.d("JWT_STATUS", "EXPIRED ->" + expired);
+                Log.d("JWT_STATUS", "EXPIRADO -> " + expired);
                 return expired;
 
             } else {

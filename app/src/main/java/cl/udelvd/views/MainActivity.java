@@ -22,10 +22,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.List;
 import java.util.Objects;
 
 import cl.udelvd.FragmentPageAdapter;
 import cl.udelvd.R;
+import cl.udelvd.model.Usuario;
 import cl.udelvd.repositorios.UsuarioRepositorio;
 import cl.udelvd.utils.Utils;
 import cl.udelvd.viewmodel.UsuarioViewModel;
@@ -69,19 +71,10 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Valicacion de token deberia tener su propio viewmodel
         UsuarioViewModel usuarioViewModel = ViewModelProviders.of(this).get(UsuarioViewModel.class);
 
-        usuarioViewModel.checkearTokenLogin().observe(this, new Observer<Boolean>() {
+        usuarioViewModel.mostrarListaUsuarios().observe(this, new Observer<List<Usuario>>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                if (!aBoolean) {
-                    Log.d("TOKEN_MAINACTIVITY", "TOKEN INVALIDO - Abriendo Login Activity");
+            public void onChanged(List<Usuario> usuarios) {
 
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-
-                } else {
-                    Log.d("TOKEN_MAINACTIVITY", "VALIDADO");
-                }
             }
         });
 

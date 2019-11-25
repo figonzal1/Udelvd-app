@@ -221,6 +221,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(@NonNull View widget) {
+
+                Log.d("INTENT", "ABRIENDO REGISTRO ACTIVITY");
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }

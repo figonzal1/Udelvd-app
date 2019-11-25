@@ -83,14 +83,14 @@ public class InvestigadorRepositorio {
      * Funcion encargada de enviar peticion POST para login
      *
      * @param investigador Datos del investigador enviados via POST
-     * @param context Contexto de la app para utilizar recursos
+     * @param context      Contexto de la app para utilizar recursos
      */
     private void enviarPostLogin(final Investigador investigador, final Context context) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
 
                 JSONObject jsonObjectLogin, jsonObjectData;
                 try {
@@ -152,13 +152,13 @@ public class InvestigadorRepositorio {
             public void onErrorResponse(VolleyError error) {
 
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERROR", "TIMEOUT_ERROR");
+                    Log.d("VOLLEY_ERROR_LOGIN", "TIMEOUT_ERROR");
                     errorMsg.postValue("Servidor no responde, intente más tarde");
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERROR", "NETWORK_ERROR");
+                    Log.d("VOLLEY_ERROR_LOGIN", "NETWORK_ERROR");
                     errorMsg.postValue("No tienes conexión a Internet");
                 }
 
@@ -180,7 +180,7 @@ public class InvestigadorRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERROR", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERROR_LOGIN", "AUTHENTICATION_ERROR: " + errorObject);
 
                         try {
                             assert errorObject != null;
@@ -197,7 +197,7 @@ public class InvestigadorRepositorio {
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERROR", "SERVER_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERROR_LOGIN", "SERVER_ERROR: " + errorObject);
 
                         try {
                             assert errorObject != null;
@@ -218,6 +218,7 @@ public class InvestigadorRepositorio {
             }
         };
 
+        //String url = "https://udelvd-dev.herokuapp.com/investigadores/login";
         String url = "http://192.168.0.14/investigadores/login";
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener,
@@ -240,6 +241,7 @@ public class InvestigadorRepositorio {
 
         String TAG = "LoginInvestigador";
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+
     }
 
     /**
@@ -345,6 +347,7 @@ public class InvestigadorRepositorio {
         };
 
 
+        //String url = "https://udelvd-dev.herokuapp.com/investigadores";
         String url = "http://192.168.0.14/investigadores";
 
         //Hacer peticion post

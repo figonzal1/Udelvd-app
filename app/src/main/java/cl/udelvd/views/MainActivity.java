@@ -26,6 +26,8 @@ import java.util.Objects;
 
 import cl.udelvd.FragmentPageAdapter;
 import cl.udelvd.R;
+import cl.udelvd.repositorios.UsuarioRepositorio;
+import cl.udelvd.utils.Utils;
 import cl.udelvd.viewmodel.UsuarioViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,11 +46,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        boolean expired = Utils.isJWTExpired(getApplicationContext());
+        if (expired) {
+
+            Log.d("INTENT", "DESVIANDO A LOGIN ACTIVITY");
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         setearToolbarViewPagerTabsDrawer();
 
-        viewModelObserver();
-
+        //viewModelObserver();
     }
+
 
     /**
      * Funcion encargada de realizar la observacion del token de autentificacion
@@ -75,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Llamado de datos (LLamado hacerlo en fragment)
-        //UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance(getApplication());
-        //usuarioRepositorio.getUsuarios();
+        UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance(getApplication());
+        usuarioRepositorio.getUsuarios();
     }
 
     /**

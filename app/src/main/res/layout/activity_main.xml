@@ -33,17 +33,25 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:tabGravity="fill"
-            app:tabIndicatorGravity="stretch"
-            app:tabIndicatorColor="@color/colorPrimaryDark"
-            app:tabMode="fixed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:tabGravity="fill"
+            app:tabIconTint="@color/colorOnPrimary"
+            app:tabIndicatorAnimationDuration="@android:integer/config_longAnimTime"
+            app:tabIndicatorColor="@color/colorSecondary"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorGravity="top"
+            app:tabIndicatorHeight="3dp"
+            app:tabInlineLabel="true"
+            app:tabMode="fixed"
+            app:tabRippleColor="@color/colorPrimaryVariant"
+            app:tabSelectedTextColor="@color/colorOnPrimary"
+            app:tabTextColor="@color/colorPrimaryVariant" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -54,10 +62,11 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/drawer_menu"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/drawer_header"
-        />
+        app:itemIconTint="@color/colorSecondaryVariant"
+        app:itemTextColor="@color/colorOnPrimary"
+        app:menu="@menu/drawer_menu" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

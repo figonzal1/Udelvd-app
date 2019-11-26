@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private void setearToolbarViewPagerTabsDrawer() {
 
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
         setSupportActionBar(toolbar);
 
         //Setear toolbar
@@ -130,6 +131,19 @@ public class MainActivity extends AppCompatActivity {
         //TabLayout
         final TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        //Setear iconos
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            assert tab != null;
+            if (i == 0) {
+
+                tab.setIcon(R.drawable.ic_list_black_24dp);
+            } else if (i == 1) {
+                tab.setIcon(R.drawable.ic_show_chart_black_24dp);
+            }
+        }
+
 
         //Drawer Navigation
         drawerLayout = findViewById(R.id.drawer_layout);

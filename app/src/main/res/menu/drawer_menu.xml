@@ -62,7 +62,7 @@
                     android:id="@+id/menu_adult_list"
                     android:checkable="true"
                     android:icon="@drawable/ic_list_black_24dp"
-                    android:title="Adultos mayores" />
+                    android:title="Usuarios" />
 
                 <item
                     android:id="@+id/menu_statistics"

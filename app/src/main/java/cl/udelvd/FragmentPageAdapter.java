@@ -15,7 +15,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
 
     public FragmentPageAdapter(@NonNull FragmentManager fm) {
         super(fm);
-        mTabs[0] = "Adultos Mayores";
+        mTabs[0] = "Usuarios";
         mTabs[1] = "Estadísticas";
     }
 

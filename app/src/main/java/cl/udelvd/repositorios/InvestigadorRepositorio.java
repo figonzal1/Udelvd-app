@@ -92,11 +92,12 @@ public class InvestigadorRepositorio {
             public void onResponse(String response) {
                 //Log.d("RESPONSE", response);
 
-                JSONObject jsonObjectLogin, jsonObjectData;
                 try {
-                    jsonObjectLogin = new JSONObject(response).getJSONObject("login");
-                    jsonObjectData = new JSONObject(response).getJSONObject("data");
 
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                    JSONObject jsonObjectLogin = jsonObject.getJSONObject("login");
 
                     String status = jsonObjectLogin.getString("status");
 
@@ -132,7 +133,11 @@ public class InvestigadorRepositorio {
                         }
 
                         investigador.setIdRol(jsonObjectAttributes.getInt("id_rol"));
-                        investigador.setNombreRol(jsonObjectAttributes.getString("nombre_rol"));
+
+                        //Buscar en JSON nombre del rol
+                        JSONObject jsonObjectRolData = jsonObjectData.getJSONObject(
+                                "relationships").getJSONObject("rol").getJSONObject("data");
+                        investigador.setNombreRol(jsonObjectRolData.getString("nombre"));
 
                         //Enviar investigador y mensaje para toast
                         Map<String, Object> result = new HashMap<>();

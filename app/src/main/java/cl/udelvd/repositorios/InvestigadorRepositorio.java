@@ -256,21 +256,30 @@ public class InvestigadorRepositorio {
             @Override
             public void onResponse(String response) {
 
+                //Log.d("RESPONSE",response);
                 try {
-                    JSONObject jsonObject =
-                            new JSONObject(response).getJSONObject("data").getJSONObject(
-                                    "attributes");
+                    JSONObject jsonObject = new JSONObject(response);
 
-                    //Comparar respuesta server con objeto enviado
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+
+                    //Obtener json desde respuesta
                     Investigador invResponse = new Investigador();
-                    invResponse.setNombre(jsonObject.getString("nombre"));
-                    invResponse.setApellido(jsonObject.getString("apellido"));
-                    invResponse.setEmail(jsonObject.getString("email"));
-                    invResponse.setIdRol(jsonObject.getInt("id_rol"));
+                    invResponse.setNombre(jsonAttributes.getString("nombre"));
+                    invResponse.setApellido(jsonAttributes.getString("apellido"));
+                    invResponse.setEmail(jsonAttributes.getString("email"));
 
-                    if (jsonObject.getInt("activado") == 0) {
+                    //Obtener relacion Rol de investigador
+                    JSONObject jsonObjectRolData = jsonData
+                            .getJSONObject("relationships")
+                            .getJSONObject("rol")
+                            .getJSONObject("data");
+
+                    invResponse.setNombreRol(jsonObjectRolData.getString("nombre"));
+
+                    if (jsonAttributes.getInt("activado") == 0) {
                         invResponse.setActivado(false);
-                    } else if (jsonObject.getInt("activdo") == 1) {
+                    } else if (jsonAttributes.getInt("activdo") == 1) {
                         invResponse.setActivado(true);
                     }
 
@@ -361,7 +370,7 @@ public class InvestigadorRepositorio {
                 params.put("apellido", investigador.getApellido());
                 params.put("email", investigador.getEmail());
                 params.put("password", investigador.getPassword());
-                params.put("id_rol", String.valueOf(investigador.getIdRol()));
+                params.put("nombre_rol", investigador.getNombreRol());
                 return params;
             }
 

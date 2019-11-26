@@ -101,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
-                    investigador.setIdRol(2); //Investigador id
+                    investigador.setNombreRol("Investigador");
                     investigador.setActivado(false);
 
                     InvestigadorRepositorio repositorio =

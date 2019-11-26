@@ -72,6 +72,14 @@ public class Investigador {
         this.activado = activado;
     }
 
+    public String getNombreRol() {
+        return nombreRol;
+    }
+
+    public void setNombreRol(String nombreRol) {
+        this.nombreRol = nombreRol;
+    }
+
 
     @Override
     public String toString() {
@@ -92,23 +100,15 @@ public class Investigador {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Investigador that = (Investigador) o;
-        return getIdRol() == that.getIdRol() &&
-                isActivado() == that.isActivado() &&
+        return isActivado() == that.isActivado() &&
                 getNombre().equals(that.getNombre()) &&
                 getApellido().equals(that.getApellido()) &&
-                getEmail().equals(that.getEmail());
+                getEmail().equals(that.getEmail()) &&
+                getNombreRol().equals(that.getNombreRol());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getNombre(), getApellido(), getEmail(), getIdRol(), isActivado());
-    }
-
-    public String getNombreRol() {
-        return nombreRol;
-    }
-
-    public void setNombreRol(String nombreRol) {
-        this.nombreRol = nombreRol;
+        return Objects.hash(getNombre(), getApellido(), getEmail(), getNombreRol(), isActivado());
     }
 }

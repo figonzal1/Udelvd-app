@@ -43,19 +43,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_nombre_rol_investigador;
     private String nombreRolInvestigador;
 
+
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        boolean expired = Utils.isJWTExpired(getApplicationContext());
-        if (expired) {
+        sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
 
-            Log.d("INTENT", "DESVIANDO A LOGIN ACTIVITY");
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        Utils.checkJWT(sharedPreferences, MainActivity.this);
 
         setearToolbarViewPagerTabsDrawer();
 
@@ -96,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
 
         //Obtener datos usuario logeado
-        SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
 
         String nombreInvestigador = sharedPreferences.getString("nombre_investigador", "");
         String apellidoInvestigador = sharedPreferences.getString("apellido_investigador", "");
@@ -191,6 +188,23 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
 
+                //LOGOUT
+                if (menuItem.getItemId() == R.id.menu_logout) {
+
+                    //TODO: HACER LOGOUT
+                    String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+
+                    if (!token.isEmpty()) {
+                        Log.d("LOGOUT", "BORRANDO TOKEN: " + token);
+                        sharedPreferences.edit().remove("TOKEN_LOGIN").apply();
+
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    return true;
+                }
                 return false;
             }
         });

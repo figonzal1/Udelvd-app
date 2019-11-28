@@ -1,6 +1,7 @@
 package cl.udelvd.utils;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+
+import cl.udelvd.views.LoginActivity;
 
 public class Utils {
 
@@ -29,11 +32,9 @@ public class Utils {
     }
 
 
-    public static boolean isJWTExpired(Context context) {
+    private static boolean isJWTExpired(SharedPreferences sharedPreferences) {
 
         //Obtener token shared pref
-        SharedPreferences sharedPreferences = context.getSharedPreferences("udelvd",
-                Context.MODE_PRIVATE);
         String json = sharedPreferences.getString("TOKEN_LOGIN", "");
         int id_investigador = sharedPreferences.getInt("id_investigador", 0);
 
@@ -80,6 +81,24 @@ public class Utils {
         } else {
             Log.d("JWT_STATUS", "VACIO");
             return true;
+        }
+    }
+
+    /**
+     * Funcion encargada de desviar la actividad actual hacia login activity
+     *
+     * @param sharedPreferences Necesario para buscar TOKEN en datos del celular
+     * @param activity          Activity que debe ser cerrada
+     */
+    public static void checkJWT(SharedPreferences sharedPreferences, Activity activity) {
+
+        boolean expired = Utils.isJWTExpired(sharedPreferences);
+        if (expired) {
+
+            Log.d("INTENT", "DESVIANDO A LOGIN ACTIVITY");
+            Intent intent = new Intent(activity.getApplication(), LoginActivity.class);
+            activity.startActivity(intent);
+            activity.finish();
         }
     }
 }

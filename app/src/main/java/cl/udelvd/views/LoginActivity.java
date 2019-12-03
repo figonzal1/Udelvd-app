@@ -82,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
                     //Obtener datos desde fomulario
                     Investigador investigador = new Investigador();
                     investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString().toLowerCase());
+
+                    //TODO: Deberia enviarse un hash desde cliente para seguridad de password
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
 
                     InvestigadorRepositorio investigadorRepositorio =
@@ -126,6 +128,10 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putInt("id_rol_investigador", investigador.getIdRol());
                     editor.putString("nombre_rol_investigador", investigador.getNombreRol());
                     editor.putBoolean("activado_investigador", investigador.isActivado());
+                    editor.putString("create_time_investigador", investigador.getCreateTime());
+
+                    //TODO: Almacenar hash de password y no texto plano
+                    editor.putString("password_investigador", Objects.requireNonNull(etPassword.getText()).toString());
                     editor.apply();
 
                     String msg_login = (String) stringObjectMap.get("mensaje_login");

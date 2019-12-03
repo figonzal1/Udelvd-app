@@ -12,6 +12,7 @@ public class Investigador {
     private int idRol;
     private String nombreRol;
     private boolean activado;
+    private String createTime;
 
     public Investigador() {
     }
@@ -80,6 +81,13 @@ public class Investigador {
         this.nombreRol = nombreRol;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
     @Override
     public String toString() {
@@ -92,6 +100,7 @@ public class Investigador {
                 ", idRol=" + idRol +
                 ", nombreRol='" + nombreRol + '\'' +
                 ", activado=" + activado +
+                ", createTime=" + createTime +
                 '}';
     }
 

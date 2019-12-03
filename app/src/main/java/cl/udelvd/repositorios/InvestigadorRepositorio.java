@@ -125,6 +125,7 @@ public class InvestigadorRepositorio {
                         investigador.setEmail(jsonObjectAttributes.getString("email"));
                         investigador.setNombre(jsonObjectAttributes.getString("nombre"));
                         investigador.setApellido(jsonObjectAttributes.getString("apellido"));
+                        investigador.setCreateTime(jsonObjectAttributes.getString("create_time"));
 
                         if (jsonObjectAttributes.getInt("activado") == 0) {
                             investigador.setActivado(false);

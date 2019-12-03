@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigation_view);
 
         //Set default tab
+        navigationView.setCheckedItem(R.id.menu_adult_list);
         Objects.requireNonNull(tabLayout.getTabAt(0)).select();
 
         configurarDrawerHeader();
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == PROFILE_ACTIVITY_CODE) {
             Log.d("FINISH_PROFILE_ACTIVITY", "Seteando navigation en listado");
-            //navigationView.setCheckedItem(R.id.menu_adult_list);
+            navigationView.setCheckedItem(R.id.menu_adult_list);
             Objects.requireNonNull(tabLayout.getTabAt(0)).select();
         }
     }

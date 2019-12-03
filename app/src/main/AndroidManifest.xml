@@ -12,17 +12,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".views.ProfileActivity"
+            android:parentActivityName=".views.MainActivity" />
+
         <activity
             android:name=".views.RegisterActivity"
             android:parentActivityName=".views.LoginActivity" />
+
         <activity android:name=".views.LoginActivity" />
 
         <activity
             android:name=".EventsActivity"
             android:parentActivityName=".InterviewsListActivity" />
+
         <activity
             android:name=".InterviewsListActivity"
             android:parentActivityName=".views.MainActivity" />
+
         <activity android:name=".views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

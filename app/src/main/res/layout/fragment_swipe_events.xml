@@ -74,7 +74,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_hora" />
 
             <View
-                android:id="@+id/divider3"
+                android:id="@+id/divider2"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="8dp"
@@ -157,7 +157,7 @@
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_directions_run_black_24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
             <ImageView
                 android:id="@+id/iv_emoticon"

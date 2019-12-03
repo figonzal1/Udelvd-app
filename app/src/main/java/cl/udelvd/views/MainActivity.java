@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private static final int PROFILE_ACTIVITY_CODE = 200;
 
     private TextView tv_nombre_apellido_investigador;
     private TextView tv_email_investigador;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private SharedPreferences sharedPreferences;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new FragmentPageAdapter(getSupportFragmentManager()));
 
         //TabLayout
-        final TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         //Setear iconos
@@ -134,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             assert tab != null;
             if (i == 0) {
-
                 tab.setIcon(R.drawable.ic_list_black_24dp);
             } else if (i == 1) {
                 tab.setIcon(R.drawable.ic_show_chart_black_24dp);
@@ -148,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Set default tab
         Objects.requireNonNull(tabLayout.getTabAt(0)).select();
-        navigationView.setCheckedItem(R.id.menu_adult_list);
 
         configurarDrawerHeader();
 
@@ -157,23 +158,34 @@ public class MainActivity extends AppCompatActivity {
             navigationView.getMenu().findItem(R.id.group_admin).setVisible(false);
         }
 
-        //Menu listener de navigations
+        navigationListener();
+
+        tabsListener();
+
+    }
+
+    /**
+     * Funcion encargada de la logica de items de navigation drawer
+     */
+    private void navigationListener() {
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 //Menu general
                 if (menuItem.getItemId() == R.id.menu_profile) {
-                    navigationView.setCheckedItem(menuItem);
                     drawerLayout.closeDrawer(GravityCompat.START, true);
+
+                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                    startActivityForResult(intent, PROFILE_ACTIVITY_CODE);
+
                     return true;
                 } else if (menuItem.getItemId() == R.id.menu_adult_list) {
-                    navigationView.setCheckedItem(menuItem);
                     Objects.requireNonNull(tabLayout.getTabAt(0)).select();
                     drawerLayout.closeDrawer(GravityCompat.START, true);
                     return true;
                 } else if (menuItem.getItemId() == R.id.menu_statistics) {
-                    navigationView.setCheckedItem(menuItem);
                     Objects.requireNonNull(tabLayout.getTabAt(1)).select();
                     drawerLayout.closeDrawer(GravityCompat.START, true);
                     return true;
@@ -181,17 +193,14 @@ public class MainActivity extends AppCompatActivity {
 
                 //Menu admin
                 if (menuItem.getItemId() == R.id.menu_actions) {
-                    navigationView.setCheckedItem(menuItem);
                     return true;
                 } else if (menuItem.getItemId() == R.id.menu_emoticons) {
-                    navigationView.setCheckedItem(menuItem);
                     return true;
                 }
 
                 //LOGOUT
                 if (menuItem.getItemId() == R.id.menu_logout) {
 
-                    //TODO: HACER LOGOUT
                     String token = sharedPreferences.getString("TOKEN_LOGIN", "");
 
                     if (!token.isEmpty()) {
@@ -205,14 +214,24 @@ public class MainActivity extends AppCompatActivity {
 
                     return true;
                 }
+
                 return false;
             }
         });
+    }
 
-        //Menu listener de tabs
+    /**
+     * Funcion encargada de la logica de los tabs
+     */
+    private void tabsListener() {
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
+                Log.d("TAB SELECTED", String.valueOf(tab.getPosition()));
+
+                //Modificar navigation drawer segun tabs (Swipe de fragments)
                 if (tab.getPosition() == 0) {
                     navigationView.setCheckedItem(R.id.menu_adult_list);
                 } else if (tab.getPosition() == 1) {
@@ -251,8 +270,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        super.onResume();
+        if (requestCode == PROFILE_ACTIVITY_CODE) {
+            Log.d("FINISH_PROFILE_ACTIVITY", "Seteando navigation en listado");
+            //navigationView.setCheckedItem(R.id.menu_adult_list);
+            Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+        }
     }
 }

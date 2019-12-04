@@ -74,7 +74,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_hora" />
 
             <View
-                android:id="@+id/divider2"
+                android:id="@+id/divider3"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="8dp"
@@ -105,7 +105,7 @@
                 android:layout_marginTop="16dp"
                 android:src="@drawable/ic_help_outline_black_24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider1" />
+                app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
             <TextView
                 android:id="@+id/tv_hora"
@@ -154,17 +154,17 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:src="@drawable/ic_directions_run_black_24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
             <ImageView
                 android:id="@+id/iv_emoticon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:src="@drawable/ic_tag_faces_black_24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider3" />
@@ -208,7 +208,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider4" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

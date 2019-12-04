@@ -30,6 +30,8 @@ public class InvestigadorRepositorio {
 
     private SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
+
     private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
     private InvestigadorRepositorio(Application application) {
@@ -61,6 +63,10 @@ public class InvestigadorRepositorio {
         return responseMsgRegistro;
     }
 
+    public SingleLiveEvent<Map<String, Object>> getResponseMsgActualizacion() {
+        return responseMsgActualizacion;
+    }
+
     /**
      * Funcion encargada de insertar investigador en BD
      *
@@ -75,17 +81,20 @@ public class InvestigadorRepositorio {
      *
      * @param investigador
      */
-    public void loginInvestigador(Investigador investigador, Context context) {
-        enviarPostLogin(investigador, context);
+    public void loginInvestigador(Investigador investigador) {
+        enviarPostLogin(investigador);
+    }
+
+    public void actualizarInvestigador(Investigador investigador) {
+        enviarPutActualizacion(investigador);
     }
 
     /**
      * Funcion encargada de enviar peticion POST para login
      *
-     * @param investigador Datos del investigador enviados via POST
-     * @param context      Contexto de la app para utilizar recursos
+     * @param investigadorForm Datos del investigador enviados via POST
      */
-    private void enviarPostLogin(final Investigador investigador, final Context context) {
+    private void enviarPostLogin(final Investigador investigadorForm) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -96,18 +105,18 @@ public class InvestigadorRepositorio {
 
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
-                    JSONObject jsonObjectLogin = jsonObject.getJSONObject("login");
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonLogin = jsonObject.getJSONObject("login");
 
-                    String status = jsonObjectLogin.getString("status");
+                    String status = jsonLogin.getString("status");
 
                     if (status.equals("Correct")) {
 
-                        String token = jsonObjectLogin.getString("token");
+                        String token = jsonLogin.getString("token");
                         Log.d("TOKEN_LOGIN", token);
 
                         //Guardar token
-                        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                        SharedPreferences sharedPreferences = application.getSharedPreferences(
                                 "udelvd", Context.MODE_PRIVATE);
 
                         //Guardar token en shared pref
@@ -116,33 +125,32 @@ public class InvestigadorRepositorio {
                         editor.apply();
 
                         //Obtener datos investigador post login
-                        Investigador investigador = new Investigador();
+                        Investigador invResponse = new Investigador();
+                        invResponse.setId(jsonData.getInt("id"));
 
-                        investigador.setId(jsonObjectData.getInt("id"));
-
-                        JSONObject jsonObjectAttributes = jsonObjectData.getJSONObject(
+                        JSONObject jsonAttributes = jsonData.getJSONObject(
                                 "attributes");
-                        investigador.setEmail(jsonObjectAttributes.getString("email"));
-                        investigador.setNombre(jsonObjectAttributes.getString("nombre"));
-                        investigador.setApellido(jsonObjectAttributes.getString("apellido"));
-                        investigador.setCreateTime(jsonObjectAttributes.getString("create_time"));
+                        invResponse.setEmail(jsonAttributes.getString("email"));
+                        invResponse.setNombre(jsonAttributes.getString("nombre"));
+                        invResponse.setApellido(jsonAttributes.getString("apellido"));
+                        invResponse.setCreateTime(jsonAttributes.getString("create_time"));
 
-                        if (jsonObjectAttributes.getInt("activado") == 0) {
-                            investigador.setActivado(false);
-                        } else if (jsonObjectAttributes.getInt("activado") == 1) {
-                            investigador.setActivado(true);
+                        if (jsonAttributes.getInt("activado") == 0) {
+                            invResponse.setActivado(false);
+                        } else if (jsonAttributes.getInt("activado") == 1) {
+                            invResponse.setActivado(true);
                         }
 
-                        investigador.setIdRol(jsonObjectAttributes.getInt("id_rol"));
+                        invResponse.setIdRol(jsonAttributes.getInt("id_rol"));
 
                         //Buscar en JSON nombre del rol
-                        JSONObject jsonObjectRolData = jsonObjectData.getJSONObject(
+                        JSONObject jsonObjectRolData = jsonData.getJSONObject(
                                 "relationships").getJSONObject("rol").getJSONObject("data");
-                        investigador.setNombreRol(jsonObjectRolData.getString("nombre"));
+                        invResponse.setNombreRol(jsonObjectRolData.getString("nombre"));
 
                         //Enviar investigador y mensaje para toast
                         Map<String, Object> result = new HashMap<>();
-                        result.put("investigador", investigador);
+                        result.put("investigador", invResponse);
                         result.put("mensaje_login", "¡Bienvenido!");
 
                         responseMsgLogin.postValue(result);
@@ -232,8 +240,8 @@ public class InvestigadorRepositorio {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", investigador.getEmail());
-                params.put("password", investigador.getPassword());
+                params.put("email", investigadorForm.getEmail());
+                params.put("password", investigadorForm.getPassword());
                 return params;
             }
 
@@ -285,7 +293,7 @@ public class InvestigadorRepositorio {
 
                     if (jsonAttributes.getInt("activado") == 0) {
                         invResponse.setActivado(false);
-                    } else if (jsonAttributes.getInt("activdo") == 1) {
+                    } else if (jsonAttributes.getInt("activado") == 1) {
                         invResponse.setActivado(true);
                     }
 
@@ -393,4 +401,143 @@ public class InvestigadorRepositorio {
     }
 
 
+    private void enviarPutActualizacion(final Investigador investigadorForm) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.d("RESPONSE", response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+
+
+                    //Investigador actualizado
+                    Investigador invResponse = new Investigador();
+                    invResponse.setId(jsonData.getInt("id"));
+
+                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+
+                    invResponse.setEmail(jsonAttributes.getString("email"));
+                    invResponse.setNombre(jsonAttributes.getString("nombre"));
+                    invResponse.setApellido(jsonAttributes.getString("apellido"));
+                    invResponse.setIdRol(jsonAttributes.getInt("id_rol"));
+
+                    if (jsonAttributes.getInt("activado") == 0) {
+                        invResponse.setActivado(false);
+                    } else if (jsonAttributes.getInt("activado") == 1) {
+                        invResponse.setActivado(true);
+                    }
+
+                    //Buscar en JSON nombre del rol
+                    JSONObject jsonObjectRolData = jsonData.getJSONObject(
+                            "relationships").getJSONObject("rol").getJSONObject("data");
+                    invResponse.setNombreRol(jsonObjectRolData.getString("nombre"));
+
+                    String update_time = jsonAttributes.getString("update_time");
+
+                    Log.d("MEMORIA", investigadorForm.toString());
+                    Log.d("INTERNET", invResponse.toString());
+
+                    if (investigadorForm.equals(invResponse) && !update_time.isEmpty()) {
+
+                        //Enviar investigador y mensaje para toast
+                        Map<String, Object> result = new HashMap<>();
+                        result.put("investigador", invResponse);
+                        result.put("mensaje_update", "¡Datos actualizados!");
+
+                        Log.d("UPDATE_TIME", update_time);
+                        responseMsgActualizacion.postValue(result);
+                    } else {
+                        Log.d("UPDATE", "NO SON IGUALES");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ERROR", "TIMEOUT_ERROR");
+                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ERROR", "NETWORK_ERROR");
+                    errorMsg.postValue("No tienes conexión a Internet");
+                }
+
+                //Errores cuando el servidor si response
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject("error");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d("VOLLEY_ERROR", "AUTHENTICATION_ERROR: " + errorObject);
+                        errorMsg.postValue("Acceso no autorizado");
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d("VOLLEY_ERROR", "SERVER_ERROR: " + errorObject);
+                    }
+                }
+            }
+        };
+
+
+        String url = "http://192.168.0.14/investigadores/" + investigadorForm.getId();
+
+        StringRequest request = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+
+                params.put("nombre", investigadorForm.getNombre());
+                params.put("apellido", investigadorForm.getApellido());
+                params.put("email", investigadorForm.getEmail());
+                params.put("password", investigadorForm.getPassword());
+                params.put("id_rol", String.valueOf(investigadorForm.getIdRol()));
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd", Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Authorization", "Bearer " + token);
+                return params;
+            }
+        };
+
+        String TAG = "ActualizacionInvestigador";
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+    }
 }

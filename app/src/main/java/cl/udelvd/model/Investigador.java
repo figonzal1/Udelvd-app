@@ -104,7 +104,7 @@ public class Investigador {
                 '}';
     }
 
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -114,10 +114,22 @@ public class Investigador {
                 getApellido().equals(that.getApellido()) &&
                 getEmail().equals(that.getEmail()) &&
                 getNombreRol().equals(that.getNombreRol());
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Investigador that = (Investigador) o;
+        return isActivado() == that.isActivado() &&
+                getNombre().equals(that.getNombre()) &&
+                getApellido().equals(that.getApellido()) &&
+                getEmail().equals(that.getEmail()) &&
+                Objects.equals(getNombreRol(), that.getNombreRol());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getNombre(), getApellido(), getEmail(), getNombreRol(), isActivado());
+        return Objects.hash(getId(), getNombre(), getApellido(), getEmail(), getIdRol(), getNombreRol(), isActivado());
     }
 }

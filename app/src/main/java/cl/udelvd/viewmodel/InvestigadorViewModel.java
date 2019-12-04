@@ -31,9 +31,13 @@ public class InvestigadorViewModel extends AndroidViewModel {
         return investigadorRepositorio.getResponseMsgLogin();
     }
 
-
     public SingleLiveEvent<String> mostrarErrorRespuesta() {
         investigadorRepositorio = InvestigadorRepositorio.getInstance(getApplication());
         return investigadorRepositorio.getErrorMsg();
+    }
+
+    public SingleLiveEvent<Map<String, Object>> mostrarMsgRespuestaActualizacion() {
+        investigadorRepositorio = InvestigadorRepositorio.getInstance(getApplication());
+        return investigadorRepositorio.getResponseMsgActualizacion();
     }
 }

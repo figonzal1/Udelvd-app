@@ -90,8 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                             InvestigadorRepositorio.getInstance(getApplication());
 
                     //Hacer login
-                    investigadorRepositorio.loginInvestigador(investigador,
-                            getApplicationContext());
+                    investigadorRepositorio.loginInvestigador(investigador);
                 }
             }
         });

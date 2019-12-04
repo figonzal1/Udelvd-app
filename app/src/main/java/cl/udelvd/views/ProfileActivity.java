@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,11 +37,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     private int id_rol;
     private int id;
+    private static final int PROFILE_ACTIVITY_CODE = 200;
+    private static final int EDIT_PROFILE_CODE = 201;
+    private String nombreRol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        Log.d("PROFILE_ACTIVITY", "LLAMADO DE ACTIVIDAD");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
@@ -61,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
         id = sharedPreferences.getInt("id_investigador", 0);
         id_rol = sharedPreferences.getInt("id_rol_investigador", 0);
+        nombreRol = sharedPreferences.getString("nombre_rol_investigador", "");
         nombre = sharedPreferences.getString("nombre_investigador", "");
         apellido = sharedPreferences.getString("apellido_investigador", "");
         email = sharedPreferences.getString("email_investigador", "");
@@ -111,7 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             //Enviar codigo OK a mainActivity
             Intent intent = getIntent();
-            setResult(200, intent);
+            setResult(PROFILE_ACTIVITY_CODE, intent);
             finish();
             return true;
         } else if (item.getItemId() == R.id.menu_edit_profile) {
@@ -124,7 +132,9 @@ public class ProfileActivity extends AppCompatActivity {
             intent.putExtra("email", email);
             intent.putExtra("id_rol", id_rol);
             intent.putExtra("password", password);
-            startActivity(intent);
+            intent.putExtra("nombre_rol", nombreRol);
+            startActivityForResult(intent, EDIT_PROFILE_CODE);
+
             return true;
         }
 
@@ -132,11 +142,21 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == EDIT_PROFILE_CODE) {
+            Log.d("FINISH_EDIT_PROFILE_ACT", "Cerrando formulario de edicion");
+            recreate();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
 
         //Enviar codigo OK a mainActivity
         Intent intent = getIntent();
-        setResult(200, intent);
+        setResult(PROFILE_ACTIVITY_CODE, intent);
         finish();
 
         super.onBackPressed();

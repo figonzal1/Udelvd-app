@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-import cl.udelvd.views.LoginActivity;
+import cl.udelvd.views.activities.LoginActivity;
 
 public class Utils {
 
@@ -32,6 +32,12 @@ public class Utils {
     }
 
 
+    /**
+     * Funcion encargada de verificar si el JWT esta expirado
+     *
+     * @param sharedPreferences Usado para buscar JWT guardado
+     * @return True | False segun sea el caso
+     */
     private static boolean isJWTExpired(SharedPreferences sharedPreferences) {
 
         //Obtener token shared pref
@@ -63,7 +69,7 @@ public class Utils {
 
                 Date date = jwt.getExpiresAt();
 
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.US);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
                 assert date != null;
                 String date_s = format.format(date);
 

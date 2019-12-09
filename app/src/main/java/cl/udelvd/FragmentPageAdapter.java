@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import cl.udelvd.views.fragments.UsuarioListaFragment;
+
 /**
  * Page Adapter usado cuando la paginacion es fija
  */
@@ -27,7 +29,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
         switch (position) {
 
             case 0:
-                f = UserListFragment.newInstance();
+                f = UsuarioListaFragment.newInstance();
                 break;
             case 1:
                 f = StatsFragment.newInstance();

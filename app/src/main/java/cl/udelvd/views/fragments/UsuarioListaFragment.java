@@ -1,40 +1,45 @@
-package cl.udelvd;
+package cl.udelvd.views.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Objects;
 
-public class UserListFragment extends Fragment {
+import cl.udelvd.NewUserDialog;
+import cl.udelvd.R;
+import cl.udelvd.repositorios.UsuarioRepositorio;
+import cl.udelvd.viewmodel.UsuarioViewModel;
+
+
+public class UsuarioListaFragment extends Fragment {
 
     private FloatingActionButton fbCrearUsuario;
-    private FragmentActivity activity;
 
-    private ConstraintLayout p1,p2,p3,p4;
+    private RecyclerView rv;
+    private UsuarioViewModel usuarioViewModel;
 
-    public UserListFragment() {
+
+    public UsuarioListaFragment() {
         // Required empty public constructor
     }
 
 
-    public static UserListFragment newInstance() {
-        return new UserListFragment();
+    public static UsuarioListaFragment newInstance() {
+        return new UsuarioListaFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
     }
 
     @Override
@@ -43,45 +48,23 @@ public class UserListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_user_list,container,false);
 
-        p1 = v.findViewById(R.id.p1);
-        p2 = v.findViewById(R.id.p2);
-        p3 = v.findViewById(R.id.p3);
-        p4 = v.findViewById(R.id.p4);
+        rv = v.findViewById(R.id.rv_lista_usuarios);
 
-        p1.setOnClickListener(new View.OnClickListener() {
+
+        LinearLayoutManager ly = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(ly);
+
+        /*usuarioViewModel = ViewModelProviders.of(this).get(UsuarioViewModel.class);
+
+        usuarioViewModel.mostrarListaUsuarios().observe(this, new Observer<List<Usuario>>() {
             @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getActivity(),InterviewsListActivity.class);
-                startActivity(intent);
+            public void onChanged(List<Usuario> usuarioList) {
+                Log.d("VIEW_MODEl_LIST", String.valueOf(usuarioList));
             }
-        });
+        });*/
 
-        p2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),InterviewsListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        p3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),InterviewsListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        p4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),InterviewsListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
+        UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance(Objects.requireNonNull(getActivity()).getApplication());
+        usuarioRepositorio.getUsuarios();
 
 
         fbCrearUsuario = v.findViewById(R.id.fb_crear_usuario);

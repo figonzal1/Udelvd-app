@@ -1,4 +1,4 @@
-package cl.udelvd.views;
+package cl.udelvd.views.activities;
 
 import android.os.Bundle;
 import android.text.TextUtils;

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class UsuarioListaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_user_list,container,false);
+        final View v = inflater.inflate(R.layout.fragment_user_list, container, false);
 
         rv = v.findViewById(R.id.rv_lista_usuarios);
 
@@ -81,7 +81,7 @@ public class UsuarioListaFragment extends Fragment {
         usuarioViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                showSnackbar(v, s, "Reintentar");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -100,7 +100,7 @@ public class UsuarioListaFragment extends Fragment {
                 assert getFragmentManager() != null;
                 dialogFragment.show(getFragmentManager(),"NewUserDialog");*/
 
-                NewUserDialog fragment = new NewUserDialog ();
+                NewUserDialog fragment = new NewUserDialog();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.add(android.R.id.content, fragment)
@@ -123,5 +123,23 @@ public class UsuarioListaFragment extends Fragment {
         });
 
         return v;
+    }
+
+
+    public void showSnackbar(View v, String titulo, String accion) {
+
+        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.fragment_list), titulo, Snackbar.LENGTH_INDEFINITE)
+                .setAction(accion, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //Refresh listado de usuarios
+                        usuarioViewModel.refreshListaUsuarios();
+
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+
+        snackbar.show();
     }
 }

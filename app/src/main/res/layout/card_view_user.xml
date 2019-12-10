@@ -11,50 +11,97 @@
     android:theme="@style/AppTheme">
 
     <ImageView
-        android:id="@+id/iv_mag_color"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/cv_iv_mag_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="Foto Usuario"
-        android:background="@color/colorPrimaryVariant"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toTopOf="parent"
-        card_view:srcCompat="@drawable/ic_person_white_24dp" />
+        card_view:srcCompat="@drawable/person_circle" />
 
     <TextView
-        android:id="@+id/tv_nombre"
+        android:id="@+id/cv_tv_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Nombre Persona"
+        card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_icono_nombre"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_icono_nombre"
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_icono_nombre" />
+
+    <TextView
+        android:id="@+id/cv_tv_fecha_nac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="XXXX/XX/XX - XX años"
+        card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_icono_fecha_nac"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_icono_fecha_nac"
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_icono_fecha_nac" />
+
+    <ImageView
+        android:id="@+id/cv_iv_icono_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Nombre Persona"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintHorizontal_bias="0.0"
-        card_view:layout_constraintStart_toEndOf="@+id/iv_mag_color"
-        card_view:layout_constraintTop_toTopOf="@+id/iv_mag_color" />
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_mag_color"
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_mag_color"
+        card_view:srcCompat="@drawable/ic_person_black_24dp" />
 
-    <TextView
-        android:id="@+id/tv_entrevistas"
+    <ImageView
+        android:id="@+id/cv_iv_icono_fecha_nac"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rut: XX.XXX.XXX-X"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintHorizontal_bias="0.0"
-        card_view:layout_constraintStart_toStartOf="@+id/tv_nombre"
-        card_view:layout_constraintTop_toBottomOf="@+id/tv_nombre" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        card_view:layout_constraintBottom_toTopOf="@+id/cv_iv_entrevistas"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_mag_color"
+        card_view:layout_constraintTop_toBottomOf="@+id/cv_iv_icono_nombre"
+        card_view:srcCompat="@drawable/ic_cake_black_24dp" />
 
-    <TextView
-        android:id="@+id/tv_edad"
+    <ImageView
+        android:id="@+id/cv_iv_entrevistas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edad: XX"
-        card_view:layout_constraintBottom_toBottomOf="@+id/iv_mag_color"
+        android:layout_marginStart="16dp"
+        card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_mag_color"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_mag_color"
+        card_view:srcCompat="@drawable/ic_interview_black_24dp" />
+
+    <TextView
+        android:id="@+id/cv_tv_n_entrevistas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="4 entrevistas"
+        card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_entrevistas"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintHorizontal_bias="0.0"
-        card_view:layout_constraintStart_toStartOf="@+id/tv_entrevistas"
-        card_view:layout_constraintTop_toBottomOf="@+id/tv_entrevistas"
-        card_view:layout_constraintVertical_bias="0.0" />
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_entrevistas"
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_entrevistas" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/dividerHorizontal"
+        android:visibility="visible"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintStart_toStartOf="@+id/cv_iv_entrevistas"
+        card_view:layout_constraintTop_toBottomOf="@+id/cv_iv_mag_color" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

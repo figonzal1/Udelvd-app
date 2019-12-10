@@ -1,15 +1,42 @@
 package cl.udelvd.model;
 
+import java.util.Date;
+
 public class Usuario {
 
+    private int id;
     private String nombre;
     private String apellido;
-    private int edad;
     private String sexo;
+
+    private Date fechaNacimiento;
     private String ciudad;
-    private int id_investigador;
+    private boolean jubiladoLegal;
+
+    private boolean caidas;
+    private int nCaidas;
+
+    private int nConvivientes3Meses;
+
+
+    private int idInvestigador;
+    private int idEstadoCivil;
+
+    //opcionales
+    private int idNivelEducacional;
+    private int idConviviente;
+    private int idProfesion;
+    private String createTime;
 
     public Usuario() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -28,20 +55,20 @@ public class Usuario {
         this.apellido = apellido;
     }
 
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
-    }
-
     public String getSexo() {
         return sexo;
     }
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     public String getCiudad() {
@@ -52,23 +79,105 @@ public class Usuario {
         this.ciudad = ciudad;
     }
 
-    public int getId_investigador() {
-        return id_investigador;
+    public boolean isJubiladoLegal() {
+        return jubiladoLegal;
     }
 
-    public void setId_investigador(int id_investigador) {
-        this.id_investigador = id_investigador;
+    public void setJubiladoLegal(boolean jubiladoLegal) {
+        this.jubiladoLegal = jubiladoLegal;
+    }
+
+    public boolean isCaidas() {
+        return caidas;
+    }
+
+    public void setCaidas(boolean caidas) {
+        this.caidas = caidas;
+    }
+
+    public int getnCaidas() {
+        return nCaidas;
+    }
+
+    public void setnCaidas(int nCaidas) {
+        this.nCaidas = nCaidas;
+    }
+
+    public int getnConvivientes3Meses() {
+        return nConvivientes3Meses;
+    }
+
+    public void setnConvivientes3Meses(int nConvivientes3Meses) {
+        this.nConvivientes3Meses = nConvivientes3Meses;
+    }
+
+    public int getIdInvestigador() {
+        return idInvestigador;
+    }
+
+    public void setIdInvestigador(int idInvestigador) {
+        this.idInvestigador = idInvestigador;
+    }
+
+    public int getIdEstadoCivil() {
+        return idEstadoCivil;
+    }
+
+    public void setIdEstadoCivil(int idEstadoCivil) {
+        this.idEstadoCivil = idEstadoCivil;
+    }
+
+    public int getIdNivelEducacional() {
+        return idNivelEducacional;
+    }
+
+    public void setIdNivelEducacional(int idNivelEducacional) {
+        this.idNivelEducacional = idNivelEducacional;
+    }
+
+    public int getIdConviviente() {
+        return idConviviente;
+    }
+
+    public void setIdConviviente(int idConviviente) {
+        this.idConviviente = idConviviente;
+    }
+
+    public int getIdProfesion() {
+        return idProfesion;
+    }
+
+    public void setIdProfesion(int idProfesion) {
+        this.idProfesion = idProfesion;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     @Override
     public String toString() {
         return "Usuario{" +
-                "nombre='" + nombre + '\'' +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
-                ", edad=" + edad +
                 ", sexo='" + sexo + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
                 ", ciudad='" + ciudad + '\'' +
-                ", id_investigador=" + id_investigador +
+                ", jubiladoLegal=" + jubiladoLegal +
+                ", caidas=" + caidas +
+                ", nCaidas=" + nCaidas +
+                ", nConvivientes3Meses=" + nConvivientes3Meses +
+                ", idInvestigador=" + idInvestigador +
+                ", idEstadoCivil=" + idEstadoCivil +
+                ", idNivelEducacional=" + idNivelEducacional +
+                ", idConviviente=" + idConviviente +
+                ", idProfesion=" + idProfesion +
+                ", createTime='" + createTime + '\'' +
                 '}';
     }
 }

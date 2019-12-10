@@ -107,4 +107,19 @@ public class Utils {
             activity.finish();
         }
     }
+
+    /**
+     * Funcion para calcular la edad
+     *
+     * @param fecha_nac Fecha nacimiento de la persona
+     * @return Edad
+     */
+    public static int calculateYearsOld(Date fecha_nac) {
+
+        Date now = new Date();
+
+        long diff = now.getTime() - fecha_nac.getTime();
+
+        return (int) (diff / (24 * 60 * 60 * 1000)) / 365;
+    }
 }

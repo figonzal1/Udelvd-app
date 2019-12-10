@@ -4,19 +4,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 import cl.udelvd.NewUserDialog;
 import cl.udelvd.R;
-import cl.udelvd.repositorios.UsuarioRepositorio;
+import cl.udelvd.model.Usuario;
 import cl.udelvd.viewmodel.UsuarioViewModel;
 
 
@@ -26,6 +31,8 @@ public class UsuarioListaFragment extends Fragment {
 
     private RecyclerView rv;
     private UsuarioViewModel usuarioViewModel;
+    private UsuarioAdapter usuarioAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     public UsuarioListaFragment() {
@@ -53,19 +60,31 @@ public class UsuarioListaFragment extends Fragment {
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
+        rv.setAdapter(new UsuarioAdapter(new ArrayList<Usuario>()));
 
-        /*usuarioViewModel = ViewModelProviders.of(this).get(UsuarioViewModel.class);
+        usuarioViewModel = ViewModelProviders.of(this).get(UsuarioViewModel.class);
 
+        //Manejador de listado de usuarios
         usuarioViewModel.mostrarListaUsuarios().observe(this, new Observer<List<Usuario>>() {
             @Override
             public void onChanged(List<Usuario> usuarioList) {
-                Log.d("VIEW_MODEl_LIST", String.valueOf(usuarioList));
+
+                usuarioAdapter = new UsuarioAdapter(usuarioList);
+                usuarioAdapter.notifyDataSetChanged();
+                rv.setAdapter(usuarioAdapter);
+
+                swipeRefreshLayout.setRefreshing(false);
             }
-        });*/
+        });
 
-        UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        usuarioRepositorio.getUsuarios();
-
+        //Manejador de Respuestas erroreas en fragment
+        usuarioViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         fbCrearUsuario = v.findViewById(R.id.fb_crear_usuario);
         fbCrearUsuario.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +105,20 @@ public class UsuarioListaFragment extends Fragment {
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.add(android.R.id.content, fragment)
                         .addToBackStack(null).commit();
+            }
+        });
+
+
+        swipeRefreshLayout = v.findViewById(R.id.refresh_usuarios);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorSecondary), getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setRefreshing(true);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                usuarioViewModel.refreshListaUsuarios();
+
+                swipeRefreshLayout.setRefreshing(true);
             }
         });
 

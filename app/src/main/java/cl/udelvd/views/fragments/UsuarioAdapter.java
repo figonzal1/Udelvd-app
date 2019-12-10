@@ -1,7 +1,5 @@
 package cl.udelvd.views.fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +14,14 @@ import java.util.Locale;
 
 import cl.udelvd.R;
 import cl.udelvd.model.Usuario;
+import cl.udelvd.utils.Utils;
 
 public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.QuakeViewHolder> {
 
     private final List<Usuario> usuarioList;
-    private final Context context;
-    private final Activity activity;
 
-    public UsuarioAdapter(List<Usuario> usuarioList, Context context, Activity activity) {
-        this.activity = activity;
+    public UsuarioAdapter(List<Usuario> usuarioList) {
         this.usuarioList = usuarioList;
-        this.context = context;
     }
 
     @NonNull
@@ -41,11 +36,13 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.QuakeVie
 
         Usuario usuario = usuarioList.get(position);
 
-        holder.tv_nombre_apellido.setText(usuario.getNombre() + " " + usuario.getApellido());
+        holder.tv_nombre_apellido.setText(String.format("%s %s", usuario.getNombre(), usuario.getApellido()));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/mm/dd", Locale.US);
-        holder.tv_fecha_nacimiento.setText(simpleDateFormat.format(usuario.getFechaNacimiento()));
-        holder.tv_n_entrevistas.setText("10");
+
+        int annos = Utils.calculateYearsOld(usuario.getFechaNacimiento());
+        holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", simpleDateFormat.format(usuario.getFechaNacimiento()), annos));
+        holder.tv_n_entrevistas.setText("10 entrevistas");
 
 
     }

@@ -1,4 +1,4 @@
-package cl.udelvd.views.fragments;
+package cl.udelvd.vistas.fragments;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Locale;
 
 import cl.udelvd.R;
-import cl.udelvd.model.Usuario;
-import cl.udelvd.utils.Utils;
+import cl.udelvd.modelo.Usuario;
+import cl.udelvd.utilidades.Utils;
 
 public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.QuakeViewHolder> {
 
@@ -27,7 +27,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.QuakeVie
     @NonNull
     @Override
     public QuakeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_user, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_entrevistado, parent, false);
         return new QuakeViewHolder(v);
     }
 
@@ -52,14 +52,14 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.QuakeVie
         return usuarioList.size();
     }
 
-    public static class QuakeViewHolder extends RecyclerView.ViewHolder {
+    static class QuakeViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv_nombre_apellido;
-        private TextView tv_fecha_nacimiento;
-        private TextView tv_n_entrevistas;
+        private final TextView tv_nombre_apellido;
+        private final TextView tv_fecha_nacimiento;
+        private final TextView tv_n_entrevistas;
 
 
-        public QuakeViewHolder(@NonNull View itemView) {
+        QuakeViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_nombre_apellido = itemView.findViewById(R.id.cv_tv_nombre);

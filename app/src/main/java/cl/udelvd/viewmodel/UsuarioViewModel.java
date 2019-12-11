@@ -8,9 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-import cl.udelvd.model.Usuario;
+import cl.udelvd.modelo.Usuario;
 import cl.udelvd.repositorios.UsuarioRepositorio;
-import cl.udelvd.utils.SingleLiveEvent;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class UsuarioViewModel extends AndroidViewModel {
 

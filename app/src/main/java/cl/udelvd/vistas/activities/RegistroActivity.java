@@ -1,4 +1,4 @@
-package cl.udelvd.views.activities;
+package cl.udelvd.vistas.activities;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,12 +20,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 
 import cl.udelvd.R;
-import cl.udelvd.model.Investigador;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
-import cl.udelvd.utils.Utils;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.InvestigadorViewModel;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegistroActivity extends AppCompatActivity {
 
     private TextInputLayout ilNombre;
     private TextInputLayout ilApellido;
@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_registro);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -191,7 +191,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
 
             //Comprobar mail valido
-            if (!Utils.isValidEmail(etEmail.getText())) {
+            if (Utils.isInValidEmail(etEmail.getText())) {
                 ilEmail.setErrorEnabled(true);
                 ilEmail.setError("Email inválido");
                 contador_errores++;
@@ -232,10 +232,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         //Si no hay errores, pasa a registro
-        if (contador_errores == 0) {
-            status = true;
-            return status;
-        }
-        return status;
+        return contador_errores == 0;
     }
 }

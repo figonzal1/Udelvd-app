@@ -8,14 +8,14 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
 
 
-    public FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior) {
+    FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = null;
+        Fragment fragment;
         fragment = EventsSwipeFragment.newInstance();
 
         return fragment;

@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import java.util.Map;
 
 import cl.udelvd.repositorios.InvestigadorRepositorio;
-import cl.udelvd.utils.SingleLiveEvent;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class InvestigadorViewModel extends AndroidViewModel {
 

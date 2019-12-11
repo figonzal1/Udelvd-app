@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".views.activities.ProfileActivity">
+    tools:context=".vistas.activities.PerfilActivity">
 
     <include
         android:id="@+id/include"
@@ -38,7 +38,7 @@
 
 
             <View
-                android:id="@+id/divider2"
+                android:id="@+id/divider1"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
@@ -48,7 +48,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_email_investigador" />
 
             <View
-                android:id="@+id/divider3"
+                android:id="@+id/divider2"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
@@ -107,6 +107,7 @@
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="Icono email investigador"
                 app:srcCompat="@drawable/ic_email_black_24dp" />
 
             <ImageView
@@ -117,7 +118,8 @@
                 android:layout_marginTop="16dp"
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                android:contentDescription="Icono cuenta activada"
+                app:layout_constraintTop_toBottomOf="@+id/divider1"
                 app:srcCompat="@drawable/ic_verified_user_black_24dp" />
 
             <TextView
@@ -167,7 +169,8 @@
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3"
+                android:contentDescription="Icono fecha de registro"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
                 app:srcCompat="@drawable/ic_access_time_black_24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -183,6 +186,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
+        android:contentDescription="Imagen perfil investigador"
         app:srcCompat="@drawable/person_circle" />
 
     <TextView
@@ -209,6 +213,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tv_nombre_investigador"
         app:layout_constraintTop_toTopOf="@+id/tv_nombre_investigador"
+        android:contentDescription="Icono investigador en línea"
         app:srcCompat="@drawable/live_dot" />
 
 

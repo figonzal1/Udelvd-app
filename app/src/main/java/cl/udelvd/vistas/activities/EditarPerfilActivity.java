@@ -1,4 +1,4 @@
-package cl.udelvd.views.activities;
+package cl.udelvd.vistas.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,12 +30,12 @@ import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.R;
-import cl.udelvd.model.Investigador;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
-import cl.udelvd.utils.Utils;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.InvestigadorViewModel;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditarPerfilActivity extends AppCompatActivity {
 
     private TextInputLayout ilNombre;
     private TextInputLayout ilApellido;
@@ -62,7 +62,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_editar_perfil);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
@@ -152,7 +152,7 @@ public class EditProfileActivity extends AppCompatActivity {
         etApellido.setText(bundle.getString("apellido"));
         etEmail.setText(bundle.getString("email"));
 
-        switchCompat = findViewById(R.id.switch1);
+        switchCompat = findViewById(R.id.switch_password_on);
 
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -216,7 +216,7 @@ public class EditProfileActivity extends AppCompatActivity {
         } else {
 
             //Comprobar mail valido
-            if (!Utils.isValidEmail(etEmail.getText())) {
+            if (Utils.isInValidEmail(etEmail.getText())) {
                 ilEmail.setErrorEnabled(true);
                 ilEmail.setError("Email inválido");
                 contador_errores++;
@@ -259,18 +259,14 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         //Si no hay errores, pasa a registro
-        if (contador_errores == 0) {
-            status = true;
-            return status;
-        }
-        return status;
+        return contador_errores == 0;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.new_user_dialog_menu, menu);
+        inflater.inflate(R.menu.menu_guardar_datos, menu);
         return true;
     }
 
@@ -279,7 +275,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         if (item.getItemId() == android.R.id.home) {
             finish();
-        } else if (item.getItemId() == R.id.menu_guardar_usuario) {
+        } else if (item.getItemId() == R.id.menu_guardar) {
             if (validarCampos()) {
 
                 progressBar.setVisibility(View.VISIBLE);

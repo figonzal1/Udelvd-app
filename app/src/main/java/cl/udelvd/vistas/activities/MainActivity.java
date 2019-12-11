@@ -1,4 +1,4 @@
-package cl.udelvd.views.activities;
+package cl.udelvd.vistas.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,35 +16,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.List;
 import java.util.Objects;
 
 import cl.udelvd.FragmentPageAdapter;
 import cl.udelvd.R;
-import cl.udelvd.model.Usuario;
-import cl.udelvd.repositorios.UsuarioRepositorio;
-import cl.udelvd.utils.Utils;
-import cl.udelvd.viewmodel.UsuarioViewModel;
+import cl.udelvd.utilidades.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private static final int PROFILE_ACTIVITY_CODE = 200;
 
-    private TextView tv_nombre_apellido_investigador;
-    private TextView tv_email_investigador;
-    private TextView tv_nombre_rol_investigador;
     private String nombreRolInvestigador;
-
 
     private SharedPreferences sharedPreferences;
     private TabLayout tabLayout;
@@ -60,29 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         setearToolbarViewPagerTabsDrawer();
 
-        //viewModelObserver();
     }
 
-
-    /**
-     * Funcion encargada de realizar la observacion del token de autentificacion
-     */
-    private void viewModelObserver() {
-
-        //TODO: Valicacion de token deberia tener su propio viewmodel
-        UsuarioViewModel usuarioViewModel = ViewModelProviders.of(this).get(UsuarioViewModel.class);
-
-        usuarioViewModel.mostrarListaUsuarios().observe(this, new Observer<List<Usuario>>() {
-            @Override
-            public void onChanged(List<Usuario> usuarios) {
-
-            }
-        });
-
-        //Llamado de datos (LLamado hacerlo en fragment)
-        UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance(getApplication());
-        usuarioRepositorio.getUsuarios();
-    }
 
     /**
      * Funcion encargada de setear el nombre del investigador logueado  en el header del drawer
@@ -91,10 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Obtener header de navigation drawer
         View header = navigationView.getHeaderView(0);
-        tv_nombre_apellido_investigador =
-                header.findViewById(R.id.tv_header_nombre_apellido_usuario);
-        tv_email_investigador = header.findViewById(R.id.tv_header_email_usuario);
-        tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
+        TextView tv_nombre_apellido_investigador = header.findViewById(R.id.tv_header_nombre_apellido_usuario);
+        TextView tv_email_investigador = header.findViewById(R.id.tv_header_email_usuario);
+        TextView tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
 
         //Obtener datos usuario logeado
 
@@ -114,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setearToolbarViewPagerTabsDrawer() {
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
         setSupportActionBar(toolbar);
 
@@ -149,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigation_view);
 
         //Set default tab
-        navigationView.setCheckedItem(R.id.menu_adult_list);
+        navigationView.setCheckedItem(R.id.menu_entrevistados);
         Objects.requireNonNull(tabLayout.getTabAt(0)).select();
 
         configurarDrawerHeader();
@@ -175,27 +142,27 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 //Menu general
-                if (menuItem.getItemId() == R.id.menu_profile) {
+                if (menuItem.getItemId() == R.id.menu_perfil) {
                     drawerLayout.closeDrawer(GravityCompat.START, true);
 
-                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                    Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
                     startActivityForResult(intent, PROFILE_ACTIVITY_CODE);
 
                     return true;
-                } else if (menuItem.getItemId() == R.id.menu_adult_list) {
+                } else if (menuItem.getItemId() == R.id.menu_entrevistados) {
                     Objects.requireNonNull(tabLayout.getTabAt(0)).select();
                     drawerLayout.closeDrawer(GravityCompat.START, true);
                     return true;
-                } else if (menuItem.getItemId() == R.id.menu_statistics) {
+                } else if (menuItem.getItemId() == R.id.menu_estadisticas) {
                     Objects.requireNonNull(tabLayout.getTabAt(1)).select();
                     drawerLayout.closeDrawer(GravityCompat.START, true);
                     return true;
                 }
 
                 //Menu admin
-                if (menuItem.getItemId() == R.id.menu_actions) {
+                if (menuItem.getItemId() == R.id.menu_acciones) {
                     return true;
-                } else if (menuItem.getItemId() == R.id.menu_emoticons) {
+                } else if (menuItem.getItemId() == R.id.menu_emoticones) {
                     return true;
                 }
 
@@ -234,9 +201,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //Modificar navigation drawer segun tabs (Swipe de fragments)
                 if (tab.getPosition() == 0) {
-                    navigationView.setCheckedItem(R.id.menu_adult_list);
+                    navigationView.setCheckedItem(R.id.menu_entrevistados);
                 } else if (tab.getPosition() == 1) {
-                    navigationView.setCheckedItem(R.id.menu_statistics);
+                    navigationView.setCheckedItem(R.id.menu_estadisticas);
                 }
             }
 
@@ -276,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == PROFILE_ACTIVITY_CODE) {
             Log.d("FINISH_PROFILE_ACTIVITY", "Seteando navigation en listado");
-            navigationView.setCheckedItem(R.id.menu_adult_list);
+            navigationView.setCheckedItem(R.id.menu_entrevistados);
             Objects.requireNonNull(tabLayout.getTabAt(0)).select();
         }
     }

@@ -1,4 +1,4 @@
-package cl.udelvd.utils;
+package cl.udelvd.utilidades;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-import cl.udelvd.views.activities.LoginActivity;
+import cl.udelvd.vistas.activities.LoginActivity;
 
 public class Utils {
 
@@ -24,11 +24,11 @@ public class Utils {
      * @param target Email objetivo
      * @return True|False según sea el caso
      */
-    public static boolean isValidEmail(CharSequence target) {
+    public static boolean isInValidEmail(CharSequence target) {
         boolean result =
                 !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        Log.d("EMAIL_VALIDO", String.valueOf(result));
-        return result;
+        Log.d("EMAIL_INVALIDO", String.valueOf(!result));
+        return !result;
     }
 
 

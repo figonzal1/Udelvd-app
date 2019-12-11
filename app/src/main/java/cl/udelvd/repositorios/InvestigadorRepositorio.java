@@ -20,19 +20,19 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cl.udelvd.model.Investigador;
-import cl.udelvd.services.VolleySingleton;
-import cl.udelvd.utils.SingleLiveEvent;
+import cl.udelvd.modelo.Investigador;
+import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class InvestigadorRepositorio {
     private static InvestigadorRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
-    private SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
     private InvestigadorRepositorio(Application application) {
         this.application = application;
@@ -70,7 +70,7 @@ public class InvestigadorRepositorio {
     /**
      * Funcion encargada de insertar investigador en BD
      *
-     * @param investigador
+     * @param investigador Objecto investigador a registrar
      */
     public void registrarInvestigador(Investigador investigador) {
         enviarPostRegistro(investigador);
@@ -79,7 +79,7 @@ public class InvestigadorRepositorio {
     /**
      * Funcion encargada de realizar el login del investigador
      *
-     * @param investigador
+     * @param investigador Objeto investigador que hará login en sistema
      */
     public void loginInvestigador(Investigador investigador) {
         enviarPostLogin(investigador);
@@ -261,7 +261,7 @@ public class InvestigadorRepositorio {
     /**
      * Funcion encargada de enviar peticion POST para registro investigador
      *
-     * @param investigador
+     * @param investigador Objeto investigador que hara registro en sistema
      */
     private void enviarPostRegistro(final Investigador investigador) {
 

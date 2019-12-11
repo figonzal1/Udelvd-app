@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:fitsSystemWindows="true"
-    tools:context=".views.activities.RegisterActivity">
+    tools:context=".vistas.activities.RegistroActivity">
 
     <include
         android:id="@+id/include"

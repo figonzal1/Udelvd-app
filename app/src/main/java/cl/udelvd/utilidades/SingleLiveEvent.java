@@ -1,4 +1,4 @@
-package cl.udelvd.utils;
+package cl.udelvd.utilidades;
 
 import android.util.Log;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
-    private AtomicBoolean status = new AtomicBoolean(false);
+    private final AtomicBoolean status = new AtomicBoolean(false);
 
     public void observe(@NonNull LifecycleOwner owner,
                         @NonNull final Observer<? super T> observer) {

@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/group_help"
+        android:id="@+id/group_ayuda"
         android:checkableBehavior="none"
         android:orderInCategory="3">
 
         <item
-            android:id="@+id/menu_config"
+            android:id="@+id/menu_configuracion"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Configuración" />
 
         <item
-            android:id="@+id/menu_privacy_policy"
+            android:id="@+id/menu_condiciones"
             android:icon="@drawable/ic_description_black_24dp"
             android:title="Condiciones y privacidad" />
         <item
-            android:id="@+id/menu_contact"
+            android:id="@+id/menu_contacto"
             android:icon="@drawable/ic_help_outline_black_24dp"
             android:title="Contáctenos" />
     </group>
 
     <group
-        android:id="@+id/group_other"
+        android:id="@+id/group_otros"
         android:checkableBehavior="none"
         android:orderInCategory="4">
 
@@ -41,13 +41,13 @@
             <group>
 
                 <item
-                    android:id="@+id/menu_actions"
+                    android:id="@+id/menu_acciones"
                     android:checkable="true"
                     android:icon="@drawable/ic_directions_run_black_24dp"
                     android:title="Acciones" />
 
                 <item
-                    android:id="@+id/menu_emoticons"
+                    android:id="@+id/menu_emoticones"
                     android:checkable="true"
                     android:icon="@drawable/ic_tag_faces_black_24dp"
                     android:title="Emoticones" />
@@ -65,19 +65,19 @@
             <group>
 
                 <item
-                    android:id="@+id/menu_profile"
+                    android:id="@+id/menu_perfil"
                     android:checkable="true"
                     android:icon="@drawable/ic_person_white_24dp"
                     android:title="Mi perfil" />
 
                 <item
-                    android:id="@+id/menu_adult_list"
+                    android:id="@+id/menu_entrevistados"
                     android:checkable="true"
                     android:icon="@drawable/ic_list_black_24dp"
-                    android:title="Usuarios" />
+                    android:title="Entrevistados" />
 
                 <item
-                    android:id="@+id/menu_statistics"
+                    android:id="@+id/menu_estadisticas"
                     android:checkable="true"
                     android:icon="@drawable/ic_show_chart_black_24dp"
                     android:title="Estadísticas" />

@@ -28,7 +28,7 @@ public class NewInterviewDialog extends DialogFragment {
         //Icono Cerrar dialog
         Toolbar toolbar = v.findViewById(R.id.toolbar_dialog_interview);
         toolbar.setTitle("Crear Entrevista");
-        toolbar.inflateMenu(R.menu.new_user_dialog_menu);
+        toolbar.inflateMenu(R.menu.menu_guardar_datos);
 
         //Logica de cierre de dialog
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -43,7 +43,7 @@ public class NewInterviewDialog extends DialogFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_guardar_usuario) {
+                if (item.getItemId() == R.id.menu_guardar) {
                     Toast.makeText(getContext(), "Entrevista guardada", Toast.LENGTH_LONG).show();
                     return true;
                 }

@@ -12,21 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.activities.EditProfileActivity"></activity>
+        <activity android:name=".vistas.activities.NuevoEntrevistadoActivity" />
+        <activity android:name=".vistas.activities.EditarPerfilActivity" />
         <activity
-            android:name=".views.activities.ProfileActivity"
-            android:parentActivityName=".views.activities.MainActivity" />
+            android:name=".vistas.activities.PerfilActivity"
+            android:parentActivityName=".vistas.activities.MainActivity" />
         <activity
-            android:name=".views.activities.RegisterActivity"
-            android:parentActivityName=".views.activities.LoginActivity" />
-        <activity android:name=".views.activities.LoginActivity" />
+            android:name=".vistas.activities.RegistroActivity"
+            android:parentActivityName=".vistas.activities.LoginActivity" />
+        <activity android:name=".vistas.activities.LoginActivity" />
         <activity
             android:name=".EventsActivity"
             android:parentActivityName=".InterviewsListActivity" />
         <activity
             android:name=".InterviewsListActivity"
-            android:parentActivityName=".views.activities.MainActivity" />
-        <activity android:name=".views.activities.MainActivity">
+            android:parentActivityName=".vistas.activities.MainActivity" />
+        <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

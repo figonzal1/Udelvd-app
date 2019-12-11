@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
-    tools:context=".views.activities.MainActivity">
+    tools:context=".vistas.activities.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -63,10 +63,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/drawer_header"
+        app:headerLayout="@layout/drawer_cabecera"
         app:itemIconTint="@color/colorSecondaryVariant"
         app:itemTextColor="@color/colorOnPrimary"
-        app:menu="@menu/drawer_menu" />
+        app:menu="@menu/menu_drawer" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

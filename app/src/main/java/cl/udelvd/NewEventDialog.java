@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,7 +27,7 @@ public class NewEventDialog extends DialogFragment {
         //Icono Cerrar dialog
         Toolbar toolbar = v.findViewById(R.id.toolbar_dialog_event);
         toolbar.setTitle("Crear Evento");
-        toolbar.inflateMenu(R.menu.new_user_dialog_menu);
+        toolbar.inflateMenu(R.menu.menu_guardar_datos);
 
         //Logica de cierre de dialog
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -43,7 +42,7 @@ public class NewEventDialog extends DialogFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_guardar_usuario) {
+                if (item.getItemId() == R.id.menu_guardar) {
                     Toast.makeText(getContext(), "Evento guardado", Toast.LENGTH_LONG).show();
                     return true;
                 }

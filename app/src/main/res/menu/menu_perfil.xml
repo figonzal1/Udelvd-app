@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".views.activities.ProfileActivity">
+    tools:context=".vistas.activities.PerfilActivity">
 
     <item
-        android:id="@+id/menu_edit_profile"
-        android:icon="@drawable/ic_edit_black_24dp"
+        android:id="@+id/menu_editar_perfil"
+        android:icon="@drawable/ic_edit_pencil_black_24dp"
         android:title="Editar perfil"
         app:showAsAction="never" />
 

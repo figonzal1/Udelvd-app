@@ -1,4 +1,6 @@
-package cl.udelvd.model;
+package cl.udelvd.modelo;
+
+import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
@@ -89,6 +91,7 @@ public class Investigador {
         this.createTime = createTime;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Investigador{" +

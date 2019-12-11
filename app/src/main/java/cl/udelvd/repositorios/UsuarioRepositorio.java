@@ -28,19 +28,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cl.udelvd.model.Usuario;
-import cl.udelvd.services.VolleySingleton;
-import cl.udelvd.utils.SingleLiveEvent;
+import cl.udelvd.modelo.Usuario;
+import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class UsuarioRepositorio {
 
     private static UsuarioRepositorio instancia;
-    private Application application;
+    private final Application application;
 
     private List<Usuario> usuarioList;
-    private MutableLiveData<List<Usuario>> mutableUsuariosList = new MutableLiveData<>();
+    private final MutableLiveData<List<Usuario>> mutableUsuariosList = new MutableLiveData<>();
 
-    private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
     private UsuarioRepositorio(Application application) {
         this.application = application;
@@ -194,7 +194,7 @@ public class UsuarioRepositorio {
                 errorListener) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
                         Context.MODE_PRIVATE);
 

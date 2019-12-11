@@ -1,4 +1,4 @@
-package cl.udelvd.views.activities;
+package cl.udelvd.vistas.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.R;
-import cl.udelvd.model.Investigador;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
-import cl.udelvd.utils.Utils;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.InvestigadorViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -38,8 +38,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout ilPassword;
     private TextInputEditText etEmail;
     private TextInputEditText etPassword;
-    private Button btn_login;
-    private TextView tv_registro;
     private ProgressBar progressBar;
 
     @Override
@@ -71,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_horizontal_login);
 
         //Boton de login
-        btn_login = findViewById(R.id.btn_login);
+        Button btn_login = findViewById(R.id.btn_login);
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
 
             //Comprobar mail válido
-            if (!Utils.isValidEmail(etEmail.getText())) {
+            if (Utils.isInValidEmail(etEmail.getText())) {
                 ilEmail.setErrorEnabled(true);
                 ilEmail.setError("Email inválido");
                 contador_errores++;
@@ -207,11 +205,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         //Si no hay errores, pasa a registro
-        if (contador_errores == 0) {
-            status = true;
-            return status;
-        }
-        return status;
+        return contador_errores == 0;
     }
 
     /**
@@ -219,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void linkRegistro() {
         //Logica de textview de registro
-        tv_registro = findViewById(R.id.tv_registro);
+        TextView tv_registro = findViewById(R.id.tv_registro);
         tv_registro.setMovementMethod(LinkMovementMethod.getInstance());
         Spannable spans = (Spannable) tv_registro.getText();
         ClickableSpan clickSpan = new ClickableSpan() {
@@ -228,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(@NonNull View widget) {
 
                 Log.d("INTENT", "ABRIENDO REGISTRO ACTIVITY");
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
                 startActivity(intent);
             }
         };

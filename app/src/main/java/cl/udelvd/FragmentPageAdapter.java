@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import cl.udelvd.views.fragments.UsuarioListaFragment;
+import cl.udelvd.vistas.fragments.UsuarioListaFragment;
 
 /**
  * Page Adapter usado cuando la paginacion es fija
@@ -16,7 +16,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
 
 
     public FragmentPageAdapter(@NonNull FragmentManager fm) {
-        super(fm);
+        super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mTabs[0] = "Usuarios";
         mTabs[1] = "Estadísticas";
     }

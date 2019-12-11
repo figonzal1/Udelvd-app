@@ -1,4 +1,6 @@
-package cl.udelvd.model;
+package cl.udelvd.modelo;
+
+import androidx.annotation.NonNull;
 
 import java.util.Date;
 
@@ -159,6 +161,7 @@ public class Usuario {
         this.createTime = createTime;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Usuario{" +

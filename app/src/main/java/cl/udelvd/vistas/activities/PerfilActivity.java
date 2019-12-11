@@ -1,4 +1,4 @@
-package cl.udelvd.views.activities;
+package cl.udelvd.vistas.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,12 +23,7 @@ import java.util.Locale;
 
 import cl.udelvd.R;
 
-public class ProfileActivity extends AppCompatActivity {
-
-    private TextView tv_nombre;
-    private TextView tv_email;
-    private TextView tv_activado;
-    private TextView tv_registro_cuenta;
+public class PerfilActivity extends AppCompatActivity {
 
     private String nombre;
     private String apellido;
@@ -44,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_perfil);
 
         Log.d("PROFILE_ACTIVITY", "LLAMADO DE ACTIVIDAD");
 
@@ -59,10 +54,10 @@ public class ProfileActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
         actionBar.setTitle("Perfil");
 
-        tv_nombre = findViewById(R.id.tv_nombre_investigador);
-        tv_activado = findViewById(R.id.tv_activado);
-        tv_email = findViewById(R.id.tv_email_investigador);
-        tv_registro_cuenta = findViewById(R.id.tv_registro);
+        TextView tv_nombre = findViewById(R.id.tv_nombre_investigador);
+        TextView tv_activado = findViewById(R.id.tv_activado);
+        TextView tv_email = findViewById(R.id.tv_email_investigador);
+        TextView tv_registro_cuenta = findViewById(R.id.tv_registro);
 
         //Lectura de datos del investigador
         SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
@@ -100,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.profile_menu, menu);
+        inflater.inflate(R.menu.menu_perfil, menu);
 
         return true;
     }
@@ -122,8 +117,8 @@ public class ProfileActivity extends AppCompatActivity {
             setResult(PROFILE_ACTIVITY_CODE, intent);
             finish();
             return true;
-        } else if (item.getItemId() == R.id.menu_edit_profile) {
-            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+        } else if (item.getItemId() == R.id.menu_editar_perfil) {
+            Intent intent = new Intent(PerfilActivity.this, EditarPerfilActivity.class);
 
             //Enviar datos de investigador hacia formulario de edicion
             intent.putExtra("id", id);

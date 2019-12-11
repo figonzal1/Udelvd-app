@@ -1,4 +1,4 @@
-package cl.udelvd.services;
+package cl.udelvd.servicios;
 
 import android.content.Context;
 
@@ -10,7 +10,7 @@ public class VolleySingleton {
 
     private static VolleySingleton instancia;
     private RequestQueue requestQueue;
-    private Context context;
+    private final Context context;
 
     /**
      * Constructor private de clase

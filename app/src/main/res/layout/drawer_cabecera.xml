@@ -16,18 +16,17 @@
         android:background="@drawable/square_round"
         android:fontFamily="sans-serif"
         android:padding="5dp"
-        android:text="Administrador"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/tv_header_nombre_apellido_usuario"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/user_image"
+        app:layout_constraintStart_toEndOf="@+id/iv_investigador"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:text="Investigador" />
 
     <ImageView
-        android:id="@+id/user_image"
+        android:id="@+id/iv_investigador"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="16dp"
@@ -46,13 +45,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-light"
-        android:text="Juan Briede"
         android:textAlignment="viewStart"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/user_image"
-        app:layout_constraintTop_toBottomOf="@+id/user_image" />
+        app:layout_constraintStart_toStartOf="@+id/iv_investigador"
+        app:layout_constraintTop_toBottomOf="@+id/iv_investigador"
+        tools:text="Nombre investigador" />
 
     <TextView
         android:id="@+id/tv_header_email_usuario"
@@ -61,7 +60,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif-light"
-        android:text="juan.briede@usm.cl"
         android:textAlignment="textStart"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,6 +67,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/tv_header_nombre_apellido_usuario"
         app:layout_constraintTop_toBottomOf="@id/tv_header_nombre_apellido_usuario"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="investigador@email.com" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

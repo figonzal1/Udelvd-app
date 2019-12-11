@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".vistas.activities.NuevoEntrevistadoActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guia_izq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/activity_vertical_margin" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guia_der"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="42dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_end="@dimen/activity_vertical_margin" />
+
+
+            <ImageView
+                android:id="@+id/iv_logo_registro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="false"
+                android:contentDescription="Logo registro entrevistado"
+                android:cropToPadding="false"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_registro_entrevistado"
+                app:srcCompat="@drawable/add_person_circle" />
+
+            <ImageView
+                android:id="@+id/iv_icono_nombre"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono nombre entrevistado"
+                android:scaleType="centerCrop"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/il_nombre_entrevistado"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toTopOf="@+id/il_nombre_entrevistado"
+                app:srcCompat="@drawable/ic_person_black_24dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_nombre_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="Nombre"
+                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
+                app:layout_constraintTop_toBottomOf="@+id/iv_logo_registro">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_nombre_entrevistado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="textCapWords"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_apellido_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:hint="Apellido"
+                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                app:endIconMode="clear_text"
+                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
+                app:layout_constraintTop_toBottomOf="@+id/il_nombre_entrevistado">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_apellido_entrevistado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="textCapWords"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/iv_icono_fecha_nacimiento"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono fecha nacimiento entrevistado"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/il_fecha_nacimiento"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toBottomOf="@+id/il_apellido_entrevistado"
+                app:srcCompat="@drawable/ic_cake_black_24dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_fecha_nacimiento"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:hint="Fecha nacimiento"
+                app:endIconDrawable="@drawable/ic_birthday_black_24dp"
+                app:endIconMode="custom"
+                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_icono_fecha_nacimiento"
+                app:layout_constraintTop_toBottomOf="@+id/il_apellido_entrevistado">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_fecha_nacimiento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="date"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_ciudad_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:hint="Ciudad"
+                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_ciudad_entrevistado"
+                app:layout_constraintTop_toBottomOf="@+id/il_fecha_nacimiento">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_ciudad_entrevistado"
+                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="textCapWords"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ProgressBar
+                android:id="@+id/progress_horizontal_registro_entrevistado"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_ciudad_entrevistado"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono ciudad entrevistado"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/il_ciudad_entrevistado"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toTopOf="@+id/il_ciudad_entrevistado"
+                app:srcCompat="@drawable/ic_place_black_24dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

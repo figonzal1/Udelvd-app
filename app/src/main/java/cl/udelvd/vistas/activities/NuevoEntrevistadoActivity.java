@@ -14,15 +14,22 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
+import cl.udelvd.CiudadAdapter;
 import cl.udelvd.R;
+import cl.udelvd.modelo.Ciudad;
+import cl.udelvd.viewmodel.CiudadViewModel;
 
 public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
@@ -38,6 +45,10 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
     private MaterialButton btn_fecha_nacimiento;
 
+    private CiudadViewModel ciudadViewModel;
+    private List<Ciudad> ciudadList;
+    private ArrayAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +58,13 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         actionBar.setTitle("Crear entrevistado");
 
+        ciudadList = new ArrayList<>();
 
         ilNombre = findViewById(R.id.il_nombre_entrevistado);
         ilApellido = findViewById(R.id.il_apellido_entrevistado);
@@ -64,13 +76,24 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
         acCiudad = findViewById(R.id.et_ciudad_entrevistado);
 
-        String[] countries = new String[]{
-                "La serena", "Valparaiso", "Viña del mar", "Concepción", "Santiago", "La florida", "La Pintana", "Lo barnechea", "Lo Espejo",
-                "La ligua", "La Serena", "LS"
-        };
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
+        //Setear autocompletado
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ciudadList);
         acCiudad.setAdapter(adapter);
 
+        ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
+
+        ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
+            @Override
+            public void onChanged(List<Ciudad> ciudads) {
+
+                if (ciudads != null) {
+                    ciudadList = ciudads;
+                    adapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
+                    acCiudad.setAdapter(adapter);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         ilFechaNacimiento.setEndIconOnClickListener(new View.OnClickListener() {
 

@@ -17,7 +17,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,19 +34,24 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
     private TextInputLayout ilNombre;
     private TextInputLayout ilApellido;
+    private TextInputLayout ilSexo;
     private TextInputLayout ilFechaNacimiento;
     private TextInputLayout ilCiudad;
+    private TextInputLayout ilEstadoCivil;
 
     private TextInputEditText etNombre;
     private TextInputEditText etApellido;
+    private AppCompatAutoCompleteTextView acSexo;
     private TextInputEditText etFechaNacimiento;
     private AppCompatAutoCompleteTextView acCiudad;
-
-    private MaterialButton btn_fecha_nacimiento;
+    private AppCompatAutoCompleteTextView acEstadoCivil;
 
     private CiudadViewModel ciudadViewModel;
     private List<Ciudad> ciudadList;
     private ArrayAdapter adapter;
+
+    public NuevoEntrevistadoActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +72,32 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
         ilNombre = findViewById(R.id.il_nombre_entrevistado);
         ilApellido = findViewById(R.id.il_apellido_entrevistado);
+        ilSexo = findViewById(R.id.il_sexo_entrevistado);
         ilFechaNacimiento = findViewById(R.id.il_fecha_nacimiento);
         ilCiudad = findViewById(R.id.il_ciudad_entrevistado);
+        ilEstadoCivil = findViewById(R.id.il_estado_civil_entrevistado);
 
         etNombre = findViewById(R.id.et_nombre_entrevistado);
         etApellido = findViewById(R.id.et_apellido_entrevistado);
+        acSexo = findViewById(R.id.et_sexo_entrevistado);
         etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
-        acCiudad = findViewById(R.id.et_ciudad_entrevistado);
 
-        //Setear autocompletado
+        //Setear autocompletado Sexo
+        String[] opcionesSexo = new String[]{"Masculino", "Femenino", "Otro"};
+        ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, opcionesSexo);
+        acSexo.setAdapter(adapterSexo);
+
+        //Setear autocompletado Ciudades
+        acCiudad = findViewById(R.id.et_ciudad_entrevistado);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ciudadList);
         acCiudad.setAdapter(adapter);
+
+        //Setear autoCompletado Estdo Civil
+        acEstadoCivil = findViewById(R.id.et_estado_civil_entrevistado);
+        //TODO: Traer estado civil desde servidor
+        String[] opciones = new String[]{"Item1", "item2", "Item 3", "Item 4", "Item 5"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, opciones);
+        acEstadoCivil.setAdapter(adapter2);
 
         ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
 
@@ -109,7 +128,6 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
 
-
                 if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
 
                     String fecha = etFechaNacimiento.getText().toString();
@@ -123,6 +141,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(NuevoEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month += 1;
                         etFechaNacimiento.setText(year + "-" + month + "-" + dayOfMonth);
                     }
                 }, year, month, day);

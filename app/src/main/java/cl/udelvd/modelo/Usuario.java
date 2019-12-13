@@ -12,7 +12,6 @@ public class Usuario {
     private String sexo;
 
     private Date fechaNacimiento;
-    private String ciudad;
     private boolean jubiladoLegal;
 
     private boolean caidas;
@@ -22,6 +21,7 @@ public class Usuario {
 
 
     private int idInvestigador;
+    private int idCiudad;
     private int idEstadoCivil;
 
     //opcionales
@@ -73,12 +73,12 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public String getCiudad() {
-        return ciudad;
+    public int getIdCiudad() {
+        return idCiudad;
     }
 
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
+    public void setIdCiudad(int idCiudad) {
+        this.idCiudad = idCiudad;
     }
 
     public boolean isJubiladoLegal() {
@@ -170,7 +170,7 @@ public class Usuario {
                 ", apellido='" + apellido + '\'' +
                 ", sexo='" + sexo + '\'' +
                 ", fechaNacimiento=" + fechaNacimiento +
-                ", ciudad='" + ciudad + '\'' +
+                ", idCiudad='" + idCiudad + '\'' +
                 ", jubiladoLegal=" + jubiladoLegal +
                 ", caidas=" + caidas +
                 ", nCaidas=" + nCaidas +

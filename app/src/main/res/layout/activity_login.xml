@@ -33,11 +33,11 @@
         android:id="@+id/view_white"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/guia_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guia_horizontal" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_login"

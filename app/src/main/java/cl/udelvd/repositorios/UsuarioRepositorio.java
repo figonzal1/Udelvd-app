@@ -78,7 +78,7 @@ public class UsuarioRepositorio {
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d("RESPONSE", response);
+                Log.d("RESPONSE", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -99,7 +99,7 @@ public class UsuarioRepositorio {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
                         usuario.setFechaNacimiento(simpleDateFormat.parse(jsonUsuarioAttributes.getString("fecha_nacimiento")));
 
-                        usuario.setCiudad(jsonUsuarioAttributes.getString("ciudad"));
+                        usuario.setIdCiudad(jsonUsuarioAttributes.getInt("id_ciudad"));
 
                         //Jubilado Legal
                         if (jsonUsuarioAttributes.getInt("jubilado_legal") == 1) {

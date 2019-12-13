@@ -29,21 +29,21 @@ import java.util.Map;
 import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.servicios.VolleySingleton;
 
-public class CiudadesRepositorio {
+public class CiudadRepositorio {
 
-    private static CiudadesRepositorio instancia;
+    private static CiudadRepositorio instancia;
     private final Application application;
 
     private List<Ciudad> ciudadList;
     private MutableLiveData<List<Ciudad>> mutableCiudadList = new MutableLiveData<>();
 
-    private CiudadesRepositorio(Application application) {
+    private CiudadRepositorio(Application application) {
         this.application = application;
     }
 
-    public static CiudadesRepositorio getInstancia(Application application) {
+    public static CiudadRepositorio getInstancia(Application application) {
         if (instancia == null) {
-            instancia = new CiudadesRepositorio(application);
+            instancia = new CiudadRepositorio(application);
         }
         return instancia;
     }

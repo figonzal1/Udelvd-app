@@ -129,7 +129,7 @@
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_fecha_nacimiento"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
-                app:layout_constraintTop_toBottomOf="@+id/il_apellido_entrevistado"
+                app:layout_constraintTop_toTopOf="@+id/il_fecha_nacimiento"
                 app:srcCompat="@drawable/ic_cake_black_24dp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -145,7 +145,7 @@
                 app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_icono_fecha_nacimiento"
-                app:layout_constraintTop_toBottomOf="@+id/il_apellido_entrevistado">
+                app:layout_constraintTop_toBottomOf="@+id/il_sexo_entrevistado">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_fecha_nacimiento"
@@ -158,6 +158,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Autocompletado escrito a mano con coincidencias-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_ciudad_entrevistado"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -166,6 +167,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:hint="Ciudad"
+                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                app:endIconMode="clear_text"
                 app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_ciudad_entrevistado"
@@ -199,14 +202,307 @@
                 android:id="@+id/iv_ciudad_entrevistado"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:contentDescription="Icono ciudad entrevistado"
+                android:contentDescription="Icono idCiudad entrevistado"
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_ciudad_entrevistado"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_ciudad_entrevistado"
                 app:srcCompat="@drawable/ic_place_black_24dp" />
 
+            <Switch
+                android:id="@+id/switch_jubilado_legal"
+                style="@style/Widget.MaterialComponents.CompoundButton.Switch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:switchPadding="8dp"
+                android:text="Jubilado legal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorOnPrimary"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/il_n_convivientes_entrevistado"
+                app:layout_constraintTop_toBottomOf="@+id/il_estado_civil_entrevistado" />
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_n_convivientes_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:hint="Convivientes"
+                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                app:endIconMode="clear_text"
+                app:helperText="Últimos 3 meses"
+                app:helperTextEnabled="true"
+                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/switch_jubilado_legal">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_n_convivientes_entrevistado"
+                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono convivientes entrevistado"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/il_n_convivientes_entrevistado"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toTopOf="@+id/il_n_convivientes_entrevistado"
+                app:srcCompat="@drawable/ic_group_people_black_24dp" />
+
+
+            <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_estado_civil_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:hint="Estado civil"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_estado_civil"
+                app:layout_constraintTop_toBottomOf="@+id/il_ciudad_entrevistado">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_estado_civil_entrevistado"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:editable="false"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
+                    tools:text="Estado civil" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_sexo_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:hint="Sexo"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_genero_entrevistado"
+                app:layout_constraintTop_toBottomOf="@+id/il_apellido_entrevistado">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_sexo_entrevistado"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:editable="false"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
+                    tools:text="Sexo" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Switch
+                android:id="@+id/switch_caidas_entrevistado"
+                style="@style/Widget.MaterialComponents.CompoundButton.Switch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:switchPadding="8dp"
+                android:text="Caídas"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorOnPrimary"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/il_n_convivientes_entrevistado"
+                app:layout_constraintTop_toBottomOf="@+id/il_n_convivientes_entrevistado" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_n_caidas_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Número caídas"
+                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                app:endIconMode="clear_text"
+                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toStartOf="@+id/switch_caidas_entrevistado"
+                app:layout_constraintTop_toBottomOf="@+id/switch_caidas_entrevistado"
+                tools:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_n_caidas_entrevistado"
+                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
+                    tools:visibility="gone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/iv_genero_entrevistado"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono genero del entrevistado"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toTopOf="@+id/il_fecha_nacimiento"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toTopOf="@+id/il_sexo_entrevistado"
+                app:srcCompat="@drawable/ic_gender_male_female" />
+
+            <ImageView
+                android:id="@+id/iv_estado_civil"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono estado civil del entrevistado"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/il_estado_civil_entrevistado"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toTopOf="@+id/il_estado_civil_entrevistado"
+                app:srcCompat="@drawable/ic_loyalty_black_24dp" />
+
+
+            <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_nivel_educacional_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:hint="Nivel educacional"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_nivel_educacional"
+                app:layout_constraintTop_toBottomOf="@+id/tv_opcionales">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_nivel_educacional_entrevistado"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:editable="false"
+                    android:fontFamily="@font/roboto"
+                    android:singleLine="true"
+                    tools:text="Nivel educacional" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_opcionales"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:text="Opcionales"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toBottomOf="@+id/il_n_caidas_entrevistado" />
+
+            <ImageView
+                android:id="@+id/iv_nivel_educacional"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono nivel educacional entrevistados"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/il_nivel_educacional_entrevistado"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toTopOf="@+id/il_nivel_educacional_entrevistado"
+                app:srcCompat="@drawable/ic_school_black_24dp" />
+
+
+            <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_conviviente_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:hint="Tipo conviviente"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_nivel_educacional"
+                app:layout_constraintTop_toBottomOf="@+id/il_profesion_entrevistado">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_conviviente_entrevistado"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:editable="false"
+                    android:fontFamily="@font/roboto"
+                    android:singleLine="true"
+                    tools:text="Tipo conviviente" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- Autocompletado escrito a mano con coincidencias-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_profesion_entrevistado"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:hint="Profesion"
+                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                app:endIconMode="clear_text"
+                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintStart_toEndOf="@+id/iv_ciudad_entrevistado"
+                app:layout_constraintTop_toBottomOf="@+id/il_nivel_educacional_entrevistado">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_profesion_entrevistado"
+                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="textCapWords"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/iv_profesion_entrevistado"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono profesion entrevistado"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/il_profesion_entrevistado"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toTopOf="@+id/il_profesion_entrevistado"
+                app:srcCompat="@drawable/ic_work_black_24dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

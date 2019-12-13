@@ -9,11 +9,11 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import cl.udelvd.modelo.Ciudad;
-import cl.udelvd.repositorios.CiudadesRepositorio;
+import cl.udelvd.repositorios.CiudadRepositorio;
 
 public class CiudadViewModel extends AndroidViewModel {
 
-    private CiudadesRepositorio ciudadesRepositorio;
+    private CiudadRepositorio ciudadRepositorio;
 
     public CiudadViewModel(@NonNull Application application) {
         super(application);
@@ -21,8 +21,8 @@ public class CiudadViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Ciudad>> cargarCiudades() {
 
-        ciudadesRepositorio = CiudadesRepositorio.getInstancia(getApplication());
-        return ciudadesRepositorio.obtenerCiudades();
+        ciudadRepositorio = CiudadRepositorio.getInstancia(getApplication());
+        return ciudadRepositorio.obtenerCiudades();
     }
 
 }

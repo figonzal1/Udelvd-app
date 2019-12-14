@@ -1,4 +1,4 @@
-package cl.udelvd;
+package cl.udelvd.adaptadores;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;

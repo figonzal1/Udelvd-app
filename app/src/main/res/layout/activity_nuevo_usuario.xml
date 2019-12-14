@@ -92,7 +92,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
                     android:inputType="textCapWords"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,7 +107,6 @@
                 android:hint="Apellido"
                 app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                 app:endIconMode="clear_text"
-                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
                 app:layout_constraintTop_toBottomOf="@+id/il_nombre_entrevistado">
@@ -117,7 +117,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
                     android:inputType="textCapWords"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,7 +155,8 @@
                     android:focusable="false"
                     android:fontFamily="@font/roboto"
                     android:inputType="date"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -182,7 +184,8 @@
                     android:completionThreshold="1"
                     android:fontFamily="@font/roboto"
                     android:inputType="textCapWords"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -220,6 +223,7 @@
                 android:text="Jubilado legal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorOnPrimary"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/il_n_convivientes_entrevistado"
@@ -251,7 +255,8 @@
                     android:completionThreshold="1"
                     android:fontFamily="@font/roboto"
                     android:inputType="numberDecimal"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -290,6 +295,7 @@
                     android:fontFamily="@font/roboto"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
+                    android:textSize="16sp"
                     tools:text="Estado civil" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -303,6 +309,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:hint="Sexo"
+                app:hintEnabled="true"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_genero_entrevistado"
                 app:layout_constraintTop_toBottomOf="@+id/il_apellido_entrevistado">
@@ -317,6 +324,7 @@
                     android:fontFamily="@font/roboto"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
+                    android:textSize="16sp"
                     tools:text="Sexo" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -332,6 +340,7 @@
                 android:text="Caídas"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorOnPrimary"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/il_n_convivientes_entrevistado"
@@ -409,6 +418,7 @@
                     android:editable="false"
                     android:fontFamily="@font/roboto"
                     android:singleLine="true"
+                    android:textSize="16sp"
                     tools:text="Nivel educacional" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -460,6 +470,7 @@
                     android:editable="false"
                     android:fontFamily="@font/roboto"
                     android:singleLine="true"
+                    android:textSize="16sp"
                     tools:text="Tipo conviviente" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -489,7 +500,8 @@
                     android:completionThreshold="1"
                     android:fontFamily="@font/roboto"
                     android:inputType="textCapWords"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

@@ -20,15 +20,17 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import cl.udelvd.CiudadAdapter;
 import cl.udelvd.R;
+import cl.udelvd.adaptadores.CiudadAdapter;
+import cl.udelvd.adaptadores.EstadoCivilAdapter;
 import cl.udelvd.modelo.Ciudad;
+import cl.udelvd.modelo.EstadoCivil;
 import cl.udelvd.viewmodel.CiudadViewModel;
+import cl.udelvd.viewmodel.EstadoCivilViewModel;
 
 public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
@@ -46,9 +48,17 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private AppCompatAutoCompleteTextView acCiudad;
     private AppCompatAutoCompleteTextView acEstadoCivil;
 
+    //ViewModels
     private CiudadViewModel ciudadViewModel;
+    private EstadoCivilViewModel estadoCivilViewModel;
+
+    //Listados
     private List<Ciudad> ciudadList;
-    private ArrayAdapter adapter;
+    private List<EstadoCivil> estadoCivilList;
+
+    //Adaptadores
+    private ArrayAdapter<Ciudad> ciudadAdapter;
+    private ArrayAdapter<EstadoCivil> estadoCivilAdapter;
 
     public NuevoEntrevistadoActivity() {
     }
@@ -68,8 +78,58 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         actionBar.setTitle("Crear entrevistado");
 
-        ciudadList = new ArrayList<>();
+        instanciarRecursosInterfaz();
 
+        iniciarViewModelObservers();
+
+        //Setear autocompletado Sexo
+        //String[] opcionesSexo = new String[]{"Masculino", "Femenino", "Otro"};
+        //ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, opcionesSexo);
+        //acSexo.setAdapter(adapterSexo);
+
+        setPickerFechaNacimiento();
+
+    }
+
+    /**
+     * Funcion encargada de inicializar observadores
+     */
+    private void iniciarViewModelObservers() {
+        ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
+        estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
+
+        estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
+            @Override
+            public void onChanged(List<EstadoCivil> estadoCivils) {
+
+                if (estadoCivils != null) {
+                    estadoCivilList = estadoCivils;
+                    estadoCivilAdapter = new EstadoCivilAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, estadoCivilList);
+                    acEstadoCivil.setAdapter(estadoCivilAdapter);
+                }
+
+                estadoCivilAdapter.notifyDataSetChanged();
+            }
+        });
+
+        ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
+            @Override
+            public void onChanged(List<Ciudad> ciudads) {
+
+                if (ciudads != null) {
+                    ciudadList = ciudads;
+                    ciudadAdapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
+                    acCiudad.setAdapter(ciudadAdapter);
+                }
+                ciudadAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    /**
+     * Instanciacion de Edittexts
+     */
+    private void instanciarRecursosInterfaz() {
         ilNombre = findViewById(R.id.il_nombre_entrevistado);
         ilApellido = findViewById(R.id.il_apellido_entrevistado);
         ilSexo = findViewById(R.id.il_sexo_entrevistado);
@@ -79,41 +139,14 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
         etNombre = findViewById(R.id.et_nombre_entrevistado);
         etApellido = findViewById(R.id.et_apellido_entrevistado);
-        acSexo = findViewById(R.id.et_sexo_entrevistado);
         etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
 
-        //Setear autocompletado Sexo
-        String[] opcionesSexo = new String[]{"Masculino", "Femenino", "Otro"};
-        ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, opcionesSexo);
-        acSexo.setAdapter(adapterSexo);
-
-        //Setear autocompletado Ciudades
         acCiudad = findViewById(R.id.et_ciudad_entrevistado);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ciudadList);
-        acCiudad.setAdapter(adapter);
-
-        //Setear autoCompletado Estdo Civil
         acEstadoCivil = findViewById(R.id.et_estado_civil_entrevistado);
-        //TODO: Traer estado civil desde servidor
-        String[] opciones = new String[]{"Item1", "item2", "Item 3", "Item 4", "Item 5"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, opciones);
-        acEstadoCivil.setAdapter(adapter2);
+        acSexo = findViewById(R.id.et_sexo_entrevistado);
+    }
 
-        ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
-
-        ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
-            @Override
-            public void onChanged(List<Ciudad> ciudads) {
-
-                if (ciudads != null) {
-                    ciudadList = ciudads;
-                    adapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
-                    acCiudad.setAdapter(adapter);
-                }
-                adapter.notifyDataSetChanged();
-            }
-        });
-
+    private void setPickerFechaNacimiento() {
         ilFechaNacimiento.setEndIconOnClickListener(new View.OnClickListener() {
 
             int year;
@@ -166,6 +199,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
+        //TODO: Configurar opcion de guardado
 
         return super.onOptionsItemSelected(item);
     }

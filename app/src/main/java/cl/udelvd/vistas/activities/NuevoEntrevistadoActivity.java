@@ -7,7 +7,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -17,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -40,6 +43,11 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private TextInputLayout ilFechaNacimiento;
     private TextInputLayout ilCiudad;
     private TextInputLayout ilEstadoCivil;
+    private SwitchMaterial switchJubiladoLegal;
+    private TextView tv_jubilado_value;
+    private SwitchMaterial switchCaidas;
+    private TextView tv_caidas_value;
+    private TextInputLayout ilNCaidas;
 
     private TextInputEditText etNombre;
     private TextInputEditText etApellido;
@@ -47,6 +55,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private TextInputEditText etFechaNacimiento;
     private AppCompatAutoCompleteTextView acCiudad;
     private AppCompatAutoCompleteTextView acEstadoCivil;
+    private TextInputEditText etNCaidas;
 
     //ViewModels
     private CiudadViewModel ciudadViewModel;
@@ -82,13 +91,67 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
         iniciarViewModelObservers();
 
-        //Setear autocompletado Sexo
-        //String[] opcionesSexo = new String[]{"Masculino", "Femenino", "Otro"};
-        //ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, opcionesSexo);
-        //acSexo.setAdapter(adapterSexo);
+        setSpinnerSexo();
 
         setPickerFechaNacimiento();
 
+        setCaidas();
+
+        setJubilado();
+
+    }
+
+    /**
+     * Funcion encargada de configurar la logica del switch de jubilado legal
+     */
+    private void setJubilado() {
+
+        switchJubiladoLegal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    tv_jubilado_value.setText("Si");
+                } else {
+                    tv_jubilado_value.setText("No");
+                }
+            }
+        });
+    }
+
+    /**
+     * Funcion encargada de configurar la logica del switch de caidas
+     */
+    private void setCaidas() {
+
+        switchCaidas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ilNCaidas.setVisibility(View.VISIBLE);
+                    etNCaidas.setVisibility(View.VISIBLE);
+
+                    tv_caidas_value.setText("Si");
+
+                } else {
+                    ilNCaidas.setVisibility(View.GONE);
+                    etNCaidas.setVisibility(View.GONE);
+
+                    tv_caidas_value.setText("No");
+                }
+            }
+        });
+
+    }
+
+    /**
+     * Funcion encargada de configurar el Spinner de sexo
+     */
+    private void setSpinnerSexo() {
+        //Setear autocompletado Sexo
+        String[] opcionesSexo = new String[]{"Masculino", "Femenino", "Otro"};
+        ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, opcionesSexo);
+        acSexo.setAdapter(adapterSexo);
     }
 
     /**
@@ -140,14 +203,22 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         ilFechaNacimiento = findViewById(R.id.il_fecha_nacimiento);
         ilCiudad = findViewById(R.id.il_ciudad_entrevistado);
         ilEstadoCivil = findViewById(R.id.il_estado_civil_entrevistado);
+        ilNCaidas = findViewById(R.id.il_n_caidas_entrevistado);
+
+        tv_jubilado_value = findViewById(R.id.tv_switch_jubilado_value);
+        tv_caidas_value = findViewById(R.id.tv_switch_caidas);
 
         etNombre = findViewById(R.id.et_nombre_entrevistado);
         etApellido = findViewById(R.id.et_apellido_entrevistado);
         etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
-
+        etNCaidas = findViewById(R.id.et_n_caidas_entrevistado);
         acCiudad = findViewById(R.id.et_ciudad_entrevistado);
         acEstadoCivil = findViewById(R.id.et_estado_civil_entrevistado);
         acSexo = findViewById(R.id.et_sexo_entrevistado);
+
+        switchJubiladoLegal = findViewById(R.id.switch_jubilado_legal);
+        switchCaidas = findViewById(R.id.switch_caidas_entrevistado);
+
     }
 
     private void setPickerFechaNacimiento() {

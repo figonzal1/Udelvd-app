@@ -212,20 +212,21 @@
                 app:layout_constraintTop_toTopOf="@+id/il_ciudad_entrevistado"
                 app:srcCompat="@drawable/ic_place_black_24dp" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switch_jubilado_legal"
                 style="@style/Widget.MaterialComponents.CompoundButton.Switch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:fontFamily="@font/roboto"
                 android:switchPadding="8dp"
+                android:checked="false"
                 android:text="Jubilado legal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorOnPrimary"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@+id/tv_switch_jubilado_value"
                 app:layout_constraintStart_toStartOf="@+id/il_n_convivientes_entrevistado"
                 app:layout_constraintTop_toBottomOf="@+id/il_estado_civil_entrevistado" />
 
@@ -329,19 +330,20 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switch_caidas_entrevistado"
                 style="@style/Widget.MaterialComponents.CompoundButton.Switch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:fontFamily="@font/roboto"
                 android:switchPadding="8dp"
                 android:text="Caídas"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorOnPrimary"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintEnd_toStartOf="@+id/tv_switch_caidas"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/il_n_convivientes_entrevistado"
                 app:layout_constraintTop_toBottomOf="@+id/il_n_convivientes_entrevistado" />
@@ -351,25 +353,24 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Número caídas"
+                android:hint="¿Cuantas caídas?"
+                android:visibility="gone"
                 app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                 app:endIconMode="clear_text"
                 app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toStartOf="@+id/switch_caidas_entrevistado"
-                app:layout_constraintTop_toBottomOf="@+id/switch_caidas_entrevistado"
-                tools:visibility="gone">
+                app:layout_constraintTop_toBottomOf="@+id/switch_caidas_entrevistado">
 
-                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_n_caidas_entrevistado"
-                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:completionThreshold="1"
                     android:fontFamily="@font/roboto"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
-                    tools:visibility="gone" />
+                    android:visibility="gone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -515,6 +516,34 @@
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_profesion_entrevistado"
                 app:srcCompat="@drawable/ic_work_black_24dp" />
+
+            <TextView
+                android:id="@+id/tv_switch_jubilado_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="No"
+                android:textColor="@color/colorPrimaryVariant"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_jubilado_legal"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintTop_toTopOf="@+id/switch_jubilado_legal"
+                tools:text="Si / No" />
+
+            <TextView
+                android:id="@+id/tv_switch_caidas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="No"
+                android:textColor="@color/colorPrimaryVariant"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/il_n_caidas_entrevistado"
+                app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                app:layout_constraintTop_toTopOf="@+id/switch_caidas_entrevistado"
+                tools:text="Si /No" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Date;
 
-public class Usuario {
+public class Entrevistado {
 
     private int id;
     private String nombre;
@@ -30,7 +30,7 @@ public class Usuario {
     private int idProfesion;
     private String createTime;
 
-    public Usuario() {
+    public Entrevistado() {
     }
 
     public int getId() {
@@ -164,7 +164,7 @@ public class Usuario {
     @NonNull
     @Override
     public String toString() {
-        return "Usuario{" +
+        return "Entrevistado{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +

@@ -20,26 +20,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cl.udelvd.R;
-import cl.udelvd.modelo.Usuario;
-import cl.udelvd.viewmodel.UsuarioViewModel;
+import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.viewmodel.EntrevistadoViewModel;
 import cl.udelvd.vistas.activities.NuevoEntrevistadoActivity;
 
 
-public class UsuarioListaFragment extends Fragment {
+public class EntrevistadoListaFragment extends Fragment {
 
     private RecyclerView rv;
-    private UsuarioViewModel usuarioViewModel;
-    private UsuarioAdapter usuarioAdapter;
+    private EntrevistadoViewModel entrevistadoViewModel;
+    private EntrevistadoAdapter entrevistadoAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
 
-    public UsuarioListaFragment() {
+    public EntrevistadoListaFragment() {
         // Required empty public constructor
     }
 
 
-    public static UsuarioListaFragment newInstance() {
-        return new UsuarioListaFragment();
+    public static EntrevistadoListaFragment newInstance() {
+        return new EntrevistadoListaFragment();
     }
 
     @Override
@@ -55,46 +55,31 @@ public class UsuarioListaFragment extends Fragment {
 
         rv = v.findViewById(R.id.rv_lista_usuarios);
 
-
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
-        rv.setAdapter(new UsuarioAdapter(new ArrayList<Usuario>()));
+        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>()));
 
-        usuarioViewModel = ViewModelProviders.of(this).get(UsuarioViewModel.class);
+        iniciarViewModelObservers(v);
 
-        //Manejador de listado de usuarios
-        usuarioViewModel.mostrarListaUsuarios().observe(this, new Observer<List<Usuario>>() {
-            @Override
-            public void onChanged(List<Usuario> usuarioList) {
+        floatingButtonCrearEntrevistado(v);
 
-                usuarioAdapter = new UsuarioAdapter(usuarioList);
-                usuarioAdapter.notifyDataSetChanged();
-                rv.setAdapter(usuarioAdapter);
+        iniciarSwipeRefresh(v);
 
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        return v;
+    }
 
-        //Manejador de Respuestas erroreas en fragment
-        usuarioViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                if (s.equals("Servidor no responde, intente más tarde")) {
-                    showSnackbar(v, s, "Reintentar");
-                } else if (s.equals("No tienes conexión a Internet")) {
-                    showSnackbar(v, s, "Reintentar");
-                }
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+    /**
+     * Funcion encargada de la logica del boton flotante para crear entrevistados
+     *
+     * @param v Vista para encontrar boton flotante en interfaz del fragmento
+     */
+    private void floatingButtonCrearEntrevistado(View v) {
 
         FloatingActionButton fbCrearUsuario = v.findViewById(R.id.fb_crear_usuario);
         fbCrearUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                //TODO: Abrir activity aqui
                 Intent intent = new Intent(getActivity(), NuevoEntrevistadoActivity.class);
                 startActivity(intent);
                 /*NewUserDialog dialog = new NewUserDialog();
@@ -114,8 +99,14 @@ public class UsuarioListaFragment extends Fragment {
 
             }
         });
+    }
 
-
+    /**
+     * Funcion encargada de configurar la lógica del SwipeRefresh
+     *
+     * @param v Vista usada para buscar swipeRefresh en fragment
+     */
+    private void iniciarSwipeRefresh(View v) {
         swipeRefreshLayout = v.findViewById(R.id.refresh_usuarios);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorSecondary), getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout.setRefreshing(true);
@@ -123,13 +114,47 @@ public class UsuarioListaFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                usuarioViewModel.refreshListaUsuarios();
-
+                //Forzar refresh
+                entrevistadoViewModel.refreshListaUsuarios();
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
+    }
 
-        return v;
+    /**
+     * Funcion que instancia
+     *
+     * @param v Vista para mostrar snackbar
+     */
+    private void iniciarViewModelObservers(final View v) {
+        entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
+
+        //Manejador de listado de usuarios
+        entrevistadoViewModel.mostrarListaUsuarios().observe(this, new Observer<List<Entrevistado>>() {
+            @Override
+            public void onChanged(List<Entrevistado> entrevistadoList) {
+
+                entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList);
+                entrevistadoAdapter.notifyDataSetChanged();
+                rv.setAdapter(entrevistadoAdapter);
+
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        //Manejador de Respuestas erroreas en fragment
+        entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (s.equals("Servidor no responde, intente más tarde")) {
+                    showSnackbar(v, s, "Reintentar");
+                } else if (s.equals("No tienes conexión a Internet")) {
+                    showSnackbar(v, s, "Reintentar");
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
 
@@ -148,7 +173,7 @@ public class UsuarioListaFragment extends Fragment {
                     public void onClick(View v) {
 
                         //Refresh listado de usuarios
-                        usuarioViewModel.refreshListaUsuarios();
+                        entrevistadoViewModel.refreshListaUsuarios();
 
                         swipeRefreshLayout.setRefreshing(true);
                     }

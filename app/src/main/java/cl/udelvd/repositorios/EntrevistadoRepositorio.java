@@ -28,52 +28,57 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cl.udelvd.modelo.Usuario;
+import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
 
-public class UsuarioRepositorio {
+public class EntrevistadoRepositorio {
 
-    private static UsuarioRepositorio instancia;
+    private static EntrevistadoRepositorio instancia;
     private final Application application;
 
-    private List<Usuario> usuarioList;
-    private final MutableLiveData<List<Usuario>> mutableUsuariosList = new MutableLiveData<>();
+    private List<Entrevistado> entrevistadoList;
 
-    private final SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorMsg;
 
-    private UsuarioRepositorio(Application application) {
+    private EntrevistadoRepositorio(Application application) {
         this.application = application;
     }
 
-    public static UsuarioRepositorio getInstance(Application application) {
+    public static EntrevistadoRepositorio getInstance(Application application) {
 
         if (instancia == null) {
-            instancia = new UsuarioRepositorio(application);
+            instancia = new EntrevistadoRepositorio(application);
         }
         return instancia;
     }
 
     public SingleLiveEvent<String> getErrorMsg() {
+        if (errorMsg == null) {
+            errorMsg = new SingleLiveEvent<>();
+        }
         return errorMsg;
     }
 
     /**
      * Funcion encargada de buscar usuarios y enviar listado a ViewModel
      *
-     * @return MutableLiveData con listado de ussuarios
+     * @return MutableLiveData con listado de usuarios
      */
-    public MutableLiveData<List<Usuario>> getUsuarios() {
-        sendGetUsuarios();
-        return mutableUsuariosList;
+    public MutableLiveData<List<Entrevistado>> getUsuarios() {
+        MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
+        sendGetUsuarios(entrevistadosMutableLiveData);
+        return entrevistadosMutableLiveData;
     }
 
     /**
      * Funcion que realizar solicitud GET para obtener listado de usuarios
+     *
+     * @param entrevistadosMutableLiveData Lista mutable vacia rellenada con lista de entrevistados
      */
-    private void sendGetUsuarios() {
+    private void sendGetUsuarios(final MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData) {
 
-        usuarioList = new ArrayList<>();
+        entrevistadoList = new ArrayList<>();
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -90,53 +95,53 @@ public class UsuarioRepositorio {
                         JSONObject jsonUsuario = jsonData.getJSONObject(i);
                         JSONObject jsonUsuarioAttributes = jsonUsuario.getJSONObject("attributes");
 
-                        Usuario usuario = new Usuario();
-                        usuario.setId(jsonUsuario.getInt("id"));
-                        usuario.setNombre(jsonUsuarioAttributes.getString("nombre"));
-                        usuario.setApellido(jsonUsuarioAttributes.getString("apellido"));
-                        usuario.setSexo(jsonUsuarioAttributes.getString("sexo"));
+                        Entrevistado entrevistado = new Entrevistado();
+                        entrevistado.setId(jsonUsuario.getInt("id"));
+                        entrevistado.setNombre(jsonUsuarioAttributes.getString("nombre"));
+                        entrevistado.setApellido(jsonUsuarioAttributes.getString("apellido"));
+                        entrevistado.setSexo(jsonUsuarioAttributes.getString("sexo"));
 
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
-                        usuario.setFechaNacimiento(simpleDateFormat.parse(jsonUsuarioAttributes.getString("fecha_nacimiento")));
+                        entrevistado.setFechaNacimiento(simpleDateFormat.parse(jsonUsuarioAttributes.getString("fecha_nacimiento")));
 
-                        usuario.setIdCiudad(jsonUsuarioAttributes.getInt("id_ciudad"));
+                        entrevistado.setIdCiudad(jsonUsuarioAttributes.getInt("id_ciudad"));
 
                         //Jubilado Legal
                         if (jsonUsuarioAttributes.getInt("jubilado_legal") == 1) {
-                            usuario.setJubiladoLegal(true);
+                            entrevistado.setJubiladoLegal(true);
                         } else {
-                            usuario.setJubiladoLegal(false);
+                            entrevistado.setJubiladoLegal(false);
                         }
 
                         //Caidas
                         if (jsonUsuarioAttributes.getInt("caidas") == 1) {
-                            usuario.setCaidas(true);
-                            usuario.setnCaidas(jsonUsuarioAttributes.getInt("n_caidas"));
+                            entrevistado.setCaidas(true);
+                            entrevistado.setnCaidas(jsonUsuarioAttributes.getInt("n_caidas"));
                         } else {
-                            usuario.setCaidas(false);
+                            entrevistado.setCaidas(false);
                         }
 
-                        usuario.setnConvivientes3Meses(jsonUsuarioAttributes.getInt("n_convivientes_3_meses"));
+                        entrevistado.setnConvivientes3Meses(jsonUsuarioAttributes.getInt("n_convivientes_3_meses"));
 
                         //Foraneas
-                        usuario.setIdInvestigador(jsonUsuarioAttributes.getInt("id_investigador"));
-                        usuario.setIdEstadoCivil(jsonUsuarioAttributes.getInt("id_estado_civil"));
+                        entrevistado.setIdInvestigador(jsonUsuarioAttributes.getInt("id_investigador"));
+                        entrevistado.setIdEstadoCivil(jsonUsuarioAttributes.getInt("id_estado_civil"));
 
                         //Foraneas opcionales
                         if (jsonUsuarioAttributes.has("id_nivel_educacional") && !jsonUsuarioAttributes.isNull("id_nivel_educacional")) {
-                            usuario.setIdNivelEducacional(jsonUsuarioAttributes.getInt("id_nivel_educacional"));
+                            entrevistado.setIdNivelEducacional(jsonUsuarioAttributes.getInt("id_nivel_educacional"));
                         }
                         if (jsonUsuarioAttributes.has("id_conviviente") && !jsonUsuarioAttributes.isNull("id_conviviente")) {
-                            usuario.setIdConviviente(jsonUsuarioAttributes.getInt("id_conviviente"));
+                            entrevistado.setIdConviviente(jsonUsuarioAttributes.getInt("id_conviviente"));
                         }
                         if (jsonUsuarioAttributes.has("id_profesion") && !jsonUsuarioAttributes.isNull("id_profesion")) {
-                            usuario.setIdProfesion(jsonUsuarioAttributes.getInt("id_profesion"));
+                            entrevistado.setIdProfesion(jsonUsuarioAttributes.getInt("id_profesion"));
                         }
 
-                        usuarioList.add(usuario);
+                        entrevistadoList.add(entrevistado);
                     }
 
-                    mutableUsuariosList.postValue(usuarioList);
+                    entrevistadosMutableLiveData.postValue(entrevistadoList);
 
 
                 } catch (JSONException | ParseException e) {

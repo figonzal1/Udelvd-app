@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Locale;
 
 import cl.udelvd.R;
-import cl.udelvd.modelo.Usuario;
+import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.utilidades.Utils;
 
-public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.QuakeViewHolder> {
+public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapter.QuakeViewHolder> {
 
-    private final List<Usuario> usuarioList;
+    private final List<Entrevistado> entrevistadoList;
 
-    public UsuarioAdapter(List<Usuario> usuarioList) {
-        this.usuarioList = usuarioList;
+    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList) {
+        this.entrevistadoList = entrevistadoList;
     }
 
     @NonNull
@@ -34,14 +34,16 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.QuakeVie
     @Override
     public void onBindViewHolder(@NonNull QuakeViewHolder holder, int position) {
 
-        Usuario usuario = usuarioList.get(position);
+        Entrevistado entrevistado = entrevistadoList.get(position);
 
-        holder.tv_nombre_apellido.setText(String.format("%s %s", usuario.getNombre(), usuario.getApellido()));
+        holder.tv_nombre_apellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/mm/dd", Locale.US);
 
-        int annos = Utils.calculateYearsOld(usuario.getFechaNacimiento());
-        holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", simpleDateFormat.format(usuario.getFechaNacimiento()), annos));
+        int annos = Utils.calculateYearsOld(entrevistado.getFechaNacimiento());
+        holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", simpleDateFormat.format(entrevistado.getFechaNacimiento()), annos));
+
+        //TODO: Agregar soporte para conteo de entrevistas
         holder.tv_n_entrevistas.setText("10 entrevistas");
 
 
@@ -49,7 +51,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.QuakeVie
 
     @Override
     public int getItemCount() {
-        return usuarioList.size();
+        return entrevistadoList.size();
     }
 
     static class QuakeViewHolder extends RecyclerView.ViewHolder {

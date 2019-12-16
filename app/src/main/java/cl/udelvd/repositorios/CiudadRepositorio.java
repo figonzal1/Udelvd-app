@@ -35,7 +35,6 @@ public class CiudadRepositorio {
     private final Application application;
 
     private List<Ciudad> ciudadList;
-    private MutableLiveData<List<Ciudad>> mutableCiudadList = new MutableLiveData<>();
 
     private CiudadRepositorio(Application application) {
         this.application = application;
@@ -48,13 +47,23 @@ public class CiudadRepositorio {
         return instancia;
     }
 
-
+    /**
+     * Funcion encargada de consultar la lista de ciudades actuales
+     *
+     * @return MutableLiveData usado en viewModel
+     */
     public MutableLiveData<List<Ciudad>> obtenerCiudades() {
-        enviarGetCiudades();
-        return mutableCiudadList;
+        MutableLiveData<List<Ciudad>> ciudadesMutableLiveData = new MutableLiveData<>();
+        enviarGetCiudades(ciudadesMutableLiveData);
+        return ciudadesMutableLiveData;
     }
 
-    private void enviarGetCiudades() {
+    /**
+     * Funcion encargada de enviar la solicitud GET al servidor, para obtener listado de ciudades disponibles.
+     *
+     * @param ciudadesMutableLiveData Lista mutable vacia rellenada con lista de ciudades
+     */
+    private void enviarGetCiudades(final MutableLiveData<List<Ciudad>> ciudadesMutableLiveData) {
 
         ciudadList = new ArrayList<>();
 
@@ -83,7 +92,7 @@ public class CiudadRepositorio {
 
                     }
 
-                    mutableCiudadList.postValue(ciudadList);
+                    ciudadesMutableLiveData.postValue(ciudadList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

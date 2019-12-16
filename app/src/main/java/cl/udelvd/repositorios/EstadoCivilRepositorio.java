@@ -64,17 +64,17 @@ public class EstadoCivilRepositorio {
      */
     public MutableLiveData<List<EstadoCivil>> obtenerEstadosCiviles() {
 
-        MutableLiveData<List<EstadoCivil>> mutableEstadosCiviles = new MutableLiveData<>();
-        enviarGetEstadosCiviles(mutableEstadosCiviles);
-        return mutableEstadosCiviles;
+        MutableLiveData<List<EstadoCivil>> estadosCivilesMutable = new MutableLiveData<>();
+        enviarGetEstadosCiviles(estadosCivilesMutable);
+        return estadosCivilesMutable;
     }
 
     /**
      * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de estados civiles
      *
-     * @param mutableEstadosCiviles
+     * @param estadosCivilesMutable Lista vacia que será rellenada con lista de estados civiles
      */
-    private void enviarGetEstadosCiviles(final MutableLiveData<List<EstadoCivil>> mutableEstadosCiviles) {
+    private void enviarGetEstadosCiviles(final MutableLiveData<List<EstadoCivil>> estadosCivilesMutable) {
 
         estadoCivilList = new ArrayList<>();
 
@@ -104,7 +104,7 @@ public class EstadoCivilRepositorio {
                         estadoCivilList.add(estadoCivil);
                     }
 
-                    mutableEstadosCiviles.postValue(estadoCivilList);
+                    estadosCivilesMutable.postValue(estadoCivilList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

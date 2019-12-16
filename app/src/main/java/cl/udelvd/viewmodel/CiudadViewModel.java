@@ -13,16 +13,27 @@ import cl.udelvd.repositorios.CiudadRepositorio;
 
 public class CiudadViewModel extends AndroidViewModel {
 
-    private CiudadRepositorio ciudadRepositorio;
+    private CiudadRepositorio repositorio;
+
+    private MutableLiveData<List<Ciudad>> ciudadMutableLiveData;
 
     public CiudadViewModel(@NonNull Application application) {
         super(application);
     }
 
+    /**
+     * Funcion encargada de cargar la lista de ciudades a la intefaz mediante ViewModel
+     *
+     * @return MutableLiveData de ciudades del sistema
+     */
     public MutableLiveData<List<Ciudad>> cargarCiudades() {
 
-        ciudadRepositorio = CiudadRepositorio.getInstancia(getApplication());
-        return ciudadRepositorio.obtenerCiudades();
+        if (ciudadMutableLiveData == null) {
+            ciudadMutableLiveData = new MutableLiveData<>();
+            repositorio = CiudadRepositorio.getInstancia(getApplication());
+            ciudadMutableLiveData = repositorio.obtenerCiudades();
+        }
+        return ciudadMutableLiveData;
     }
 
 }

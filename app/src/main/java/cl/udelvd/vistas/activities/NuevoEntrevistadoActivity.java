@@ -95,9 +95,12 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
      * Funcion encargada de inicializar observadores
      */
     private void iniciarViewModelObservers() {
+
+        //Crear instancias
         ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
         estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
 
+        //Observador de estados civiles
         estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
             @Override
             public void onChanged(List<EstadoCivil> estadoCivils) {
@@ -112,6 +115,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             }
         });
 
+        //Observador de ciudades
         ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
             @Override
             public void onChanged(List<Ciudad> ciudads) {

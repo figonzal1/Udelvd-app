@@ -22,7 +22,7 @@ public class EstadoCivilViewModel extends AndroidViewModel {
     }
 
     /**
-     * Funcion encargada de cargar la lista de estados civiles mediante ViewModel
+     * Funcion encargada de cargar la lista de estados civiles a la interfaz mediante ViewModel
      *
      * @return MutableLiveData de estados civiles
      */

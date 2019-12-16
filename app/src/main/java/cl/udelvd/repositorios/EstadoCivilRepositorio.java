@@ -34,7 +34,6 @@ public class EstadoCivilRepositorio {
     private Application application;
 
     private List<EstadoCivil> estadoCivilList;
-    private MutableLiveData<List<EstadoCivil>> mutableLiveData = new MutableLiveData<>();
 
     /**
      * Constructor de clase
@@ -58,12 +57,24 @@ public class EstadoCivilRepositorio {
         return instancia;
     }
 
+    /**
+     * Funcion encargada de consultar la lista de estados civiles
+     *
+     * @return MutableLivedata usado en viewModel
+     */
     public MutableLiveData<List<EstadoCivil>> obtenerEstadosCiviles() {
-        enviarGetEstadosCiviles();
-        return mutableLiveData;
+
+        MutableLiveData<List<EstadoCivil>> mutableEstadosCiviles = new MutableLiveData<>();
+        enviarGetEstadosCiviles(mutableEstadosCiviles);
+        return mutableEstadosCiviles;
     }
 
-    private void enviarGetEstadosCiviles() {
+    /**
+     * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de estados civiles
+     *
+     * @param mutableEstadosCiviles
+     */
+    private void enviarGetEstadosCiviles(final MutableLiveData<List<EstadoCivil>> mutableEstadosCiviles) {
 
         estadoCivilList = new ArrayList<>();
 
@@ -93,7 +104,7 @@ public class EstadoCivilRepositorio {
                         estadoCivilList.add(estadoCivil);
                     }
 
-                    mutableLiveData.postValue(estadoCivilList);
+                    mutableEstadosCiviles.postValue(estadoCivilList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -164,6 +175,25 @@ public class EstadoCivilRepositorio {
         String TAG = "ciudades";
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
 
+
+    }
+
+    /**
+     * Funcion para buscar estado civil
+     *
+     * @param nombre Nombre del estado civil a buscar
+     * @return Objeto estado civil
+     */
+    public EstadoCivil buscarEstadoCivil(String nombre) {
+
+        for (int i = 0; i < estadoCivilList.size(); i++) {
+            EstadoCivil estadoCivil = estadoCivilList.get(i);
+
+            if (estadoCivil.getNombre().equals(nombre)) {
+                return estadoCivil;
+            }
+        }
+        return null;
     }
 
 }

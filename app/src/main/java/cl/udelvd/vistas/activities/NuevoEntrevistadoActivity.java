@@ -198,6 +198,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if (item.getItemId() == R.id.menu_guardar) {
+
         }
         //TODO: Configurar opcion de guardado
 

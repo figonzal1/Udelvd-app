@@ -15,12 +15,23 @@ public class EstadoCivilViewModel extends AndroidViewModel {
 
     private EstadoCivilRepositorio repositorio;
 
+    private MutableLiveData<List<EstadoCivil>> estadoCivilMutableLiveData;
+
     public EstadoCivilViewModel(@NonNull Application application) {
         super(application);
     }
 
+    /**
+     * Funcion encargada de cargar la lista de estados civiles mediante ViewModel
+     *
+     * @return MutableLiveData de estados civiles
+     */
     public MutableLiveData<List<EstadoCivil>> cargarEstadosCiviles() {
-        repositorio = EstadoCivilRepositorio.getInstance(getApplication());
-        return repositorio.obtenerEstadosCiviles();
+        if (estadoCivilMutableLiveData == null) {
+            estadoCivilMutableLiveData = new MutableLiveData<>();
+            repositorio = EstadoCivilRepositorio.getInstance(getApplication());
+            estadoCivilMutableLiveData = repositorio.obtenerEstadosCiviles();
+        }
+        return estadoCivilMutableLiveData;
     }
 }

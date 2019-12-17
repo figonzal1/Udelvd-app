@@ -25,52 +25,47 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cl.udelvd.modelo.NivelEducacional;
+import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.servicios.VolleySingleton;
 
-public class NivelEducacionalRepositorio {
+public class TipoConvivenciaRepositorio {
 
-    private static NivelEducacionalRepositorio instancia;
+    private static TipoConvivenciaRepositorio instancia;
     private Application application;
 
-    private List<NivelEducacional> nivelEducacionalList;
+    private List<TipoConvivencia> tipoConvivenciaList;
 
-    private NivelEducacionalRepositorio(Application application) {
+    public TipoConvivenciaRepositorio(Application application) {
         this.application = application;
     }
 
-    public static NivelEducacionalRepositorio getInstancia(Application application) {
-
+    public static TipoConvivenciaRepositorio getInstancia(Application application) {
         if (instancia == null) {
-            instancia = new NivelEducacionalRepositorio(application);
+            instancia = new TipoConvivenciaRepositorio(application);
         }
         return instancia;
     }
 
     /**
-     * Funcion encargada de consultar la lista de niveles educacionales
+     * Funcion encargada de consultar la lista de tipos de convivencia
      *
      * @return MutableLivedata usado en viewModel
      */
-    public MutableLiveData<List<NivelEducacional>> obtenerNivelesEducacionales() {
-        MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData = new MutableLiveData<>();
-        enviarGetNivelesEduc(nivelEducMutableLiveData);
-        return nivelEducMutableLiveData;
+    public MutableLiveData<List<TipoConvivencia>> obtenerTiposConvivencias() {
+        MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableLiveData = new MutableLiveData<>();
+        enviarGetTipoConvivencia(tipoConvivenciaMutableLiveData);
+        return tipoConvivenciaMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de niveles educacionales
-     *
-     * @param nivelEducMutableLiveData Lista vacia que será rellenada con lista de niveles educacionales
-     */
-    private void enviarGetNivelesEduc(final MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData) {
+    private void enviarGetTipoConvivencia(final MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableLiveData) {
 
-        nivelEducacionalList = new ArrayList<>();
+        tipoConvivenciaList = new ArrayList<>();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d("Response", response);
+
+                //Log.d("RESPONSE", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -78,25 +73,25 @@ public class NivelEducacionalRepositorio {
                     JSONArray jsonData = jsonObject.getJSONArray("data");
 
                     for (int i = 0; i < jsonData.length(); i++) {
-                        JSONObject jsonNivelEduc = jsonData.getJSONObject(i);
+                        JSONObject jsonEstadoCivil = jsonData.getJSONObject(i);
 
-                        int id_nivel = jsonNivelEduc.getInt("id");
+                        int id_estado_vivil = jsonEstadoCivil.getInt("id");
 
-                        JSONObject jsonAttributes = jsonNivelEduc.getJSONObject("attributes");
-                        String nombre_nivel = jsonAttributes.getString("nombre");
+                        JSONObject jsonAttributes = jsonEstadoCivil.getJSONObject("attributes");
+                        String nombre_estado_civil = jsonAttributes.getString("nombre");
 
-                        NivelEducacional nivelEducacional = new NivelEducacional();
-                        nivelEducacional.setId(id_nivel);
-                        nivelEducacional.setNombre(nombre_nivel);
+                        TipoConvivencia tipoConvivencia = new TipoConvivencia();
+                        tipoConvivencia.setId(id_estado_vivil);
+                        tipoConvivencia.setNombre(nombre_estado_civil);
 
-                        nivelEducacionalList.add(nivelEducacional);
+                        tipoConvivenciaList.add(tipoConvivencia);
                     }
 
-                    nivelEducMutableLiveData.postValue(nivelEducacionalList);
+                    tipoConvivenciaMutableLiveData.postValue(tipoConvivenciaList);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         };
 
@@ -140,12 +135,14 @@ public class NivelEducacionalRepositorio {
             }
         };
 
-        String url = "http://192.168.0.14/nivelesEducacionales";
+
+        String url = "http://192.168.0.14/tiposConvivencias";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
+
                 SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
                         Context.MODE_PRIVATE);
 
@@ -158,8 +155,7 @@ public class NivelEducacionalRepositorio {
             }
         };
 
-        String TAG = "nivelesEducacionales";
+        String TAG = "tiposConvivencias";
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
-
     }
 }

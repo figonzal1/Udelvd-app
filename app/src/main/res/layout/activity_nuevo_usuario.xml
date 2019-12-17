@@ -449,21 +449,21 @@
 
             <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_conviviente_entrevistado"
+                android:id="@+id/il_tipo_convivencia_entrevistado"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
-                android:hint="Tipo conviviente"
+                android:hint="Tipo convivencia"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_nivel_educacional"
                 app:layout_constraintTop_toBottomOf="@+id/il_profesion_entrevistado">
 
                 <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    android:id="@+id/et_conviviente_entrevistado"
+                    android:id="@+id/et_tipo_convivencia_entrevistado"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

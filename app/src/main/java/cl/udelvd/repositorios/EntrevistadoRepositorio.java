@@ -131,8 +131,8 @@ public class EntrevistadoRepositorio {
                         if (jsonUsuarioAttributes.has("id_nivel_educacional") && !jsonUsuarioAttributes.isNull("id_nivel_educacional")) {
                             entrevistado.setIdNivelEducacional(jsonUsuarioAttributes.getInt("id_nivel_educacional"));
                         }
-                        if (jsonUsuarioAttributes.has("id_conviviente") && !jsonUsuarioAttributes.isNull("id_conviviente")) {
-                            entrevistado.setIdConviviente(jsonUsuarioAttributes.getInt("id_conviviente"));
+                        if (jsonUsuarioAttributes.has("id_tipo_convivencia") && !jsonUsuarioAttributes.isNull("id_tipo_convivencia")) {
+                            entrevistado.setIdTipoConvivencia(jsonUsuarioAttributes.getInt("id_tipo_convivencia"));
                         }
                         if (jsonUsuarioAttributes.has("id_profesion") && !jsonUsuarioAttributes.isNull("id_profesion")) {
                             entrevistado.setIdProfesion(jsonUsuarioAttributes.getInt("id_profesion"));

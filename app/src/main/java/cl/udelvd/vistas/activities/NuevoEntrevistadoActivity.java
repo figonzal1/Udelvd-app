@@ -31,12 +31,15 @@ import cl.udelvd.R;
 import cl.udelvd.adaptadores.CiudadAdapter;
 import cl.udelvd.adaptadores.EstadoCivilAdapter;
 import cl.udelvd.adaptadores.NivelEducacionalAdapter;
+import cl.udelvd.adaptadores.TipoConvivenciaAdapter;
 import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.modelo.EstadoCivil;
 import cl.udelvd.modelo.NivelEducacional;
+import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.viewmodel.CiudadViewModel;
 import cl.udelvd.viewmodel.EstadoCivilViewModel;
 import cl.udelvd.viewmodel.NivelEducacionalViewModel;
+import cl.udelvd.viewmodel.TipoConvivenciaViewModel;
 
 public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
@@ -51,6 +54,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private SwitchMaterial switchCaidas;
     private TextView tv_caidas_value;
     private TextInputLayout ilNCaidas;
+    private TextInputLayout ilTipoConvivencia;
 
     private TextInputEditText etNombre;
     private TextInputEditText etApellido;
@@ -60,21 +64,25 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private AppCompatAutoCompleteTextView acNivelEducacional;
     private AppCompatAutoCompleteTextView acEstadoCivil;
     private TextInputEditText etNCaidas;
+    private AppCompatAutoCompleteTextView acTipoConvivencia;
 
     //ViewModels
     private CiudadViewModel ciudadViewModel;
     private EstadoCivilViewModel estadoCivilViewModel;
     private NivelEducacionalViewModel nivelEducacionalViewModel;
+    private TipoConvivenciaViewModel tipoConvivenciaViewModel;
 
     //Listados
     private List<Ciudad> ciudadList;
     private List<EstadoCivil> estadoCivilList;
     private List<NivelEducacional> nivelEducacionalList;
+    private List<TipoConvivencia> tipoConvivenciaList;
 
     //Adaptadores
     private ArrayAdapter<Ciudad> ciudadAdapter;
     private ArrayAdapter<EstadoCivil> estadoCivilAdapter;
     private ArrayAdapter<NivelEducacional> nivelEducacionalAdapter;
+    private ArrayAdapter<TipoConvivencia> tipoConvivenciaAdapter;
 
     public NuevoEntrevistadoActivity() {
     }
@@ -170,6 +178,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
         estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
         nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
+        tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
 
         //Observador de estados civiles
         estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
@@ -212,6 +221,19 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 nivelEducacionalAdapter.notifyDataSetChanged();
             }
         });
+
+        //Observador de tipos de convivencias
+        tipoConvivenciaViewModel.cargarTiposConvivencias().observe(this, new Observer<List<TipoConvivencia>>() {
+            @Override
+            public void onChanged(List<TipoConvivencia> list) {
+                if (list != null) {
+                    tipoConvivenciaList = list;
+                    tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
+                    acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
+                }
+                tipoConvivenciaAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**
@@ -225,6 +247,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         ilCiudad = findViewById(R.id.il_ciudad_entrevistado);
         ilEstadoCivil = findViewById(R.id.il_estado_civil_entrevistado);
         ilNCaidas = findViewById(R.id.il_n_caidas_entrevistado);
+        ilTipoConvivencia = findViewById(R.id.il_tipo_convivencia_entrevistado);
 
         tv_jubilado_value = findViewById(R.id.tv_switch_jubilado_value);
         tv_caidas_value = findViewById(R.id.tv_switch_caidas);
@@ -238,6 +261,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         acEstadoCivil = findViewById(R.id.et_estado_civil_entrevistado);
         acSexo = findViewById(R.id.et_sexo_entrevistado);
         acNivelEducacional = findViewById(R.id.et_nivel_educacional_entrevistado);
+        acTipoConvivencia = findViewById(R.id.et_tipo_convivencia_entrevistado);
 
         switchJubiladoLegal = findViewById(R.id.switch_jubilado_legal);
         switchCaidas = findViewById(R.id.switch_caidas_entrevistado);

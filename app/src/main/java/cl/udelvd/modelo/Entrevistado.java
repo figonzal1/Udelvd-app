@@ -26,7 +26,7 @@ public class Entrevistado {
 
     //opcionales
     private int idNivelEducacional;
-    private int idConviviente;
+    private int idTipoConvivencia;
     private int idProfesion;
     private String createTime;
 
@@ -137,12 +137,12 @@ public class Entrevistado {
         this.idNivelEducacional = idNivelEducacional;
     }
 
-    public int getIdConviviente() {
-        return idConviviente;
+    public int getIdTipoConvivencia() {
+        return idTipoConvivencia;
     }
 
-    public void setIdConviviente(int idConviviente) {
-        this.idConviviente = idConviviente;
+    public void setIdTipoConvivencia(int idTipoConvivencia) {
+        this.idTipoConvivencia = idTipoConvivencia;
     }
 
     public int getIdProfesion() {
@@ -178,7 +178,7 @@ public class Entrevistado {
                 ", idInvestigador=" + idInvestigador +
                 ", idEstadoCivil=" + idEstadoCivil +
                 ", idNivelEducacional=" + idNivelEducacional +
-                ", idConviviente=" + idConviviente +
+                ", idTipoConvivencia=" + idTipoConvivencia +
                 ", idProfesion=" + idProfesion +
                 ", createTime='" + createTime + '\'' +
                 '}';

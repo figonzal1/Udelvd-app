@@ -25,64 +25,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cl.udelvd.modelo.EstadoCivil;
+import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.servicios.VolleySingleton;
 
-public class EstadoCivilRepositorio {
+public class NivelEducacionalRepositorio {
 
-    private static EstadoCivilRepositorio instancia;
+    private static NivelEducacionalRepositorio instancia;
     private Application application;
 
-    private List<EstadoCivil> estadoCivilList;
+    private List<NivelEducacional> nivelEducacionalList;
 
-    /**
-     * Constructor de clase
-     *
-     * @param application
-     */
-    private EstadoCivilRepositorio(Application application) {
+    private NivelEducacionalRepositorio(Application application) {
         this.application = application;
     }
 
-    /**
-     * Clase singleton para creacion de repositorio
-     *
-     * @param application Contexto de uso
-     * @return Instancia de clase
-     */
-    public static EstadoCivilRepositorio getInstance(Application application) {
+    public static NivelEducacionalRepositorio getInstancia(Application application) {
+
         if (instancia == null) {
-            instancia = new EstadoCivilRepositorio(application);
+            instancia = new NivelEducacionalRepositorio(application);
         }
         return instancia;
     }
 
-    /**
-     * Funcion encargada de consultar la lista de estados civiles
-     *
-     * @return MutableLivedata usado en viewModel
-     */
-    public MutableLiveData<List<EstadoCivil>> obtenerEstadosCiviles() {
-
-        MutableLiveData<List<EstadoCivil>> estadosCivilesMutable = new MutableLiveData<>();
-        enviarGetEstadosCiviles(estadosCivilesMutable);
-        return estadosCivilesMutable;
+    public MutableLiveData<List<NivelEducacional>> obtenerNivelesEducacionales() {
+        MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData = new MutableLiveData<>();
+        enviarGetNivelesEduc(nivelEducMutableLiveData);
+        return nivelEducMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de estados civiles
-     *
-     * @param estadosCivilesMutable Lista vacia que será rellenada con lista de estados civiles
-     */
-    private void enviarGetEstadosCiviles(final MutableLiveData<List<EstadoCivil>> estadosCivilesMutable) {
+    private void enviarGetNivelesEduc(final MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData) {
 
-        estadoCivilList = new ArrayList<>();
+        nivelEducacionalList = new ArrayList<>();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
-                //Log.d("RESPONSE", response);
+                Log.d("Response", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -90,25 +68,25 @@ public class EstadoCivilRepositorio {
                     JSONArray jsonData = jsonObject.getJSONArray("data");
 
                     for (int i = 0; i < jsonData.length(); i++) {
-                        JSONObject jsonEstadoCivil = jsonData.getJSONObject(i);
+                        JSONObject jsonNivelEduc = jsonData.getJSONObject(i);
 
-                        int id_estado_vivil = jsonEstadoCivil.getInt("id");
+                        int id_nivel = jsonNivelEduc.getInt("id");
 
-                        JSONObject jsonAttributes = jsonEstadoCivil.getJSONObject("attributes");
-                        String nombre_estado_civil = jsonAttributes.getString("nombre");
+                        JSONObject jsonAttributes = jsonNivelEduc.getJSONObject("attributes");
+                        String nombre_nivel = jsonAttributes.getString("nombre");
 
-                        EstadoCivil estadoCivil = new EstadoCivil();
-                        estadoCivil.setId(id_estado_vivil);
-                        estadoCivil.setNombre(nombre_estado_civil);
+                        NivelEducacional nivelEducacional = new NivelEducacional();
+                        nivelEducacional.setId(id_nivel);
+                        nivelEducacional.setNombre(nombre_nivel);
 
-                        estadoCivilList.add(estadoCivil);
+                        nivelEducacionalList.add(nivelEducacional);
                     }
 
-                    estadosCivilesMutable.postValue(estadoCivilList);
-
+                    nivelEducMutableLiveData.postValue(nivelEducacionalList);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         };
 
@@ -152,14 +130,12 @@ public class EstadoCivilRepositorio {
             }
         };
 
-
-        String url = "http://192.168.0.14/estadosCiviles";
+        String url = "http://192.168.0.14/nivelesEducacionales";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
             @Override
-            public Map<String, String> getHeaders() {
-
+            public Map<String, String> getHeaders() throws AuthFailureError {
                 SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
                         Context.MODE_PRIVATE);
 
@@ -172,28 +148,8 @@ public class EstadoCivilRepositorio {
             }
         };
 
-        String TAG = "ciudades";
+        String TAG = "nivelesEducacionales";
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
 
-
     }
-
-    /**
-     * Funcion para buscar estado civil
-     *
-     * @param nombre Nombre del estado civil a buscar
-     * @return Objeto estado civil
-     */
-    public EstadoCivil buscarEstadoCivil(String nombre) {
-
-        for (int i = 0; i < estadoCivilList.size(); i++) {
-            EstadoCivil estadoCivil = estadoCivilList.get(i);
-
-            if (estadoCivil.getNombre().equals(nombre)) {
-                return estadoCivil;
-            }
-        }
-        return null;
-    }
-
 }

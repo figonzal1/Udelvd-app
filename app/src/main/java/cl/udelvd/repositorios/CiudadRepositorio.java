@@ -70,7 +70,7 @@ public class CiudadRepositorio {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);

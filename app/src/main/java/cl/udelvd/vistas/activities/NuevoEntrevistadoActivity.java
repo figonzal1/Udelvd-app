@@ -30,10 +30,13 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.CiudadAdapter;
 import cl.udelvd.adaptadores.EstadoCivilAdapter;
+import cl.udelvd.adaptadores.NivelEducacionalAdapter;
 import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.modelo.EstadoCivil;
+import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.viewmodel.CiudadViewModel;
 import cl.udelvd.viewmodel.EstadoCivilViewModel;
+import cl.udelvd.viewmodel.NivelEducacionalViewModel;
 
 public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
@@ -54,20 +57,24 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private AppCompatAutoCompleteTextView acSexo;
     private TextInputEditText etFechaNacimiento;
     private AppCompatAutoCompleteTextView acCiudad;
+    private AppCompatAutoCompleteTextView acNivelEducacional;
     private AppCompatAutoCompleteTextView acEstadoCivil;
     private TextInputEditText etNCaidas;
 
     //ViewModels
     private CiudadViewModel ciudadViewModel;
     private EstadoCivilViewModel estadoCivilViewModel;
+    private NivelEducacionalViewModel nivelEducacionalViewModel;
 
     //Listados
     private List<Ciudad> ciudadList;
     private List<EstadoCivil> estadoCivilList;
+    private List<NivelEducacional> nivelEducacionalList;
 
     //Adaptadores
     private ArrayAdapter<Ciudad> ciudadAdapter;
     private ArrayAdapter<EstadoCivil> estadoCivilAdapter;
+    private ArrayAdapter<NivelEducacional> nivelEducacionalAdapter;
 
     public NuevoEntrevistadoActivity() {
     }
@@ -162,6 +169,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         //Crear instancias
         ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
         estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
+        nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
 
         //Observador de estados civiles
         estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
@@ -191,6 +199,19 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 ciudadAdapter.notifyDataSetChanged();
             }
         });
+
+        //Observador de niveles educacionaes
+        nivelEducacionalViewModel.cargarNivelesEduc().observe(this, new Observer<List<NivelEducacional>>() {
+            @Override
+            public void onChanged(List<NivelEducacional> nivelEducacionals) {
+                if (nivelEducacionals != null) {
+                    nivelEducacionalList = nivelEducacionals;
+                    nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
+                    acNivelEducacional.setAdapter(nivelEducacionalAdapter);
+                }
+                nivelEducacionalAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**
@@ -212,9 +233,11 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         etApellido = findViewById(R.id.et_apellido_entrevistado);
         etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
         etNCaidas = findViewById(R.id.et_n_caidas_entrevistado);
+
         acCiudad = findViewById(R.id.et_ciudad_entrevistado);
         acEstadoCivil = findViewById(R.id.et_estado_civil_entrevistado);
         acSexo = findViewById(R.id.et_sexo_entrevistado);
+        acNivelEducacional = findViewById(R.id.et_nivel_educacional_entrevistado);
 
         switchJubiladoLegal = findViewById(R.id.switch_jubilado_legal);
         switchCaidas = findViewById(R.id.switch_caidas_entrevistado);

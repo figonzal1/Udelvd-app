@@ -31,14 +31,17 @@ import cl.udelvd.R;
 import cl.udelvd.adaptadores.CiudadAdapter;
 import cl.udelvd.adaptadores.EstadoCivilAdapter;
 import cl.udelvd.adaptadores.NivelEducacionalAdapter;
+import cl.udelvd.adaptadores.ProfesionAdapter;
 import cl.udelvd.adaptadores.TipoConvivenciaAdapter;
 import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.modelo.EstadoCivil;
 import cl.udelvd.modelo.NivelEducacional;
+import cl.udelvd.modelo.Profesion;
 import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.viewmodel.CiudadViewModel;
 import cl.udelvd.viewmodel.EstadoCivilViewModel;
 import cl.udelvd.viewmodel.NivelEducacionalViewModel;
+import cl.udelvd.viewmodel.ProfesionViewModel;
 import cl.udelvd.viewmodel.TipoConvivenciaViewModel;
 
 public class NuevoEntrevistadoActivity extends AppCompatActivity {
@@ -55,6 +58,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private TextView tv_caidas_value;
     private TextInputLayout ilNCaidas;
     private TextInputLayout ilTipoConvivencia;
+    private TextInputLayout ilProfesion;
 
     private TextInputEditText etNombre;
     private TextInputEditText etApellido;
@@ -65,24 +69,28 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private AppCompatAutoCompleteTextView acEstadoCivil;
     private TextInputEditText etNCaidas;
     private AppCompatAutoCompleteTextView acTipoConvivencia;
+    private AppCompatAutoCompleteTextView acProfesion;
 
     //ViewModels
     private CiudadViewModel ciudadViewModel;
     private EstadoCivilViewModel estadoCivilViewModel;
     private NivelEducacionalViewModel nivelEducacionalViewModel;
     private TipoConvivenciaViewModel tipoConvivenciaViewModel;
+    private ProfesionViewModel profesionViewModel;
 
     //Listados
     private List<Ciudad> ciudadList;
     private List<EstadoCivil> estadoCivilList;
     private List<NivelEducacional> nivelEducacionalList;
     private List<TipoConvivencia> tipoConvivenciaList;
+    private List<Profesion> profesionList;
 
     //Adaptadores
     private ArrayAdapter<Ciudad> ciudadAdapter;
     private ArrayAdapter<EstadoCivil> estadoCivilAdapter;
     private ArrayAdapter<NivelEducacional> nivelEducacionalAdapter;
     private ArrayAdapter<TipoConvivencia> tipoConvivenciaAdapter;
+    private ArrayAdapter<Profesion> profesionAdapter;
 
     public NuevoEntrevistadoActivity() {
     }
@@ -179,6 +187,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
         nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
         tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
+        profesionViewModel = ViewModelProviders.of(this).get(ProfesionViewModel.class);
 
         //Observador de estados civiles
         estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
@@ -234,6 +243,19 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 tipoConvivenciaAdapter.notifyDataSetChanged();
             }
         });
+
+        //Observador de profesiones
+        profesionViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
+            @Override
+            public void onChanged(List<Profesion> profesions) {
+                if (profesions != null) {
+                    profesionList = profesions;
+                    profesionAdapter = new ProfesionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, profesionList);
+                    acProfesion.setAdapter(profesionAdapter);
+                }
+                profesionAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**
@@ -248,6 +270,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         ilEstadoCivil = findViewById(R.id.il_estado_civil_entrevistado);
         ilNCaidas = findViewById(R.id.il_n_caidas_entrevistado);
         ilTipoConvivencia = findViewById(R.id.il_tipo_convivencia_entrevistado);
+        ilProfesion = findViewById(R.id.il_profesion_entrevistado);
 
         tv_jubilado_value = findViewById(R.id.tv_switch_jubilado_value);
         tv_caidas_value = findViewById(R.id.tv_switch_caidas);
@@ -262,6 +285,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         acSexo = findViewById(R.id.et_sexo_entrevistado);
         acNivelEducacional = findViewById(R.id.et_nivel_educacional_entrevistado);
         acTipoConvivencia = findViewById(R.id.et_tipo_convivencia_entrevistado);
+        acProfesion = findViewById(R.id.et_profesion_entrevistado);
 
         switchJubiladoLegal = findViewById(R.id.switch_jubilado_legal);
         switchCaidas = findViewById(R.id.switch_caidas_entrevistado);

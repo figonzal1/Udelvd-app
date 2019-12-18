@@ -162,4 +162,14 @@ public class NivelEducacionalRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
 
     }
+
+    public NivelEducacional buscarNivelEducacional(String nombre) {
+
+        for (int i = 0; i < nivelEducacionalList.size(); i++) {
+            if (nivelEducacionalList.get(i).getNombre().equals(nombre)) {
+                return nivelEducacionalList.get(i);
+            }
+        }
+        return null;
+    }
 }

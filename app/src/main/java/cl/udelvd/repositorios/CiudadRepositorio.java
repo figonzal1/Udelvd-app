@@ -164,4 +164,14 @@ public class CiudadRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
 
     }
+
+    public Ciudad buscarCiudadPorNombre(String ciudad) {
+
+        for (int i = 0; i < ciudadList.size(); i++) {
+            if (ciudadList.get(i).getNombre().equals(ciudad)) {
+                return ciudadList.get(i);
+            }
+        }
+        return null;
+    }
 }

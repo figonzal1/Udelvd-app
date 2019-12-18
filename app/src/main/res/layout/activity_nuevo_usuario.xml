@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".vistas.activities.NuevoEntrevistadoActivity">
 
+    <ProgressBar
+        android:id="@+id/progress_horizontal_registro_entrevistado"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
     <include
         android:id="@+id/include"
         layout="@layout/toolbar_layout"
@@ -16,6 +28,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="true"
@@ -23,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include">
+        app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_registro_entrevistado">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -50,14 +63,14 @@
                 android:id="@+id/iv_logo_registro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:adjustViewBounds="false"
                 android:contentDescription="Logo registro entrevistado"
                 android:cropToPadding="false"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
-                app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_registro_entrevistado"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/add_person_circle" />
 
             <ImageView
@@ -189,18 +202,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ProgressBar
-                android:id="@+id/progress_horizontal_registro_entrevistado"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
                 android:id="@+id/iv_ciudad_entrevistado"
                 android:layout_width="30dp"
@@ -217,18 +218,18 @@
                 style="@style/Widget.MaterialComponents.CompoundButton.Switch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
+                android:checked="false"
                 android:fontFamily="@font/roboto"
                 android:switchPadding="8dp"
-                android:checked="false"
                 android:text="Jubilado legal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorOnPrimary"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_switch_jubilado_value"
                 app:layout_constraintStart_toStartOf="@+id/il_n_convivientes_entrevistado"
-                app:layout_constraintTop_toBottomOf="@+id/il_estado_civil_entrevistado" />
+                app:layout_constraintTop_toBottomOf="@+id/il_n_convivientes_entrevistado" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -237,7 +238,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:hint="Convivientes"
                 app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                 app:endIconMode="clear_text"
@@ -246,9 +247,9 @@
                 app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/switch_jubilado_legal">
+                app:layout_constraintTop_toBottomOf="@+id/il_estado_civil_entrevistado">
 
-                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_n_convivientes_entrevistado"
                     style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense"
                     android:layout_width="match_parent"
@@ -280,7 +281,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:hint="Estado civil"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_estado_civil"
@@ -320,8 +321,11 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:completionThreshold="1"
-                    android:editable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
@@ -335,7 +339,7 @@
                 style="@style/Widget.MaterialComponents.CompoundButton.Switch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/roboto"
                 android:switchPadding="8dp"
@@ -346,7 +350,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/tv_switch_caidas"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/il_n_convivientes_entrevistado"
-                app:layout_constraintTop_toBottomOf="@+id/il_n_convivientes_entrevistado" />
+                app:layout_constraintTop_toBottomOf="@+id/switch_jubilado_legal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_n_caidas_entrevistado"

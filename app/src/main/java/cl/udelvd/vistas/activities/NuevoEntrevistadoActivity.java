@@ -1,7 +1,11 @@
 package cl.udelvd.vistas.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,8 +28,12 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -34,10 +43,17 @@ import cl.udelvd.adaptadores.NivelEducacionalAdapter;
 import cl.udelvd.adaptadores.ProfesionAdapter;
 import cl.udelvd.adaptadores.TipoConvivenciaAdapter;
 import cl.udelvd.modelo.Ciudad;
+import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.EstadoCivil;
 import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.modelo.TipoConvivencia;
+import cl.udelvd.repositorios.CiudadRepositorio;
+import cl.udelvd.repositorios.EntrevistadoRepositorio;
+import cl.udelvd.repositorios.EstadoCivilRepositorio;
+import cl.udelvd.repositorios.NivelEducacionalRepositorio;
+import cl.udelvd.repositorios.ProfesionRepositorio;
+import cl.udelvd.repositorios.TipoConvivenciaRepositorio;
 import cl.udelvd.viewmodel.CiudadViewModel;
 import cl.udelvd.viewmodel.EstadoCivilViewModel;
 import cl.udelvd.viewmodel.NivelEducacionalViewModel;
@@ -52,6 +68,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private TextInputLayout ilFechaNacimiento;
     private TextInputLayout ilCiudad;
     private TextInputLayout ilEstadoCivil;
+    private TextInputLayout ilNConvivientes;
     private SwitchMaterial switchJubiladoLegal;
     private TextView tv_jubilado_value;
     private SwitchMaterial switchCaidas;
@@ -64,6 +81,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private TextInputEditText etApellido;
     private AppCompatAutoCompleteTextView acSexo;
     private TextInputEditText etFechaNacimiento;
+    private TextInputEditText etNConvivientes;
     private AppCompatAutoCompleteTextView acCiudad;
     private AppCompatAutoCompleteTextView acNivelEducacional;
     private AppCompatAutoCompleteTextView acEstadoCivil;
@@ -91,6 +109,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private ArrayAdapter<NivelEducacional> nivelEducacionalAdapter;
     private ArrayAdapter<TipoConvivencia> tipoConvivenciaAdapter;
     private ArrayAdapter<Profesion> profesionAdapter;
+
+    private ProgressBar progressBar;
 
     public NuevoEntrevistadoActivity() {
     }
@@ -122,6 +142,88 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
         setJubilado();
 
+    }
+
+    private boolean validarCampos() {
+
+        int contador_errores = 0;
+
+        //Comprobar nombre vacio
+        if (TextUtils.isEmpty(etNombre.getText())) {
+            ilNombre.setErrorEnabled(true);
+            ilNombre.setError("Campo requerido");
+            contador_errores++;
+        } else {
+            ilNombre.setErrorEnabled(false);
+        }
+
+        //Comprobar apellido
+        if (TextUtils.isEmpty(etApellido.getText())) {
+            ilApellido.setErrorEnabled(true);
+            ilApellido.setError("Campo requerido");
+            contador_errores++;
+        } else {
+            ilApellido.setErrorEnabled(false);
+        }
+
+        //Comprobar Sexo
+        if (TextUtils.isEmpty(acSexo.getText())) {
+            ilSexo.setErrorEnabled(true);
+            ilSexo.setError("Campo requerido");
+            contador_errores++;
+        } else {
+            ilSexo.setErrorEnabled(false);
+        }
+
+        //Comprobar fecha nacimiento
+        if (TextUtils.isEmpty(etFechaNacimiento.getText())) {
+            ilFechaNacimiento.setErrorEnabled(true);
+            ilFechaNacimiento.setError("Campo requerido");
+            contador_errores++;
+        } else {
+            ilFechaNacimiento.setErrorEnabled(false);
+        }
+
+        //Comprobar ciudad
+        if (TextUtils.isEmpty(acCiudad.getText())) {
+            ilCiudad.setErrorEnabled(true);
+            ilCiudad.setError("Campo requerido");
+            contador_errores++;
+        } else {
+            ilCiudad.setErrorEnabled(false);
+        }
+
+        //Comprobar estado civil
+        if (TextUtils.isEmpty(acEstadoCivil.getText())) {
+            ilEstadoCivil.setErrorEnabled(true);
+            ilEstadoCivil.setError("Campo requerido");
+            contador_errores++;
+        } else {
+            ilEstadoCivil.setErrorEnabled(false);
+        }
+
+        //Comprobar n_convivientes_3_meses
+        if (TextUtils.isEmpty(etNConvivientes.getText())) {
+            ilNConvivientes.setErrorEnabled(true);
+            ilNConvivientes.setError("Campo requerido");
+            contador_errores++;
+        } else {
+            ilNConvivientes.setErrorEnabled(false);
+        }
+
+
+        if (switchCaidas.isChecked()) {
+
+            if (TextUtils.isEmpty(etNCaidas.getText())) {
+                ilNCaidas.setErrorEnabled(true);
+                ilNCaidas.setError("Campo requerido");
+                contador_errores++;
+            } else {
+                ilNCaidas.setErrorEnabled(false);
+            }
+        }
+
+        return contador_errores == 0;
     }
 
     /**
@@ -268,6 +370,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         ilFechaNacimiento = findViewById(R.id.il_fecha_nacimiento);
         ilCiudad = findViewById(R.id.il_ciudad_entrevistado);
         ilEstadoCivil = findViewById(R.id.il_estado_civil_entrevistado);
+        ilNConvivientes = findViewById(R.id.il_n_convivientes_entrevistado);
         ilNCaidas = findViewById(R.id.il_n_caidas_entrevistado);
         ilTipoConvivencia = findViewById(R.id.il_tipo_convivencia_entrevistado);
         ilProfesion = findViewById(R.id.il_profesion_entrevistado);
@@ -279,6 +382,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         etApellido = findViewById(R.id.et_apellido_entrevistado);
         etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
         etNCaidas = findViewById(R.id.et_n_caidas_entrevistado);
+        etNConvivientes = findViewById(R.id.et_n_convivientes_entrevistado);
 
         acCiudad = findViewById(R.id.et_ciudad_entrevistado);
         acEstadoCivil = findViewById(R.id.et_estado_civil_entrevistado);
@@ -290,9 +394,48 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         switchJubiladoLegal = findViewById(R.id.switch_jubilado_legal);
         switchCaidas = findViewById(R.id.switch_caidas_entrevistado);
 
+        progressBar = findViewById(R.id.progress_horizontal_registro_entrevistado);
+
     }
 
     private void setPickerFechaNacimiento() {
+        //OnClick
+        etFechaNacimiento.setOnClickListener(new View.OnClickListener() {
+            int year;
+            int month;
+            int day;
+
+            @Override
+            public void onClick(View v) {
+
+                final Calendar c = Calendar.getInstance();
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+
+                if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
+
+                    String fecha = etFechaNacimiento.getText().toString();
+                    String[] fecha_split = fecha.split("-");
+
+                    year = Integer.parseInt(fecha_split[0]);
+                    month = Integer.parseInt(fecha_split[1]);
+                    day = Integer.parseInt(fecha_split[2]);
+                }
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(NuevoEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month += 1;
+                        etFechaNacimiento.setText(year + "-" + month + "-" + dayOfMonth);
+                    }
+                }, year, month, day);
+
+                datePickerDialog.show();
+            }
+        });
+
+        //EndIconOnClick
         ilFechaNacimiento.setEndIconOnClickListener(new View.OnClickListener() {
 
             int year;
@@ -346,8 +489,90 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             finish();
         } else if (item.getItemId() == R.id.menu_guardar) {
 
+            if (validarCampos()) {
+
+                progressBar.setVisibility(View.VISIBLE);
+
+                //Recibir datos de formulario y crear objeto entrevistado
+                Entrevistado entrevistado = new Entrevistado();
+
+                SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
+                int idInvestigador = sharedPreferences.getInt("id_investigador", 0);
+
+                entrevistado.setIdInvestigador(idInvestigador);
+                entrevistado.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
+                entrevistado.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
+                entrevistado.setSexo(acSexo.getText().toString());
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                Date fechaNac = null;
+                try {
+                    fechaNac = simpleDateFormat.parse(Objects.requireNonNull(etFechaNacimiento.getText()).toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                entrevistado.setFechaNacimiento(fechaNac);
+
+                CiudadRepositorio ciudadRepositorio = CiudadRepositorio.getInstancia(getApplication());
+                entrevistado.setIdCiudad(
+                        ciudadRepositorio.buscarCiudadPorNombre(
+                                acCiudad.getText().toString()
+                        ).getId()
+                );
+
+                EstadoCivilRepositorio estadoCivilRepositorio = EstadoCivilRepositorio.getInstance(getApplication());
+                entrevistado.setIdEstadoCivil(
+                        estadoCivilRepositorio.buscarEstadoCivil(
+                                acEstadoCivil.getText().toString()
+                        ).getId()
+                );
+
+                entrevistado.setnConvivientes3Meses(Integer.parseInt(Objects.requireNonNull(etNConvivientes.getText()).toString()));
+
+                entrevistado.setJubiladoLegal(switchJubiladoLegal.isChecked());
+                entrevistado.setCaidas(switchCaidas.isChecked());
+                if (switchCaidas.isChecked()) {
+                    entrevistado.setNCaidas(Integer.parseInt(Objects.requireNonNull(etNCaidas.getText()).toString()));
+                }
+
+                if (!TextUtils.isEmpty(acNivelEducacional.getText())) {
+
+                    NivelEducacionalRepositorio nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
+                    entrevistado.setIdNivelEducacional(
+                            nivelEducacionalRepositorio.buscarNivelEducacional(
+                                    acNivelEducacional.getText().toString()
+                            ).getId()
+                    );
+                }
+
+                if (!TextUtils.isEmpty(acProfesion.getText())) {
+
+                    ProfesionRepositorio profesionRepositorio = ProfesionRepositorio.getInstancia(getApplication());
+                    entrevistado.setIdProfesion(
+                            profesionRepositorio.buscarProfesion(
+                                    acProfesion.getText().toString()
+                            ).getId()
+                    );
+                }
+
+                if (!TextUtils.isEmpty(acTipoConvivencia.getText())) {
+
+                    TipoConvivenciaRepositorio tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
+
+                    entrevistado.setIdTipoConvivencia(
+                            tipoConvivenciaRepositorio.buscarTipoConvivencia(
+                                    acTipoConvivencia.getText().toString()
+                            ).getId()
+                    );
+
+                }
+
+
+                EntrevistadoRepositorio entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+                Log.d("ENTREVISTADO_CREATE", entrevistado.toString());
+            }
         }
-        //TODO: Configurar opcion de guardado
+
 
         return super.onOptionsItemSelected(item);
     }

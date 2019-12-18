@@ -158,4 +158,16 @@ public class TipoConvivenciaRepositorio {
         String TAG = "tiposConvivencias";
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
     }
+
+    public TipoConvivencia buscarTipoConvivencia(String nombre) {
+
+        for (int i = 0; i < tipoConvivenciaList.size(); i++) {
+
+            if (tipoConvivenciaList.get(i).getNombre().equals(nombre)) {
+                return tipoConvivenciaList.get(i);
+            }
+        }
+
+        return null;
+    }
 }

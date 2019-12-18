@@ -97,11 +97,11 @@ public class Entrevistado {
         this.caidas = caidas;
     }
 
-    public int getnCaidas() {
+    public int getNCaidas() {
         return nCaidas;
     }
 
-    public void setnCaidas(int nCaidas) {
+    public void setNCaidas(int nCaidas) {
         this.nCaidas = nCaidas;
     }
 

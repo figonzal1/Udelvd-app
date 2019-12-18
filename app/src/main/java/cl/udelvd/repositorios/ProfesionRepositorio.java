@@ -160,4 +160,15 @@ public class ProfesionRepositorio {
         String TAG = "nivelesEducacionales";
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
     }
+
+    public Profesion buscarProfesion(String nombre) {
+
+        for (int i = 0; i < profesionsList.size(); i++) {
+
+            if (profesionsList.get(i).getNombre().equals(nombre)) {
+                return profesionsList.get(i);
+            }
+        }
+        return null;
+    }
 }

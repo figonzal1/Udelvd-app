@@ -116,7 +116,7 @@ public class EntrevistadoRepositorio {
                         //Caidas
                         if (jsonUsuarioAttributes.getInt("caidas") == 1) {
                             entrevistado.setCaidas(true);
-                            entrevistado.setnCaidas(jsonUsuarioAttributes.getInt("n_caidas"));
+                            entrevistado.setNCaidas(jsonUsuarioAttributes.getInt("n_caidas"));
                         } else {
                             entrevistado.setCaidas(false);
                         }

@@ -107,4 +107,14 @@
         card_view:layout_constraintStart_toStartOf="@+id/cv_iv_entrevistas"
         card_view:layout_constraintTop_toBottomOf="@+id/cv_iv_mag_color" />
 
+    <ImageView
+        android:id="@+id/iv_menu_entrevistado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:srcCompat="@drawable/ic_more_vert_black_24dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

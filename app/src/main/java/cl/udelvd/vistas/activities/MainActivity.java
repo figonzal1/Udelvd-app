@@ -23,8 +23,8 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
-import cl.udelvd.FragmentPageAdapter;
 import cl.udelvd.R;
+import cl.udelvd.adaptadores.FragmentPageAdapter;
 import cl.udelvd.utilidades.Utils;
 
 public class MainActivity extends AppCompatActivity {

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cl.udelvd.R;
+import cl.udelvd.adaptadores.EntrevistadoAdapter;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.viewmodel.EntrevistadoViewModel;
 import cl.udelvd.vistas.activities.NuevoEntrevistadoActivity;
@@ -57,7 +58,7 @@ public class EntrevistadoListaFragment extends Fragment {
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
-        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>()));
+        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getContext()));
 
         iniciarViewModelObservers(v);
 
@@ -134,7 +135,7 @@ public class EntrevistadoListaFragment extends Fragment {
             @Override
             public void onChanged(List<Entrevistado> entrevistadoList) {
 
-                entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList);
+                entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList, getContext());
                 entrevistadoAdapter.notifyDataSetChanged();
                 rv.setAdapter(entrevistadoAdapter);
 

@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.INVISIBLE);
 
                     assert msg_login != null;
-                    Log.d("OBSERVER_LOGIN_OK", msg_login);
+                    Log.d("OBSERVER", msg_login);
 
                     //Si el mensaje es 'Bienvenido' se realiza login
                     if (msg_login.equals("¡Bienvenido!")) {
@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.d("OBSERVER_LOGIN_ERROR", s);
+                Log.d("OBSERVER", s);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });

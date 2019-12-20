@@ -145,7 +145,7 @@ public class NivelEducacionalRepositorio {
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
                         Context.MODE_PRIVATE);
 

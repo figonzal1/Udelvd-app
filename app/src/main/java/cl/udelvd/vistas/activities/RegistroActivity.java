@@ -128,7 +128,7 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                Log.d("VIEW_MODEL", "MSG_RESPONSE: " + s);
+                Log.d("OBSERVER", "MSG_RESPONSE: " + s);
 
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
@@ -146,7 +146,7 @@ public class RegistroActivity extends AppCompatActivity {
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.d("VIEW_MODEL", "MSG_ERROR: " + s);
+                Log.d("OBSERVER", "MSG_ERROR: " + s);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });

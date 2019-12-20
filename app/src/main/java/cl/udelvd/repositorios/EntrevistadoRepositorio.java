@@ -23,12 +23,18 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.modelo.EstadoCivil;
+import cl.udelvd.modelo.NivelEducacional;
+import cl.udelvd.modelo.Profesion;
+import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
 
@@ -38,8 +44,9 @@ public class EntrevistadoRepositorio {
     private final Application application;
 
     private List<Entrevistado> entrevistadoList;
-
-    private SingleLiveEvent<String> errorMsg;
+    private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
     private EntrevistadoRepositorio(Application application) {
         this.application = application;
@@ -54,10 +61,20 @@ public class EntrevistadoRepositorio {
     }
 
     public SingleLiveEvent<String> getErrorMsg() {
-        if (errorMsg == null) {
-            errorMsg = new SingleLiveEvent<>();
-        }
         return errorMsg;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgRegistro() {
+        return responseMsgRegistro;
+    }
+
+    /**
+     * Funcion encargada de registrar entrevistados en el sistema
+     *
+     * @param entrevistado Objeto entrevistado para el registro
+     */
+    public void registrarEntrevistado(Entrevistado entrevistado) {
+        enviarPostEntrevistado(entrevistado);
     }
 
     /**
@@ -66,7 +83,7 @@ public class EntrevistadoRepositorio {
      * @return MutableLiveData con listado de usuarios
      */
     public MutableLiveData<List<Entrevistado>> getUsuarios() {
-        MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
+        entrevistadoList = new ArrayList<>();
         sendGetUsuarios(entrevistadosMutableLiveData);
         return entrevistadosMutableLiveData;
     }
@@ -78,12 +95,11 @@ public class EntrevistadoRepositorio {
      */
     private void sendGetUsuarios(final MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData) {
 
-        entrevistadoList = new ArrayList<>();
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -104,7 +120,9 @@ public class EntrevistadoRepositorio {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
                         entrevistado.setFechaNacimiento(simpleDateFormat.parse(jsonUsuarioAttributes.getString("fecha_nacimiento")));
 
-                        entrevistado.setIdCiudad(jsonUsuarioAttributes.getInt("id_ciudad"));
+                        Ciudad ciudad = new Ciudad();
+                        ciudad.setId(jsonUsuarioAttributes.getInt("id_ciudad"));
+                        entrevistado.setCiudad(ciudad);
 
                         //Jubilado Legal
                         if (jsonUsuarioAttributes.getInt("jubilado_legal") == 1) {
@@ -125,17 +143,25 @@ public class EntrevistadoRepositorio {
 
                         //Foraneas
                         entrevistado.setIdInvestigador(jsonUsuarioAttributes.getInt("id_investigador"));
-                        entrevistado.setIdEstadoCivil(jsonUsuarioAttributes.getInt("id_estado_civil"));
+                        EstadoCivil estadoCivil = new EstadoCivil();
+                        estadoCivil.setId(jsonUsuarioAttributes.getInt("id_estado_civil"));
+                        entrevistado.setEstadoCivil(estadoCivil);
 
                         //Foraneas opcionales
                         if (jsonUsuarioAttributes.has("id_nivel_educacional") && !jsonUsuarioAttributes.isNull("id_nivel_educacional")) {
-                            entrevistado.setIdNivelEducacional(jsonUsuarioAttributes.getInt("id_nivel_educacional"));
+                            NivelEducacional nivelEducacional = new NivelEducacional();
+                            nivelEducacional.setId(jsonUsuarioAttributes.getInt("id_nivel_educacional"));
+                            entrevistado.setNivelEducacional(nivelEducacional);
                         }
                         if (jsonUsuarioAttributes.has("id_tipo_convivencia") && !jsonUsuarioAttributes.isNull("id_tipo_convivencia")) {
-                            entrevistado.setIdTipoConvivencia(jsonUsuarioAttributes.getInt("id_tipo_convivencia"));
+                            TipoConvivencia tipoConvivencia = new TipoConvivencia();
+                            tipoConvivencia.setId(jsonUsuarioAttributes.getInt("id_tipo_convivencia"));
+                            entrevistado.setTipoConvivencia(tipoConvivencia);
                         }
                         if (jsonUsuarioAttributes.has("id_profesion") && !jsonUsuarioAttributes.isNull("id_profesion")) {
-                            entrevistado.setIdProfesion(jsonUsuarioAttributes.getInt("id_profesion"));
+                            Profesion profesion = new Profesion();
+                            profesion.setId(jsonUsuarioAttributes.getInt("id_profesion"));
+                            entrevistado.setProfesion(profesion);
                         }
 
                         entrevistadoList.add(entrevistado);
@@ -215,4 +241,176 @@ public class EntrevistadoRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
     }
 
+    /**
+     * Funcion encargada de realizar la solicitud POST para registrar un entrevistado
+     *
+     * @param entrevistado Objeto entrevistado a ser registrado
+     */
+    private void enviarPostEntrevistado(final Entrevistado entrevistado) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+
+                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+
+                    //Obtener json desde respuesta
+                    Entrevistado entResponse = new Entrevistado();
+                    entResponse.setNombre(jsonAttributes.getString("nombre"));
+                    entResponse.setApellido(jsonAttributes.getString("apellido"));
+
+                    entResponse.setSexo(jsonAttributes.getString("sexo"));
+
+                    if (jsonAttributes.getInt("jubilado_legal") == 0) {
+                        entResponse.setJubiladoLegal(false);
+                    } else {
+                        entResponse.setJubiladoLegal(true);
+                    }
+
+                    if (jsonAttributes.getInt("caidas") == 0) {
+                        entResponse.setCaidas(false);
+                    } else {
+                        entResponse.setCaidas(true);
+                    }
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date fechaNac = simpleDateFormat.parse(jsonAttributes.getString("fecha_nacimiento"));
+                    entResponse.setFechaNacimiento(fechaNac);
+
+                    entResponse.setnConvivientes3Meses(jsonAttributes.getInt("n_convivientes_3_meses"));
+                    entResponse.setIdInvestigador(jsonAttributes.getInt("id_investigador"));
+
+
+                    Log.d("MEMORIA", entrevistado.toString());
+                    Log.d("INTERNET", entResponse.toString());
+
+                    if (entrevistado.equals(entResponse)) {
+                        responseMsgRegistro.postValue("¡Entrevistado registrado!");
+                    }
+
+                } catch (JSONException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ERR_ENTREVISTADO", "TIMEOUT_ERROR");
+                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ERR_ENTREVISTADO", "NETWORK_ERROR");
+                    errorMsg.postValue("No tienes conexión a Internet");
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject("error");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d("VOLLEY_ERR_ENTREVISTADO", "AUTHENTICATION_ERROR: " + errorObject);
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d("VOLLEY_ERR_ENTREVISTADO", "SERVER_ERROR: " + errorObject);
+                    }
+                }
+            }
+        };
+
+        String url = "http://192.168.0.14/entrevistados";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("nombre", entrevistado.getNombre());
+                params.put("apellido", entrevistado.getApellido());
+                params.put("sexo", entrevistado.getSexo());
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                String fechaNac = simpleDateFormat.format(entrevistado.getFechaNacimiento());
+                params.put("fecha_nacimiento", fechaNac);
+                params.put("nombre_ciudad", entrevistado.getCiudad().getNombre());
+
+                if (entrevistado.isJubiladoLegal()) {
+                    params.put("jubilado_legal", String.valueOf(1));
+                } else {
+                    params.put("jubilado_legal", String.valueOf(0));
+                }
+
+                if (entrevistado.isCaidas()) {
+                    params.put("caidas", String.valueOf(1));
+
+                    params.put("n_caidas", String.valueOf(entrevistado.getNCaidas()));
+                } else {
+                    params.put("caidas", String.valueOf(0));
+                }
+
+                params.put("n_convivientes_3_meses", String.valueOf(entrevistado.getNConvivientes3Meses()));
+                params.put("id_investigador", String.valueOf(entrevistado.getIdInvestigador()));
+                params.put("id_estado_civil", String.valueOf(entrevistado.getEstadoCivil().getId()));
+
+                /*
+                    OPCIONALES
+                 */
+                if (entrevistado.getNivelEducacional() != null) {
+                    params.put("id_nivel_educacional", String.valueOf(entrevistado.getNivelEducacional().getId()));
+                }
+
+                if (entrevistado.getTipoConvivencia() != null) {
+                    params.put("id_tipo_convivencia", String.valueOf(entrevistado.getTipoConvivencia().getId()));
+                }
+
+                if (entrevistado.getProfesion() != null) {
+                    params.put("nombre_profesion", entrevistado.getProfesion().getNombre());
+                }
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "Bearer " + token);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+
+                return params;
+            }
+        };
+
+        String TAG = "RegistroEntrevistado";
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+    }
 }

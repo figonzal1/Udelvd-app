@@ -58,4 +58,15 @@ public class EntrevistadoViewModel extends AndroidViewModel {
         return repositorio.getErrorMsg();
     }
 
+    /**
+     * Funcion que envia el mensaje de respuesta de registro desde el respositorio a la interfaz
+     * (Con observer)
+     *
+     * @return SingleLive con mensaje de registro
+     */
+    public SingleLiveEvent<String> mostrarRespuestaRegistro() {
+        repositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        return repositorio.getResponseMsgRegistro();
+    }
+
 }

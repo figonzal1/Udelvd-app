@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -48,13 +49,12 @@ import cl.udelvd.modelo.EstadoCivil;
 import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.modelo.TipoConvivencia;
-import cl.udelvd.repositorios.CiudadRepositorio;
 import cl.udelvd.repositorios.EntrevistadoRepositorio;
 import cl.udelvd.repositorios.EstadoCivilRepositorio;
 import cl.udelvd.repositorios.NivelEducacionalRepositorio;
-import cl.udelvd.repositorios.ProfesionRepositorio;
 import cl.udelvd.repositorios.TipoConvivenciaRepositorio;
 import cl.udelvd.viewmodel.CiudadViewModel;
+import cl.udelvd.viewmodel.EntrevistadoViewModel;
 import cl.udelvd.viewmodel.EstadoCivilViewModel;
 import cl.udelvd.viewmodel.NivelEducacionalViewModel;
 import cl.udelvd.viewmodel.ProfesionViewModel;
@@ -95,6 +95,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private NivelEducacionalViewModel nivelEducacionalViewModel;
     private TipoConvivenciaViewModel tipoConvivenciaViewModel;
     private ProfesionViewModel profesionViewModel;
+    private EntrevistadoViewModel entrevistadoViewModel;
 
     //Listados
     private List<Ciudad> ciudadList;
@@ -149,7 +150,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         int contador_errores = 0;
 
         //Comprobar nombre vacio
-        if (TextUtils.isEmpty(etNombre.getText())) {
+        if (Objects.requireNonNull(etNombre.getText()).toString().isEmpty()) {
             ilNombre.setErrorEnabled(true);
             ilNombre.setError("Campo requerido");
             contador_errores++;
@@ -158,7 +159,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         }
 
         //Comprobar apellido
-        if (TextUtils.isEmpty(etApellido.getText())) {
+        if (Objects.requireNonNull(etApellido.getText()).toString().isEmpty()) {
             ilApellido.setErrorEnabled(true);
             ilApellido.setError("Campo requerido");
             contador_errores++;
@@ -167,7 +168,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         }
 
         //Comprobar Sexo
-        if (TextUtils.isEmpty(acSexo.getText())) {
+        if (acSexo.getText().toString().isEmpty()) {
             ilSexo.setErrorEnabled(true);
             ilSexo.setError("Campo requerido");
             contador_errores++;
@@ -176,7 +177,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         }
 
         //Comprobar fecha nacimiento
-        if (TextUtils.isEmpty(etFechaNacimiento.getText())) {
+        if (Objects.requireNonNull(etFechaNacimiento.getText()).toString().isEmpty()) {
             ilFechaNacimiento.setErrorEnabled(true);
             ilFechaNacimiento.setError("Campo requerido");
             contador_errores++;
@@ -185,7 +186,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         }
 
         //Comprobar ciudad
-        if (TextUtils.isEmpty(acCiudad.getText())) {
+        if (acCiudad.getText().toString().isEmpty()) {
             ilCiudad.setErrorEnabled(true);
             ilCiudad.setError("Campo requerido");
             contador_errores++;
@@ -194,7 +195,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         }
 
         //Comprobar estado civil
-        if (TextUtils.isEmpty(acEstadoCivil.getText())) {
+        if (acEstadoCivil.getText().toString().isEmpty()) {
             ilEstadoCivil.setErrorEnabled(true);
             ilEstadoCivil.setError("Campo requerido");
             contador_errores++;
@@ -203,7 +204,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         }
 
         //Comprobar n_convivientes_3_meses
-        if (TextUtils.isEmpty(etNConvivientes.getText())) {
+        if (Objects.requireNonNull(etNConvivientes.getText()).toString().isEmpty()) {
             ilNConvivientes.setErrorEnabled(true);
             ilNConvivientes.setError("Campo requerido");
             contador_errores++;
@@ -290,6 +291,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
         tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
         profesionViewModel = ViewModelProviders.of(this).get(ProfesionViewModel.class);
+        entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
 
         //Observador de estados civiles
         estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
@@ -356,6 +358,32 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     acProfesion.setAdapter(profesionAdapter);
                 }
                 profesionAdapter.notifyDataSetChanged();
+            }
+        });
+
+        //Observador para mensajes creacion entrevistado
+        entrevistadoViewModel.mostrarRespuestaRegistro().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Log.d("OBSERVER", "MSG_RESPONSE: " + s);
+
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                //Si el registro fue correcto cerrar la actividad
+                if (s.equals("¡Entrevistado registrado!")) {
+                    finish();
+                }
+            }
+        });
+
+        //Observador para mensajes de error de registro entrevistado
+        entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Log.d("OBSERVER", "MSG_ERROR: " + s);
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -513,19 +541,17 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 }
                 entrevistado.setFechaNacimiento(fechaNac);
 
-                CiudadRepositorio ciudadRepositorio = CiudadRepositorio.getInstancia(getApplication());
-                entrevistado.setIdCiudad(
-                        ciudadRepositorio.buscarCiudadPorNombre(
-                                acCiudad.getText().toString()
-                        ).getId()
-                );
+                Ciudad ciudad = new Ciudad();
+                ciudad.setNombre(acCiudad.getText().toString());
+                entrevistado.setCiudad(ciudad);
 
                 EstadoCivilRepositorio estadoCivilRepositorio = EstadoCivilRepositorio.getInstance(getApplication());
-                entrevistado.setIdEstadoCivil(
+                EstadoCivil estadoCivil = new EstadoCivil();
+                estadoCivil.setId(
                         estadoCivilRepositorio.buscarEstadoCivil(
                                 acEstadoCivil.getText().toString()
-                        ).getId()
-                );
+                        ).getId());
+                entrevistado.setEstadoCivil(estadoCivil);
 
                 entrevistado.setnConvivientes3Meses(Integer.parseInt(Objects.requireNonNull(etNConvivientes.getText()).toString()));
 
@@ -535,40 +561,40 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     entrevistado.setNCaidas(Integer.parseInt(Objects.requireNonNull(etNCaidas.getText()).toString()));
                 }
 
-                if (!TextUtils.isEmpty(acNivelEducacional.getText())) {
+                if (!acNivelEducacional.getText().toString().isEmpty()) {
 
                     NivelEducacionalRepositorio nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
-                    entrevistado.setIdNivelEducacional(
+                    NivelEducacional nivelEducacional = new NivelEducacional();
+                    nivelEducacional.setId(
                             nivelEducacionalRepositorio.buscarNivelEducacional(
                                     acNivelEducacional.getText().toString()
-                            ).getId()
-                    );
+                            ).getId());
+                    entrevistado.setNivelEducacional(nivelEducacional);
                 }
 
-                if (!TextUtils.isEmpty(acProfesion.getText())) {
+                if (!acProfesion.getText().toString().isEmpty()) {
 
-                    ProfesionRepositorio profesionRepositorio = ProfesionRepositorio.getInstancia(getApplication());
-                    entrevistado.setIdProfesion(
-                            profesionRepositorio.buscarProfesion(
-                                    acProfesion.getText().toString()
-                            ).getId()
-                    );
+                    Profesion profesion = new Profesion();
+                    profesion.setNombre(acProfesion.getText().toString());
+                    entrevistado.setProfesion(profesion);
                 }
 
-                if (!TextUtils.isEmpty(acTipoConvivencia.getText())) {
+                if (!acTipoConvivencia.getText().toString().isEmpty()) {
 
                     TipoConvivenciaRepositorio tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
 
-                    entrevistado.setIdTipoConvivencia(
+                    TipoConvivencia tipoConvivencia = new TipoConvivencia();
+                    tipoConvivencia.setId(
                             tipoConvivenciaRepositorio.buscarTipoConvivencia(
                                     acTipoConvivencia.getText().toString()
-                            ).getId()
-                    );
-
+                            ).getId());
+                    entrevistado.setTipoConvivencia(tipoConvivencia);
                 }
 
 
+
                 EntrevistadoRepositorio entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+                entrevistadoRepositorio.registrarEntrevistado(entrevistado);
                 Log.d("ENTREVISTADO_CREATE", entrevistado.toString());
             }
         }

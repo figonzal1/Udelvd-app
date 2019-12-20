@@ -1,8 +1,7 @@
 package cl.udelvd.modelo;
 
-import androidx.annotation.NonNull;
-
 import java.util.Date;
+import java.util.Objects;
 
 public class Entrevistado {
 
@@ -21,13 +20,13 @@ public class Entrevistado {
 
 
     private int idInvestigador;
-    private int idCiudad;
-    private int idEstadoCivil;
+    private Ciudad ciudad;
+    private EstadoCivil estadoCivil;
 
     //opcionales
-    private int idNivelEducacional;
-    private int idTipoConvivencia;
-    private int idProfesion;
+    private NivelEducacional nivelEducacional;
+    private TipoConvivencia tipoConvivencia;
+    private Profesion profesion;
     private String createTime;
 
     public Entrevistado() {
@@ -73,12 +72,12 @@ public class Entrevistado {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public int getIdCiudad() {
-        return idCiudad;
+    public Ciudad getCiudad() {
+        return ciudad;
     }
 
-    public void setIdCiudad(int idCiudad) {
-        this.idCiudad = idCiudad;
+    public void setCiudad(Ciudad ciudad) {
+        this.ciudad = ciudad;
     }
 
     public boolean isJubiladoLegal() {
@@ -105,7 +104,7 @@ public class Entrevistado {
         this.nCaidas = nCaidas;
     }
 
-    public int getnConvivientes3Meses() {
+    public int getNConvivientes3Meses() {
         return nConvivientes3Meses;
     }
 
@@ -121,36 +120,36 @@ public class Entrevistado {
         this.idInvestigador = idInvestigador;
     }
 
-    public int getIdEstadoCivil() {
-        return idEstadoCivil;
+    public EstadoCivil getEstadoCivil() {
+        return estadoCivil;
     }
 
-    public void setIdEstadoCivil(int idEstadoCivil) {
-        this.idEstadoCivil = idEstadoCivil;
+    public void setEstadoCivil(EstadoCivil estadoCivil) {
+        this.estadoCivil = estadoCivil;
     }
 
-    public int getIdNivelEducacional() {
-        return idNivelEducacional;
+    public NivelEducacional getNivelEducacional() {
+        return nivelEducacional;
     }
 
-    public void setIdNivelEducacional(int idNivelEducacional) {
-        this.idNivelEducacional = idNivelEducacional;
+    public void setNivelEducacional(NivelEducacional nivelEducacional) {
+        this.nivelEducacional = nivelEducacional;
     }
 
-    public int getIdTipoConvivencia() {
-        return idTipoConvivencia;
+    public TipoConvivencia getTipoConvivencia() {
+        return tipoConvivencia;
     }
 
-    public void setIdTipoConvivencia(int idTipoConvivencia) {
-        this.idTipoConvivencia = idTipoConvivencia;
+    public void setTipoConvivencia(TipoConvivencia tipoConvivencia) {
+        this.tipoConvivencia = tipoConvivencia;
     }
 
-    public int getIdProfesion() {
-        return idProfesion;
+    public Profesion getProfesion() {
+        return profesion;
     }
 
-    public void setIdProfesion(int idProfesion) {
-        this.idProfesion = idProfesion;
+    public void setProfesion(Profesion profesion) {
+        this.profesion = profesion;
     }
 
     public String getCreateTime() {
@@ -161,7 +160,26 @@ public class Entrevistado {
         this.createTime = createTime;
     }
 
-    @NonNull
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entrevistado that = (Entrevistado) o;
+        return isJubiladoLegal() == that.isJubiladoLegal() &&
+                isCaidas() == that.isCaidas() &&
+                nConvivientes3Meses == that.nConvivientes3Meses &&
+                getIdInvestigador() == that.getIdInvestigador() &&
+                getNombre().equals(that.getNombre()) &&
+                getApellido().equals(that.getApellido()) &&
+                getSexo().equals(that.getSexo()) &&
+                getFechaNacimiento().equals(that.getFechaNacimiento());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNombre(), getApellido(), getSexo(), getFechaNacimiento(), isJubiladoLegal(), isCaidas(), nConvivientes3Meses, getIdInvestigador(), getCiudad(), getEstadoCivil());
+    }
+
     @Override
     public String toString() {
         return "Entrevistado{" +
@@ -170,17 +188,19 @@ public class Entrevistado {
                 ", apellido='" + apellido + '\'' +
                 ", sexo='" + sexo + '\'' +
                 ", fechaNacimiento=" + fechaNacimiento +
-                ", idCiudad='" + idCiudad + '\'' +
                 ", jubiladoLegal=" + jubiladoLegal +
                 ", caidas=" + caidas +
                 ", nCaidas=" + nCaidas +
                 ", nConvivientes3Meses=" + nConvivientes3Meses +
                 ", idInvestigador=" + idInvestigador +
-                ", idEstadoCivil=" + idEstadoCivil +
-                ", idNivelEducacional=" + idNivelEducacional +
-                ", idTipoConvivencia=" + idTipoConvivencia +
-                ", idProfesion=" + idProfesion +
+                ", ciudad=" + ciudad +
+                ", estadoCivil=" + estadoCivil +
+                ", nivelEducacional=" + nivelEducacional +
+                ", tipoConvivencia=" + tipoConvivencia +
+                ", profesion=" + profesion +
                 ", createTime='" + createTime + '\'' +
                 '}';
     }
+
+
 }

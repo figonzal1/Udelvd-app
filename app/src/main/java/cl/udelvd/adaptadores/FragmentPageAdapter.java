@@ -1,10 +1,11 @@
-package cl.udelvd;
+package cl.udelvd.adaptadores;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import cl.udelvd.StatsFragment;
 import cl.udelvd.vistas.fragments.EntrevistadoListaFragment;
 
 /**

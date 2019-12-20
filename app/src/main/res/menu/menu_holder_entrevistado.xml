@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_ver_entrevistado"
+        android:title="Ver información básica" />
+
+    <item
+        android:id="@+id/menu_editar_entrevistado"
+        android:title="Editar entrevistado" />
+
+    <item
+        android:id="@+id/menu_ver_entrevistas"
+        android:title="Ver entrevistas" />
+</menu>

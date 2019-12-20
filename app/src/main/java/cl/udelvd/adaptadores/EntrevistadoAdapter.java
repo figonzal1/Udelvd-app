@@ -1,8 +1,12 @@
-package cl.udelvd.vistas.fragments;
+package cl.udelvd.adaptadores;
 
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,9 +23,11 @@ import cl.udelvd.utilidades.Utils;
 public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapter.QuakeViewHolder> {
 
     private final List<Entrevistado> entrevistadoList;
+    private Context context;
 
-    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList) {
+    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context) {
         this.entrevistadoList = entrevistadoList;
+        this.context = context;
     }
 
     @NonNull
@@ -32,7 +38,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull QuakeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final QuakeViewHolder holder, int position) {
 
         Entrevistado entrevistado = entrevistadoList.get(position);
 
@@ -47,6 +53,24 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         holder.tv_n_entrevistas.setText("10 entrevistas");
 
 
+        holder.iv_menu_entrevistado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PopupMenu popupMenu = new PopupMenu(context, holder.iv_menu_entrevistado);
+                popupMenu.inflate(R.menu.menu_holder_entrevistado);
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+
+
     }
 
     @Override
@@ -59,6 +83,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         private final TextView tv_nombre_apellido;
         private final TextView tv_fecha_nacimiento;
         private final TextView tv_n_entrevistas;
+        private final ImageView iv_menu_entrevistado;
 
 
         QuakeViewHolder(@NonNull View itemView) {
@@ -67,6 +92,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
             tv_nombre_apellido = itemView.findViewById(R.id.cv_tv_nombre);
             tv_fecha_nacimiento = itemView.findViewById(R.id.cv_tv_fecha_nac);
             tv_n_entrevistas = itemView.findViewById(R.id.cv_tv_n_entrevistas);
+            iv_menu_entrevistado = itemView.findViewById(R.id.iv_menu_entrevistado);
         }
     }
 }

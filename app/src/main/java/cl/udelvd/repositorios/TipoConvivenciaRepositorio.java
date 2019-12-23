@@ -34,8 +34,9 @@ public class TipoConvivenciaRepositorio {
     private Application application;
 
     private List<TipoConvivencia> tipoConvivenciaList;
+    private static final String TAG_TIPO_CONVIVENCIA = "ListadoTipoConvivencia";
 
-    public TipoConvivenciaRepositorio(Application application) {
+    private TipoConvivenciaRepositorio(Application application) {
         this.application = application;
     }
 
@@ -99,12 +100,12 @@ public class TipoConvivenciaRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERROR_LOGIN", "TIMEOUT_ERROR");
+                    Log.d("VOLLEY_ERR_TIPO_CONVIV", "TIMEOUT_ERROR");
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERROR_LOGIN", "NETWORK_ERROR");
+                    Log.d("VOLLEY_ERR_TIPO_CONVIV", "NETWORK_ERROR");
                 }
 
                 //Errores cuando el servidor si responde
@@ -124,19 +125,19 @@ public class TipoConvivenciaRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERROR_LOGIN", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERR_TIPO_CONVIV", "AUTHENTICATION_ERROR: " + errorObject);
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERROR_LOGIN", "SERVER_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERR_TIPO_CONVIV", "SERVER_ERROR: " + errorObject);
                     }
                 }
             }
         };
 
 
-        String url = "http://192.168.0.14/tiposConvivencias";
+        String url = "http://192.168.1.86/tiposConvivencias";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -155,10 +156,15 @@ public class TipoConvivenciaRepositorio {
             }
         };
 
-        String TAG = "tiposConvivencias";
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_TIPO_CONVIVENCIA);
     }
 
+    /**
+     * Funcion encargada de buscar tipo convivencia según parámetro
+     *
+     * @param nombre Nombre del tipo de convivencia
+     * @return TipoConvivencia
+     */
     public TipoConvivencia buscarTipoConvivencia(String nombre) {
 
         for (int i = 0; i < tipoConvivenciaList.size(); i++) {

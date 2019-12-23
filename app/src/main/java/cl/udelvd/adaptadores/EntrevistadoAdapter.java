@@ -1,6 +1,7 @@
 package cl.udelvd.adaptadores;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.Locale;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.utilidades.Utils;
+import cl.udelvd.vistas.activities.EditarEntrevistadoActivity;
 
 public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapter.QuakeViewHolder> {
 
@@ -40,7 +42,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
     @Override
     public void onBindViewHolder(@NonNull final QuakeViewHolder holder, int position) {
 
-        Entrevistado entrevistado = entrevistadoList.get(position);
+        final Entrevistado entrevistado = entrevistadoList.get(position);
 
         holder.tv_nombre_apellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
 
@@ -53,6 +55,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         holder.tv_n_entrevistas.setText("10 entrevistas");
 
 
+        //TOdo: Terminar popupsmenu
         holder.iv_menu_entrevistado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +66,13 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        return false;
+
+                        if (item.getItemId() == R.id.menu_editar_entrevistado) {
+                            Intent intent = new Intent(context, EditarEntrevistadoActivity.class);
+                            intent.putExtra("id_entrevistado", entrevistado.getId());
+                            context.startActivity(intent);
+                        }
+                        return true;
                     }
                 });
                 popupMenu.show();

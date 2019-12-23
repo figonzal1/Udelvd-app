@@ -35,6 +35,8 @@ public class NivelEducacionalRepositorio {
 
     private List<NivelEducacional> nivelEducacionalList;
 
+    private static final String TAG_NIVEL_EDUCACIONAL = "ListadoNivelEducacional";
+
     private NivelEducacionalRepositorio(Application application) {
         this.application = application;
     }
@@ -104,12 +106,12 @@ public class NivelEducacionalRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERROR_LOGIN", "TIMEOUT_ERROR");
+                    Log.d("VOLLEY_ERR_NIVEL_EDUC", "TIMEOUT_ERROR");
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERROR_LOGIN", "NETWORK_ERROR");
+                    Log.d("VOLLEY_ERR_NIVEL_EDUC", "NETWORK_ERROR");
                 }
 
                 //Errores cuando el servidor si responde
@@ -129,18 +131,18 @@ public class NivelEducacionalRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERROR_LOGIN", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERR_NIVEL_EDUC", "AUTHENTICATION_ERROR: " + errorObject);
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERROR_LOGIN", "SERVER_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERR_NIVEL_EDUC", "SERVER_ERROR: " + errorObject);
                     }
                 }
             }
         };
 
-        String url = "http://192.168.0.14/nivelesEducacionales";
+        String url = "http://192.168.1.86/nivelesEducacionales";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -158,8 +160,7 @@ public class NivelEducacionalRepositorio {
             }
         };
 
-        String TAG = "nivelesEducacionales";
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_NIVEL_EDUCACIONAL);
 
     }
 

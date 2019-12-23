@@ -34,6 +34,10 @@ public class InvestigadorRepositorio {
 
     private final SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
+    private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
+    private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
+    private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
+
     private InvestigadorRepositorio(Application application) {
         this.application = application;
     }
@@ -77,16 +81,155 @@ public class InvestigadorRepositorio {
     }
 
     /**
+     * Funcion encargada de enviar peticion POST para registro investigador
+     *
+     * @param investigador Objeto investigador que hara registro en sistema
+     */
+    private void enviarPostRegistro(final Investigador investigador) {
+
+        //Definicion de listener de respuesta
+        final Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                //Log.d("RESPONSE",response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+
+                    //Obtener json desde respuesta
+                    Investigador invResponse = new Investigador();
+                    invResponse.setNombre(jsonAttributes.getString("nombre"));
+                    invResponse.setApellido(jsonAttributes.getString("apellido"));
+                    invResponse.setEmail(jsonAttributes.getString("email"));
+
+                    //Obtener relacion Rol de investigador
+                    JSONObject jsonObjectRolData = jsonData
+                            .getJSONObject("relationships")
+                            .getJSONObject("rol")
+                            .getJSONObject("data");
+
+                    invResponse.setNombreRol(jsonObjectRolData.getString("nombre"));
+
+                    if (jsonAttributes.getInt("activado") == 0) {
+                        invResponse.setActivado(false);
+                    } else if (jsonAttributes.getInt("activado") == 1) {
+                        invResponse.setActivado(true);
+                    }
+
+                    Log.d("MEMORIA", investigador.toString());
+                    Log.d("INTERNET", invResponse.toString());
+
+                    if (investigador.equals(invResponse)) {
+                        responseMsgRegistro.postValue("¡Estas registrado!");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        //Definicion de listener de error
+        final Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ERR_REGIS_INVEST", "TIMEOUT_ERROR");
+                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ERR_REGIS_INVEST", "NETWORK_ERROR");
+                    errorMsg.postValue("No tienes conexión a Internet");
+                }
+
+                //Errores cuandoel servidor si response
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject("error");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d("VOLLEY_ERR_REGIS_INVEST", "AUTHENTICATION_ERROR: " + errorObject);
+                        errorMsg.postValue("Acceso no autorizado");
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d("VOLLEY_ERR_REGIS_INVEST", "SERVER_ERROR: " + errorObject);
+
+                        try {
+
+                            assert errorObject != null;
+                            //Si el error es de mail repetido, postear error msg
+                            if (errorObject.get("detail").equals("Email already exists")) {
+                                errorMsg.postValue("Email ya registrado");
+                            } else {
+                                errorMsg.postValue("Servidor no responde, intente más tarde");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+        };
+
+
+        //String url = "https://udelvd-dev.herokuapp.com/investigadores";
+        String url = "http://192.168.1.86/investigadores";
+
+        //Hacer peticion post
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                responseListener, errorListener) {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+
+                params.put("nombre", investigador.getNombre());
+                params.put("apellido", investigador.getApellido());
+                params.put("email", investigador.getEmail());
+                params.put("password", investigador.getPassword());
+                params.put("nombre_rol", investigador.getNombreRol());
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_REGISTRO);
+    }
+
+    /**
      * Funcion encargada de realizar el login del investigador
      *
      * @param investigador Objeto investigador que hará login en sistema
      */
     public void loginInvestigador(Investigador investigador) {
         enviarPostLogin(investigador);
-    }
-
-    public void actualizarInvestigador(Investigador investigador) {
-        enviarPutActualizacion(investigador);
     }
 
     /**
@@ -233,7 +376,7 @@ public class InvestigadorRepositorio {
         };
 
         //String url = "https://udelvd-dev.herokuapp.com/investigadores/login";
-        String url = "http://192.168.0.14/investigadores/login";
+        String url = "http://192.168.1.86/investigadores/login";
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener,
                 errorListener) {
@@ -253,161 +396,31 @@ public class InvestigadorRepositorio {
             }
         };
 
-        String TAG = "LoginInvestigador";
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_LOGIN);
 
     }
 
     /**
-     * Funcion encargada de enviar peticion POST para registro investigador
+     * Funcion encargada de actualizar los datos del investigador
      *
-     * @param investigador Objeto investigador que hara registro en sistema
+     * @param investigador Objeto investigador
      */
-    private void enviarPostRegistro(final Investigador investigador) {
-
-        //Definicion de listener de respuesta
-        final Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                //Log.d("RESPONSE",response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
-                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
-
-                    //Obtener json desde respuesta
-                    Investigador invResponse = new Investigador();
-                    invResponse.setNombre(jsonAttributes.getString("nombre"));
-                    invResponse.setApellido(jsonAttributes.getString("apellido"));
-                    invResponse.setEmail(jsonAttributes.getString("email"));
-
-                    //Obtener relacion Rol de investigador
-                    JSONObject jsonObjectRolData = jsonData
-                            .getJSONObject("relationships")
-                            .getJSONObject("rol")
-                            .getJSONObject("data");
-
-                    invResponse.setNombreRol(jsonObjectRolData.getString("nombre"));
-
-                    if (jsonAttributes.getInt("activado") == 0) {
-                        invResponse.setActivado(false);
-                    } else if (jsonAttributes.getInt("activado") == 1) {
-                        invResponse.setActivado(true);
-                    }
-
-                    Log.d("MEMORIA", investigador.toString());
-                    Log.d("INTERNET", invResponse.toString());
-
-                    if (investigador.equals(invResponse)) {
-                        responseMsgRegistro.postValue("¡Estas registrado!");
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        //Definicion de listener de error
-        final Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERROR", "TIMEOUT_ERROR");
-                    errorMsg.postValue("Servidor no responde, intente más tarde");
-                }
-
-                //Error de conexion a internet
-                else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERROR", "NETWORK_ERROR");
-                    errorMsg.postValue("No tienes conexión a Internet");
-                }
-
-                //Errores cuandoel servidor si response
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    //Obtener json error
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    //Error de autorizacion
-                    if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERROR", "AUTHENTICATION_ERROR: " + errorObject);
-                        errorMsg.postValue("Acceso no autorizado");
-                    }
-
-                    //Error de servidor
-                    else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERROR", "SERVER_ERROR: " + errorObject);
-
-                        try {
-
-                            assert errorObject != null;
-                            //Si el error es de mail repetido, postear error msg
-                            if (errorObject.get("detail").equals("Email already exists")) {
-                                errorMsg.postValue("Email ya registrado");
-                            } else {
-                                errorMsg.postValue("Servidor no responde, intente más tarde");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-            }
-        };
-
-
-        //String url = "https://udelvd-dev.herokuapp.com/investigadores";
-        String url = "http://192.168.0.14/investigadores";
-
-        //Hacer peticion post
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                responseListener, errorListener) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-
-                params.put("nombre", investigador.getNombre());
-                params.put("apellido", investigador.getApellido());
-                params.put("email", investigador.getEmail());
-                params.put("password", investigador.getPassword());
-                params.put("nombre_rol", investigador.getNombreRol());
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-
-        String TAG = "RegistroInvestigador";
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+    public void actualizarInvestigador(Investigador investigador) {
+        enviarPutActualizacion(investigador);
     }
 
-
+    /**
+     * Funcion encargada de enviar actualización al servidor mediante metodo PUT
+     *
+     * @param investigadorForm Objeto investigador a ser enviado
+     */
     private void enviarPutActualizacion(final Investigador investigadorForm) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -448,10 +461,8 @@ public class InvestigadorRepositorio {
                         result.put("investigador", invResponse);
                         result.put("mensaje_update", "¡Datos actualizados!");
 
-                        Log.d("UPDATE_TIME", update_time);
+                        Log.d("UPDATE_STATUS", update_time);
                         responseMsgActualizacion.postValue(result);
-                    } else {
-                        Log.d("UPDATE", "NO SON IGUALES");
                     }
 
                 } catch (JSONException e) {
@@ -465,13 +476,13 @@ public class InvestigadorRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERROR", "TIMEOUT_ERROR");
+                    Log.d("VOLLEY_ERR_INV_UPDATE", "TIMEOUT_ERROR");
                     errorMsg.postValue("Servidor no responde, intente más tarde");
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERROR", "NETWORK_ERROR");
+                    Log.d("VOLLEY_ERR_INV_UPDATE", "NETWORK_ERROR");
                     errorMsg.postValue("No tienes conexión a Internet");
                 }
 
@@ -492,20 +503,20 @@ public class InvestigadorRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERROR", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERR_INV_UPDATE", "AUTHENTICATION_ERROR: " + errorObject);
                         errorMsg.postValue("Acceso no autorizado");
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERROR", "SERVER_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERR_INV_UPDATE", "SERVER_ERROR: " + errorObject);
                     }
                 }
             }
         };
 
 
-        String url = "http://192.168.0.14/investigadores/" + investigadorForm.getId();
+        String url = "http://192.168.1.86/investigadores/" + investigadorForm.getId();
 
         StringRequest request = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
 
@@ -537,7 +548,6 @@ public class InvestigadorRepositorio {
             }
         };
 
-        String TAG = "ActualizacionInvestigador";
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_ACTUALIZACION);
     }
 }

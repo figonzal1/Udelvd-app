@@ -119,7 +119,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nuevo_usuario);
+        setContentView(R.layout.activity_nuevo_entrevistado);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
@@ -302,6 +302,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     estadoCivilList = estadoCivils;
                     estadoCivilAdapter = new EstadoCivilAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, estadoCivilList);
                     acEstadoCivil.setAdapter(estadoCivilAdapter);
+
+                    Log.d("VM_ESTADO_CIVIL", "Listado cargado");
                 }
 
                 estadoCivilAdapter.notifyDataSetChanged();
@@ -317,6 +319,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     ciudadList = ciudads;
                     ciudadAdapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
                     acCiudad.setAdapter(ciudadAdapter);
+
+                    Log.d("VM_CIUDAD", "Listado cargado");
                 }
                 ciudadAdapter.notifyDataSetChanged();
             }
@@ -330,6 +334,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     nivelEducacionalList = nivelEducacionals;
                     nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
                     acNivelEducacional.setAdapter(nivelEducacionalAdapter);
+
+                    Log.d("VM_NIVEL_EDUC", "Listado cargado");
                 }
                 nivelEducacionalAdapter.notifyDataSetChanged();
             }
@@ -343,6 +349,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     tipoConvivenciaList = list;
                     tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
                     acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
+
+                    Log.d("VM_TIPO_CONVIVENCIA", "Listado cargado");
                 }
                 tipoConvivenciaAdapter.notifyDataSetChanged();
             }
@@ -356,6 +364,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     profesionList = profesions;
                     profesionAdapter = new ProfesionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, profesionList);
                     acProfesion.setAdapter(profesionAdapter);
+
+                    Log.d("VM_PROFESIONES", "Listado cargado");
                 }
                 profesionAdapter.notifyDataSetChanged();
             }
@@ -365,10 +375,11 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         entrevistadoViewModel.mostrarRespuestaRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.d("OBSERVER", "MSG_RESPONSE: " + s);
 
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                Log.d("VM_NEW_ENTREVISTADO", "MSG_RESPONSE: " + s);
 
                 //Si el registro fue correcto cerrar la actividad
                 if (s.equals("¡Entrevistado registrado!")) {
@@ -382,8 +393,10 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.d("OBSERVER", "MSG_ERROR: " + s);
+
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                Log.d("VM_NEW_ENTREVISTADO", "MSG_ERROR: " + s);
             }
         });
     }
@@ -590,7 +603,6 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                             ).getId());
                     entrevistado.setTipoConvivencia(tipoConvivencia);
                 }
-
 
 
                 EntrevistadoRepositorio entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());

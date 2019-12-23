@@ -48,6 +48,10 @@ public class EntrevistadoRepositorio {
     private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
     private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
+    private static final String TAG_ENTREVISTADOS_LISTA = "ListaEntrevistados";
+    private static final String TAG_ENTREVISTADO_REGISTRO = "RegistroEntrevistado";
+    private static final Object TAG_ENTREVISTADO = "ObtenerEntrevistado";
+
     private EntrevistadoRepositorio(Application application) {
         this.application = application;
     }
@@ -69,22 +73,13 @@ public class EntrevistadoRepositorio {
     }
 
     /**
-     * Funcion encargada de registrar entrevistados en el sistema
-     *
-     * @param entrevistado Objeto entrevistado para el registro
-     */
-    public void registrarEntrevistado(Entrevistado entrevistado) {
-        enviarPostEntrevistado(entrevistado);
-    }
-
-    /**
      * Funcion encargada de buscar usuarios y enviar listado a ViewModel
      *
      * @return MutableLiveData con listado de usuarios
      */
-    public MutableLiveData<List<Entrevistado>> getUsuarios() {
+    public MutableLiveData<List<Entrevistado>> obtenerEntrevistados() {
         entrevistadoList = new ArrayList<>();
-        sendGetUsuarios(entrevistadosMutableLiveData);
+        sendGetEntrevistados(entrevistadosMutableLiveData);
         return entrevistadosMutableLiveData;
     }
 
@@ -93,7 +88,7 @@ public class EntrevistadoRepositorio {
      *
      * @param entrevistadosMutableLiveData Lista mutable vacia rellenada con lista de entrevistados
      */
-    private void sendGetUsuarios(final MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData) {
+    private void sendGetEntrevistados(final MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData) {
 
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -181,10 +176,10 @@ public class EntrevistadoRepositorio {
             public void onErrorResponse(VolleyError error) {
 
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERROR", "TIMEOUT_ERROR");
+                    Log.d("VOLLEY_ER_ENTREVISTADOS", "TIMEOUT_ERROR");
                     errorMsg.postValue("Servidor no responde, intente más tarde");
                 } else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERROR", "NETWORK_ERROR");
+                    Log.d("VOLLEY_ER_ENTREVISTADOS", "NETWORK_ERROR");
                     errorMsg.postValue("No tienes conexión a Internet");
                 }
 
@@ -205,20 +200,20 @@ public class EntrevistadoRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERROR", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ER_ENTREVISTADOS", "AUTHENTICATION_ERROR: " + errorObject);
                         errorMsg.postValue("Acceso no autorizado");
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERROR", "SERVER_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ER_ENTREVISTADOS", "SERVER_ERROR: " + errorObject);
                     }
                 }
             }
         };
 
         //String url = "https://udelvd-dev.herokuapp.com/entrevistados";
-        String url = "http://192.168.0.14/entrevistados";
+        String url = "http://192.168.1.86/entrevistados";
 
         //Hacer request
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener,
@@ -236,9 +231,16 @@ public class EntrevistadoRepositorio {
                 return params;
             }
         };
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADOS_LISTA);
+    }
 
-        String TAG = "ListaUsuario";
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+    /**
+     * Funcion encargada de registrar entrevistados en el sistema
+     *
+     * @param entrevistado Objeto entrevistado para el registro
+     */
+    public void registrarEntrevistado(Entrevistado entrevistado) {
+        enviarPostEntrevistado(entrevistado);
     }
 
     /**
@@ -343,7 +345,7 @@ public class EntrevistadoRepositorio {
             }
         };
 
-        String url = "http://192.168.0.14/entrevistados";
+        String url = "http://192.168.1.86/entrevistados";
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
 
@@ -410,7 +412,164 @@ public class EntrevistadoRepositorio {
             }
         };
 
-        String TAG = "RegistroEntrevistado";
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADO_REGISTRO);
+    }
+
+    /**
+     * Funcion encargada de obtener la información de un entrevistado en específico
+     *
+     * @param entrevistado Objeto entrevistado
+     * @return
+     */
+    public MutableLiveData<Entrevistado> obtenerEntrevistado(Entrevistado entrevistado) {
+        MutableLiveData<Entrevistado> entrevistadoMutableLiveData = new MutableLiveData<>();
+        enviarGetEntrevistado(entrevistado, entrevistadoMutableLiveData);
+        return entrevistadoMutableLiveData;
+    }
+
+    /**
+     * Funcion encargada de enviar solicitud GET para obtener datos de entrevistado específico
+     *
+     * @param entrevistado                Objeto entrevistado
+     * @param entrevistadoMutableLiveData Información de un entrevistado
+     */
+    private void enviarGetEntrevistado(final Entrevistado entrevistado, final MutableLiveData<Entrevistado> entrevistadoMutableLiveData) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+
+                    entrevistado.setId(jsonData.getInt("id"));
+
+                    entrevistado.setNombre(jsonAttributes.getString("nombre"));
+                    entrevistado.setApellido(jsonAttributes.getString("apellido"));
+                    entrevistado.setSexo(jsonAttributes.getString("sexo"));
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date fechaNac = simpleDateFormat.parse(jsonAttributes.getString("fecha_nacimiento"));
+                    entrevistado.setFechaNacimiento(fechaNac);
+
+                    if (jsonAttributes.getInt("jubilado_legal") == 0) {
+                        entrevistado.setJubiladoLegal(false);
+                    } else {
+                        entrevistado.setJubiladoLegal(true);
+                    }
+
+                    if (jsonAttributes.getInt("caidas") == 0) {
+                        entrevistado.setCaidas(false);
+                    } else {
+                        entrevistado.setCaidas(true);
+
+                        entrevistado.setNCaidas(jsonAttributes.getInt("n_caidas"));
+                    }
+
+                    entrevistado.setnConvivientes3Meses(jsonAttributes.getInt("n_convivientes_3_meses"));
+                    entrevistado.setIdInvestigador(jsonAttributes.getInt("id_investigador"));
+
+                    Ciudad ciudad = new Ciudad();
+                    ciudad.setId(jsonAttributes.getInt("id_ciudad"));
+                    entrevistado.setCiudad(ciudad);
+
+                    EstadoCivil estadoCivil = new EstadoCivil();
+                    estadoCivil.setId(jsonAttributes.getInt("id_estado_civil"));
+                    entrevistado.setEstadoCivil(estadoCivil);
+
+                    //Opcionales (manejar nulls como strings)
+                    String id_nivel_educacional = jsonAttributes.getString("id_nivel_educacional");
+
+                    if (!id_nivel_educacional.equals("null")) {
+                        NivelEducacional nivelEducacional = new NivelEducacional();
+                        nivelEducacional.setId(Integer.parseInt(id_nivel_educacional));
+
+                        entrevistado.setNivelEducacional(nivelEducacional);
+                    }
+
+                    String id_tipo_convivencia = jsonAttributes.getString("id_tipo_convivencia");
+                    if (!id_tipo_convivencia.equals("null")) {
+                        TipoConvivencia tipoConvivencia = new TipoConvivencia();
+                        tipoConvivencia.setId(Integer.parseInt(id_tipo_convivencia));
+                    }
+
+                    String id_profesion = jsonAttributes.getString("id_profesion");
+                    if (!id_profesion.equals("null")) {
+                        Profesion profesion = new Profesion();
+                        profesion.setId(Integer.parseInt(id_profesion));
+                    }
+
+                    entrevistadoMutableLiveData.postValue(entrevistado);
+
+                } catch (JSONException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ER_ENTREVISTADO", "TIMEOUT_ERROR");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ER_ENTREVISTADO", "NETWORK_ERROR");
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject("error");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d("VOLLEY_ER_ENTREVISTADO", "AUTHENTICATION_ERROR: " + errorObject);
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d("VOLLEY_ER_ENTREVISTADO", "SERVER_ERROR: " + errorObject);
+                    }
+                }
+            }
+        };
+
+        String url = "http://192.168.1.86/entrevistados/" + entrevistado.getId();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Authorization", "Bearer " + token);
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO);
     }
 }

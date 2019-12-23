@@ -35,10 +35,12 @@ public class EstadoCivilRepositorio {
 
     private List<EstadoCivil> estadoCivilList;
 
+    private static final String TAG_GET_ESTADOS_CIVILES = "ListaEstadosCiviles";
+
     /**
      * Constructor de clase
      *
-     * @param application
+     * @param application , utilizado para instanciar recursos
      */
     private EstadoCivilRepositorio(Application application) {
         this.application = application;
@@ -116,12 +118,12 @@ public class EstadoCivilRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERROR_LOGIN", "TIMEOUT_ERROR");
+                    Log.d("VOLLEY_ERR_EST_CIVIL", "TIMEOUT_ERROR");
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERROR_LOGIN", "NETWORK_ERROR");
+                    Log.d("VOLLEY_ERR_EST_CIVIL", "NETWORK_ERROR");
                 }
 
                 //Errores cuando el servidor si responde
@@ -141,19 +143,19 @@ public class EstadoCivilRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERROR_LOGIN", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERR_EST_CIVIL", "AUTHENTICATION_ERROR: " + errorObject);
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERROR_LOGIN", "SERVER_ERROR: " + errorObject);
+                        Log.d("VOLLEY_ERR_EST_CIVIL", "SERVER_ERROR: " + errorObject);
                     }
                 }
             }
         };
 
 
-        String url = "http://192.168.0.14/estadosCiviles";
+        String url = "http://192.168.1.86/estadosCiviles";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -172,8 +174,7 @@ public class EstadoCivilRepositorio {
             }
         };
 
-        String TAG = "ciudades";
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG);
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_GET_ESTADOS_CIVILES);
 
 
     }

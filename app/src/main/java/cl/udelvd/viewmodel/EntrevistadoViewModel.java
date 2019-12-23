@@ -33,7 +33,7 @@ public class EntrevistadoViewModel extends AndroidViewModel {
         if (entrevistadoMutableLiveData == null) {
             entrevistadoMutableLiveData = new MutableLiveData<>();
             repositorio = EntrevistadoRepositorio.getInstance(getApplication());
-            entrevistadoMutableLiveData = repositorio.getUsuarios();
+            entrevistadoMutableLiveData = repositorio.obtenerEntrevistados();
         }
         return entrevistadoMutableLiveData;
     }
@@ -44,7 +44,7 @@ public class EntrevistadoViewModel extends AndroidViewModel {
      */
     public void refreshListaUsuarios() {
         repositorio = EntrevistadoRepositorio.getInstance(getApplication());
-        repositorio.getUsuarios();
+        repositorio.obtenerEntrevistados();
     }
 
     /**
@@ -69,4 +69,8 @@ public class EntrevistadoViewModel extends AndroidViewModel {
         return repositorio.getResponseMsgRegistro();
     }
 
+    public MutableLiveData<Entrevistado> mostrarEntrevistado(Entrevistado entrevistado) {
+        repositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        return repositorio.obtenerEntrevistado(entrevistado);
+    }
 }

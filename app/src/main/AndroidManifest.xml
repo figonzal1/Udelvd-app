@@ -12,8 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".vistas.activities.NuevoEntrevistadoActivity" />
-        <activity android:name=".vistas.activities.EditarPerfilActivity" />
+        <activity
+            android:name=".vistas.activities.EditarEntrevistadoActivity"
+            android:parentActivityName=".vistas.activities.MainActivity" />
+        <activity
+            android:name=".vistas.activities.NuevoEntrevistadoActivity"
+            android:parentActivityName=".vistas.activities.MainActivity" />
+        <activity
+            android:name=".vistas.activities.EditarPerfilActivity"
+            android:parentActivityName=".vistas.activities.PerfilActivity" />
         <activity
             android:name=".vistas.activities.PerfilActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />

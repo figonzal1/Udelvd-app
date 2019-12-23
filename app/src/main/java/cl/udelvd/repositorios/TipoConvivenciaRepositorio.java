@@ -165,7 +165,7 @@ public class TipoConvivenciaRepositorio {
      * @param nombre Nombre del tipo de convivencia
      * @return TipoConvivencia
      */
-    public TipoConvivencia buscarTipoConvivencia(String nombre) {
+    public TipoConvivencia buscarTipoConvivenciaPorNombre(String nombre) {
 
         for (int i = 0; i < tipoConvivenciaList.size(); i++) {
 
@@ -174,6 +174,22 @@ public class TipoConvivenciaRepositorio {
             }
         }
 
+        return null;
+    }
+
+    /**
+     * Funcion encargada de buscar tipo convivencia según parámetro
+     *
+     * @param id Id del tipo de convivencia
+     * @return TipoConvivencia
+     */
+    public TipoConvivencia buscarTipoConvivenciaPorId(int id) {
+        for (int i = 0; i < tipoConvivenciaList.size(); i++) {
+
+            if (tipoConvivenciaList.get(i).getId() == id) {
+                return tipoConvivenciaList.get(i);
+            }
+        }
         return null;
     }
 }

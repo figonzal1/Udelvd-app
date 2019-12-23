@@ -185,7 +185,7 @@ public class EstadoCivilRepositorio {
      * @param nombre Nombre del estado civil a buscar
      * @return Objeto estado civil
      */
-    public EstadoCivil buscarEstadoCivil(String nombre) {
+    public EstadoCivil buscarEstadoCivilPorNombre(String nombre) {
 
         for (int i = 0; i < estadoCivilList.size(); i++) {
             EstadoCivil estadoCivil = estadoCivilList.get(i);
@@ -197,4 +197,15 @@ public class EstadoCivilRepositorio {
         return null;
     }
 
+    public EstadoCivil buscarEstadoCivilPorId(int id) {
+
+        for (int i = 0; i < estadoCivilList.size(); i++) {
+            EstadoCivil estadoCivil = estadoCivilList.get(i);
+
+            if (estadoCivil.getId() == id) {
+                return estadoCivil;
+            }
+        }
+        return null;
+    }
 }

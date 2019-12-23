@@ -169,11 +169,28 @@ public class ProfesionRepositorio {
      * @param nombre Nombre de la prefesion a buscar
      * @return Profesion
      */
-    public Profesion buscarProfesion(String nombre) {
+    public Profesion buscarProfesionPorNombre(String nombre) {
 
         for (int i = 0; i < profesionsList.size(); i++) {
 
             if (profesionsList.get(i).getNombre().equals(nombre)) {
+                return profesionsList.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Funcion para buscar profesion según parametro
+     *
+     * @param id Id de la profesion a buscar
+     * @return Profesion
+     */
+    public Profesion buscarProfesionPorId(int id) {
+
+        for (int i = 0; i < profesionsList.size(); i++) {
+
+            if (profesionsList.get(i).getId() == id) {
                 return profesionsList.get(i);
             }
         }

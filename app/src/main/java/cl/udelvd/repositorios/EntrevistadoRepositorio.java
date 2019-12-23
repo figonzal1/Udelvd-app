@@ -495,12 +495,16 @@ public class EntrevistadoRepositorio {
                     if (!id_tipo_convivencia.equals("null")) {
                         TipoConvivencia tipoConvivencia = new TipoConvivencia();
                         tipoConvivencia.setId(Integer.parseInt(id_tipo_convivencia));
+
+                        entrevistado.setTipoConvivencia(tipoConvivencia);
                     }
 
                     String id_profesion = jsonAttributes.getString("id_profesion");
                     if (!id_profesion.equals("null")) {
                         Profesion profesion = new Profesion();
                         profesion.setId(Integer.parseInt(id_profesion));
+
+                        entrevistado.setProfesion(profesion);
                     }
 
                     entrevistadoMutableLiveData.postValue(entrevistado);

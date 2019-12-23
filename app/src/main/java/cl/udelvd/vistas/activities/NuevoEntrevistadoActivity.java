@@ -561,7 +561,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 EstadoCivilRepositorio estadoCivilRepositorio = EstadoCivilRepositorio.getInstance(getApplication());
                 EstadoCivil estadoCivil = new EstadoCivil();
                 estadoCivil.setId(
-                        estadoCivilRepositorio.buscarEstadoCivil(
+                        estadoCivilRepositorio.buscarEstadoCivilPorNombre(
                                 acEstadoCivil.getText().toString()
                         ).getId());
                 entrevistado.setEstadoCivil(estadoCivil);
@@ -579,7 +579,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     NivelEducacionalRepositorio nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
                     NivelEducacional nivelEducacional = new NivelEducacional();
                     nivelEducacional.setId(
-                            nivelEducacionalRepositorio.buscarNivelEducacional(
+                            nivelEducacionalRepositorio.buscarNivelEducacionalPorNombre(
                                     acNivelEducacional.getText().toString()
                             ).getId());
                     entrevistado.setNivelEducacional(nivelEducacional);
@@ -598,7 +598,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
                     TipoConvivencia tipoConvivencia = new TipoConvivencia();
                     tipoConvivencia.setId(
-                            tipoConvivenciaRepositorio.buscarTipoConvivencia(
+                            tipoConvivenciaRepositorio.buscarTipoConvivenciaPorNombre(
                                     acTipoConvivencia.getText().toString()
                             ).getId());
                     entrevistado.setTipoConvivencia(tipoConvivencia);

@@ -164,10 +164,20 @@ public class NivelEducacionalRepositorio {
 
     }
 
-    public NivelEducacional buscarNivelEducacional(String nombre) {
+    public NivelEducacional buscarNivelEducacionalPorNombre(String nombre) {
 
         for (int i = 0; i < nivelEducacionalList.size(); i++) {
             if (nivelEducacionalList.get(i).getNombre().equals(nombre)) {
+                return nivelEducacionalList.get(i);
+            }
+        }
+        return null;
+    }
+
+    public NivelEducacional buscarNivelEducacionalPorId(int id) {
+
+        for (int i = 0; i < nivelEducacionalList.size(); i++) {
+            if (nivelEducacionalList.get(i).getId() == id) {
                 return nivelEducacionalList.get(i);
             }
         }

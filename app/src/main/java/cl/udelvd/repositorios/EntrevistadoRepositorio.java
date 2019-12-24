@@ -576,4 +576,135 @@ public class EntrevistadoRepositorio {
         };
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO);
     }
+
+    public void actualizarEntrevistado(Entrevistado entrevistado) {
+        enviarPutEntrevistado(entrevistado);
+    }
+
+    private void enviarPutEntrevistado(final Entrevistado entrevistado) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //TODO: Terminar response y logica de cierre de actividad al verificar edicion
+                Log.d("RESPONSE", response);
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ERR_ENTREVISTADO", "TIMEOUT_ERROR");
+                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ERR_ENTREVISTADO", "NETWORK_ERROR");
+                    errorMsg.postValue("No tienes conexión a Internet");
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+                    Log.d("ERROR", json);
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+
+                        errorObject = jsonObject.getJSONObject("error");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d("VOLLEY_ERR_ENTREVISTADO", "AUTHENTICATION_ERROR: " + errorObject);
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d("VOLLEY_ERR_ENTREVISTADO", "SERVER_ERROR: " + errorObject);
+                    }
+                }
+            }
+        };
+
+        String url = "http://192.168.1.86/entrevistados/" + entrevistado.getId();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
+
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("nombre", entrevistado.getNombre());
+                params.put("apellido", entrevistado.getApellido());
+                params.put("sexo", entrevistado.getSexo());
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                String fechaNac = simpleDateFormat.format(entrevistado.getFechaNacimiento());
+                params.put("fecha_nacimiento", fechaNac);
+                params.put("nombre_ciudad", entrevistado.getCiudad().getNombre());
+
+                if (entrevistado.isJubiladoLegal()) {
+                    params.put("jubilado_legal", String.valueOf(1));
+                } else {
+                    params.put("jubilado_legal", String.valueOf(0));
+                }
+
+                if (entrevistado.isCaidas()) {
+                    params.put("caidas", String.valueOf(1));
+
+                    params.put("n_caidas", String.valueOf(entrevistado.getNCaidas()));
+                } else {
+                    params.put("caidas", String.valueOf(0));
+                }
+
+                params.put("n_convivientes_3_meses", String.valueOf(entrevistado.getNConvivientes3Meses()));
+                params.put("id_investigador", String.valueOf(entrevistado.getIdInvestigador()));
+                params.put("id_estado_civil", String.valueOf(entrevistado.getEstadoCivil().getId()));
+
+                /*
+                    OPCIONALES
+                 */
+                if (entrevistado.getNivelEducacional() != null) {
+                    params.put("id_nivel_educacional", String.valueOf(entrevistado.getNivelEducacional().getId()));
+                }
+
+                if (entrevistado.getTipoConvivencia() != null) {
+                    params.put("id_tipo_convivencia", String.valueOf(entrevistado.getTipoConvivencia().getId()));
+                }
+
+                if (entrevistado.getProfesion() != null) {
+                    params.put("nombre_profesion", entrevistado.getProfesion().getNombre());
+                }
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "Bearer " + token);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, "ActualizarEntrevistado");
+    }
 }

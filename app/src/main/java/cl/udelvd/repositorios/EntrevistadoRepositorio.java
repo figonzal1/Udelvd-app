@@ -586,16 +586,26 @@ public class EntrevistadoRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO);
     }
 
+    /**
+     * Funcion encargada de actualizar los datos de un entrevistado
+     *
+     * @param entrevistado Objeto entrevistado con datos a ser actualizados
+     */
     public void actualizarEntrevistado(Entrevistado entrevistado) {
         enviarPutEntrevistado(entrevistado);
     }
 
+    /**
+     * Funcion encargada de enviar la peticion PUT al servidor
+     *
+     * @param entrevistado Objeto entrevistado con los datos actualizados
+     */
     private void enviarPutEntrevistado(final Entrevistado entrevistado) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                
+
                 //Log.d("RESPONSE", response);
 
                 try {

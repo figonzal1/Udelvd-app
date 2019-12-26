@@ -376,7 +376,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
                 Log.d("VM_NEW_ENTREVISTADO", "MSG_RESPONSE: " + s);
@@ -392,7 +392,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
 
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 

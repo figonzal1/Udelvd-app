@@ -44,9 +44,13 @@ public class EntrevistadoRepositorio {
     private final Application application;
 
     private List<Entrevistado> entrevistadoList;
+
+    //Mensajeria
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
-    private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
+
+    private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
 
     private static final String TAG_ENTREVISTADOS_LISTA = "ListaEntrevistados";
     private static final String TAG_ENTREVISTADO_REGISTRO = "RegistroEntrevistado";
@@ -70,6 +74,10 @@ public class EntrevistadoRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgRegistro() {
         return responseMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgActualizacion() {
+        return responseMsgActualizacion;
     }
 
     /**
@@ -287,11 +295,12 @@ public class EntrevistadoRepositorio {
                     entResponse.setnConvivientes3Meses(jsonAttributes.getInt("n_convivientes_3_meses"));
                     entResponse.setIdInvestigador(jsonAttributes.getInt("id_investigador"));
 
+                    String create_time = jsonAttributes.getString("create_time");
 
                     Log.d("MEMORIA", entrevistado.toString());
                     Log.d("INTERNET", entResponse.toString());
 
-                    if (entrevistado.equals(entResponse)) {
+                    if (entrevistado.equals(entResponse) && !create_time.isEmpty()) {
                         responseMsgRegistro.postValue("¡Entrevistado registrado!");
                     }
 
@@ -586,8 +595,56 @@ public class EntrevistadoRepositorio {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //TODO: Terminar response y logica de cierre de actividad al verificar edicion
-                Log.d("RESPONSE", response);
+                
+                //Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+
+                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+
+                    Entrevistado entrevistadoInternet = new Entrevistado();
+                    entrevistadoInternet.setId(jsonData.getInt("id"));
+
+                    entrevistadoInternet.setNombre(jsonAttributes.getString("nombre"));
+                    entrevistadoInternet.setApellido(jsonAttributes.getString("apellido"));
+                    entrevistadoInternet.setSexo(jsonAttributes.getString("sexo"));
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date fechaNac = simpleDateFormat.parse(jsonAttributes.getString("fecha_nacimiento"));
+                    entrevistadoInternet.setFechaNacimiento(fechaNac);
+
+                    if (jsonAttributes.getInt("jubilado_legal") == 0) {
+                        entrevistadoInternet.setJubiladoLegal(false);
+                    } else {
+                        entrevistadoInternet.setJubiladoLegal(true);
+                    }
+
+                    if (jsonAttributes.getInt("caidas") == 0) {
+                        entrevistadoInternet.setCaidas(false);
+                    } else {
+                        entrevistadoInternet.setCaidas(true);
+
+                        entrevistadoInternet.setNCaidas(jsonAttributes.getInt("n_caidas"));
+                    }
+
+                    entrevistadoInternet.setnConvivientes3Meses(jsonAttributes.getInt("n_convivientes_3_meses"));
+                    entrevistadoInternet.setIdInvestigador(jsonAttributes.getInt("id_investigador"));
+
+                    Log.d("MEMORIA", entrevistado.toString());
+                    Log.d("INTERNET", entrevistadoInternet.toString());
+
+                    String update_time = jsonAttributes.getString("update_time");
+
+                    if (entrevistado.equals(entrevistadoInternet) && !update_time.isEmpty()) {
+                        responseMsgActualizacion.postValue("¡Entrevistado actualizado!");
+                    }
+
+                } catch (JSONException | ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
         };
 

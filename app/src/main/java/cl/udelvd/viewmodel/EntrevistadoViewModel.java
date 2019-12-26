@@ -69,6 +69,22 @@ public class EntrevistadoViewModel extends AndroidViewModel {
         return repositorio.getResponseMsgRegistro();
     }
 
+    /**
+     * Funcion que envía el mensaje de respuesta de actualización desde el repositorio hacia la inteefaz
+     *
+     * @return Single live con el mensaje de actualización
+     */
+    public SingleLiveEvent<String> mostrarRespuestaActualizacion() {
+        repositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        return repositorio.getResponseMsgActualizacion();
+    }
+
+    /**
+     * Funcion encargada de enviar los datos del entrevistado desde el repositorio a la interfaz
+     *
+     * @param entrevistado Objeto entrevistado
+     * @return Mutable Live data con los datos de la persona
+     */
     public MutableLiveData<Entrevistado> mostrarEntrevistado(Entrevistado entrevistado) {
         repositorio = EntrevistadoRepositorio.getInstance(getApplication());
         return repositorio.obtenerEntrevistado(entrevistado);

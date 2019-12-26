@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -423,6 +424,9 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Funcion que reune las instancias de observadores viewModel
+     */
     private void iniciarViewModelEntrevistado() {
 
         entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
@@ -438,6 +442,31 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                 }
             }
         });
+
+        entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        entrevistadoViewModel.mostrarRespuestaActualizacion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (s.equals("¡Entrevistado actualizado!")) {
+                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                    //Cerrar activity
+                    finish();
+                }
+            }
+        });
+
 
     }
 
@@ -507,7 +536,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
             acTipoConvivencia.setText(nombre, false);
         }
 
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
 
@@ -576,21 +605,27 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     entrevistado.setCaidas(false);
                 }
 
-                NivelEducacionalRepositorio nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
-                int id_nivel_educacional = nivelEducacionalRepositorio.buscarNivelEducacionalPorNombre(acNivelEducacional.getText().toString()).getId();
-                NivelEducacional nivelEducacional = new NivelEducacional();
-                nivelEducacional.setId(id_nivel_educacional);
-                entrevistado.setNivelEducacional(nivelEducacional);
+                if (!acNivelEducacional.getText().toString().isEmpty()) {
+                    NivelEducacionalRepositorio nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
+                    int id_nivel_educacional = nivelEducacionalRepositorio.buscarNivelEducacionalPorNombre(acNivelEducacional.getText().toString()).getId();
+                    NivelEducacional nivelEducacional = new NivelEducacional();
+                    nivelEducacional.setId(id_nivel_educacional);
+                    entrevistado.setNivelEducacional(nivelEducacional);
+                }
 
-                Profesion profesion = new Profesion();
-                profesion.setNombre(acProfesion.getText().toString());
-                entrevistado.setProfesion(profesion);
+                if (!acProfesion.getText().toString().isEmpty()) {
+                    Profesion profesion = new Profesion();
+                    profesion.setNombre(acProfesion.getText().toString());
+                    entrevistado.setProfesion(profesion);
+                }
 
-                TipoConvivenciaRepositorio tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
-                int id_tipo_convivencia = tipoConvivenciaRepositorio.buscarTipoConvivenciaPorNombre(acTipoConvivencia.getText().toString()).getId();
-                TipoConvivencia tipoConvivencia = new TipoConvivencia();
-                tipoConvivencia.setId(id_tipo_convivencia);
-                entrevistado.setTipoConvivencia(tipoConvivencia);
+                if (!acTipoConvivencia.getText().toString().isEmpty()) {
+                    TipoConvivenciaRepositorio tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
+                    int id_tipo_convivencia = tipoConvivenciaRepositorio.buscarTipoConvivenciaPorNombre(acTipoConvivencia.getText().toString()).getId();
+                    TipoConvivencia tipoConvivencia = new TipoConvivencia();
+                    tipoConvivencia.setId(id_tipo_convivencia);
+                    entrevistado.setTipoConvivencia(tipoConvivencia);
+                }
 
                 EntrevistadoRepositorio entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
                 entrevistadoRepositorio.actualizarEntrevistado(entrevistado);

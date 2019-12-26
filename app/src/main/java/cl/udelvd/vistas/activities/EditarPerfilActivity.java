@@ -104,7 +104,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.INVISIBLE);
 
                     assert msg_update != null;
-                    Log.d("OBSERVER_UPDATE_OK", msg_update);
+                    Log.d("VM_INV_UPDATE", msg_update);
 
                     if (msg_update.equals("¡Datos actualizados!")) {
 

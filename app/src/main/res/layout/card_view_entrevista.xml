@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -26,48 +27,49 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Entrevista 1"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />
+            card_view:layout_constraintTop_toTopOf="parent"
+            tools:text="Entrevista 1" />
 
         <TextView
-            android:id="@+id/tv_fecha_registro_titulo"
+            android:id="@+id/tv_entrevista_fecha_registro_titulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Fecha registro:"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textSize="12sp"
+            android:text="Fecha registro:"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_entrevista_nombre" />
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_entrevista_nombre"
+            tools:text="Fecha registro:" />
 
         <TextView
-            android:id="@+id/tv_fecha_registro"
+            android:id="@+id/tv_entrevista_fecha_registro_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
-            android:text="22/12/2019"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textSize="12sp"
             android:textStyle="italic"
-            card_view:layout_constraintBottom_toBottomOf="@+id/tv_fecha_registro_titulo"
-            card_view:layout_constraintEnd_toStartOf="@+id/tv_tipo_entrevista"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_entrevista_fecha_registro_titulo"
+            card_view:layout_constraintEnd_toStartOf="@+id/tv_entrevista_tipo"
             card_view:layout_constraintHorizontal_bias="0.0"
-            card_view:layout_constraintStart_toEndOf="@+id/tv_fecha_registro_titulo"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_entrevista_fecha_registro_titulo"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_entrevista_nombre"
-            card_view:layout_constraintVertical_bias="1.0" />
+            card_view:layout_constraintVertical_bias="1.0"
+            tools:text="22/12/2019" />
 
         <TextView
-            android:id="@+id/tv_tipo_entrevista"
+            android:id="@+id/tv_entrevista_tipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Normal"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />
+            card_view:layout_constraintTop_toTopOf="parent"
+            tools:text="Normal" />
 
         <View
             android:id="@+id/divider"
@@ -78,7 +80,7 @@
             android:visibility="visible"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_fecha_registro_titulo" />
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_entrevista_fecha_registro_titulo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

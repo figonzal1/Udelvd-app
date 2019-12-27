@@ -21,6 +21,7 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.activities.EditarEntrevistadoActivity;
+import cl.udelvd.vistas.activities.EntrevistasListaActivity;
 
 public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapter.QuakeViewHolder> {
 
@@ -54,8 +55,15 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         //TODO: Agregar soporte para conteo de entrevistas
         holder.tv_n_entrevistas.setText("10 entrevistas");
 
+        holder.card_view_entrevistado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EntrevistasListaActivity.class);
+                intent.putExtra("id_entrevistado", entrevistado.getId());
+                context.startActivity(intent);
+            }
+        });
 
-        //TOdo: Terminar popupsmenu
         holder.iv_menu_entrevistado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +79,17 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                             Intent intent = new Intent(context, EditarEntrevistadoActivity.class);
                             intent.putExtra("id_entrevistado", entrevistado.getId());
                             context.startActivity(intent);
+                        } else if (item.getItemId() == R.id.menu_ver_entrevistas) {
+                            Intent intent = new Intent(context, EntrevistasListaActivity.class);
+                            intent.putExtra("id_entrevistado", entrevistado.getId());
+                            intent.putExtra("nombre_entrevistado", entrevistado.getNombre());
+                            intent.putExtra("apellido_entrevistado", entrevistado.getApellido());
+                            
+                            context.startActivity(intent);
                         }
+
+                        //TODO: Ver posibilidad de tener perfil de entrevistado
+
                         return true;
                     }
                 });
@@ -94,6 +112,8 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         private final TextView tv_n_entrevistas;
         private final ImageView iv_menu_entrevistado;
 
+        private final View card_view_entrevistado;
+
 
         QuakeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +122,8 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
             tv_fecha_nacimiento = itemView.findViewById(R.id.cv_tv_fecha_nac);
             tv_n_entrevistas = itemView.findViewById(R.id.cv_tv_n_entrevistas);
             iv_menu_entrevistado = itemView.findViewById(R.id.iv_menu_entrevistado);
+
+            card_view_entrevistado = itemView.findViewById(R.id.card_view_entrevistado);
         }
     }
 }

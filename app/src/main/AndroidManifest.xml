@@ -30,9 +30,9 @@
         <activity android:name=".vistas.activities.LoginActivity" />
         <activity
             android:name=".EventsActivity"
-            android:parentActivityName=".InterviewsListActivity" />
+            android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
         <activity
-            android:name=".InterviewsListActivity"
+            android:name=".vistas.activities.EntrevistasListaActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>

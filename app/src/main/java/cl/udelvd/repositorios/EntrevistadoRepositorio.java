@@ -167,6 +167,11 @@ public class EntrevistadoRepositorio {
                             entrevistado.setProfesion(profesion);
                         }
 
+                        JSONObject jsonRelationships = jsonUsuario.getJSONObject("relationships");
+                        entrevistado.setN_entrevistas(
+                                jsonRelationships.getJSONObject("entrevistas").getJSONObject("data").getInt("n_entrevistas")
+                        );
+
                         entrevistadoList.add(entrevistado);
                     }
 
@@ -515,6 +520,11 @@ public class EntrevistadoRepositorio {
 
                         entrevistado.setProfesion(profesion);
                     }
+
+                    JSONObject jsonRelationships = jsonData.getJSONObject("relationships");
+                    entrevistado.setN_entrevistas(
+                            jsonRelationships.getJSONObject("entrevistas").getJSONObject("data").getInt("n_entrevistas")
+                    );
 
                     entrevistadoMutableLiveData.postValue(entrevistado);
 

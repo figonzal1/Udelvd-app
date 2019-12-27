@@ -52,8 +52,11 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         int annos = Utils.calculateYearsOld(entrevistado.getFechaNacimiento());
         holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", simpleDateFormat.format(entrevistado.getFechaNacimiento()), annos));
 
-        //TODO: Agregar soporte para conteo de entrevistas
-        holder.tv_n_entrevistas.setText("10 entrevistas");
+        if (entrevistado.getN_entrevistas() == 1) {
+            holder.tv_n_entrevistas.setText(entrevistado.getN_entrevistas() + " entrevista");
+        } else {
+            holder.tv_n_entrevistas.setText(entrevistado.getN_entrevistas() + " entrevistas");
+        }
 
         holder.card_view_entrevistado.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +87,8 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                             intent.putExtra("id_entrevistado", entrevistado.getId());
                             intent.putExtra("nombre_entrevistado", entrevistado.getNombre());
                             intent.putExtra("apellido_entrevistado", entrevistado.getApellido());
-                            
+                            intent.putExtra("n_entrevistas", entrevistado.getN_entrevistas());
+
                             context.startActivity(intent);
                         }
 

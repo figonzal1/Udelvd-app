@@ -18,7 +18,6 @@ public class Entrevistado {
 
     private int nConvivientes3Meses;
 
-
     private int idInvestigador;
     private Ciudad ciudad;
     private EstadoCivil estadoCivil;
@@ -27,7 +26,9 @@ public class Entrevistado {
     private NivelEducacional nivelEducacional;
     private TipoConvivencia tipoConvivencia;
     private Profesion profesion;
-    private String createTime;
+
+    //Relaciones
+    private int n_entrevistas; //Numero total de entrevistas de la persona
 
     public Entrevistado() {
     }
@@ -152,12 +153,12 @@ public class Entrevistado {
         this.profesion = profesion;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public int getN_entrevistas() {
+        return n_entrevistas;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setN_entrevistas(int n_entrevistas) {
+        this.n_entrevistas = n_entrevistas;
     }
 
     @Override
@@ -198,7 +199,6 @@ public class Entrevistado {
                 ", nivelEducacional=" + nivelEducacional +
                 ", tipoConvivencia=" + tipoConvivencia +
                 ", profesion=" + profesion +
-                ", createTime='" + createTime + '\'' +
                 '}';
     }
 

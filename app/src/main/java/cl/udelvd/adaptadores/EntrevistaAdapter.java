@@ -48,7 +48,6 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
 
         holder.tv_fecha_registro.setText(fechaEntrevista);
 
-
         //TODO: Setear in click listener para abrir actividad con eventos
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override

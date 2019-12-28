@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/card_view_info_entrevistado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -46,7 +46,7 @@
                 card_view:srcCompat="@drawable/ic_person_white_24dp" />
 
             <TextView
-                android:id="@+id/tv_nombre"
+                android:id="@+id/tv_entrevistado_nombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -58,14 +58,14 @@
                 app:layout_constraintTop_toTopOf="@+id/iv_user" />
 
             <TextView
-                android:id="@+id/tv_entrevista"
+                android:id="@+id/tv_n_entrevistas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Entrevistas: 2"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/tv_nombre"
-                app:layout_constraintTop_toBottomOf="@+id/tv_nombre" />
+                app:layout_constraintStart_toStartOf="@+id/tv_entrevistado_nombre"
+                app:layout_constraintTop_toBottomOf="@+id/tv_entrevistado_nombre" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
@@ -109,7 +109,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+        app:layout_constraintTop_toBottomOf="@+id/card_view_info_entrevistado" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fb_crear_evento"

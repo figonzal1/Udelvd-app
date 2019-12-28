@@ -86,12 +86,14 @@ public class EntrevistaRepositorio {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                         entrevista.setFecha_entrevista(simpleDateFormat.parse(jsonAttributes.getString("fecha_entrevista")));
 
+                        //Relationship
+                        JSONObject jsonRelationship = jsonEntrevista.getJSONObject("relationships").getJSONObject("tipoEntrevista").getJSONObject("data");
                         TipoEntrevista tipoEntrevista = new TipoEntrevista();
-                        tipoEntrevista.setId(jsonAttributes.getInt("id_tipo_entrevista"));
+                        tipoEntrevista.setId(jsonRelationship.getInt("id"));
+                        tipoEntrevista.setNombre(jsonRelationship.getString("nombre"));
                         entrevista.setTipoEntrevista(tipoEntrevista);
 
                         entrevistaList.add(entrevista);
-
                     }
 
                     mutableEntrevistasPersonales.postValue(entrevistaList);

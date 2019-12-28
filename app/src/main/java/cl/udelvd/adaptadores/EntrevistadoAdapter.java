@@ -63,6 +63,9 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
             public void onClick(View v) {
                 Intent intent = new Intent(context, EntrevistasListaActivity.class);
                 intent.putExtra("id_entrevistado", entrevistado.getId());
+                intent.putExtra("nombre_entrevistado", entrevistado.getNombre());
+                intent.putExtra("apellido_entrevistado", entrevistado.getApellido());
+                intent.putExtra("n_entrevistas", entrevistado.getN_entrevistas());
                 context.startActivity(intent);
             }
         });
@@ -124,7 +127,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
 
             tv_nombre_apellido = itemView.findViewById(R.id.cv_tv_nombre);
             tv_fecha_nacimiento = itemView.findViewById(R.id.cv_tv_fecha_nac);
-            tv_n_entrevistas = itemView.findViewById(R.id.cv_tv_n_entrevistas);
+            tv_n_entrevistas = itemView.findViewById(R.id.tv_n_entrevistas);
             iv_menu_entrevistado = itemView.findViewById(R.id.iv_menu_entrevistado);
 
             card_view_entrevistado = itemView.findViewById(R.id.card_view_entrevistado);

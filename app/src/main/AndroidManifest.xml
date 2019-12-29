@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cl.udelvd"
     android:installLocation="auto">
 
@@ -11,29 +12,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name=".vistas.activities.EditarEntrevistadoActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
-        <activity
-            android:name=".vistas.activities.NuevoEntrevistadoActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
-        <activity
-            android:name=".vistas.activities.EditarPerfilActivity"
-            android:parentActivityName=".vistas.activities.PerfilActivity" />
-        <activity
-            android:name=".vistas.activities.PerfilActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
-        <activity
-            android:name=".vistas.activities.RegistroActivity"
-            android:parentActivityName=".vistas.activities.LoginActivity" />
-        <activity android:name=".vistas.activities.LoginActivity" />
-        <activity
-            android:name=".EventsActivity"
-            android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
-        <activity
-            android:name=".vistas.activities.EntrevistasListaActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <!--Main-->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,6 +23,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--Entrevistas-->
+        <activity
+            android:name=".vistas.activities.EntrevistasListaActivity"
+            android:parentActivityName=".vistas.activities.MainActivity" />
+        <activity
+            android:name=".NuevaEntrevistaActivity"
+            android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
+
+        <!-- Entrevistado -->
+        <activity
+            android:name=".vistas.activities.NuevoEntrevistadoActivity"
+            android:parentActivityName=".vistas.activities.MainActivity" />
+        <activity
+            android:name=".vistas.activities.EditarEntrevistadoActivity"
+            android:parentActivityName=".vistas.activities.MainActivity" />
+
+        <!-- Investigador -->
+        <activity
+            android:name=".vistas.activities.PerfilActivity"
+            android:parentActivityName=".vistas.activities.MainActivity" />
+        <activity
+            android:name=".vistas.activities.EditarPerfilActivity"
+            android:parentActivityName=".vistas.activities.PerfilActivity" />
+        <activity
+            android:name=".vistas.activities.RegistroActivity"
+            android:parentActivityName=".vistas.activities.LoginActivity" />
+        <activity android:name=".vistas.activities.LoginActivity" />
+
+        <!-- Eventos -->
+        <activity
+            android:name=".EventsActivity"
+            android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

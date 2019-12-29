@@ -2,6 +2,7 @@ package cl.udelvd.adaptadores;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,11 +63,13 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EntrevistasListaActivity.class);
-                intent.putExtra("id_entrevistado", entrevistado.getId());
-                intent.putExtra("nombre_entrevistado", entrevistado.getNombre());
-                intent.putExtra("apellido_entrevistado", entrevistado.getApellido());
-                intent.putExtra("n_entrevistas", entrevistado.getN_entrevistas());
-                context.startActivity(intent);
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("id_entrevistado", entrevistado.getId());
+                bundle.putString("nombre_entrevistado", entrevistado.getNombre());
+                bundle.putString("apellido_entrevistado", entrevistado.getApellido());
+                intent.putExtras(bundle);
+                context.startActivity(intent, bundle);
             }
         });
 
@@ -87,11 +90,12 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                             context.startActivity(intent);
                         } else if (item.getItemId() == R.id.menu_ver_entrevistas) {
                             Intent intent = new Intent(context, EntrevistasListaActivity.class);
-                            intent.putExtra("id_entrevistado", entrevistado.getId());
-                            intent.putExtra("nombre_entrevistado", entrevistado.getNombre());
-                            intent.putExtra("apellido_entrevistado", entrevistado.getApellido());
-                            intent.putExtra("n_entrevistas", entrevistado.getN_entrevistas());
 
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("id_entrevistado", entrevistado.getId());
+                            bundle.putString("nombre_entrevistado", entrevistado.getNombre());
+                            bundle.putString("apellido_entrevistado", entrevistado.getApellido());
+                            intent.putExtras(bundle);
                             context.startActivity(intent);
                         }
 

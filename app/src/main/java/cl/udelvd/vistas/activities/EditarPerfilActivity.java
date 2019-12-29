@@ -275,6 +275,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
         } else if (item.getItemId() == R.id.menu_guardar) {
             if (validarCampos()) {
 
@@ -305,6 +306,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 //Actualizar investigador
                 repositorio.actualizarInvestigador(investigador);
             }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -193,7 +193,7 @@ public class InvestigadorRepositorio {
 
 
         //String url = "https://udelvd-dev.herokuapp.com/investigadores";
-        String url = "http://192.168.1.86/investigadores";
+        String url = "http://192.168.0.14/investigadores";
 
         //Hacer peticion post
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -376,7 +376,7 @@ public class InvestigadorRepositorio {
         };
 
         //String url = "https://udelvd-dev.herokuapp.com/investigadores/login";
-        String url = "http://192.168.1.86/investigadores/login";
+        String url = "http://192.168.0.14/investigadores/login";
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener,
                 errorListener) {
@@ -516,7 +516,7 @@ public class InvestigadorRepositorio {
         };
 
 
-        String url = "http://192.168.1.86/investigadores/" + investigadorForm.getId();
+        String url = "http://192.168.0.14/investigadores/" + investigadorForm.getId();
 
         StringRequest request = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
 

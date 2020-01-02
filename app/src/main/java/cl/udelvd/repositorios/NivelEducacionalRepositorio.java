@@ -142,7 +142,7 @@ public class NivelEducacionalRepositorio {
             }
         };
 
-        String url = "http://192.168.1.86/nivelesEducacionales";
+        String url = "http://192.168.0.14/nivelesEducacionales";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

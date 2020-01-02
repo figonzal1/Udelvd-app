@@ -141,7 +141,7 @@ public class ProfesionRepositorio {
             }
         };
 
-        String url = "http://192.168.1.86/profesiones";
+        String url = "http://192.168.0.14/profesiones";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

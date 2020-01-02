@@ -143,7 +143,7 @@ public class CiudadRepositorio {
         };
 
 
-        String url = "http://192.168.1.86/ciudades";
+        String url = "http://192.168.0.14/ciudades";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

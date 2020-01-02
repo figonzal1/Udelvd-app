@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cl.udelvd.NuevaEntrevistaActivity;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.EntrevistaAdapter;
 import cl.udelvd.modelo.Entrevista;

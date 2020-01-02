@@ -11,6 +11,7 @@ import java.util.List;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.repositorios.EntrevistaRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class EntrevistaViewModel extends AndroidViewModel {
 
@@ -29,5 +30,15 @@ public class EntrevistaViewModel extends AndroidViewModel {
             entrevistasMutableLiveData = repositorio.obtenerEntrevistasPersonales(entrevistado);
         }
         return entrevistasMutableLiveData;
+    }
+
+    public SingleLiveEvent<String> mostrarRespuestaRegistro() {
+        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgRegistro();
+    }
+
+    public SingleLiveEvent<String> mostrarRespuestaError() {
+        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgError();
     }
 }

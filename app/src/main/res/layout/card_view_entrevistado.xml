@@ -63,7 +63,7 @@
         card_view:layout_constraintStart_toEndOf="@+id/cv_iv_mag_color"
         card_view:layout_constraintTop_toTopOf="@+id/cv_iv_mag_color"
         android:contentDescription="Icono nombre entrevistado"
-        card_view:srcCompat="@drawable/ic_person_black_24dp" />
+        card_view:srcCompat="@drawable/ic_person_black_alpha_24dp" />
 
     <ImageView
         android:id="@+id/cv_iv_icono_fecha_nac"
@@ -86,7 +86,7 @@
         card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_mag_color"
         card_view:layout_constraintStart_toEndOf="@+id/cv_iv_mag_color"
         android:contentDescription="Icono numero de entrevistas de entrevistado"
-        card_view:srcCompat="@drawable/ic_interview_black_24dp" />
+        card_view:srcCompat="@drawable/ic_interview_black_alpha_24dp" />
 
     <TextView
         android:id="@+id/tv_n_entrevistas"

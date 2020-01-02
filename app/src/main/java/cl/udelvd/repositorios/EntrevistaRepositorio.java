@@ -44,6 +44,8 @@ public class EntrevistaRepositorio {
     private static final String TAG_NEW_ENTREVISTA = "NuevaEntrevista";
 
     private List<Entrevista> entrevistaList;
+    private MutableLiveData<List<Entrevista>> entrevistaMutableLiveData = new MutableLiveData<>();
+
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
@@ -67,10 +69,8 @@ public class EntrevistaRepositorio {
     }
 
     public MutableLiveData<List<Entrevista>> obtenerEntrevistasPersonales(Entrevistado entrevistado) {
-
-        MutableLiveData<List<Entrevista>> mutableEntrevistasPersonales = new MutableLiveData<>();
-        sendGetEntrevistasPersonales(entrevistado, mutableEntrevistasPersonales);
-        return mutableEntrevistasPersonales;
+        sendGetEntrevistasPersonales(entrevistado, entrevistaMutableLiveData);
+        return entrevistaMutableLiveData;
     }
 
     private void sendGetEntrevistasPersonales(Entrevistado entrevistado, final MutableLiveData<List<Entrevista>> mutableEntrevistasPersonales) {

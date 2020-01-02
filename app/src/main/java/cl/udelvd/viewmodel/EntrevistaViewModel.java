@@ -41,4 +41,9 @@ public class EntrevistaViewModel extends AndroidViewModel {
         repositorio = EntrevistaRepositorio.getInstancia(getApplication());
         return repositorio.getResponseMsgError();
     }
+
+    public void refreshEntrevistas(Entrevistado entrevistado) {
+        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        repositorio.obtenerEntrevistasPersonales(entrevistado);
+    }
 }

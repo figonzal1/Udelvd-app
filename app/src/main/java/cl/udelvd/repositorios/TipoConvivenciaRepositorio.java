@@ -137,7 +137,7 @@ public class TipoConvivenciaRepositorio {
         };
 
 
-        String url = "http://192.168.1.86/tiposConvivencias";
+        String url = "http://192.168.0.14/tiposConvivencias";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

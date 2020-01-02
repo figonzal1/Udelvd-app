@@ -226,7 +226,7 @@ public class EntrevistadoRepositorio {
         };
 
         //String url = "https://udelvd-dev.herokuapp.com/entrevistados";
-        String url = "http://192.168.1.86/entrevistados";
+        String url = "http://192.168.0.14/entrevistados";
 
         //Hacer request
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener,
@@ -359,7 +359,7 @@ public class EntrevistadoRepositorio {
             }
         };
 
-        String url = "http://192.168.1.86/entrevistados";
+        String url = "http://192.168.0.14/entrevistados";
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
 
@@ -575,7 +575,7 @@ public class EntrevistadoRepositorio {
             }
         };
 
-        String url = "http://192.168.1.86/entrevistados/" + entrevistado.getId();
+        String url = "http://192.168.0.14/entrevistados/" + entrevistado.getId();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -713,7 +713,7 @@ public class EntrevistadoRepositorio {
             }
         };
 
-        String url = "http://192.168.1.86/entrevistados/" + entrevistado.getId();
+        String url = "http://192.168.0.14/entrevistados/" + entrevistado.getId();
 
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
 

@@ -528,6 +528,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
         } else if (item.getItemId() == R.id.menu_guardar) {
 
             if (validarCampos()) {
@@ -609,6 +610,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 entrevistadoRepositorio.registrarEntrevistado(entrevistado);
                 Log.d("ENTREVISTADO_CREATE", entrevistado.toString());
             }
+
+            return true;
         }
 
 

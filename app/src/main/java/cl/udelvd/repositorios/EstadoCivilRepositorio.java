@@ -155,7 +155,7 @@ public class EstadoCivilRepositorio {
         };
 
 
-        String url = "http://192.168.1.86/estadosCiviles";
+        String url = "http://192.168.0.14/estadosCiviles";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

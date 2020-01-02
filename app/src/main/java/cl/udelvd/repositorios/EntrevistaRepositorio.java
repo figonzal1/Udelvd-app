@@ -147,7 +147,7 @@ public class EntrevistaRepositorio {
         };
 
 
-        String url = "http://192.168.1.86/entrevistados/" + entrevistado.getId() + "/entrevistas";
+        String url = "http://192.168.0.14/entrevistados/" + entrevistado.getId() + "/entrevistas";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

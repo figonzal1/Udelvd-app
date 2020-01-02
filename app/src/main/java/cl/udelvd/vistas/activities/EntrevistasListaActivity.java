@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -45,7 +46,8 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     private int id_entrevistado;
     private String nombre_entrevistado;
     private String apellido_entrevistado;
-    private int n_entrevistas;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,8 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         setearRecursosInterfaz();
 
         obtenerDatosBundle();
+
+        iniciarSwipeRefresh();
 
         iniciarViewModelObservers();
 
@@ -93,6 +97,21 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                 Intent intent = new Intent(EntrevistasListaActivity.this, NuevaEntrevistaActivity.class);
                 intent.putExtra("id_entrevistado", entrevistado.getId());
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void iniciarSwipeRefresh() {
+        swipeRefreshLayout = findViewById(R.id.refresh_entrevistas);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorSecondary), getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setRefreshing(true);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Forzar refresh entrevistas
+                entrevistaViewModel.refreshEntrevistas(entrevistado);
+                swipeRefreshLayout.setRefreshing(true);
             }
         });
     }
@@ -136,6 +155,8 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                     Map<String, Integer> tipos = contarTipos(entrevistas);
                     tv_entrevistas_normales.setText(String.valueOf(tipos.get("normales")));
                     tv_entrevistas_extraordinarias.setText(String.valueOf(tipos.get("extraordinarias")));
+
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
@@ -155,6 +176,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
         tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
     }
+
 
     private Map<String, Integer> contarTipos(List<Entrevista> entrevistas) {
         int normales = 0;

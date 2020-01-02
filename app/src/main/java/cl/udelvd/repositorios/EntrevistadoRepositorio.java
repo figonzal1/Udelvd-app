@@ -44,13 +44,12 @@ public class EntrevistadoRepositorio {
     private final Application application;
 
     private List<Entrevistado> entrevistadoList;
+    private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
 
     //Mensajeria
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
-
-    private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
 
     private static final String TAG_ENTREVISTADOS_LISTA = "ListaEntrevistados";
     private static final String TAG_ENTREVISTADO_REGISTRO = "RegistroEntrevistado";
@@ -86,7 +85,6 @@ public class EntrevistadoRepositorio {
      * @return MutableLiveData con listado de usuarios
      */
     public MutableLiveData<List<Entrevistado>> obtenerEntrevistados() {
-        entrevistadoList = new ArrayList<>();
         sendGetEntrevistados(entrevistadosMutableLiveData);
         return entrevistadosMutableLiveData;
     }
@@ -98,6 +96,7 @@ public class EntrevistadoRepositorio {
      */
     private void sendGetEntrevistados(final MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData) {
 
+        entrevistadoList = new ArrayList<>();
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -220,6 +219,7 @@ public class EntrevistadoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d("VOLLEY_ER_ENTREVISTADOS", "SERVER_ERROR: " + errorObject);
+                        errorMsg.postValue("Servidor no responde, intente más tarde");
                     }
                 }
             }

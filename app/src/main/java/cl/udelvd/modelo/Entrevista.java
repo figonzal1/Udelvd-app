@@ -51,12 +51,21 @@ public class Entrevista {
         if (!(o instanceof Entrevista)) return false;
         Entrevista that = (Entrevista) o;
         return getId_entrevistado() == that.getId_entrevistado() &&
-                getTipoEntrevista().equals(that.getTipoEntrevista()) &&
                 getFecha_entrevista().equals(that.getFecha_entrevista());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId_entrevistado(), getTipoEntrevista(), getFecha_entrevista());
+        return Objects.hash(getId_entrevistado(), getFecha_entrevista());
+    }
+
+    @Override
+    public String toString() {
+        return "Entrevista{" +
+                "id=" + id +
+                ", id_entrevistado=" + id_entrevistado +
+                ", tipoEntrevista=" + tipoEntrevista +
+                ", fecha_entrevista=" + fecha_entrevista +
+                '}';
     }
 }

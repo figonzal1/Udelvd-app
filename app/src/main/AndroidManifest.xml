@@ -29,7 +29,7 @@
             android:name=".vistas.activities.EntrevistasListaActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />
         <activity
-            android:name=".NuevaEntrevistaActivity"
+            android:name=".vistas.activities.NuevaEntrevistaActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
 
         <!-- Entrevistado -->

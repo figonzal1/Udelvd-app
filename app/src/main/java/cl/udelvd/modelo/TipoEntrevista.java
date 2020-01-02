@@ -26,9 +26,6 @@ public class TipoEntrevista {
 
     @Override
     public String toString() {
-        return "TipoEntrevista{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                '}';
+        return nombre;
     }
 }

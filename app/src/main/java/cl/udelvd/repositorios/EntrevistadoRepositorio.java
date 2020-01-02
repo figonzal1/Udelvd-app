@@ -521,11 +521,6 @@ public class EntrevistadoRepositorio {
                         entrevistado.setProfesion(profesion);
                     }
 
-                    JSONObject jsonRelationships = jsonData.getJSONObject("relationships");
-                    entrevistado.setN_entrevistas(
-                            jsonRelationships.getJSONObject("entrevistas").getJSONObject("data").getInt("n_entrevistas")
-                    );
-
                     entrevistadoMutableLiveData.postValue(entrevistado);
 
                 } catch (JSONException | ParseException e) {

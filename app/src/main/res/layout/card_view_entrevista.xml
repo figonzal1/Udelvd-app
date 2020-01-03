@@ -27,7 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorOnPrimary"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             tools:text="Entrevista 1" />
@@ -37,9 +39,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textSize="12sp"
+            android:fontFamily="@font/roboto"
             android:text="Fecha registro:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="12sp"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_entrevista_nombre"
             tools:text="Fecha registro:" />
@@ -50,7 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/colorOnPrimary"
             android:textSize="12sp"
             android:textStyle="italic"
             card_view:layout_constraintBottom_toBottomOf="@+id/tv_entrevista_fecha_registro_titulo"
@@ -65,10 +71,16 @@
             android:id="@+id/tv_entrevista_tipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/roboto"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/colorOnPrimary"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_entrevista_nombre"
+            card_view:layout_constraintEnd_toStartOf="@+id/iv_menu_entrevista"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_entrevista_nombre"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_entrevista_nombre"
             tools:text="Normal" />
 
         <View
@@ -81,6 +93,17 @@
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_entrevista_fecha_registro_titulo" />
+
+        <ImageView
+            android:id="@+id/iv_menu_entrevista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Icono menu contextual"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:srcCompat="@drawable/ic_more_vert_black_24dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

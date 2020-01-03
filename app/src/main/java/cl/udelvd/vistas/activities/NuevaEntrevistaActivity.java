@@ -1,7 +1,6 @@
 package cl.udelvd.vistas.activities;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -260,12 +259,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
-
-            Intent intent = getIntent();
-            //Enviar id_entrevistado de vuelta
-            intent.putExtra("id_entrevistado", id_entrevistado);
             finish();
-
             return true;
         } else if (item.getItemId() == R.id.menu_guardar) {
 

@@ -85,10 +85,13 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                     public boolean onMenuItemClick(MenuItem item) {
 
                         if (item.getItemId() == R.id.menu_editar_entrevistado) {
+
                             Intent intent = new Intent(context, EditarEntrevistadoActivity.class);
                             intent.putExtra("id_entrevistado", entrevistado.getId());
                             context.startActivity(intent);
+
                         } else if (item.getItemId() == R.id.menu_ver_entrevistas) {
+
                             Intent intent = new Intent(context, EntrevistasListaActivity.class);
 
                             Bundle bundle = new Bundle();

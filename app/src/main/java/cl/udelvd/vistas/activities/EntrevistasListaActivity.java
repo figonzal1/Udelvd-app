@@ -176,7 +176,11 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                     rv.setAdapter(entrevistaAdapter);
 
                     //Contar cantidad de entrevistas
-                    tv_n_entrevistas.setText(entrevistas.size() + " entrevistas");
+                    if (entrevistas.size() == 1) {
+                        tv_n_entrevistas.setText(entrevistas.size() + " entrevista");
+                    } else {
+                        tv_n_entrevistas.setText(entrevistas.size() + " entrevistas");
+                    }
 
                     //Contar tipos de entrevistas
                     Map<String, Integer> tipos = contarTipos(entrevistas);

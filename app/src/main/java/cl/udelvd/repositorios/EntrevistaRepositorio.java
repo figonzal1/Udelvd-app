@@ -68,11 +68,22 @@ public class EntrevistaRepositorio {
         return responseMsgError;
     }
 
+    /**
+     * Funcion que permite obtener el listado de entrevistas de una persona
+     *
+     * @param entrevistado Objeto entrevistaco que contiene el Id para buscar entrevistas
+     * @return Listado mutable con entrevistas de usuario
+     */
     public MutableLiveData<List<Entrevista>> obtenerEntrevistasPersonales(Entrevistado entrevistado) {
         sendGetEntrevistasPersonales(entrevistado, entrevistaMutableLiveData);
         return entrevistaMutableLiveData;
     }
 
+    /**
+     * Funcion que envía peticion GET para obtener listado de entrevistas
+     * @param entrevistado Objeto entrevistado
+     * @param mutableEntrevistasPersonales Lista mutable de entrevistas
+     */
     private void sendGetEntrevistasPersonales(Entrevistado entrevistado, final MutableLiveData<List<Entrevista>> mutableEntrevistasPersonales) {
 
         entrevistaList = new ArrayList<>();
@@ -123,11 +134,13 @@ public class EntrevistaRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d("VOLLEY_ERR_ENTREVISTA", "TIMEOUT_ERROR");
+                    responseMsgError.postValue("Servidor no responde, intente más tarde");
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d("VOLLEY_ERR_ENTREVISTA", "NETWORK_ERROR");
+                    responseMsgError.postValue("No tienes conexión a Internet");
                 }
 
                 //Errores cuando el servidor si responde
@@ -148,11 +161,13 @@ public class EntrevistaRepositorio {
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
                         Log.d("VOLLEY_ERR_ENTREVISTA", "AUTHENTICATION_ERROR: " + errorObject);
+                        responseMsgError.postValue("Acceso no autorizado");
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d("VOLLEY_ERR_ENTREVISTA", "SERVER_ERROR: " + errorObject);
+                        responseMsgError.postValue("Servidor no responde, intente más tarde");
                     }
                 }
             }
@@ -181,10 +196,18 @@ public class EntrevistaRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ENTREVISTAS);
     }
 
+    /**
+     * Funcion encargada de registrar une entrevista en el sistema
+     * @param entrevista Objeto entrevista con datos asociados
+     */
     public void registrarEntrevista(Entrevista entrevista) {
         enviarPostEntrevista(entrevista);
     }
 
+    /**
+     * Función encargada de enviar peticion POST para registrar entrevista en el sistema
+     * @param entrevista Objeto entrevista con datos asoiados
+     */
     private void enviarPostEntrevista(final Entrevista entrevista) {
 
 

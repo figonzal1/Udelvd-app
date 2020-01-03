@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,21 +102,24 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         });
     }
 
-    private void iniciarSwipeRefresh() {
-        swipeRefreshLayout = findViewById(R.id.refresh_entrevistas);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorSecondary), getResources().getColor(R.color.colorPrimary));
-        swipeRefreshLayout.setRefreshing(true);
+    private void setearRecursosInterfaz() {
+        rv = findViewById(R.id.rv_lista_entrevistas);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //Forzar refresh entrevistas
-                entrevistaViewModel.refreshEntrevistas(entrevistado);
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(ly);
+
+        entrevistaAdapter = new EntrevistaAdapter(new ArrayList<Entrevista>(), getApplicationContext());
+        rv.setAdapter(entrevistaAdapter);
+
+        tv_nombreCompleto = findViewById(R.id.tv_entrevistado_nombre);
+        tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
+        tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
+        tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
     }
 
+    /**
+     * Funcion encargada de obtener los datos desde el intent de la actividad padre
+     */
     private void obtenerDatosBundle() {
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
@@ -137,8 +141,31 @@ public class EntrevistasListaActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Funcion encargada de la lógica del swipe refresh de entrevistas
+     */
+    private void iniciarSwipeRefresh() {
+        swipeRefreshLayout = findViewById(R.id.refresh_entrevistas);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorSecondary), getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setRefreshing(true);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Forzar refresh entrevistas
+                entrevistaViewModel.refreshEntrevistas(entrevistado);
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+    }
+
+    /**
+     * Funcion encargada de inicializar los viewModelsObservers
+     */
     private void iniciarViewModelObservers() {
         entrevistaViewModel = ViewModelProviders.of(this).get(EntrevistaViewModel.class);
+
+        //Observador de listado de entrevistas
         entrevistaViewModel.cargarEntrevistas(entrevistado).observe(this, new Observer<List<Entrevista>>() {
             @Override
             public void onChanged(List<Entrevista> entrevistas) {
@@ -157,27 +184,32 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                     tv_entrevistas_extraordinarias.setText(String.valueOf(tipos.get("extraordinarias")));
 
                     swipeRefreshLayout.setRefreshing(false);
+
+                    Log.d("VM_LISTA_ENTREVISTAS", "MSG_RESPONSE: " + entrevistas.toString());
                 }
+            }
+        });
+
+        //Observador para errores
+        entrevistaViewModel.mostrarRespuestaError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                showSnackbar(findViewById(R.id.entrevistas_list), s, "Reintentar");
+
+                swipeRefreshLayout.setRefreshing(false);
+
+                Log.d("VM_LISTA_ENTREVISTAS", "MSG_ERROR: " + s);
             }
         });
     }
 
-    private void setearRecursosInterfaz() {
-        rv = findViewById(R.id.rv_lista_entrevistas);
-
-        LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
-        rv.setLayoutManager(ly);
-
-        entrevistaAdapter = new EntrevistaAdapter(new ArrayList<Entrevista>(), getApplicationContext());
-        rv.setAdapter(entrevistaAdapter);
-
-        tv_nombreCompleto = findViewById(R.id.tv_entrevistado_nombre);
-        tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
-        tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
-        tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
-    }
-
-
+    /**
+     * Funcion encargada de contar las entrevistas normales y extraordinarias
+     *
+     * @param entrevistas Listadp de entrevistas
+     * @return Mapa con conteo de normales y extraordinadias
+     */
     private Map<String, Integer> contarTipos(List<Entrevista> entrevistas) {
         int normales = 0;
         int extraordinarias = 0;
@@ -193,5 +225,29 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         map.put("normales", normales);
         map.put("extraordinarias", extraordinarias);
         return map;
+    }
+
+    /**
+     * Funcion para mostrar el snackbar en la actividad
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     * @param accion Boton de accion del snackbar
+     */
+    private void showSnackbar(View v, String titulo, String accion) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
+                .setAction(accion, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //Refresh listado de usuarios
+                        entrevistaViewModel.refreshEntrevistas(entrevistado);
+
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+
+        snackbar.show();
     }
 }

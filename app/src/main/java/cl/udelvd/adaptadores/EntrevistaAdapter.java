@@ -1,9 +1,14 @@
 package cl.udelvd.adaptadores;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +21,7 @@ import java.util.Locale;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevista;
+import cl.udelvd.vistas.activities.EditarEntrevistaActivity;
 
 public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.QuakeViewHolder> {
 
@@ -35,7 +41,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
     }
 
     @Override
-    public void onBindViewHolder(@NonNull QuakeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final QuakeViewHolder holder, int position) {
 
         final Entrevista entrevista = entrevistaList.get(position);
 
@@ -56,6 +62,39 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
             }
         });
 
+        holder.iv_menu_entrevista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PopupMenu popupMenu = new PopupMenu(context, holder.iv_menu_entrevista);
+                popupMenu.inflate(R.menu.menu_holder_entrevista);
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        if (item.getItemId() == R.id.menu_ver_eventos) {
+                            return true;
+                        } else if (item.getItemId() == R.id.menu_editar_entrevista) {
+
+                            Intent intent = new Intent(context, EditarEntrevistaActivity.class);
+
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("id_entrevista", entrevista.getId());
+                            bundle.putInt("id_entrevistado", entrevista.getId_entrevistado());
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                popupMenu.show();
+            }
+        });
+
     }
 
     @Override
@@ -69,6 +108,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
         private final TextView tv_fecha_registro;
         private final TextView tv_tipo_entrevista;
         private final View card_view;
+        private final ImageView iv_menu_entrevista;
 
         QuakeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,6 +117,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
             tv_entrevista_nombre = itemView.findViewById(R.id.tv_entrevista_nombre);
             tv_fecha_registro = itemView.findViewById(R.id.tv_entrevista_fecha_registro_value);
             tv_tipo_entrevista = itemView.findViewById(R.id.tv_entrevista_tipo);
+            iv_menu_entrevista = itemView.findViewById(R.id.iv_menu_entrevista);
         }
     }
 }

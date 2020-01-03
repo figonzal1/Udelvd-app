@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!--Main-->
+        <!-- Main -->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,13 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!--Entrevistas-->
+        <!-- Entrevistas -->
         <activity
             android:name=".vistas.activities.EntrevistasListaActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />
         <activity
             android:name=".vistas.activities.NuevaEntrevistaActivity"
+            android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
+
+        <activity
+            android:name=".vistas.activities.EditarEntrevistaActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
 
         <!-- Entrevistado -->

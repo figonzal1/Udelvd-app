@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,19 +17,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import cl.udelvd.EventsActivity;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevista;
+import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.vistas.activities.EditarEntrevistaActivity;
 
 public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.QuakeViewHolder> {
 
     private final List<Entrevista> entrevistaList;
     private Context context;
+    private Entrevistado entrevistado;
+    private Map<String, Integer> params;
 
-    public EntrevistaAdapter(List<Entrevista> entrevistaList, Context context) {
+    public EntrevistaAdapter(List<Entrevista> entrevistaList, Context context, Entrevistado entrevistado, Map<String, Integer> params) {
         this.entrevistaList = entrevistaList;
         this.context = context;
+        this.entrevistado = entrevistado;
+        this.params = params;
     }
 
     @NonNull
@@ -58,7 +64,21 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Item click listener", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, EventsActivity.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("id_entrevista", entrevista.getId());
+                bundle.putInt("id_entrevistado", entrevista.getId_entrevistado());
+
+                bundle.putString("nombre_entrevistado", entrevistado.getNombre());
+                bundle.putString("apellido_entrevistado", entrevistado.getApellido());
+
+                bundle.putInt("n_entrevistas", params.get("n_entrevistas"));
+                bundle.putString("n_normales", String.valueOf(params.get("n_normales")));
+                bundle.putString("n_extraodrinarias", String.valueOf(params.get("n_extraodrinarias")));
+
+                intent.putExtras(bundle);
+                context.startActivity(intent);
             }
         });
 

@@ -83,6 +83,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
                             bundle.putInt("id_entrevista", entrevista.getId());
                             bundle.putInt("id_entrevistado", entrevista.getId_entrevistado());
                             intent.putExtras(bundle);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
 
                             return true;

@@ -41,7 +41,9 @@ public class EntrevistaRepositorio {
     private final Application application;
 
     private static final String TAG_GET_ENTREVISTAS = "ListadoEntrevistas";
+    private static final Object TAG_GET_ENTREVISTA = "ObtenerEntrevista";
     private static final String TAG_NEW_ENTREVISTA = "NuevaEntrevista";
+    private static final String TAG_UPDATE_ENTREVISTA = "ActualizarEntrevista";
 
     private List<Entrevista> entrevistaList;
     private MutableLiveData<List<Entrevista>> entrevistaMutableLiveData = new MutableLiveData<>();
@@ -81,7 +83,8 @@ public class EntrevistaRepositorio {
 
     /**
      * Funcion que envía peticion GET para obtener listado de entrevistas
-     * @param entrevistado Objeto entrevistado
+     *
+     * @param entrevistado                 Objeto entrevistado
      * @param mutableEntrevistasPersonales Lista mutable de entrevistas
      */
     private void sendGetEntrevistasPersonales(Entrevistado entrevistado, final MutableLiveData<List<Entrevista>> mutableEntrevistasPersonales) {
@@ -198,6 +201,7 @@ public class EntrevistaRepositorio {
 
     /**
      * Funcion encargada de registrar une entrevista en el sistema
+     *
      * @param entrevista Objeto entrevista con datos asociados
      */
     public void registrarEntrevista(Entrevista entrevista) {
@@ -206,6 +210,7 @@ public class EntrevistaRepositorio {
 
     /**
      * Función encargada de enviar peticion POST para registrar entrevista en el sistema
+     *
      * @param entrevista Objeto entrevista con datos asoiados
      */
     private void enviarPostEntrevista(final Entrevista entrevista) {
@@ -321,5 +326,205 @@ public class EntrevistaRepositorio {
         };
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NEW_ENTREVISTA);
 
+    }
+
+    /**
+     * Funcion encargada de obtener una entrevista especifica de un entrevistado
+     *
+     * @param entrevista Datos de la entrevista
+     * @return Objeto mutable de la entrevista solicitada
+     */
+    public MutableLiveData<Entrevista> obtenerEntrevistaPersonal(Entrevista entrevista) {
+        MutableLiveData<Entrevista> mutableLiveData = new MutableLiveData<>();
+        enviarGetEntrevistaPersonal(entrevista, mutableLiveData);
+        return mutableLiveData;
+    }
+
+    /**
+     * Funcion encargada de enviar la peticion GET al servidor para obtener la entrevista solicitada
+     *
+     * @param entrevista      Objeto entrevista con datos de consulta
+     * @param mutableLiveData Mutable live data con datos de entrevista
+     */
+    private void enviarGetEntrevistaPersonal(Entrevista entrevista, final MutableLiveData<Entrevista> mutableLiveData) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.d("RESPONSE_GET_ENTREVISTA", response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+
+                    JSONObject jsonAttribute = jsonData.getJSONObject("attributes");
+
+                    Entrevista entrevistaInternet = new Entrevista();
+                    entrevistaInternet.setId(jsonData.getInt("id"));
+                    entrevistaInternet.setId_entrevistado(jsonAttribute.getInt("id_entrevistado"));
+
+                    TipoEntrevista tipoEntrevista = new TipoEntrevista();
+                    tipoEntrevista.setId(jsonAttribute.getInt("id_tipo_entrevista"));
+
+                    entrevistaInternet.setTipoEntrevista(tipoEntrevista);
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    entrevistaInternet.setFecha_entrevista(simpleDateFormat.parse(jsonAttribute.getString("fecha_entrevista")));
+
+                    mutableLiveData.postValue(entrevistaInternet);
+
+                } catch (JSONException | ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ERR_ENTREVISTA", "TIMEOUT_ERROR");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ERR_ENTREVISTA", "NETWORK_ERROR");
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject("error");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d("VOLLEY_ERR_ENTREVISTA", "AUTHENTICATION_ERROR: " + errorObject);
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d("VOLLEY_ERR_ENTREVISTA", "SERVER_ERROR: " + errorObject);
+                    }
+                }
+            }
+        };
+
+
+        String url = "http://192.168.0.14/entrevistados/" + entrevista.getId_entrevistado() + "/entrevistas/" + entrevista.getId();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Authorization", "Bearer " + token);
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ENTREVISTA);
+    }
+
+    public void actualizarEntrevista(Entrevista entrevista) {
+        enviarPutEntrevista(entrevista);
+    }
+
+    private void enviarPutEntrevista(final Entrevista entrevista) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("RESPONSE_EDIT", response);
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Log.d("VOLLEY_ERR_ENTREVISTA", "TIMEOUT_ERROR");
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d("VOLLEY_ERR_ENTREVISTA", "NETWORK_ERROR");
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject("error");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d("VOLLEY_ERR_ENTREVISTA", "AUTHENTICATION_ERROR: " + errorObject);
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d("VOLLEY_ERR_ENTREVISTA", "SERVER_ERROR: " + errorObject);
+                    }
+                }
+            }
+        };
+
+        String url = "http://192.68.0.14/entrevistados/" + entrevista.getId_entrevistado() + "/entrevista/" + entrevista.getId();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("id_tipo_entrevista", String.valueOf(entrevista.getTipoEntrevista().getId()));
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                params.put("fecha_entrevista", simpleDateFormat.format(entrevista.getFecha_entrevista()));
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Authorization", "Bearer " + token);
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_UPDATE_ENTREVISTA);
     }
 }

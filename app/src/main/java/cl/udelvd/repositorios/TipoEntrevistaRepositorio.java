@@ -149,6 +149,12 @@ public class TipoEntrevistaRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, "TiposEntrevistas");
     }
 
+    /**
+     * Funcion encargada de buscar una TipoEntrevista dado parametro
+     *
+     * @param nombre Nombre del tipo entrevista
+     * @return Objeto tipoEntrevista
+     */
     public TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
 
         for (int i = 0; i < tipoEntrevistaList.size(); i++) {
@@ -156,7 +162,22 @@ public class TipoEntrevistaRepositorio {
                 return tipoEntrevistaList.get(i);
             }
         }
+        return null;
+    }
 
+    /**
+     * Funcion encargada de buscar una TipoEntrevista dado parametro
+     *
+     * @param id Id del tipo entrevista
+     * @return Objeto tipoEntrevista
+     */
+    public TipoEntrevista buscarTipoEntrevistaPorId(int id) {
+
+        for (int i = 0; i < tipoEntrevistaList.size(); i++) {
+            if (tipoEntrevistaList.get(i).getId() == id) {
+                return tipoEntrevistaList.get(i);
+            }
+        }
         return null;
     }
 }

@@ -3,9 +3,11 @@ package cl.udelvd.vistas.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -48,6 +50,9 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     private String nombre_entrevistado;
     private String apellido_entrevistado;
 
+    //Map params para eventos
+    private Map<String, Integer> params;
+
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -65,14 +70,13 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         actionBar.setTitle("Listado entrevistas");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        setearRecursosInterfaz();
-
         obtenerDatosBundle();
+
+        setearRecursosInterfaz();
 
         iniciarSwipeRefresh();
 
         iniciarViewModelObservers();
-
 
         fabNuevaEntrevista = findViewById(R.id.fb_crear_entrevista);
         fabNuevaEntrevista.setOnClickListener(new View.OnClickListener() {
@@ -108,13 +112,15 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
         rv.setLayoutManager(ly);
 
-        entrevistaAdapter = new EntrevistaAdapter(new ArrayList<Entrevista>(), getApplicationContext());
+        entrevistaAdapter = new EntrevistaAdapter(new ArrayList<Entrevista>(), getApplicationContext(), entrevistado, params);
         rv.setAdapter(entrevistaAdapter);
 
         tv_nombreCompleto = findViewById(R.id.tv_entrevistado_nombre);
         tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
         tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
         tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
+
+        tv_nombreCompleto.setText(nombre_entrevistado + " " + apellido_entrevistado);
     }
 
     /**
@@ -133,12 +139,9 @@ public class EntrevistasListaActivity extends AppCompatActivity {
             entrevistado.setId(id_entrevistado);
             entrevistado.setNombre(nombre_entrevistado);
             entrevistado.setApellido(apellido_entrevistado);
-
-            tv_nombreCompleto.setText(nombre_entrevistado + " " + apellido_entrevistado);
         } else {
             Log.d("BUNDLE_STATUS", "bundle vacio");
         }
-
     }
 
     /**
@@ -171,10 +174,6 @@ public class EntrevistasListaActivity extends AppCompatActivity {
             public void onChanged(List<Entrevista> entrevistas) {
                 if (entrevistas != null) {
 
-                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, getApplicationContext());
-                    entrevistaAdapter.notifyDataSetChanged();
-                    rv.setAdapter(entrevistaAdapter);
-
                     //Contar cantidad de entrevistas
                     if (entrevistas.size() == 1) {
                         tv_n_entrevistas.setText(entrevistas.size() + " entrevista");
@@ -186,6 +185,16 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                     Map<String, Integer> tipos = contarTipos(entrevistas);
                     tv_entrevistas_normales.setText(String.valueOf(tipos.get("normales")));
                     tv_entrevistas_extraordinarias.setText(String.valueOf(tipos.get("extraordinarias")));
+
+                    params = new HashMap<>();
+                    params.put("n_entrevistas", entrevistas.size());
+                    params.put("n_normales", tipos.get("normales"));
+                    params.put("n_extraodrinarias", tipos.get("extraordinarias"));
+
+                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, getApplicationContext(), entrevistado, params);
+                    entrevistaAdapter.notifyDataSetChanged();
+                    rv.setAdapter(entrevistaAdapter);
+
 
                     swipeRefreshLayout.setRefreshing(false);
 
@@ -253,5 +262,14 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                 });
 
         snackbar.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

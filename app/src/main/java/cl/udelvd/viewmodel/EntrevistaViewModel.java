@@ -77,5 +77,13 @@ public class EntrevistaViewModel extends AndroidViewModel {
         return repositorio.getResponseMsgError();
     }
 
-
+    /**
+     * Funcion encargada de mostrar la respuesta de actualizacion de una entrevista en la UI
+     *
+     * @return SingleLive evento de evento de mensajeria de actualizacion
+     */
+    public SingleLiveEvent<String> mostrarRespuestaActualizacion() {
+        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgActualizacion();
+    }
 }

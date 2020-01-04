@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -50,6 +51,7 @@ public class EntrevistaRepositorio {
 
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
 
     private EntrevistaRepositorio(Application application) {
         this.application = application;
@@ -68,6 +70,10 @@ public class EntrevistaRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgError() {
         return responseMsgError;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgActualizacion() {
+        return responseMsgActualizacion;
     }
 
     /**
@@ -452,6 +458,32 @@ public class EntrevistaRepositorio {
             @Override
             public void onResponse(String response) {
                 Log.d("RESPONSE_EDIT", response);
+
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+
+                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+
+                    Entrevista entrevistaInternet = new Entrevista();
+                    entrevistaInternet.setId(jsonData.getInt("id"));
+                    entrevistaInternet.setId_entrevistado(jsonAttributes.getInt("id_entrevistado"));
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date fecha_entrevista = simpleDateFormat.parse(jsonAttributes.getString("fecha_entrevista"));
+                    entrevistaInternet.setFecha_entrevista(fecha_entrevista);
+
+                    String update_time = jsonAttributes.getString("update_time");
+
+                    if (entrevista.equals(entrevistaInternet) && !update_time.isEmpty()) {
+                        responseMsgActualizacion.postValue("¡Entrevista actualizada!");
+                    }
+
+                } catch (JSONException | ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
         };
 
@@ -495,7 +527,7 @@ public class EntrevistaRepositorio {
             }
         };
 
-        String url = "http://192.68.0.14/entrevistados/" + entrevista.getId_entrevistado() + "/entrevista/" + entrevista.getId();
+        String url = "http://192.168.0.14/entrevistados/" + entrevista.getId_entrevistado() + "/entrevistas/" + entrevista.getId();
 
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
             @Override

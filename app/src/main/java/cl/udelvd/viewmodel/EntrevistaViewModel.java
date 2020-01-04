@@ -39,6 +39,27 @@ public class EntrevistaViewModel extends AndroidViewModel {
     }
 
     /**
+     * Funcion encargada de refrescar listado de usuarios desde repositorio al viewmodel
+     *
+     * @param entrevistado Objeto entrevistado usado para entrevistas asociadas
+     */
+    public void refreshEntrevistas(Entrevistado entrevistado) {
+        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        repositorio.obtenerEntrevistasPersonales(entrevistado);
+    }
+
+    /**
+     * Funcion encargada de solicitar datos de una entrevista y entregarlos al formulario de UI
+     *
+     * @param entrevista Datos de la entrevista pra ser buscada
+     * @return Mutable con el objeto entrevista
+     */
+    public MutableLiveData<Entrevista> cargarEntrevista(Entrevista entrevista) {
+        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return repositorio.obtenerEntrevistaPersonal(entrevista);
+    }
+
+    /**
      * Funcion encargada de mostrar la respuesta post registro de entrevista en la UI
      * @return SingleLiveEvent con evento unico de mensaje
      */
@@ -56,12 +77,5 @@ public class EntrevistaViewModel extends AndroidViewModel {
         return repositorio.getResponseMsgError();
     }
 
-    /**
-     * Funcion encargada de refrescar listado de usuarios desde repositorio al viewmodel
-     * @param entrevistado Objeto entrevistado usado para entrevistas asociadas
-     */
-    public void refreshEntrevistas(Entrevistado entrevistado) {
-        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
-        repositorio.obtenerEntrevistasPersonales(entrevistado);
-    }
+
 }

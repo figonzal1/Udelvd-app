@@ -11,12 +11,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.modelo.Evento;
+import cl.udelvd.viewmodel.EventoViewModel;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
@@ -34,6 +40,11 @@ public class EventsActivity extends AppCompatActivity {
 
     private Entrevista entrevista;
     private Entrevistado entrevistado;
+
+    private List<Evento> eventoList;
+    private EventoViewModel eventoViewModel;
+    private FragmentStatePageAdapter fragmentStatePageAdapter;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +66,7 @@ public class EventsActivity extends AppCompatActivity {
 
         setearRecursosInterfaz();
 
-
-        ViewPager viewPager = findViewById(R.id.view_pager_events);
-        viewPager.setAdapter(new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
+        viewPager = findViewById(R.id.view_pager_events);
 
         FloatingActionButton fb = findViewById(R.id.fb_crear_evento);
 
@@ -108,6 +117,20 @@ public class EventsActivity extends AppCompatActivity {
             n_entrevistas = bundle.getInt("n_entrevistas");
             n_normales = bundle.getString("n_normales");
             n_extraordnarias = bundle.getString("n_extraodrinarias");
+
+            eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
+            eventoViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
+                @Override
+                public void onChanged(List<Evento> eventos) {
+                    if (eventos != null) {
+                        eventoList = eventos;
+
+                        Log.d("EVENTOS_VM", eventoList.toString());
+                        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList);
+                        viewPager.setAdapter(fragmentStatePageAdapter);
+                    }
+                }
+            });
         } else {
             Log.d("BUNDLE_STATUS_EVENTOS", "VACIO");
         }

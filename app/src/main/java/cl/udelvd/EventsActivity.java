@@ -32,6 +32,7 @@ public class EventsActivity extends AppCompatActivity {
     private String n_normales;
     private String n_extraordnarias;
     private int n_entrevistas;
+    private String fecha_entrevista;
 
     private TextView tv_normales;
     private TextView tv_extraodrinarias;
@@ -110,6 +111,8 @@ public class EventsActivity extends AppCompatActivity {
             entrevista.setId(bundle.getInt("id_entrevista"));
             entrevista.setId_entrevistado(bundle.getInt("id_entrevistado"));
 
+            fecha_entrevista = bundle.getString("fecha_entrevista");
+
             entrevistado = new Entrevistado();
             entrevistado.setNombre(bundle.getString("nombre_entrevistado"));
             entrevistado.setApellido(bundle.getString("apellido_entrevistado"));
@@ -126,7 +129,7 @@ public class EventsActivity extends AppCompatActivity {
                         eventoList = eventos;
 
                         Log.d("EVENTOS_VM", eventoList.toString());
-                        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList);
+                        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
                         viewPager.setAdapter(fragmentStatePageAdapter);
                     }
                 }

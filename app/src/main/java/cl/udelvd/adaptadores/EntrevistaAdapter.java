@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import cl.udelvd.EventsActivity;
 import cl.udelvd.R;
@@ -55,8 +56,8 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
 
         holder.tv_tipo_entrevista.setText(entrevista.getTipoEntrevista().getNombre());
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String fechaEntrevista = simpleDateFormat.format(entrevista.getFecha_entrevista());
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        final String fechaEntrevista = simpleDateFormat.format(entrevista.getFecha_entrevista());
 
         holder.tv_fecha_registro.setText(fechaEntrevista);
 
@@ -70,10 +71,12 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
                 bundle.putInt("id_entrevista", entrevista.getId());
                 bundle.putInt("id_entrevistado", entrevista.getId_entrevistado());
 
+                bundle.putString("fecha_entrevista", fechaEntrevista);
+
                 bundle.putString("nombre_entrevistado", entrevistado.getNombre());
                 bundle.putString("apellido_entrevistado", entrevistado.getApellido());
 
-                bundle.putInt("n_entrevistas", params.get("n_entrevistas"));
+                bundle.putInt("n_entrevistas", Objects.requireNonNull(params.get("n_entrevistas")));
                 bundle.putString("n_normales", String.valueOf(params.get("n_normales")));
                 bundle.putString("n_extraodrinarias", String.valueOf(params.get("n_extraodrinarias")));
 

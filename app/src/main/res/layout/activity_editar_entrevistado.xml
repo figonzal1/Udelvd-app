@@ -232,7 +232,7 @@
                 app:helperTextEnabled="true"
                 app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/iv_convivientes"
                 app:layout_constraintTop_toBottomOf="@+id/il_estado_civil_entrevistado">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -249,7 +249,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/iv_convivientes"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="Icono convivientes entrevistado"

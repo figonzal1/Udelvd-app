@@ -2,15 +2,30 @@ package cl.udelvd;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+import cl.udelvd.modelo.Evento;
 
 
 public class EventsSwipeFragment extends Fragment {
+
+    private Evento evento;
+    private String fecha_entrevista;
+    private int position;
+
+    private TextView tv_fecha_entrevista;
+    private TextView tv_evento;
+    private TextView tv_accion;
+    private ImageView iv_emoticon;
+    private TextView tv_hora_evento;
+    private TextView tv_justificacion;
+
 
     public EventsSwipeFragment() {
         // Required empty public constructor
@@ -30,7 +45,33 @@ public class EventsSwipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_swipe_events, container, false);
+        View v = inflater.inflate(R.layout.fragment_swipe_events, container, false);
+
+        instanciaRecursosInterfaz(v);
+
+        setearInformacionEvento();
+
+        return v;
+    }
+
+    private void setearInformacionEvento() {
+        tv_fecha_entrevista.setText("Entrevista " + fecha_entrevista);
+        tv_evento.setText("Evento " + (position + 1));
+
+        tv_accion.setText(String.valueOf(evento.getAccion().getId()));
+
+        tv_hora_evento.setText(evento.getHora_evento());
+
+        tv_justificacion.setText(evento.getJustificacion());
+    }
+
+    private void instanciaRecursosInterfaz(View v) {
+        tv_fecha_entrevista = v.findViewById(R.id.tv_fecha_entrevista);
+        tv_evento = v.findViewById(R.id.tv_detalle_evento);
+        tv_hora_evento = v.findViewById(R.id.tv_hora_evento);
+        tv_accion = v.findViewById(R.id.tv_accion_evento);
+        tv_justificacion = v.findViewById(R.id.tv_justificacion_evento);
+        iv_emoticon = v.findViewById(R.id.iv_emoticon_evento);
     }
 
 
@@ -42,5 +83,17 @@ public class EventsSwipeFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+
+    public void setFechaEntrevista(String fecha_entrevista) {
+        this.fecha_entrevista = fecha_entrevista;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

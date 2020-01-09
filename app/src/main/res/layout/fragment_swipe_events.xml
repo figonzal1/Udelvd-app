@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -25,20 +25,21 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tv_evento_detalle"
+                android:id="@+id/tv_detalle_evento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
                 android:text="Evento X"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textSize="24sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorOnPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_entrevista_detalle" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_fecha_entrevista" />
 
             <TextView
-                android:id="@+id/tv_entrevista_detalle"
+                android:id="@+id/tv_fecha_entrevista"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -59,7 +60,7 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_evento_detalle" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_detalle_evento" />
 
             <View
                 android:id="@+id/divider2"
@@ -70,7 +71,7 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/tv_hora"
+                app:layout_constraintStart_toStartOf="@+id/tv_hora_evento"
                 app:layout_constraintTop_toBottomOf="@+id/iv_hora" />
 
             <View
@@ -82,7 +83,7 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/tv_hora"
+                app:layout_constraintStart_toStartOf="@+id/tv_hora_evento"
                 app:layout_constraintTop_toBottomOf="@+id/iv_accion" />
 
             <View
@@ -94,7 +95,7 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/tv_hora"
+                app:layout_constraintStart_toStartOf="@+id/tv_hora_evento"
                 app:layout_constraintTop_toBottomOf="@+id/iv_emoticon" />
 
             <ImageView
@@ -103,33 +104,38 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_help_outline_black_24dp"
+                android:contentDescription="Icono hora evento"
                 app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/ic_access_time_black_24dp"
                 app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
             <TextView
-                android:id="@+id/tv_hora"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_hora_titulo"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Hora: 08:40"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_hora"
+                android:fontFamily="@font/roboto"
+                android:text="Hora evento"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorOnPrimary"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/iv_hora"
                 app:layout_constraintTop_toTopOf="@+id/iv_hora" />
 
             <TextView
-                android:id="@+id/tv_accion"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_accion_titulo"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Accion: Ducha"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_accion"
+                android:fontFamily="@font/roboto"
+                android:text="Acción"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorOnPrimary"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/iv_hora"
@@ -170,7 +176,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/iv_emoticon_evento"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
@@ -183,32 +189,61 @@
                 app:layout_constraintTop_toTopOf="@+id/iv_emoticon" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/tv_justificacion_evento"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/roboto"
                 android:textAlignment="viewStart"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorOnSurface"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.488"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_justificacion_titulo"
+                tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/tv_justificacion_titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
                 android:text="Justificación"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorOnPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <TextView
+                android:id="@+id/tv_accion_evento"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="-"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorOnSurface"
+                app:layout_constraintEnd_toEndOf="@id/tv_accion_titulo"
+                app:layout_constraintStart_toStartOf="@id/tv_accion_titulo"
+                app:layout_constraintTop_toBottomOf="@id/tv_accion_titulo"
+                tools:text="Accion X" />
+
+            <TextView
+                android:id="@+id/tv_hora_evento"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="-"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorOnSurface"
+                app:layout_constraintEnd_toEndOf="@+id/tv_hora_titulo"
+                app:layout_constraintStart_toStartOf="@+id/tv_hora_titulo"
+                app:layout_constraintTop_toBottomOf="@+id/tv_hora_titulo"
+                tools:text="8:50 hrs" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

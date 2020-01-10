@@ -433,7 +433,7 @@ public class EntrevistadoRepositorio {
      * Funcion encargada de obtener la información de un entrevistado en específico
      *
      * @param entrevistado Objeto entrevistado
-     * @return
+     * @return MutableLiveData de entrevistado
      */
     public MutableLiveData<Entrevistado> obtenerEntrevistado(Entrevistado entrevistado) {
         MutableLiveData<Entrevistado> entrevistadoMutableLiveData = new MutableLiveData<>();

@@ -39,6 +39,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
+                <TextView
+                    android:id="@+id/tv_entrevistas_vacios"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="No hay entrevistas para esta persona"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorOnPrimary"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_view_info_entrevistado"
+                    tools:visibility="visible" />
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_view_info_entrevistado"
                     android:layout_width="match_parent"

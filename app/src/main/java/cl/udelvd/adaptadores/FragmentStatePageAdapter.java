@@ -1,4 +1,4 @@
-package cl.udelvd;
+package cl.udelvd.adaptadores;
 
 import android.util.Log;
 
@@ -10,13 +10,14 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.List;
 
 import cl.udelvd.modelo.Evento;
+import cl.udelvd.vistas.fragments.EventsSwipeFragment;
 
 public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
 
     private List<Evento> eventoList;
     private String fecha_entrevista;
 
-    FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior, List<Evento> eventoList, String fecha_entrevista) {
+    public FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior, List<Evento> eventoList, String fecha_entrevista) {
         super(fm, behavior);
         this.eventoList = eventoList;
         this.fecha_entrevista = fecha_entrevista;

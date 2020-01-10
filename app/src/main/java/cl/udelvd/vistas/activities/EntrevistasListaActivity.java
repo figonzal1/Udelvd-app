@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cl.udelvd.R;
@@ -42,6 +44,9 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     private TextView tv_n_entrevistas;
     private TextView tv_entrevistas_normales;
     private TextView tv_entrevistas_extraordinarias;
+
+    private CardView cv_lista_entrevistas;
+    private TextView tv_entrevistas_vacias;
 
     private Entrevistado entrevistado;
 
@@ -120,7 +125,10 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
         tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
 
-        tv_nombreCompleto.setText(nombre_entrevistado + " " + apellido_entrevistado);
+        tv_nombreCompleto.setText(String.format("%s %s", nombre_entrevistado, apellido_entrevistado));
+
+        cv_lista_entrevistas = findViewById(R.id.card_view_lista_entrevistas);
+        tv_entrevistas_vacias = findViewById(R.id.tv_entrevistas_vacios);
     }
 
     /**
@@ -174,11 +182,13 @@ public class EntrevistasListaActivity extends AppCompatActivity {
             public void onChanged(List<Entrevista> entrevistas) {
                 if (entrevistas != null) {
 
+                    swipeRefreshLayout.setRefreshing(false);
+
                     //Contar cantidad de entrevistas
                     if (entrevistas.size() == 1) {
-                        tv_n_entrevistas.setText(entrevistas.size() + " entrevista");
+                        tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", entrevistas.size()));
                     } else {
-                        tv_n_entrevistas.setText(entrevistas.size() + " entrevistas");
+                        tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", entrevistas.size()));
                     }
 
                     //Contar tipos de entrevistas
@@ -191,14 +201,20 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                     params.put("n_normales", tipos.get("normales"));
                     params.put("n_extraodrinarias", tipos.get("extraordinarias"));
 
-                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, getApplicationContext(), entrevistado, params);
-                    entrevistaAdapter.notifyDataSetChanged();
-                    rv.setAdapter(entrevistaAdapter);
+                    if (entrevistas.size() > 0) {
 
+                        cv_lista_entrevistas.setVisibility(View.VISIBLE);
+                        tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
 
-                    swipeRefreshLayout.setRefreshing(false);
+                        entrevistaAdapter = new EntrevistaAdapter(entrevistas, getApplicationContext(), entrevistado, params);
+                        entrevistaAdapter.notifyDataSetChanged();
+                        rv.setAdapter(entrevistaAdapter);
 
-                    Log.d("VM_LISTA_ENTREVISTAS", "MSG_RESPONSE: " + entrevistas.toString());
+                        Log.d("VM_LISTA_ENTREVISTAS", "MSG_RESPONSE: " + entrevistas.toString());
+                    } else {
+                        cv_lista_entrevistas.setVisibility(View.INVISIBLE);
+                        tv_entrevistas_vacias.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });

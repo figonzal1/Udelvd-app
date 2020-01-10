@@ -11,6 +11,7 @@ import java.util.List;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.repositorios.EventoRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class EventoViewModel extends AndroidViewModel {
 
@@ -30,5 +31,16 @@ public class EventoViewModel extends AndroidViewModel {
             eventoMutableLiveData = repositorio.obtenerEventosEntrevista(entrevista);
         }
         return eventoMutableLiveData;
+    }
+
+    /**
+     * Funcion que envia el mensaje de error desde el respositorio a la interfaz
+     * (Con observer)
+     *
+     * @return SingleLive con mensaje de error
+     */
+    public SingleLiveEvent<String> mostrarErrorRespuesta() {
+        repositorio = EventoRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseErrorMsg();
     }
 }

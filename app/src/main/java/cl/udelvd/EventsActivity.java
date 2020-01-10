@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -18,6 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Locale;
 
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
@@ -38,6 +41,7 @@ public class EventsActivity extends AppCompatActivity {
     private TextView tv_extraodrinarias;
     private TextView tv_nombreApellido;
     private TextView tv_n_entrevistas;
+    private TextView tv_eventos_vacios;
 
     private Entrevista entrevista;
     private Entrevistado entrevistado;
@@ -47,27 +51,20 @@ public class EventsActivity extends AppCompatActivity {
     private FragmentStatePageAdapter fragmentStatePageAdapter;
     private ViewPager viewPager;
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-
-        setSupportActionBar(toolbar);
-
-        //Boton atras
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("Eventos");
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        configuracionToolbar();
 
         obtenerDatosBundle();
 
         setearRecursosInterfaz();
 
-        viewPager = findViewById(R.id.view_pager_events);
+        iniciarViewModel();
 
         FloatingActionButton fb = findViewById(R.id.fb_crear_evento);
 
@@ -83,22 +80,81 @@ public class EventsActivity extends AppCompatActivity {
         });
     }
 
+    private void configuracionToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
+
+        setSupportActionBar(toolbar);
+
+        //Boton atras
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("Eventos");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void iniciarViewModel() {
+        eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
+        eventoViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
+            @Override
+            public void onChanged(List<Evento> eventos) {
+                if (eventos != null) {
+
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    eventoList = eventos;
+
+                    Log.d("EVENTOS_VM", eventoList.toString());
+
+                    if (eventoList.size() > 0) {
+                        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
+                        viewPager.setAdapter(fragmentStatePageAdapter);
+                        viewPager.setVisibility(View.VISIBLE);
+
+                    } else {
+                        Log.d("HOLA", "EVENTOS VACIOS");
+                        viewPager.setVisibility(View.GONE);
+                        tv_eventos_vacios.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        eventoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void setearRecursosInterfaz() {
+
+        progressBar = findViewById(R.id.progress_bar_eventos);
+        progressBar.setVisibility(View.VISIBLE);
+
+        viewPager = findViewById(R.id.view_pager_events);
+
         tv_nombreApellido = findViewById(R.id.tv_entrevistado_nombre);
         tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
         tv_normales = findViewById(R.id.tv_normales_value);
         tv_extraodrinarias = findViewById(R.id.tv_extraordinarias_value);
 
-        tv_nombreApellido.setText(entrevistado.getNombre() + " " + entrevistado.getApellido());
+        tv_nombreApellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
         tv_normales.setText(n_normales);
         tv_extraodrinarias.setText(n_extraordnarias);
 
         //Contar cantidad de entrevistas
         if (n_entrevistas == 1) {
-            tv_n_entrevistas.setText(n_entrevistas + " entrevista");
+            tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", n_entrevistas));
         } else {
-            tv_n_entrevistas.setText(n_entrevistas + " entrevistas");
+            tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", n_entrevistas));
         }
+
+        tv_eventos_vacios = findViewById(R.id.tv_eventos_vacios);
 
     }
 
@@ -121,19 +177,6 @@ public class EventsActivity extends AppCompatActivity {
             n_normales = bundle.getString("n_normales");
             n_extraordnarias = bundle.getString("n_extraodrinarias");
 
-            eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
-            eventoViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
-                @Override
-                public void onChanged(List<Evento> eventos) {
-                    if (eventos != null) {
-                        eventoList = eventos;
-
-                        Log.d("EVENTOS_VM", eventoList.toString());
-                        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
-                        viewPager.setAdapter(fragmentStatePageAdapter);
-                    }
-                }
-            });
         } else {
             Log.d("BUNDLE_STATUS_EVENTOS", "VACIO");
         }

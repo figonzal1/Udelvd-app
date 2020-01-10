@@ -52,7 +52,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
 
         final Entrevista entrevista = entrevistaList.get(position);
 
-        holder.tv_entrevista_nombre.setText("Entrevista " + (position + 1));
+        holder.tv_entrevista_nombre.setText(String.format(Locale.US, "Entrevista %d", position + 1));
 
         holder.tv_tipo_entrevista.setText(entrevista.getTipoEntrevista().getNombre());
 
@@ -61,7 +61,6 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
 
         holder.tv_fecha_registro.setText(fechaEntrevista);
 
-        //TODO: Setear in click listener para abrir actividad con eventos
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +96,23 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
                     public boolean onMenuItemClick(MenuItem item) {
 
                         if (item.getItemId() == R.id.menu_ver_eventos) {
+                            Intent intent = new Intent(context, EventsActivity.class);
+
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("id_entrevista", entrevista.getId());
+                            bundle.putInt("id_entrevistado", entrevista.getId_entrevistado());
+
+                            bundle.putString("fecha_entrevista", fechaEntrevista);
+
+                            bundle.putString("nombre_entrevistado", entrevistado.getNombre());
+                            bundle.putString("apellido_entrevistado", entrevistado.getApellido());
+
+                            bundle.putInt("n_entrevistas", Objects.requireNonNull(params.get("n_entrevistas")));
+                            bundle.putString("n_normales", String.valueOf(params.get("n_normales")));
+                            bundle.putString("n_extraodrinarias", String.valueOf(params.get("n_extraodrinarias")));
+
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
                             return true;
                         } else if (item.getItemId() == R.id.menu_editar_entrevista) {
 

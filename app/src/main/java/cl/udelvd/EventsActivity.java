@@ -80,6 +80,9 @@ public class EventsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configuracion inicial de toolbar
+     */
     private void configuracionToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
@@ -93,44 +96,36 @@ public class EventsActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void iniciarViewModel() {
-        eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
-        eventoViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
-            @Override
-            public void onChanged(List<Evento> eventos) {
-                if (eventos != null) {
+    /**
+     * Cargar datos desde intent (EntrevistaListaActivity)
+     */
+    private void obtenerDatosBundle() {
 
-                    progressBar.setVisibility(View.INVISIBLE);
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
 
-                    eventoList = eventos;
+            entrevista = new Entrevista();
+            entrevista.setId(bundle.getInt("id_entrevista"));
+            entrevista.setId_entrevistado(bundle.getInt("id_entrevistado"));
 
-                    Log.d("EVENTOS_VM", eventoList.toString());
+            fecha_entrevista = bundle.getString("fecha_entrevista");
 
-                    if (eventoList.size() > 0) {
-                        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
-                        viewPager.setAdapter(fragmentStatePageAdapter);
-                        viewPager.setVisibility(View.VISIBLE);
+            entrevistado = new Entrevistado();
+            entrevistado.setNombre(bundle.getString("nombre_entrevistado"));
+            entrevistado.setApellido(bundle.getString("apellido_entrevistado"));
 
-                    } else {
-                        Log.d("HOLA", "EVENTOS VACIOS");
-                        viewPager.setVisibility(View.GONE);
-                        tv_eventos_vacios.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
+            n_entrevistas = bundle.getInt("n_entrevistas");
+            n_normales = bundle.getString("n_normales");
+            n_extraordnarias = bundle.getString("n_extraodrinarias");
 
-        eventoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-            }
-        });
+        } else {
+            Log.d("BUNDLE_STATUS_EVENTOS", "VACIO");
+        }
     }
 
+    /**
+     * Inicializar recursos de interfaz
+     */
     private void setearRecursosInterfaz() {
 
         progressBar = findViewById(R.id.progress_bar_eventos);
@@ -158,29 +153,49 @@ public class EventsActivity extends AppCompatActivity {
 
     }
 
-    private void obtenerDatosBundle() {
+    /**
+     * Iniciar observadores de viewModels
+     */
+    private void iniciarViewModel() {
+        eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
 
-        if (getIntent().getExtras() != null) {
-            Bundle bundle = getIntent().getExtras();
+        //Observador de carga de eventos
+        eventoViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
+            @Override
+            public void onChanged(List<Evento> eventos) {
+                if (eventos != null) {
 
-            entrevista = new Entrevista();
-            entrevista.setId(bundle.getInt("id_entrevista"));
-            entrevista.setId_entrevistado(bundle.getInt("id_entrevistado"));
+                    progressBar.setVisibility(View.INVISIBLE);
 
-            fecha_entrevista = bundle.getString("fecha_entrevista");
+                    eventoList = eventos;
 
-            entrevistado = new Entrevistado();
-            entrevistado.setNombre(bundle.getString("nombre_entrevistado"));
-            entrevistado.setApellido(bundle.getString("apellido_entrevistado"));
+                    Log.d("EVENTOS_VM", eventoList.toString());
 
-            n_entrevistas = bundle.getInt("n_entrevistas");
-            n_normales = bundle.getString("n_normales");
-            n_extraordnarias = bundle.getString("n_extraodrinarias");
+                    if (eventoList.size() > 0) {
+                        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
+                        viewPager.setAdapter(fragmentStatePageAdapter);
+                        viewPager.setVisibility(View.VISIBLE);
 
-        } else {
-            Log.d("BUNDLE_STATUS_EVENTOS", "VACIO");
-        }
+                    } else {
+                        viewPager.setVisibility(View.GONE);
+                        tv_eventos_vacios.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        //Observador de error al cargar eventos
+        eventoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

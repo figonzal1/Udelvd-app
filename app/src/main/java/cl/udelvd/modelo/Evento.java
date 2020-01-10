@@ -1,5 +1,7 @@
 package cl.udelvd.modelo;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 
 public class Evento {
@@ -63,6 +65,7 @@ public class Evento {
         this.hora_evento = hora_evento;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Evento{" +

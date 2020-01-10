@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +31,7 @@ public class EventsSwipeFragment extends Fragment {
     private ImageView iv_emoticon;
     private TextView tv_hora_evento;
     private TextView tv_justificacion;
+    private TextView tv_descripcion_emoticon;
 
 
     public EventsSwipeFragment() {
@@ -59,6 +61,24 @@ public class EventsSwipeFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Inicializar recursos usados en interfaz
+     *
+     * @param v View de interfaz
+     */
+    private void instanciaRecursosInterfaz(View v) {
+        tv_fecha_entrevista = v.findViewById(R.id.tv_fecha_entrevista);
+        tv_evento = v.findViewById(R.id.tv_detalle_evento);
+        tv_hora_evento = v.findViewById(R.id.tv_hora_evento);
+        tv_accion = v.findViewById(R.id.tv_accion_evento);
+        tv_justificacion = v.findViewById(R.id.tv_justificacion_evento);
+        iv_emoticon = v.findViewById(R.id.iv_emoticon_evento);
+        tv_descripcion_emoticon = v.findViewById(R.id.tv_descripcion_emoticon);
+    }
+
+    /**
+     * Configurar informacion del evento en cada cardview dentro del Swipe
+     */
     private void setearInformacionEvento() {
         tv_fecha_entrevista.setText(String.format("Entrevista día %s", fecha_entrevista));
         tv_evento.setText(String.format(Locale.US, "Evento %d", position + 1));
@@ -70,24 +90,17 @@ public class EventsSwipeFragment extends Fragment {
 
         tv_justificacion.setText(evento.getJustificacion());
 
+        tv_descripcion_emoticon.setText(evento.getEmoticon().getDescripcion());
+
         //GLIDE PARA CARGAR IMAGEN DE foto
+        //TODO: Terminar de configurar glide placeholder y errores
         Glide.with(this)
                 .load(evento.getEmoticon().getUrl())
                 .into(iv_emoticon);
     }
 
-    private void instanciaRecursosInterfaz(View v) {
-        tv_fecha_entrevista = v.findViewById(R.id.tv_fecha_entrevista);
-        tv_evento = v.findViewById(R.id.tv_detalle_evento);
-        tv_hora_evento = v.findViewById(R.id.tv_hora_evento);
-        tv_accion = v.findViewById(R.id.tv_accion_evento);
-        tv_justificacion = v.findViewById(R.id.tv_justificacion_evento);
-        iv_emoticon = v.findViewById(R.id.iv_emoticon_evento);
-    }
-
-
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
     }
 

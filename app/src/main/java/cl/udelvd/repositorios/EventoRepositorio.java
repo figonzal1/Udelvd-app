@@ -20,9 +20,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cl.udelvd.modelo.Accion;
@@ -101,7 +104,9 @@ public class EventoRepositorio {
                         evento.setEntrevista(e);
 
                         evento.setJustificacion(jsonAttributes.getString("justificacion"));
-                        evento.setHora_evento(jsonAttributes.getString("hora_evento"));
+
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.US);
+                        evento.setHora_evento(simpleDateFormat.parse(jsonAttributes.getString("hora_evento")));
 
                         JSONObject jsonRelationships = jsonEvento.getJSONObject("relationships");
 
@@ -122,7 +127,7 @@ public class EventoRepositorio {
                     }
 
                     mutableLiveData.postValue(eventoList);
-                } catch (JSONException e) {
+                } catch (JSONException | ParseException e) {
                     e.printStackTrace();
                 }
             }

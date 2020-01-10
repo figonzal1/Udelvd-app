@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import cl.udelvd.modelo.Evento;
 
 
@@ -55,12 +58,13 @@ public class EventsSwipeFragment extends Fragment {
     }
 
     private void setearInformacionEvento() {
-        tv_fecha_entrevista.setText("Entrevista " + fecha_entrevista);
-        tv_evento.setText("Evento " + (position + 1));
+        tv_fecha_entrevista.setText(String.format("Entrevista día %s", fecha_entrevista));
+        tv_evento.setText(String.format(Locale.US, "Evento %d", position + 1));
 
         tv_accion.setText(String.valueOf(evento.getAccion().getNombre()));
 
-        tv_hora_evento.setText(evento.getHora_evento());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+        tv_hora_evento.setText(simpleDateFormat.format(evento.getHora_evento()));
 
         tv_justificacion.setText(evento.getJustificacion());
 

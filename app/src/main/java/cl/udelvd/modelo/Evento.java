@@ -1,5 +1,7 @@
 package cl.udelvd.modelo;
 
+import java.util.Date;
+
 public class Evento {
 
     private int id;
@@ -7,7 +9,8 @@ public class Evento {
     private Accion accion;
     private Emoticon emoticon;
     private String justificacion;
-    private String hora_evento;
+    private Date hora_evento;
+
 
     public Evento() {
     }
@@ -52,11 +55,11 @@ public class Evento {
         this.justificacion = justificacion;
     }
 
-    public String getHora_evento() {
+    public Date getHora_evento() {
         return hora_evento;
     }
 
-    public void setHora_evento(String hora_evento) {
+    public void setHora_evento(Date hora_evento) {
         this.hora_evento = hora_evento;
     }
 

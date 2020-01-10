@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".NuevoEventoActivity"></activity>
         <!-- Main -->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
@@ -22,28 +22,22 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- Entrevistas -->
+        </activity> <!-- Entrevistas -->
         <activity
             android:name=".vistas.activities.EntrevistasListaActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />
         <activity
             android:name=".vistas.activities.NuevaEntrevistaActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
-
         <activity
             android:name=".vistas.activities.EditarEntrevistaActivity"
-            android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
-
-        <!-- Entrevistado -->
+            android:parentActivityName=".vistas.activities.EntrevistasListaActivity" /> <!-- Entrevistado -->
         <activity
             android:name=".vistas.activities.NuevoEntrevistadoActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />
         <activity
             android:name=".vistas.activities.EditarEntrevistadoActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
-
-        <!-- Investigador -->
+            android:parentActivityName=".vistas.activities.MainActivity" /> <!-- Investigador -->
         <activity
             android:name=".vistas.activities.PerfilActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />
@@ -53,9 +47,7 @@
         <activity
             android:name=".vistas.activities.RegistroActivity"
             android:parentActivityName=".vistas.activities.LoginActivity" />
-        <activity android:name=".vistas.activities.LoginActivity" />
-
-        <!-- Eventos -->
+        <activity android:name=".vistas.activities.LoginActivity" /> <!-- Eventos -->
         <activity
             android:name=".vistas.activities.EventosActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />

@@ -1,5 +1,7 @@
 package cl.udelvd.modelo;
 
+import androidx.annotation.NonNull;
+
 public class Accion {
 
     private int id;
@@ -24,11 +26,9 @@ public class Accion {
         this.nombre = nombre;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "Accion{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                '}';
+        return nombre;
     }
 }

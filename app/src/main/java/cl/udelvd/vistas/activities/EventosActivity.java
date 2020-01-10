@@ -1,5 +1,6 @@
 package cl.udelvd.vistas.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -22,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.Locale;
 
-import cl.udelvd.NewEventDialog;
+import cl.udelvd.NuevoEventoActivity;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.FragmentStatePageAdapter;
 import cl.udelvd.modelo.Entrevista;
@@ -69,16 +69,19 @@ public class EventosActivity extends AppCompatActivity {
 
         iniciarViewModel();
 
-        FloatingActionButton fb = findViewById(R.id.fb_crear_evento);
+        FloatingActionButton fb_crear_evento = findViewById(R.id.fb_crear_evento);
 
-        fb.setOnClickListener(new View.OnClickListener() {
+        fb_crear_evento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NewEventDialog fragment = new NewEventDialog();
+                /*NewEventDialog fragment = new NewEventDialog();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.add(android.R.id.content, fragment)
-                        .addToBackStack(null).commit();
+                        .addToBackStack(null).commit();*/
+
+                Intent intent = new Intent(EventosActivity.this, NuevoEventoActivity.class);
+                startActivity(intent);
             }
         });
     }

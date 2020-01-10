@@ -1,4 +1,4 @@
-package cl.udelvd;
+package cl.udelvd.vistas.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +22,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.Locale;
 
+import cl.udelvd.NewEventDialog;
+import cl.udelvd.R;
+import cl.udelvd.adaptadores.FragmentStatePageAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.Evento;
@@ -29,7 +32,7 @@ import cl.udelvd.viewmodel.EventoViewModel;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
-public class EventsActivity extends AppCompatActivity {
+public class EventosActivity extends AppCompatActivity {
 
 
     private String n_normales;
@@ -165,6 +168,7 @@ public class EventsActivity extends AppCompatActivity {
             public void onChanged(List<Evento> eventos) {
                 if (eventos != null) {
 
+                    //TODO: Poner SwipeFrefresh (?)
                     progressBar.setVisibility(View.INVISIBLE);
 
                     eventoList = eventos;
@@ -175,6 +179,7 @@ public class EventsActivity extends AppCompatActivity {
                         fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
                         viewPager.setAdapter(fragmentStatePageAdapter);
                         viewPager.setVisibility(View.VISIBLE);
+                        tv_eventos_vacios.setVisibility(View.INVISIBLE);
 
                     } else {
                         viewPager.setVisibility(View.GONE);

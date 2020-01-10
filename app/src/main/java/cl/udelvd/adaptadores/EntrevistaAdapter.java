@@ -20,11 +20,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import cl.udelvd.EventsActivity;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.vistas.activities.EditarEntrevistaActivity;
+import cl.udelvd.vistas.activities.EventosActivity;
 
 public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.QuakeViewHolder> {
 
@@ -64,7 +64,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, EventsActivity.class);
+                Intent intent = new Intent(context, EventosActivity.class);
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("id_entrevista", entrevista.getId());
@@ -96,7 +96,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
                     public boolean onMenuItemClick(MenuItem item) {
 
                         if (item.getItemId() == R.id.menu_ver_eventos) {
-                            Intent intent = new Intent(context, EventsActivity.class);
+                            Intent intent = new Intent(context, EventosActivity.class);
 
                             Bundle bundle = new Bundle();
                             bundle.putInt("id_entrevista", entrevista.getId());

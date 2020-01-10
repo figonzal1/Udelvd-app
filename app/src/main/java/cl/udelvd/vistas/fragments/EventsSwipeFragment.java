@@ -1,4 +1,4 @@
-package cl.udelvd;
+package cl.udelvd.vistas.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import cl.udelvd.R;
 import cl.udelvd.modelo.Evento;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
@@ -96,7 +97,6 @@ public class EventsSwipeFragment extends Fragment {
         tv_descripcion_emoticon.setText(evento.getEmoticon().getDescripcion());
 
         //GLIDE PARA CARGAR IMAGEN DE foto
-        //TODO: Terminar de configurar glide placeholder y errores
         Glide.with(this)
                 .load(evento.getEmoticon().getUrl())
                 .apply(new RequestOptions()

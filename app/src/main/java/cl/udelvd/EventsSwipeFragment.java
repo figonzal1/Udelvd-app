@@ -58,11 +58,13 @@ public class EventsSwipeFragment extends Fragment {
         tv_fecha_entrevista.setText("Entrevista " + fecha_entrevista);
         tv_evento.setText("Evento " + (position + 1));
 
-        tv_accion.setText(String.valueOf(evento.getAccion().getId()));
+        tv_accion.setText(String.valueOf(evento.getAccion().getNombre()));
 
         tv_hora_evento.setText(evento.getHora_evento());
 
         tv_justificacion.setText(evento.getJustificacion());
+
+        //GLIDE PARA CARGAR IMAGEN DE foto
     }
 
     private void instanciaRecursosInterfaz(View v) {

@@ -30,6 +30,7 @@ import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class EventoRepositorio {
 
@@ -38,6 +39,8 @@ public class EventoRepositorio {
     private Application application;
 
     private List<Evento> eventoList;
+
+    private SingleLiveEvent<String> responseErrorMsg = new SingleLiveEvent<>();
 
     private EventoRepositorio(Application application) {
         this.application = application;
@@ -48,6 +51,10 @@ public class EventoRepositorio {
             instancia = new EventoRepositorio(application);
         }
         return instancia;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsg() {
+        return responseErrorMsg;
     }
 
     /**
@@ -93,16 +100,23 @@ public class EventoRepositorio {
                         e.setId(jsonAttributes.getInt("id_entrevista"));
                         evento.setEntrevista(e);
 
-                        Accion accion = new Accion();
-                        accion.setId(jsonAttributes.getInt("id_accion"));
-                        evento.setAccion(accion);
-
-                        Emoticon emoticon = new Emoticon();
-                        emoticon.setId(jsonAttributes.getInt("id_emoticon"));
-                        evento.setEmoticon(emoticon);
-
                         evento.setJustificacion(jsonAttributes.getString("justificacion"));
                         evento.setHora_evento(jsonAttributes.getString("hora_evento"));
+
+                        JSONObject jsonRelationships = jsonEvento.getJSONObject("relationships");
+
+                        JSONObject jsonAccionData = jsonRelationships.getJSONObject("accion").getJSONObject("data");
+                        Accion accion = new Accion();
+                        accion.setId(jsonAccionData.getInt("id"));
+                        accion.setNombre(jsonAccionData.getString("nombre"));
+                        evento.setAccion(accion);
+
+                        JSONObject jsonEmoticonData = jsonRelationships.getJSONObject("emoticon").getJSONObject("data");
+                        Emoticon emoticon = new Emoticon();
+                        emoticon.setId(jsonEmoticonData.getInt("id"));
+                        emoticon.setDescripcion(jsonEmoticonData.getString("descripcion"));
+                        emoticon.setUrl(jsonEmoticonData.getString("url"));
+                        evento.setEmoticon(emoticon);
 
                         eventoList.add(evento);
                     }
@@ -119,14 +133,13 @@ public class EventoRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d("VOLLEY_EVENTOS", "TIMEOUT_ERROR");
-                }
-
-                //Error de conexion a internet
-                else if (error instanceof NetworkError) {
+                    responseErrorMsg.postValue("Servidor no responde, intente más tarde");
+                } else if (error instanceof NetworkError) {
                     Log.d("VOLLEY_EVENTOS", "NETWORK_ERROR");
+                    responseErrorMsg.postValue("No tienes conexión a Internet");
                 }
 
-                //Errores cuando el servidor si responde
+                //Errores cuando el servidor si response
                 else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
@@ -144,11 +157,13 @@ public class EventoRepositorio {
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
                         Log.d("VOLLEY_EVENTOS", "AUTHENTICATION_ERROR: " + errorObject);
+                        responseErrorMsg.postValue("Acceso no autorizado");
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d("VOLLEY_EVENTOS", "SERVER_ERROR: " + errorObject);
+                        responseErrorMsg.postValue("Servidor no responde, intente más tarde");
                     }
                 }
             }

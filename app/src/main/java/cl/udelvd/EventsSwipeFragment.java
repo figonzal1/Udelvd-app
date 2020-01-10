@@ -12,11 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import cl.udelvd.modelo.Evento;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 public class EventsSwipeFragment extends Fragment {
@@ -96,6 +99,9 @@ public class EventsSwipeFragment extends Fragment {
         //TODO: Terminar de configurar glide placeholder y errores
         Glide.with(this)
                 .load(evento.getEmoticon().getUrl())
+                .apply(new RequestOptions()
+                        .error(R.drawable.not_found))
+                .transition(withCrossFade())
                 .into(iv_emoticon);
     }
 

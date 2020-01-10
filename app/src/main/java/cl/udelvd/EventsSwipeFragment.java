@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -69,6 +71,9 @@ public class EventsSwipeFragment extends Fragment {
         tv_justificacion.setText(evento.getJustificacion());
 
         //GLIDE PARA CARGAR IMAGEN DE foto
+        Glide.with(this)
+                .load(evento.getEmoticon().getUrl())
+                .into(iv_emoticon);
     }
 
     private void instanciaRecursosInterfaz(View v) {

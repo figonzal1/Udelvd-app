@@ -89,7 +89,7 @@ public class EventsSwipeFragment extends Fragment {
 
         tv_accion.setText(String.valueOf(evento.getAccion().getNombre()));
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.US);
         tv_hora_evento.setText(simpleDateFormat.format(evento.getHora_evento()));
 
         tv_justificacion.setText(evento.getJustificacion());

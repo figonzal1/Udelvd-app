@@ -173,6 +173,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- TODO: Combinar spinner con escritura manual -->
             <!-- Autocompletado escrito a mano con coincidencias-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_ciudad_entrevistado"

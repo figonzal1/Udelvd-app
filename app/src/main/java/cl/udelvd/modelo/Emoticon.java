@@ -1,5 +1,7 @@
 package cl.udelvd.modelo;
 
+import androidx.annotation.NonNull;
+
 public class Emoticon {
 
     private int id;
@@ -33,6 +35,7 @@ public class Emoticon {
         this.descripcion = descripcion;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Emoticon{" +

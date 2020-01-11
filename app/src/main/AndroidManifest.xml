@@ -14,7 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".NuevoEventoActivity"></activity>
         <!-- Main -->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
@@ -51,6 +50,9 @@
         <activity
             android:name=".vistas.activities.EventosActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
+        <activity
+            android:name=".NuevoEventoActivity"
+            android:parentActivityName=".vistas.activities.EventosActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

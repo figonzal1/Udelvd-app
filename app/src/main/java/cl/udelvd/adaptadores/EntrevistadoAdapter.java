@@ -24,7 +24,7 @@ import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.activities.EditarEntrevistadoActivity;
 import cl.udelvd.vistas.activities.EntrevistasListaActivity;
 
-public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapter.QuakeViewHolder> {
+public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapter.EntrevistadoViewHolder> {
 
     private final List<Entrevistado> entrevistadoList;
     private Context context;
@@ -36,13 +36,13 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
 
     @NonNull
     @Override
-    public QuakeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EntrevistadoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_entrevistado, parent, false);
-        return new QuakeViewHolder(v);
+        return new EntrevistadoViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final QuakeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final EntrevistadoViewHolder holder, int position) {
 
         final Entrevistado entrevistado = entrevistadoList.get(position);
 
@@ -54,9 +54,9 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", simpleDateFormat.format(entrevistado.getFechaNacimiento()), annos));
 
         if (entrevistado.getN_entrevistas() == 1) {
-            holder.tv_n_entrevistas.setText(entrevistado.getN_entrevistas() + " entrevista");
+            holder.tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", entrevistado.getN_entrevistas()));
         } else {
-            holder.tv_n_entrevistas.setText(entrevistado.getN_entrevistas() + " entrevistas");
+            holder.tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", entrevistado.getN_entrevistas()));
         }
 
         holder.card_view_entrevistado.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +119,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         return entrevistadoList.size();
     }
 
-    static class QuakeViewHolder extends RecyclerView.ViewHolder {
+    static class EntrevistadoViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tv_nombre_apellido;
         private final TextView tv_fecha_nacimiento;
@@ -129,7 +129,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         private final View card_view_entrevistado;
 
 
-        QuakeViewHolder(@NonNull View itemView) {
+        EntrevistadoViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_nombre_apellido = itemView.findViewById(R.id.cv_tv_nombre);

@@ -7,7 +7,7 @@
     tools:context=".NuevoEventoActivity">
 
     <include
-        android:id="@+id/include2"
+        android:id="@+id/include"
         layout="@layout/toolbar_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -22,10 +22,10 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/include2"
+        app:layout_constraintBottom_toBottomOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2" />
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -34,53 +34,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2"
+        app:layout_constraintTop_toBottomOf="@+id/include"
         app:layout_constraintVertical_bias="0.0">
 
-        <TextView
-            android:id="@+id/tv_entrevista_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:text="Ingrese datos"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
         <ImageView
-            android:id="@+id/iv_icono_fecha_entrevista"
+            android:id="@+id/iv_hora_evento"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:contentDescription="Icono fecha entrevista"
+            android:contentDescription="Icono hora evento"
             android:tint="@color/colorSecondaryVariant"
-            app:layout_constraintBottom_toBottomOf="@+id/il_fecha_entrevista"
+            app:layout_constraintBottom_toBottomOf="@+id/il_hora_evento"
             app:layout_constraintStart_toStartOf="@+id/guia_izq"
-            app:layout_constraintTop_toTopOf="@+id/il_fecha_entrevista"
+            app:layout_constraintTop_toTopOf="@+id/il_hora_evento"
             app:srcCompat="@drawable/ic_date_black_24dp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/il_fecha_entrevista"
+            android:id="@+id/il_hora_evento"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:hint="Fecha entrevista"
+            android:hint="Hora evento"
             app:endIconDrawable="@drawable/ic_date_black_24dp"
             app:endIconMode="custom"
             app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toStartOf="@+id/guia_der"
-            app:layout_constraintStart_toEndOf="@+id/iv_icono_fecha_entrevista"
+            app:layout_constraintStart_toEndOf="@+id/iv_hora_evento"
             app:layout_constraintTop_toBottomOf="@+id/il_accion_evento">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_fecha_entrevista"
+                android:id="@+id/et_hora_evento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
@@ -92,17 +76,18 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
-            android:id="@+id/iv_tipo_entrevista"
+            android:id="@+id/iv_accion_evento"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:contentDescription="Icono tipo entrevista"
+            android:contentDescription="Icono accion evento"
             android:tint="@color/colorSecondaryVariant"
             app:layout_constraintBottom_toBottomOf="@+id/il_accion_evento"
             app:layout_constraintStart_toStartOf="@+id/guia_izq"
             app:layout_constraintTop_toTopOf="@+id/il_accion_evento"
             app:srcCompat="@drawable/ic_directions_run_black_24dp" />
 
-        <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
+        <!-- Autocompletado de escritura manual COMBINADO
+        con selector de opciones fijo (SPINNER)-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/il_accion_evento"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
@@ -112,7 +97,7 @@
             android:layout_marginTop="16dp"
             android:hint="Acción"
             app:layout_constraintEnd_toStartOf="@+id/guia_der"
-            app:layout_constraintStart_toEndOf="@+id/iv_tipo_entrevista"
+            app:layout_constraintStart_toEndOf="@+id/iv_accion_evento"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatAutoCompleteTextView
@@ -122,10 +107,69 @@
                 android:layout_height="wrap_content"
                 android:completionThreshold="1"
                 android:fontFamily="@font/roboto"
-                android:inputType="textCapWords"
+                android:inputType="text"
                 android:singleLine="true"
                 android:textSize="16sp"
                 tools:text="Acción" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_seleccionar_emoticon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="Seleccionar emoticón"
+            app:layout_constraintEnd_toStartOf="@+id/guia_der"
+            app:layout_constraintStart_toStartOf="@+id/guia_izq"
+            app:layout_constraintTop_toBottomOf="@+id/il_hora_evento" />
+
+        <ImageView
+            android:id="@+id/iv_emoticon_evento"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="Icono emoticon evento"
+            android:tint="@color/colorSecondaryVariant"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_emoticon"
+            app:layout_constraintStart_toStartOf="@+id/guia_izq"
+            app:layout_constraintTop_toTopOf="@+id/spinner_emoticon"
+            app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+        <Spinner
+            android:id="@+id/spinner_emoticon"
+            style="@android:style/Widget.Material.Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guia_der"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/iv_emoticon_evento"
+            app:layout_constraintTop_toBottomOf="@+id/tv_seleccionar_emoticon" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_justificacion_evento"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:hint="Justificación"
+            app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toStartOf="@+id/guia_der"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/iv_hora_evento"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_emoticon">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_justificacion_evento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:inputType="textMultiLine"
+                android:textSize="16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,6 +186,46 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="16dp" />
+
+
+        <!--<RadioGroup
+            android:id="@+id/radio_group_emoticones"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_button_smiley"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/smiley"
+                android:checked="true"
+                android:gravity="center_horizontal" />
+
+            <RadioButton
+                android:id="@+id/radio_button_angry"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/angry"
+                android:gravity="center_horizontal" />
+
+            <RadioButton
+                android:id="@+id/radio_button_afraid"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/afraid"
+                android:gravity="center_horizontal" />
+
+            <RadioButton
+                android:id="@+id/radio_button_sad"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/sad"
+                android:gravity="center_horizontal" />
+        </RadioGroup>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -81,6 +81,7 @@ public class EventosActivity extends AppCompatActivity {
                         .addToBackStack(null).commit();*/
 
                 Intent intent = new Intent(EventosActivity.this, NuevoEventoActivity.class);
+                intent.putExtra("id_entrevista", entrevista.getId());
                 startActivity(intent);
             }
         });

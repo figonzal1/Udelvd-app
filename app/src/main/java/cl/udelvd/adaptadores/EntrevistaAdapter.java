@@ -26,7 +26,7 @@ import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.vistas.activities.EditarEntrevistaActivity;
 import cl.udelvd.vistas.activities.EventosActivity;
 
-public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.QuakeViewHolder> {
+public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.EntrevistaViewHolder> {
 
     private final List<Entrevista> entrevistaList;
     private Context context;
@@ -42,13 +42,13 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
 
     @NonNull
     @Override
-    public QuakeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EntrevistaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_entrevista, parent, false);
-        return new QuakeViewHolder(v);
+        return new EntrevistaViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final QuakeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final EntrevistaViewHolder holder, int position) {
 
         final Entrevista entrevista = entrevistaList.get(position);
 
@@ -142,7 +142,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
         return entrevistaList.size();
     }
 
-    static class QuakeViewHolder extends RecyclerView.ViewHolder {
+    static class EntrevistaViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tv_entrevista_nombre;
         private final TextView tv_fecha_registro;
@@ -150,7 +150,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.Qu
         private final View card_view;
         private final ImageView iv_menu_entrevista;
 
-        QuakeViewHolder(@NonNull View itemView) {
+        EntrevistaViewHolder(@NonNull View itemView) {
             super(itemView);
 
             card_view = itemView.findViewById(R.id.card_view);

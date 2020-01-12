@@ -156,4 +156,14 @@ public class AccionRepositorio {
 
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ACCIONES);
     }
+
+    public Accion buscarAccionPorNombre(String nombre) {
+
+        for (int i = 0; i < accionList.size(); i++) {
+            if (nombre.equals(accionList.get(i).getNombre())) {
+                return accionList.get(i);
+            }
+        }
+        return null;
+    }
 }

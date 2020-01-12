@@ -51,7 +51,7 @@
             android:name=".vistas.activities.EventosActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
         <activity
-            android:name=".NuevoEventoActivity"
+            android:name=".vistas.activities.NuevoEventoActivity"
             android:parentActivityName=".vistas.activities.EventosActivity" />
 
         <meta-data

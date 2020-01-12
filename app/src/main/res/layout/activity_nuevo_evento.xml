@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NuevoEventoActivity">
+    tools:context=".vistas.activities.NuevoEventoActivity">
 
     <include
         android:id="@+id/include"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
-        android:id="@+id/progress_horizontal_nueva_entrevista"
+        android:id="@+id/progress_horizontal_nuevo_evento"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -22,7 +22,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.Locale;
 
-import cl.udelvd.NuevoEventoActivity;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.FragmentStatePageAdapter;
 import cl.udelvd.modelo.Entrevista;

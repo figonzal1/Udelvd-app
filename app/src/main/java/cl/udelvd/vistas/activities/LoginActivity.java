@@ -45,17 +45,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        viewModelObserver();
+        instanciarRecursosInterfaz();
 
-        setearViews();
+        iniciarViewModels();
 
-        linkRegistro();
+        configurarlinkRegistro();
     }
 
     /**
      * Funcion encargada de configurar las views de la vista Login
      */
-    private void setearViews() {
+    private void instanciarRecursosInterfaz() {
         //Instancia formulario
         //Inputs Layouts
         ilEmail = findViewById(R.id.il_email_login);
@@ -84,11 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                     //TODO: Deberia enviarse un hash desde cliente para seguridad de password
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
 
-                    InvestigadorRepositorio investigadorRepositorio =
-                            InvestigadorRepositorio.getInstance(getApplication());
-
-                    //Hacer login
-                    investigadorRepositorio.loginInvestigador(investigador);
+                    InvestigadorRepositorio.getInstance(getApplication()).loginInvestigador(investigador);
                 }
             }
         });
@@ -97,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Funcion encargada de manejar los ViewModelObservers de la actividad login
      */
-    private void viewModelObserver() {
+    private void iniciarViewModels() {
 
         InvestigadorViewModel investigadorViewModel =
                 ViewModelProviders.of(this).get(InvestigadorViewModel.class);
@@ -108,9 +104,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(Map<String, Object> stringObjectMap) {
 
-                Investigador investigador = (Investigador) stringObjectMap.get("investigador");
+                Investigador investigador = (Investigador) stringObjectMap.get(getString(R.string.KEY_INVES_OBJECT));
 
-                SharedPreferences sharedPreferences = getSharedPreferences("udelvd",
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -118,28 +114,27 @@ public class LoginActivity extends AppCompatActivity {
                 if (investigador != null) {
 
                     //Guardar en sharedPref investigador recien logeado
-                    editor.putInt("id_investigador", investigador.getId());
-                    editor.putString("nombre_investigador", investigador.getNombre());
-                    editor.putString("apellido_investigador", investigador.getApellido());
-                    editor.putString("email_investigador", investigador.getEmail());
-                    editor.putInt("id_rol_investigador", investigador.getIdRol());
-                    editor.putString("nombre_rol_investigador", investigador.getNombreRol());
-                    editor.putBoolean("activado_investigador", investigador.isActivado());
-                    editor.putString("create_time_investigador", investigador.getCreateTime());
+                    editor.putInt(getString(R.string.SHARED_PREF_INVES_ID), investigador.getId());
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE), investigador.getNombre());
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_APELLIDO), investigador.getApellido());
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_EMAIL), investigador.getEmail());
+                    editor.putInt(getString(R.string.SHARED_PREF_INVES_ID_ROL), investigador.getIdRol());
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), investigador.getNombreRol());
+                    editor.putBoolean(getString(R.string.SHARED_PREF_INVES_ACTIVADO), investigador.isActivado());
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_CREATE_TIME), investigador.getCreateTime());
 
                     //TODO: Almacenar hash de password y no texto plano
-                    editor.putString("password_investigador", Objects.requireNonNull(etPassword.getText()).toString());
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_PASSWORD), Objects.requireNonNull(etPassword.getText()).toString());
                     editor.apply();
 
-                    String msg_login = (String) stringObjectMap.get("mensaje_login");
+                    String msg_login = (String) stringObjectMap.get(getString(R.string.LOGIN_MSG_VM));
 
                     progressBar.setVisibility(View.INVISIBLE);
 
-                    assert msg_login != null;
-                    Log.d("OBSERVER", msg_login);
 
                     //Si el mensaje es 'Bienvenido' se realiza login
-                    if (msg_login.equals("¡Bienvenido!")) {
+                    assert msg_login != null;
+                    if (msg_login.equals(getString(R.string.MSG_INVEST_LOGIN))) {
 
                         //Mostrar mensaje en pantalla
                         Toast.makeText(getApplicationContext(), msg_login, Toast.LENGTH_LONG).show();
@@ -157,7 +152,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.d("OBSERVER", s);
+
+                Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VM_MSG_RESPONSE), s));
+
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });
@@ -170,20 +167,19 @@ public class LoginActivity extends AppCompatActivity {
      */
     private boolean validarCampos() {
 
-        boolean status = false;
         int contador_errores = 0;
 
         //Comprobar email vacio
         if (TextUtils.isEmpty(etEmail.getText())) {
             ilEmail.setErrorEnabled(true);
-            ilEmail.setError("Campo requerido");
+            ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
 
             //Comprobar mail válido
             if (Utils.isInValidEmail(etEmail.getText())) {
                 ilEmail.setErrorEnabled(true);
-                ilEmail.setError("Email inválido");
+                ilEmail.setError(getString(R.string.VALIDACION_EMAIL));
                 contador_errores++;
             } else {
                 ilEmail.setErrorEnabled(false);
@@ -193,12 +189,12 @@ public class LoginActivity extends AppCompatActivity {
         //Comprobar contraseña vacia
         if (TextUtils.isEmpty(etPassword.getText())) {
             ilPassword.setErrorEnabled(true);
-            ilPassword.setError("Campo requerido");
+            ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } //Comprobar contraseña menor que 8
         else if (etPassword.getText().length() < 8) {
             ilPassword.setErrorEnabled(true);
-            ilPassword.setError("Contraseña debe tener 8 carácteres mínimo");
+            ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
             contador_errores++;
         } else {
             ilPassword.setErrorEnabled(false);
@@ -211,7 +207,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Funcion encargada de manejar la logica del link azul "Registro"
      */
-    private void linkRegistro() {
+    private void configurarlinkRegistro() {
         //Logica de textview de registro
         TextView tv_registro = findViewById(R.id.tv_registro);
         tv_registro.setMovementMethod(LinkMovementMethod.getInstance());
@@ -221,7 +217,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(@NonNull View widget) {
 
-                Log.d("INTENT", "ABRIENDO REGISTRO ACTIVITY");
                 Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
                 startActivity(intent);
             }

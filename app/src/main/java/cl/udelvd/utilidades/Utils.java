@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -134,12 +135,12 @@ public class Utils {
     /**
      * Funcion encargada de hacer la configuracion de titulo, color e icono de toolbar
      *
-     * @param activity         Actividad en uso
-     * @param context          Contexto de la actividad
-     * @param id_drawable_home Id del icono de home up
-     * @param titulo           Titulo del toolbar
+     * @param activity                Actividad en uso
+     * @param context                 Contexto de la actividad
+     * @param id_custom_drawable_home Id del icono de home up
+     * @param titulo                  Titulo del toolbar
      */
-    public static void configurarToolbar(AppCompatActivity activity, Context context, int id_drawable_home, String titulo) {
+    public static void configurarToolbar(AppCompatActivity activity, Context context, int id_custom_drawable_home, String titulo) {
 
         Toolbar toolbar = activity.findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(context.getResources().getColor(R.color.colorOnPrimary));
@@ -149,7 +150,9 @@ public class Utils {
         ActionBar actionBar = activity.getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(id_drawable_home);
+        if (id_custom_drawable_home != 0) {
+            actionBar.setHomeAsUpIndicator(id_custom_drawable_home);
+        }
         actionBar.setTitle(titulo);
     }
 

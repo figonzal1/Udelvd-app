@@ -153,7 +153,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
 
             Bundle bundle = getIntent().getExtras();
-            
             investigador = new Investigador();
 
             investigador.setId(bundle.getInt(getString(R.string.KEY_INVES_ID)));

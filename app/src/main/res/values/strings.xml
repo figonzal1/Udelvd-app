@@ -9,6 +9,7 @@
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
+    <string name="TITULO_TOOLBAR_REGISTRO">Registro</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY">udelvd</string>
@@ -91,6 +92,11 @@
     <string name="PERFIL_NO_ACTIVADO">No activada</string>
     <string name="TAG_TOKEN_LOGIN">TOKEN_LOGIN</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE">VOLLEY_ERR_INV_UPDATE</string>
+    <string name="TAG_VM_INVES_REGISTRO">VM_INVES_REGISTRO</string>
+    <string name="VM_MSG_RESPONSE">MSG_RESPONSE:</string>
+    <string name="VM_MSG_RESPONSE_ERROR">MSG_ERROR:</string>
+    <string name="MSG_INVEST_LOGIN">¡Bienvenido!</string>
+    <string name="TAG_VM_INVES_LOGIN">VM_INVEST_LOGIN</string>
 
 
 </resources>

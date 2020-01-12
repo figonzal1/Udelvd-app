@@ -153,7 +153,9 @@ public class Utils {
         if (id_custom_drawable_home != 0) {
             actionBar.setHomeAsUpIndicator(id_custom_drawable_home);
         }
-        actionBar.setTitle(titulo);
+        if (titulo != null) {
+            actionBar.setTitle(titulo);
+        }
     }
 
     /**

@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -25,6 +23,7 @@ import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.FragmentPageAdapter;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.utilidades.Utils;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,63 +32,54 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private static final int PROFILE_ACTIVITY_CODE = 200;
 
-    private String nombreRolInvestigador;
-
     private SharedPreferences sharedPreferences;
     private TabLayout tabLayout;
+
+    private Investigador investigador;
+
+    private TextView tv_nombre_apellido_investigador;
+    private TextView tv_email_investigador;
+    private TextView tv_nombre_rol_investigador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
         Utils.checkJWT(sharedPreferences, MainActivity.this);
 
-        setearToolbarViewPagerTabsDrawer();
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_menu_white_24dp, null);
+
+        instanciarRecursosInterfaz();
+
+        obtenerBundles();
+
+        setearViewPagerTabsDrawer();
 
     }
 
-
-    /**
-     * Funcion encargada de setear el nombre del investigador logueado  en el header del drawer
-     */
-    private void configurarDrawerHeader() {
-
+    private void instanciarRecursosInterfaz() {
         //Obtener header de navigation drawer
         View header = navigationView.getHeaderView(0);
-        TextView tv_nombre_apellido_investigador = header.findViewById(R.id.tv_header_nombre_apellido_usuario);
-        TextView tv_email_investigador = header.findViewById(R.id.tv_header_email_usuario);
-        TextView tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
+        tv_nombre_apellido_investigador = header.findViewById(R.id.tv_header_nombre_apellido_usuario);
+        tv_email_investigador = header.findViewById(R.id.tv_header_email_usuario);
+        tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
+    }
 
-        //Obtener datos usuario logeado
-
-        String nombreInvestigador = sharedPreferences.getString("nombre_investigador", "");
-        String apellidoInvestigador = sharedPreferences.getString("apellido_investigador", "");
-        nombreRolInvestigador = sharedPreferences.getString("nombre_rol_investigador", "");
-        String emailInvestigador = sharedPreferences.getString("email_investigador", "");
-
-        //Setear datos en pantalla
-        tv_nombre_apellido_investigador.setText(nombreInvestigador + " " + apellidoInvestigador);
-        tv_email_investigador.setText(emailInvestigador);
-        tv_nombre_rol_investigador.setText(nombreRolInvestigador);
+    private void obtenerBundles() {
+        investigador = new Investigador();
+        investigador.setNombre(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE), ""));
+        investigador.setApellido(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_APELLIDO), ""));
+        investigador.setNombreRol(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), ""));
+        investigador.setEmail(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), ""));
     }
 
     /**
      * Funcion encargada de configurar elementos de UI
      */
-    private void setearToolbarViewPagerTabsDrawer() {
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-        setSupportActionBar(toolbar);
-
-        //Setear toolbar
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+    private void setearViewPagerTabsDrawer() {
 
         //ViewPager
         ViewPager viewPager = findViewById(R.id.view_pager_main);
@@ -119,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setCheckedItem(R.id.menu_entrevistados);
         Objects.requireNonNull(tabLayout.getTabAt(0)).select();
 
-        configurarDrawerHeader();
+        cargarDatosInvestigador();
 
         //Si el usuario no es admin, ocultar panel
-        if (!nombreRolInvestigador.equals("Administrador")) {
+        if (!investigador.getNombreRol().equals("Administrador")) {
             navigationView.getMenu().findItem(R.id.group_admin).setVisible(false);
         }
 
@@ -130,6 +120,14 @@ public class MainActivity extends AppCompatActivity {
 
         tabsListener();
 
+    }
+
+    private void cargarDatosInvestigador() {
+
+        //Setear datos en pantalla
+        tv_nombre_apellido_investigador.setText(String.format("%s %s", investigador.getNombre(), investigador.getApellido()));
+        tv_email_investigador.setText(investigador.getEmail());
+        tv_nombre_rol_investigador.setText(investigador.getNombreRol());
     }
 
     /**
@@ -169,11 +167,11 @@ public class MainActivity extends AppCompatActivity {
                 //LOGOUT
                 if (menuItem.getItemId() == R.id.menu_logout) {
 
-                    String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                    String token = sharedPreferences.getString(getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                     if (!token.isEmpty()) {
-                        Log.d("LOGOUT", "BORRANDO TOKEN: " + token);
-                        sharedPreferences.edit().remove("TOKEN_LOGIN").apply();
+                        Log.d(getString(R.string.TAG_TOKEN_LOGOUT), String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
+                        sharedPreferences.edit().remove(getString(R.string.SHARED_PREF_TOKEN_LOGIN)).apply();
 
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);
@@ -197,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
 
-                Log.d("TAB SELECTED", String.valueOf(tab.getPosition()));
+                Log.d(getString(R.string.TAG_TAB_SELECTED), String.valueOf(tab.getPosition()));
 
                 //Modificar navigation drawer segun tabs (Swipe de fragments)
                 if (tab.getPosition() == 0) {
@@ -219,12 +217,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Funcion que maneja el click de navigation drawer
-     *
-     * @param item Item que recibe el click
-     * @return True | False
-     */
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -242,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PROFILE_ACTIVITY_CODE) {
-            Log.d("FINISH_PROFILE_ACTIVITY", "Seteando navigation en listado");
             navigationView.setCheckedItem(R.id.menu_entrevistados);
             Objects.requireNonNull(tabLayout.getTabAt(0)).select();
         }

@@ -94,8 +94,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("SELECT ITEM", spinner.getSelectedItem().toString());
-
+                Log.d("SELECTED_ITEM", spinner.getSelectedItem().toString());
                 Emoticon emoticon = emoticonList.get(position);
                 evento.setEmoticon(emoticon);
                 spinner.setSelected(true);
@@ -103,7 +102,6 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
                 spinner.setSelected(false);
             }
         });

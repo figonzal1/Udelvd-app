@@ -63,51 +63,53 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Email"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_email"
-                app:layout_constraintTop_toTopOf="@+id/iv_email" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_activado_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Estado cuenta"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/iv_activado"
-                app:layout_constraintTop_toTopOf="@+id/iv_activado" />
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
             <TextView
                 android:id="@+id/tv_registro_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Registro cuenta"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_registro"
-                app:layout_constraintTop_toTopOf="@+id/iv_registro" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <ImageView
                 android:id="@+id/iv_email"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:tint="@color/colorSecondaryVariant"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:contentDescription="Icono email investigador"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_email_investigador"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_email_title"
                 app:srcCompat="@drawable/ic_email_black_24dp" />
 
             <ImageView
@@ -115,11 +117,11 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:tint="@color/colorSecondaryVariant"
-                app:layout_constraintStart_toStartOf="parent"
                 android:contentDescription="Icono cuenta activada"
-                app:layout_constraintTop_toBottomOf="@+id/divider1"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_activado"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_activado_title"
                 app:srcCompat="@drawable/ic_verified_user_black_24dp" />
 
             <TextView
@@ -129,7 +131,6 @@
                 android:text="Activada"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_activado"
                 app:layout_constraintEnd_toEndOf="@+id/tv_activado_title"
                 app:layout_constraintStart_toStartOf="@+id/tv_activado_title"
                 app:layout_constraintTop_toBottomOf="@+id/tv_activado_title" />
@@ -138,13 +139,15 @@
                 android:id="@+id/tv_registro"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:text="2019/07/07"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_registro"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/tv_registro_title"
                 app:layout_constraintStart_toStartOf="@+id/tv_registro_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_registro_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_registro_title"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/tv_email_investigador"
@@ -153,9 +156,7 @@
                 android:text="tatafel_8@hotmail.com"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_email"
                 app:layout_constraintEnd_toEndOf="@+id/tv_email_title"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/tv_email_title"
                 app:layout_constraintTop_toBottomOf="@+id/tv_email_title" />
 
@@ -164,13 +165,11 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:tint="@color/colorSecondaryVariant"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 android:contentDescription="Icono fecha de registro"
-                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_registro"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_registro_title"
                 app:srcCompat="@drawable/ic_access_time_black_24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

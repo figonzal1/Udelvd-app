@@ -1,6 +1,96 @@
 <resources>
     <string name="app_name">Un Dia En La Vida De</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- URLS-->
+    <string name="URL_GET_INVESTIGADORES">http://192.168.0.14/investigadores</string>
+    <string name="URL_LOGIN_INVESTIGADORES">http://192.168.0.14/investigadores/login</string>
+    <string name="URL_PUT_INVESTIGADORES">http://192.168.0.14/investigadores/</string>
+
+
+    <!-- Titulos Toolbar -->
+    <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
+
+    <!-- SHARED PREF KEYS-->
+    <string name="SHARED_PREF_MASTER_KEY">udelvd</string>
+    <string name="SHARED_PREF_INVES_ID">id_investigador</string>
+    <string name="SHARED_PREF_INVES_ID_ROL">id_rol_investigador</string>
+    <string name="SHARED_PREF_INVES_NOMBRE_ROL">nombre_rol_investigador</string>
+    <string name="SHARED_PREF_INVES_NOMBRE">nombre_investigador</string>
+    <string name="SHARED_PREF_INVES_APELLIDO">apellido_investigador</string>
+    <string name="SHARED_PREF_INVES_EMAIL">email_investigador</string>
+    <string name="SHARED_PREF_INVES_ACTIVADO">activado_investigador</string>
+    <string name="SHARED_PREF_INVES_CREATE_TIME">create_time_investigador</string>
+    <string name="SHARED_PREF_INVES_PASSWORD">password_investigador</string>
+    <string name="SHARED_PREF_TOKEN_LOGIN">TOKEN_LOGIN</string>
+
+    <!-- Formatos -->
+    <string name="FORMATO_FECHA">yyyy-mm-dd</string>
+
+    <!-- Keys for intent -->
+    <string name="KEY_INVES_OBJECT">investigador</string>
+    <string name="KEY_INVES_ID">id</string>
+    <string name="KEY_INVES_NOMBRE">nombre</string>
+    <string name="KEY_INVES_APELLIDO">apellido</string>
+    <string name="KEY_INVES_EMAIL">email</string>
+    <string name="KEY_INVES_ID_ROL">id_rol</string>
+    <string name="KEY_INVES_PASSWORD">password</string>
+    <string name="KEY_INVES_NOMBRE_ROL">nombre_rol</string>
+    <string name="KEY_INVES_ACTIVADO">activado</string>
+
+    <string name="KEY_ROL_OBJECT">rol</string>
+    <string name="KEY_ROL_NOMBRE">nombre</string>
+
+    <string name="KEY_CREATE_TIME">create_time</string>
+    <string name="KEY_UPDATE_TIME">update_time</string>
+
+    <!-- JSON KEYS -->
+    <string name="JSON_DATA">data</string>
+    <string name="JSON_ATTRIBUTES">attributes</string>
+    <string name="JSON_RELATIONSHIPS">relationships</string>
+    <string name="JSON_ERROR">error</string>
+    <string name="JSON_ERROR_DETAIL">detail</string>
+    <string name="JSON_LOGIN">login</string>
+    <string name="JSON_LOGIN_STATUS">status</string>
+    <string name="JSON_LOGIN_STATUS_RESPONSE">Correct</string>
+    <string name="JSON_TOKEN">token</string>
+    <string name="JSON_CONTENT_TYPE">Content-Type</string>
+    <string name="JSON_CONTENT_TYPE_MSG">application/x-www-form-urlencoded</string>
+    <string name="JSON_AUTH">Authorization</string>
+    <string name="JSON_AUTH_MSG">Bearer</string>
+
+    <!-- TAGS VOLLEY -->
+    <string name="TAG_VOLLEY_INVES_REGISTRO">VOLLEY_ERR_REGIS_INVEST</string>
+    <string name="TIMEOUT_ERROR">TIMEOUT_ERROR</string>
+    <string name="NETWORK_ERROR">NETWORK_ERROR</string>
+    <string name="TIMEOUR_ERROR_MSG_VM">Servidor no responde, intente más tarde</string>
+    <string name="NETWORK_ERROR_MSG_VM">No tienes conexión a Internet</string>
+    <string name="AUTHENTICATION_ERROR">AUTHENTICATION_ERROR:</string>
+    <string name="AUTHENTICATION_ERROR_MSG_VM">Acceso no autorizado</string>
+    <string name="SERVER_ERROR">SERVER_ERROR:</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG">Email already exists</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email ya registrado</string>
+    <string name="LOGIN_MSG_VM">mensaje_login</string>
+    <string name="LOGIN_MSG_VM_WELCOME">¡Bienvenido!</string>
+    <string name="TAG_VOLLEY_ERROR_LOGIN">VOLLEY_ERROR_LOGIN</string>
+    <string name="SERVER_ERROR_AUTH_MSG">Please check your credentials</string>
+    <string name="SERVER_ERROR_AUTH_MSG_VM">Login fallido, revisa tus datos</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_2">Email does not exist</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
+    <string name="UPDATE_MSG_VM">mensaje_update</string>
+    <string name="UPDATE_MSG_VM_SAVE">¡Datos actualizados!</string>
+    <string name="TAG_EDIT_PROFILE_RESULT">FINISH_EDIT_PROFILE_ACT</string>
+    <string name="EDIT_PROFILE_RESULT_MSG">Cerrando formulario de edicion</string>
+    <string name="TAG_VIEW_MODEL_INVEST_UPDATE">VM_INV_UPDATE</string>
+    <string name="MSG_INVEST_ACTUALIZADO">¡Datos actualizados!</string>
+    <string name="MSG_INVEST_REGISTRADO">¡Estas registrado!</string>
+    <string name="VALIDACION_CAMPO_REQUERIDO">Campo requerido</string>
+    <string name="VALIDACION_EMAIL">Email inválido</string>
+    <string name="VALIDACION_PASSWORD_LARGO">Contraseña debe tener 8 carácteres mínimo</string>
+    <string name="VALIDACION_PASSWORD_NO_IGUALES">Contraseñas no coinciden</string>
+    <string name="PERFIL_ACTIVADO">Activado</string>
+    <string name="PERFIL_NO_ACTIVADO">No activada</string>
+    <string name="TAG_TOKEN_LOGIN">TOKEN_LOGIN</string>
+    <string name="TAG_VOLLEY_ERR_INV_UPDATE">VOLLEY_ERR_INV_UPDATE</string>
+
+
 </resources>

@@ -1,19 +1,26 @@
 package cl.udelvd.utilidades;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import cl.udelvd.R;
 import cl.udelvd.vistas.activities.LoginActivity;
 
 public class Utils {
@@ -121,5 +128,66 @@ public class Utils {
         long diff = now.getTime() - fecha_nac.getTime();
 
         return (int) (diff / (24 * 60 * 60 * 1000)) / 365;
+    }
+
+
+    /**
+     * Funcion encargada de hacer la configuracion de titulo, color e icono de toolbar
+     *
+     * @param activity         Actividad en uso
+     * @param context          Contexto de la actividad
+     * @param id_drawable_home Id del icono de home up
+     * @param titulo           Titulo del toolbar
+     */
+    public static void configurarToolbar(AppCompatActivity activity, Context context, int id_drawable_home, String titulo) {
+
+        Toolbar toolbar = activity.findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(context.getResources().getColor(R.color.colorOnPrimary));
+        activity.setSupportActionBar(toolbar);
+
+        //Setear toolbar
+        ActionBar actionBar = activity.getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(id_drawable_home);
+        actionBar.setTitle(titulo);
+    }
+
+    /**
+     * Funcion que convierte una fecha date en un string
+     *
+     * @param context Contexto utilizado para el uso de strings
+     * @param dFecha  Fecha que será convertida
+     * @return String de la fecha
+     */
+    public static String dateToString(Context context, Date dFecha) {
+        SimpleDateFormat mFormat =
+                new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.US);
+
+        return mFormat.format(dFecha);
+    }
+
+
+    /**
+     * Funcion encargada de transformar un String a un Date
+     *
+     * @param sFecha Fecha en string que será convertida en date
+     * @return dFecha Fecha en Date entregada por le funcion
+     */
+    public static Date stringToDate(Context context, String sFecha) {
+
+        SimpleDateFormat mFormat =
+                new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA),
+                        Locale.US);
+        Date mDFecha = null;
+
+        try {
+            mDFecha = mFormat.parse(sFecha);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mDFecha;
     }
 }

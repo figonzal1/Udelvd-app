@@ -8,9 +8,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -46,24 +44,17 @@ public class RegistroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_REGISTRO));
 
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Registro");
+        iniciarViewModel();
 
-        viewModelObserver();
-
-        setearViews();
-
+        instanciarRecursosInterfaz();
     }
 
     /**
      * Funcion encargada de configurar las views de la ista Registro
      */
-    private void setearViews() {
+    private void instanciarRecursosInterfaz() {
 
         //Instancias formulario
         //Inputs Layouts
@@ -101,14 +92,10 @@ public class RegistroActivity extends AppCompatActivity {
 
                     investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
-                    investigador.setNombreRol("Investigador");
+                    investigador.setNombreRol(getString(R.string.KEY_INVES_OBJECT).toUpperCase());
                     investigador.setActivado(false);
 
-                    InvestigadorRepositorio repositorio =
-                            InvestigadorRepositorio.getInstance(getApplication());
-
-                    //Hacer registro del investigador
-                    repositorio.registrarInvestigador(investigador);
+                    InvestigadorRepositorio.getInstance(getApplication()).registrarInvestigador(investigador);
                 }
 
             }
@@ -118,7 +105,7 @@ public class RegistroActivity extends AppCompatActivity {
     /**
      * Funcion encargada del manejo de ViewModels
      */
-    private void viewModelObserver() {
+    private void iniciarViewModel() {
 
         final InvestigadorViewModel investigadorViewModel =
                 ViewModelProviders.of(this).get(InvestigadorViewModel.class);
@@ -128,13 +115,13 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                Log.d("OBSERVER", "MSG_RESPONSE: " + s);
+                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VM_MSG_RESPONSE), s));
 
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
                 //Si el registro fue correcto cerrar la actividad
-                if (s.equals("¡Estas registrado!")) {
+                if (s.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
                     finish();
                 }
             }
@@ -146,7 +133,7 @@ public class RegistroActivity extends AppCompatActivity {
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.d("OBSERVER", "MSG_ERROR: " + s);
+                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VM_MSG_RESPONSE_ERROR), s));
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });
@@ -160,12 +147,12 @@ public class RegistroActivity extends AppCompatActivity {
      */
     private boolean validarCampos() {
 
-        boolean status = false;
         int contador_errores = 0;
+
         //Comprobar nombre vacio
         if (TextUtils.isEmpty(etNombre.getText())) {
             ilNombre.setErrorEnabled(true);
-            ilNombre.setError("Campo requerido");
+            ilNombre.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
 
         } else {
@@ -176,7 +163,7 @@ public class RegistroActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(etApellido.getText())) {
 
             ilApellido.setErrorEnabled(true);
-            ilApellido.setError("Campo requerido");
+            ilApellido.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilApellido.setErrorEnabled(false);
@@ -186,14 +173,14 @@ public class RegistroActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(etEmail.getText())) {
 
             ilEmail.setErrorEnabled(true);
-            ilEmail.setError("Campo requerido");
+            ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
 
             //Comprobar mail valido
             if (Utils.isInValidEmail(etEmail.getText())) {
                 ilEmail.setErrorEnabled(true);
-                ilEmail.setError("Email inválido");
+                ilEmail.setError(getString(R.string.VALIDACION_EMAIL));
                 contador_errores++;
             } else {
                 ilEmail.setErrorEnabled(false);
@@ -203,26 +190,26 @@ public class RegistroActivity extends AppCompatActivity {
         //Comprobar contraseña vacia
         if (TextUtils.isEmpty(etPassword.getText())) {
             ilPassword.setErrorEnabled(true);
-            ilPassword.setError("Campo requerido");
+            ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         }
         //Comprobar contraseña menor que 8
         else if (etPassword.getText().length() < 8) {
             ilPassword.setErrorEnabled(true);
-            ilPassword.setError("Contraseña debe tener 8 carácteres mínimo");
+            ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
             contador_errores++;
         }
         //Comprobar confirmacion vacia
         else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
             ilConfirmacionPassword.setErrorEnabled(true);
-            ilConfirmacionPassword.setError("Campo requerido");
+            ilConfirmacionPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
 
             //Comprobar contraseñas iguales
             if (!etPassword.getText().toString().equals(etConfirmacionPassword.getText().toString())) {
                 ilConfirmacionPassword.setErrorEnabled(true);
-                ilConfirmacionPassword.setError("Contraseñas no coinciden");
+                ilConfirmacionPassword.setError(getString(R.string.VALIDACION_PASSWORD_NO_IGUALES));
                 contador_errores++;
             } else {
                 contador_errores = 0;

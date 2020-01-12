@@ -11,15 +11,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -37,88 +35,48 @@ import cl.udelvd.viewmodel.InvestigadorViewModel;
 
 public class EditarPerfilActivity extends AppCompatActivity {
 
+    private static final int EDIT_PROFILE_CODE = 201;
+
     private TextInputLayout ilNombre;
     private TextInputLayout ilApellido;
     private TextInputLayout ilEmail;
-    private static final int EDIT_PROFILE_CODE = 201;
     private TextInputLayout ilPassword;
+    private TextInputLayout ilConfirmacionPassword;
 
     private TextInputEditText etNombre;
     private TextInputEditText etApellido;
     private TextInputEditText etEmail;
-    private TextInputLayout ilConfirmacionPassword;
     private TextInputEditText etPassword;
     private TextInputEditText etConfirmacionPassword;
 
     private ProgressBar progressBar;
-    private ImageView iv_password;
+    private ConstraintLayout cl_password_opcional;
 
-    private String password;
-    private int id;
-    private int id_rol;
+    private Investigador investigador;
+
     private SwitchCompat switchCompat;
-    private String nombreRol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-        setSupportActionBar(toolbar);
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, "Editar perfil");
 
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-        actionBar.setTitle("Editar Perfil");
+        instanciarRecursosInterfaz();
 
-        InvestigadorViewModel investigadorViewModel = ViewModelProviders.of(this).get(InvestigadorViewModel.class);
+        iniciarViewModel();
 
-        investigadorViewModel.mostrarMsgRespuestaActualizacion().observe(this, new Observer<Map<String, Object>>() {
-            @Override
-            public void onChanged(Map<String, Object> stringObjectMap) {
+        obtenerBundles();
 
-                Investigador investigador = (Investigador) stringObjectMap.get("investigador");
+        cargarDatosInvestigador();
 
-                SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
+        configurarSwitchPasswordOpcional();
+    }
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+    private void instanciarRecursosInterfaz() {
 
-                if (investigador != null) {
-                    //Guardar en sharedPref investigador con datos actualizados
-                    editor.putString("nombre_investigador", investigador.getNombre());
-                    editor.putString("apellido_investigador", investigador.getApellido());
-                    editor.putString("email_investigador", investigador.getEmail());
-
-                    //TODO: Almacenar hash de password y no texto plano
-                    if (switchCompat.isChecked()) {
-                        //Actualizar password en sharedPref
-                        editor.putString("password_investigador", Objects.requireNonNull(etPassword.getText()).toString());
-                    }
-                    editor.apply();
-
-                    String msg_update = (String) stringObjectMap.get("mensaje_update");
-
-                    progressBar.setVisibility(View.INVISIBLE);
-
-                    assert msg_update != null;
-                    Log.d("VM_INV_UPDATE", msg_update);
-
-                    if (msg_update.equals("¡Datos actualizados!")) {
-
-                        //Mostrar mensaje ne pantall
-                        Toast.makeText(getApplicationContext(), msg_update, Toast.LENGTH_LONG).show();
-
-                        //Cerrar formulario
-                        Intent intent = getIntent();
-                        setResult(EDIT_PROFILE_CODE, intent);
-                        finish();
-                    }
-                }
-            }
-        });
+        cl_password_opcional = findViewById(R.id.cl_optional_password);
 
         //Instancias formulario
         //Inputs Layouts
@@ -127,8 +85,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
         ilEmail = findViewById(R.id.il_email_investigador);
         ilPassword = findViewById(R.id.il_password_investigador);
         ilConfirmacionPassword = findViewById(R.id.il_confirm_password_investigador);
-
-        iv_password = findViewById(R.id.iv_icono_password);
 
         //Edit texts
         etNombre = findViewById(R.id.et_nombre_investigador);
@@ -139,19 +95,84 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
         //ProgressBar
         progressBar = findViewById(R.id.progress_horizontal_registro);
+    }
 
-        //Llenar editText con informacion usuario
-        Bundle bundle = getIntent().getExtras();
+    private void iniciarViewModel() {
+        InvestigadorViewModel investigadorViewModel = ViewModelProviders.of(this).get(InvestigadorViewModel.class);
 
-        assert bundle != null;
-        id = bundle.getInt("id");
-        id_rol = bundle.getInt("id_rol");
-        password = bundle.getString("password");
-        nombreRol = bundle.getString("nombre_rol");
-        etNombre.setText(bundle.getString("nombre"));
-        etApellido.setText(bundle.getString("apellido"));
-        etEmail.setText(bundle.getString("email"));
+        investigadorViewModel.mostrarMsgRespuestaActualizacion().observe(this, new Observer<Map<String, Object>>() {
+            @Override
+            public void onChanged(Map<String, Object> stringObjectMap) {
 
+                if (stringObjectMap != null) {
+
+                    Investigador investigador = (Investigador) stringObjectMap.get(getString(R.string.KEY_INVES_OBJECT));
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    if (investigador != null) {
+                        //Guardar en sharedPref investigador con datos actualizados
+                        editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE), investigador.getNombre());
+                        editor.putString(getString(R.string.SHARED_PREF_INVES_APELLIDO), investigador.getApellido());
+                        editor.putString(getString(R.string.SHARED_PREF_INVES_EMAIL), investigador.getEmail());
+
+                        //TODO: Almacenar hash de password y no texto plano
+                        if (switchCompat.isChecked()) {
+                            //Actualizar password en sharedPref
+                            editor.putString(getString(R.string.SHARED_PREF_INVES_PASSWORD), Objects.requireNonNull(etPassword.getText()).toString());
+                        }
+                        editor.apply();
+
+                        String msg_update = (String) stringObjectMap.get(getString(R.string.UPDATE_MSG_VM));
+
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        assert msg_update != null;
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE), msg_update);
+
+                        if (msg_update.equals(getString(R.string.MSG_INVEST_ACTUALIZADO))) {
+
+                            Toast.makeText(getApplicationContext(), msg_update, Toast.LENGTH_LONG).show();
+
+                            //Cerrar formulario
+                            //Setear codigo OK
+                            Intent intent = getIntent();
+                            setResult(EDIT_PROFILE_CODE, intent);
+                            finish();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void obtenerBundles() {
+
+        if (getIntent().getExtras() != null) {
+
+            Bundle bundle = new Bundle();
+
+            investigador = new Investigador();
+
+            investigador.setId(bundle.getInt(getString(R.string.KEY_INVES_ID)));
+            investigador.setIdRol(bundle.getInt(getString(R.string.KEY_INVES_ID_ROL)));
+            investigador.setPassword(bundle.getString(getString(R.string.KEY_INVES_PASSWORD)));
+            investigador.setNombreRol(bundle.getString(getString(R.string.KEY_INVES_NOMBRE_ROL)));
+            investigador.setNombre(bundle.getString(getString(R.string.KEY_INVES_NOMBRE)));
+            investigador.setApellido(bundle.getString(getString(R.string.KEY_INVES_APELLIDO)));
+            investigador.setEmail(bundle.getString(getString(R.string.KEY_INVES_EMAIL)));
+        }
+    }
+
+    private void cargarDatosInvestigador() {
+        etNombre.setText(investigador.getNombre());
+        etApellido.setText(investigador.getApellido());
+        etEmail.setText(investigador.getEmail());
+    }
+
+    private void configurarSwitchPasswordOpcional() {
         switchCompat = findViewById(R.id.switch_password_on);
 
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -159,23 +180,12 @@ public class EditarPerfilActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked) {
-                    iv_password.setVisibility(View.VISIBLE);
-                    ilPassword.setVisibility(View.VISIBLE);
-                    ilConfirmacionPassword.setVisibility(View.VISIBLE);
-
-                    etPassword.setVisibility(View.VISIBLE);
-                    etConfirmacionPassword.setVisibility(View.VISIBLE);
+                    cl_password_opcional.setVisibility(View.VISIBLE);
                 } else {
-                    iv_password.setVisibility(View.GONE);
-                    ilPassword.setVisibility(View.GONE);
-                    ilConfirmacionPassword.setVisibility(View.GONE);
-
-                    etPassword.setVisibility(View.GONE);
-                    etConfirmacionPassword.setVisibility(View.GONE);
+                    cl_password_opcional.setVisibility(View.GONE);
                 }
             }
         });
-
     }
 
     /**
@@ -185,12 +195,12 @@ public class EditarPerfilActivity extends AppCompatActivity {
      */
     private boolean validarCampos() {
 
-        boolean status = false;
         int contador_errores = 0;
+
         //Comprobar nombre vacio
         if (TextUtils.isEmpty(etNombre.getText())) {
             ilNombre.setErrorEnabled(true);
-            ilNombre.setError("Campo requerido");
+            ilNombre.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
 
         } else {
@@ -201,7 +211,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(etApellido.getText())) {
 
             ilApellido.setErrorEnabled(true);
-            ilApellido.setError("Campo requerido");
+            ilApellido.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilApellido.setErrorEnabled(false);
@@ -211,14 +221,14 @@ public class EditarPerfilActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(etEmail.getText())) {
 
             ilEmail.setErrorEnabled(true);
-            ilEmail.setError("Campo requerido");
+            ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
 
             //Comprobar mail valido
             if (Utils.isInValidEmail(etEmail.getText())) {
                 ilEmail.setErrorEnabled(true);
-                ilEmail.setError("Email inválido");
+                ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 contador_errores++;
             } else {
                 ilEmail.setErrorEnabled(false);
@@ -229,26 +239,26 @@ public class EditarPerfilActivity extends AppCompatActivity {
             //Comprobar contraseña vacia
             if (TextUtils.isEmpty(etPassword.getText())) {
                 ilPassword.setErrorEnabled(true);
-                ilPassword.setError("Campo requerido");
+                ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 contador_errores++;
             }
             //Comprobar contraseña menor que 8
             else if (etPassword.getText().length() < 8) {
                 ilPassword.setErrorEnabled(true);
-                ilPassword.setError("Contraseña debe tener 8 carácteres mínimo");
+                ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
                 contador_errores++;
             }
             //Comprobar confirmacion vacia
             else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
                 ilConfirmacionPassword.setErrorEnabled(true);
-                ilConfirmacionPassword.setError("Campo requerido");
+                ilConfirmacionPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 contador_errores++;
             } else {
 
                 //Comprobar contraseñas iguales
                 if (!etPassword.getText().toString().equals(etConfirmacionPassword.getText().toString())) {
                     ilConfirmacionPassword.setErrorEnabled(true);
-                    ilConfirmacionPassword.setError("Contraseñas no coinciden");
+                    ilConfirmacionPassword.setError(getString(R.string.VALIDACION_PASSWORD_NO_IGUALES));
                     contador_errores++;
                 } else {
                     contador_errores = 0;
@@ -277,34 +287,31 @@ public class EditarPerfilActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.menu_guardar) {
+
             if (validarCampos()) {
 
                 progressBar.setVisibility(View.VISIBLE);
 
                 //Recibir datos desde formulario y usar hiddens
-                Investigador investigador = new Investigador();
+                Investigador invesActualizado = new Investigador();
 
-                investigador.setId(id);
-                investigador.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
-                investigador.setApellido(Objects.requireNonNull(etApellido.getText())
-                        .toString());
-                investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
+                invesActualizado.setId(investigador.getId());
+                invesActualizado.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
+                invesActualizado.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
+                invesActualizado.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
 
                 if (switchCompat.isChecked()) {
-                    investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
+                    //Nueva pass
+                    invesActualizado.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
                 } else {
-                    investigador.setPassword(password);
+                    //Pass antigua
+                    invesActualizado.setPassword(investigador.getPassword());
                 }
-                investigador.setIdRol(id_rol);
-                investigador.setNombreRol(nombreRol);
 
-                InvestigadorRepositorio repositorio =
-                        InvestigadorRepositorio.getInstance(getApplication());
+                invesActualizado.setIdRol(investigador.getIdRol());
+                invesActualizado.setNombreRol(invesActualizado.getNombreRol());
 
-                Log.d("INVESTIGADOR_UPDATE", investigador.toString());
-
-                //Actualizar investigador
-                repositorio.actualizarInvestigador(investigador);
+                InvestigadorRepositorio.getInstance(getApplication()).actualizarInvestigador(invesActualizado);
             }
             return true;
         }

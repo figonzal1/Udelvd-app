@@ -97,6 +97,9 @@
     <string name="VM_MSG_RESPONSE_ERROR">MSG_ERROR:</string>
     <string name="MSG_INVEST_LOGIN">¡Bienvenido!</string>
     <string name="TAG_VM_INVES_LOGIN">VM_INVEST_LOGIN</string>
+    <string name="TAG_TAB_SELECTED">TAB_SELECTED</string>
+    <string name="TAG_TOKEN_LOGOUT">LOGOUT</string>
+    <string name="TOKEN_LOGOUT_MSG">BORRANDO TOKEN:</string>
 
 
 </resources>

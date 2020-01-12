@@ -3,6 +3,7 @@ package cl.udelvd.modelo;
 import androidx.annotation.NonNull;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Evento {
 
@@ -76,5 +77,19 @@ public class Evento {
                 ", justificacion='" + justificacion + '\'' +
                 ", hora_evento='" + hora_evento + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Evento)) return false;
+        Evento evento = (Evento) o;
+        return getJustificacion().equals(evento.getJustificacion()) &&
+                getHora_evento().equals(evento.getHora_evento());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getJustificacion(), getHora_evento());
     }
 }

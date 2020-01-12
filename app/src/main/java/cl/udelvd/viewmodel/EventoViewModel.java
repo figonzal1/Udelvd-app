@@ -43,4 +43,15 @@ public class EventoViewModel extends AndroidViewModel {
         repositorio = EventoRepositorio.getInstancia(getApplication());
         return repositorio.getResponseErrorMsg();
     }
+
+    /**
+     * Funcion que envia el mensaje de registro exitoso desde el respositorio a la interfaz
+     * (Con observer)
+     *
+     * @return SingleLive con mensaje de error
+     */
+    public SingleLiveEvent<String> mostrarRespuestaRegistro() {
+        repositorio = EventoRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgRegistro();
+    }
 }

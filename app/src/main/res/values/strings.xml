@@ -5,11 +5,14 @@
     <string name="URL_GET_INVESTIGADORES">http://192.168.0.14/investigadores</string>
     <string name="URL_LOGIN_INVESTIGADORES">http://192.168.0.14/investigadores/login</string>
     <string name="URL_PUT_INVESTIGADORES">http://192.168.0.14/investigadores/</string>
-
+    <string name="URL_POST_ENTREVISTADOS">http://192.168.0.14/entrevistados</string>
+    <string name="URL_GET_ENTREVISTADOS">http://192.168.0.14/entrevistados</string>
+    <string name="URL_PUT_ENTREVISTADOS">http://192.168.0.14/entrevistados/</string>
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
     <string name="TITULO_TOOLBAR_REGISTRO">Registro</string>
+    <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">Crear entrevistado</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY">udelvd</string>
@@ -41,6 +44,27 @@
     <string name="KEY_ROL_OBJECT">rol</string>
     <string name="KEY_ROL_NOMBRE">nombre</string>
 
+    <string name="KEY_ENTREVISTADO_ID_ESTADO_CIVIL">id_estado_civil</string>
+    <string name="KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL">id_nivel_educacional</string>
+    <string name="KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA">id_tipo_convivencia</string>
+    <string name="KEY_ENTREVISTADO_NOMBRE_PROFESION">nombre_profesion</string>
+    <string name="KEY_ENTREVISTADO_ID">id</string>
+    <string name="KEY_ENTREVISTADO_NOMBRE">nombre</string>
+    <string name="KEY_ENTREVISTADO_APELLIDO">apellido</string>
+    <string name="KEY_ENTREVISTADO_SEXO">sexo</string>
+    <string name="KEY_ENTREVISTADO_JUBILADO_LEGAL">jubilado_legal</string>
+    <string name="KEY_ENTREVISTADO_CAIDAS">caidas</string>
+    <string name="KEY_ENTREVISTADO_FECHA_NAC">fecha_nacimiento</string>
+    <string name="KEY_ENTREVISTADO_N_CONVI_3_MESES">n_convivientes_3_meses</string>
+    <string name="KEY_ENTREVISTADO_ID_INVESTIGADOR">id_investigador</string>
+    <string name="KEY_ENTREVISTADO_NOMBRE_CIUDAD">nombre_ciudad</string>
+    <string name="KEY_ENTREVISTADO_N_CAIDAS">n_caidas</string>
+    <string name="KEY_ENTREVISTADO_ID_CIUDAD">id_ciudad</string>
+    <string name="KEY_ENTREVISTADO_ID_PROFESION">id_profesion</string>
+    <string name="KEY_ENTREVISTADO_N_ENTREVISTAS">n_entrevistas</string>
+
+    <string name="KEY_ENTREVISTA_OBJECT">entrevistas</string>
+
     <string name="KEY_CREATE_TIME">create_time</string>
     <string name="KEY_UPDATE_TIME">update_time</string>
 
@@ -59,11 +83,11 @@
     <string name="JSON_AUTH">Authorization</string>
     <string name="JSON_AUTH_MSG">Bearer</string>
 
-    <!-- TAGS VOLLEY -->
+    <!-- VOLLEY -->
     <string name="TAG_VOLLEY_INVES_REGISTRO">VOLLEY_ERR_REGIS_INVEST</string>
     <string name="TIMEOUT_ERROR">TIMEOUT_ERROR</string>
     <string name="NETWORK_ERROR">NETWORK_ERROR</string>
-    <string name="TIMEOUR_ERROR_MSG_VM">Servidor no responde, intente más tarde</string>
+    <string name="TIMEOUT_ERROR_MSG_VM">Servidor no responde, intente más tarde</string>
     <string name="NETWORK_ERROR_MSG_VM">No tienes conexión a Internet</string>
     <string name="AUTHENTICATION_ERROR">AUTHENTICATION_ERROR:</string>
     <string name="AUTHENTICATION_ERROR_MSG_VM">Acceso no autorizado</string>
@@ -77,6 +101,10 @@
     <string name="SERVER_ERROR_AUTH_MSG_VM">Login fallido, revisa tus datos</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_2">Email does not exist</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
+    <string name="TAG_VOLLEY_ERR_INV_UPDATE">VOLLEY_ERR_INV_UPDATE</string>
+    <string name="TAG_VOLLEY_ERR_ENTREVISTADO">VOLLEY_ERR_ENTREVISTADO</string>
+
+    <!-- Miscelaneos -->
     <string name="UPDATE_MSG_VM">mensaje_update</string>
     <string name="UPDATE_MSG_VM_SAVE">¡Datos actualizados!</string>
     <string name="TAG_EDIT_PROFILE_RESULT">FINISH_EDIT_PROFILE_ACT</string>
@@ -91,15 +119,35 @@
     <string name="PERFIL_ACTIVADO">Activado</string>
     <string name="PERFIL_NO_ACTIVADO">No activada</string>
     <string name="TAG_TOKEN_LOGIN">TOKEN_LOGIN</string>
-    <string name="TAG_VOLLEY_ERR_INV_UPDATE">VOLLEY_ERR_INV_UPDATE</string>
     <string name="TAG_VM_INVES_REGISTRO">VM_INVES_REGISTRO</string>
-    <string name="VM_MSG_RESPONSE">MSG_RESPONSE:</string>
-    <string name="VM_MSG_RESPONSE_ERROR">MSG_ERROR:</string>
+    <string name="VIEW_MODEL_MSG_RESPONSE">MSG_RESPONSE:</string>
+    <string name="VIEW_MODEL_MSG_RESPONSE_ERROR">MSG_ERROR:</string>
     <string name="MSG_INVEST_LOGIN">¡Bienvenido!</string>
     <string name="TAG_VM_INVES_LOGIN">VM_INVEST_LOGIN</string>
     <string name="TAG_TAB_SELECTED">TAB_SELECTED</string>
     <string name="TAG_TOKEN_LOGOUT">LOGOUT</string>
     <string name="TOKEN_LOGOUT_MSG">BORRANDO TOKEN:</string>
+    <string name="SNACKBAR_REINTENTAR">Reintentar</string>
+    <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTADO">VM_LISTA_ENTREVISTADO</string>
+    <string name="VIEW_MODEL_LISTA_ENTREVISTADO_MSG">Listado cargado</string>
+    <string name="TAG_VIEW_MODEL_ESTADO_CIVIL">VM_ESTADO_CIVIL</string>
+    <string name="VIEW_MODEL_LISTADO_CARGADO">Listado cargado</string>
+    <string name="TAG_VIEW_MODEL_CIUDAD">VM_CIUDAD</string>
+    <string name="TAG_VIEW_MODEL_NIVEL_EDUCACION">VM_NIVEL_EDUC</string>
+    <string name="TAG_VIEW_MODEL_TIPO_CONVIVENCIA">VM_TIPO_CONVIVENCIA</string>
+    <string name="TAG_VIEW_MODEL_PROFESIONES">VM_PROFESIONES</string>
+    <string name="TAG_VIEW_MODEL_NUEVO_ENTREVISTADO">VM_NEW_ENTREVISTADO</string>
+    <string name="MSG_REGISTRO_ENTREVISTADO">¡Entrevistado registrado!</string>
+    <string name="SEXO_MASCULINO">Masculino</string>
+    <string name="SEXO_FEMENINO">Femenino</string>
+    <string name="SEXO_OTRO">Otro</string>
+    <string name="REGEX_FECHA">-</string>
+    <string name="SI">Si</string>
+    <string name="NO">No</string>
+    <string name="ROL_INVESTIGADOR">Investigador</string>
+    <string name="ROL_ADMINITRADOR">Administrador</string>
+    <string name="NULL">null</string>
+    <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
 
 
 </resources>

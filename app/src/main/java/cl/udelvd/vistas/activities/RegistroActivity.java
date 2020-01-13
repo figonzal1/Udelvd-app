@@ -92,7 +92,7 @@ public class RegistroActivity extends AppCompatActivity {
 
                     investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
-                    investigador.setNombreRol(getString(R.string.KEY_INVES_OBJECT).toUpperCase());
+                    investigador.setNombreRol(getString(R.string.ROL_INVESTIGADOR));
                     investigador.setActivado(false);
 
                     InvestigadorRepositorio.getInstance(getApplication()).registrarInvestigador(investigador);
@@ -115,7 +115,7 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VM_MSG_RESPONSE), s));
+                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
@@ -133,7 +133,7 @@ public class RegistroActivity extends AppCompatActivity {
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VM_MSG_RESPONSE_ERROR), s));
+                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });

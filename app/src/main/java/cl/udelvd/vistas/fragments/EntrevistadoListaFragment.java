@@ -2,6 +2,7 @@ package cl.udelvd.vistas.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,11 +55,7 @@ public class EntrevistadoListaFragment extends Fragment {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_lista_entrevistados, container, false);
 
-        rv = v.findViewById(R.id.rv_lista_usuarios);
-
-        LinearLayoutManager ly = new LinearLayoutManager(getContext());
-        rv.setLayoutManager(ly);
-        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getContext()));
+        configurarRecyclerView(v);
 
         iniciarViewModelObservers(v);
 
@@ -67,6 +64,14 @@ public class EntrevistadoListaFragment extends Fragment {
         iniciarSwipeRefresh(v);
 
         return v;
+    }
+
+    private void configurarRecyclerView(View v) {
+        rv = v.findViewById(R.id.rv_lista_usuarios);
+
+        LinearLayoutManager ly = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(ly);
+        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getContext()));
     }
 
     /**
@@ -116,7 +121,7 @@ public class EntrevistadoListaFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //Forzar refresh
-                entrevistadoViewModel.refreshListaUsuarios();
+                entrevistadoViewModel.refreshListaEntrevistados();
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
@@ -131,7 +136,7 @@ public class EntrevistadoListaFragment extends Fragment {
         entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
 
         //Manejador de listado de usuarios
-        entrevistadoViewModel.mostrarListaUsuarios().observe(this, new Observer<List<Entrevistado>>() {
+        entrevistadoViewModel.mostrarListaEntrevistados().observe(this, new Observer<List<Entrevistado>>() {
             @Override
             public void onChanged(List<Entrevistado> entrevistadoList) {
 
@@ -140,6 +145,8 @@ public class EntrevistadoListaFragment extends Fragment {
                 rv.setAdapter(entrevistadoAdapter);
 
                 swipeRefreshLayout.setRefreshing(false);
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
             }
         });
 
@@ -148,10 +155,10 @@ public class EntrevistadoListaFragment extends Fragment {
             @Override
             public void onChanged(String s) {
 
-                if (s.equals("Servidor no responde, intente más tarde")) {
-                    showSnackbar(v, s, "Reintentar");
-                } else if (s.equals("No tienes conexión a Internet")) {
-                    showSnackbar(v, s, "Reintentar");
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -174,7 +181,7 @@ public class EntrevistadoListaFragment extends Fragment {
                     public void onClick(View v) {
 
                         //Refresh listado de usuarios
-                        entrevistadoViewModel.refreshListaUsuarios();
+                        entrevistadoViewModel.refreshListaEntrevistados();
 
                         swipeRefreshLayout.setRefreshing(true);
                     }

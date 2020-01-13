@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
 
-                Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VM_MSG_RESPONSE), s));
+                Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }

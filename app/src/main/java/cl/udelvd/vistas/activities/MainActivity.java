@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_nombre_apellido_investigador;
     private TextView tv_email_investigador;
     private TextView tv_nombre_rol_investigador;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void instanciarRecursosInterfaz() {
-        //Obtener header de navigation drawer
+        viewPager = findViewById(R.id.view_pager_main);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        tabLayout = findViewById(R.id.tabs);
+
         View header = navigationView.getHeaderView(0);
         tv_nombre_apellido_investigador = header.findViewById(R.id.tv_header_nombre_apellido_usuario);
         tv_email_investigador = header.findViewById(R.id.tv_header_email_usuario);
@@ -82,11 +87,11 @@ public class MainActivity extends AppCompatActivity {
     private void setearViewPagerTabsDrawer() {
 
         //ViewPager
-        ViewPager viewPager = findViewById(R.id.view_pager_main);
+
         viewPager.setAdapter(new FragmentPageAdapter(getSupportFragmentManager()));
 
         //TabLayout
-        tabLayout = findViewById(R.id.tabs);
+
         tabLayout.setupWithViewPager(viewPager);
 
         //Setear iconos
@@ -100,11 +105,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
-        //Drawer Navigation
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.navigation_view);
-
         //Set default tab
         navigationView.setCheckedItem(R.id.menu_entrevistados);
         Objects.requireNonNull(tabLayout.getTabAt(0)).select();
@@ -112,14 +112,12 @@ public class MainActivity extends AppCompatActivity {
         cargarDatosInvestigador();
 
         //Si el usuario no es admin, ocultar panel
-        if (!investigador.getNombreRol().equals("Administrador")) {
+        if (!investigador.getNombreRol().equals(getString(R.string.ROL_ADMINITRADOR))) {
             navigationView.getMenu().findItem(R.id.group_admin).setVisible(false);
         }
-
         navigationListener();
 
         tabsListener();
-
     }
 
     private void cargarDatosInvestigador() {

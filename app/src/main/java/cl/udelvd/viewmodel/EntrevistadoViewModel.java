@@ -28,7 +28,7 @@ public class EntrevistadoViewModel extends AndroidViewModel {
      *
      * @return MutableLiveData con listado de usuarios
      */
-    public MutableLiveData<List<Entrevistado>> mostrarListaUsuarios() {
+    public MutableLiveData<List<Entrevistado>> mostrarListaEntrevistados() {
 
         if (entrevistadoMutableLiveData == null) {
             entrevistadoMutableLiveData = new MutableLiveData<>();
@@ -39,10 +39,10 @@ public class EntrevistadoViewModel extends AndroidViewModel {
     }
 
     /**
-     * Funcion que refresca el listado de ususuarios (Forzar getUsuario)
+     * Funcion que refresca el listado de entrevistados (Forzar refresh)
      * (Funcion directa)
      */
-    public void refreshListaUsuarios() {
+    public void refreshListaEntrevistados() {
         repositorio = EntrevistadoRepositorio.getInstance(getApplication());
         repositorio.obtenerEntrevistados();
     }

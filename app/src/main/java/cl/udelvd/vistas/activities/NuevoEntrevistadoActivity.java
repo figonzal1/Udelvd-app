@@ -18,10 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -29,8 +27,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +49,7 @@ import cl.udelvd.repositorios.EntrevistadoRepositorio;
 import cl.udelvd.repositorios.EstadoCivilRepositorio;
 import cl.udelvd.repositorios.NivelEducacionalRepositorio;
 import cl.udelvd.repositorios.TipoConvivenciaRepositorio;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.CiudadViewModel;
 import cl.udelvd.viewmodel.EntrevistadoViewModel;
 import cl.udelvd.viewmodel.EstadoCivilViewModel;
@@ -121,15 +118,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_entrevistado);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-        setSupportActionBar(toolbar);
-
-        final ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-        actionBar.setTitle("Crear entrevistado");
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_NUEVO_ENTREVISTADO));
 
         instanciarRecursosInterfaz();
 
@@ -145,264 +134,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
     }
 
-    private boolean validarCampos() {
-
-        int contador_errores = 0;
-
-        //Comprobar nombre vacio
-        if (Objects.requireNonNull(etNombre.getText()).toString().isEmpty()) {
-            ilNombre.setErrorEnabled(true);
-            ilNombre.setError("Campo requerido");
-            contador_errores++;
-        } else {
-            ilNombre.setErrorEnabled(false);
-        }
-
-        //Comprobar apellido
-        if (Objects.requireNonNull(etApellido.getText()).toString().isEmpty()) {
-            ilApellido.setErrorEnabled(true);
-            ilApellido.setError("Campo requerido");
-            contador_errores++;
-        } else {
-            ilApellido.setErrorEnabled(false);
-        }
-
-        //Comprobar Sexo
-        if (acSexo.getText().toString().isEmpty()) {
-            ilSexo.setErrorEnabled(true);
-            ilSexo.setError("Campo requerido");
-            contador_errores++;
-        } else {
-            ilSexo.setErrorEnabled(false);
-        }
-
-        //Comprobar fecha nacimiento
-        if (Objects.requireNonNull(etFechaNacimiento.getText()).toString().isEmpty()) {
-            ilFechaNacimiento.setErrorEnabled(true);
-            ilFechaNacimiento.setError("Campo requerido");
-            contador_errores++;
-        } else {
-            ilFechaNacimiento.setErrorEnabled(false);
-        }
-
-        //Comprobar ciudad
-        if (acCiudad.getText().toString().isEmpty()) {
-            ilCiudad.setErrorEnabled(true);
-            ilCiudad.setError("Campo requerido");
-            contador_errores++;
-        } else {
-            ilCiudad.setErrorEnabled(false);
-        }
-
-        //Comprobar estado civil
-        if (acEstadoCivil.getText().toString().isEmpty()) {
-            ilEstadoCivil.setErrorEnabled(true);
-            ilEstadoCivil.setError("Campo requerido");
-            contador_errores++;
-        } else {
-            ilEstadoCivil.setErrorEnabled(false);
-        }
-
-        //Comprobar n_convivientes_3_meses
-        if (Objects.requireNonNull(etNConvivientes.getText()).toString().isEmpty()) {
-            ilNConvivientes.setErrorEnabled(true);
-            ilNConvivientes.setError("Campo requerido");
-            contador_errores++;
-        } else {
-            ilNConvivientes.setErrorEnabled(false);
-        }
-
-
-        if (switchCaidas.isChecked()) {
-
-            if (TextUtils.isEmpty(etNCaidas.getText())) {
-                ilNCaidas.setErrorEnabled(true);
-                ilNCaidas.setError("Campo requerido");
-                contador_errores++;
-            } else {
-                ilNCaidas.setErrorEnabled(false);
-            }
-        }
-
-        return contador_errores == 0;
-    }
-
     /**
-     * Funcion encargada de configurar la logica del switch de jubilado legal
-     */
-    private void setJubilado() {
-
-        switchJubiladoLegal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    tv_jubilado_value.setText("Si");
-                } else {
-                    tv_jubilado_value.setText("No");
-                }
-            }
-        });
-    }
-
-    /**
-     * Funcion encargada de configurar la logica del switch de caidas
-     */
-    private void setCaidas() {
-
-        switchCaidas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    ilNCaidas.setVisibility(View.VISIBLE);
-                    etNCaidas.setVisibility(View.VISIBLE);
-
-                    tv_caidas_value.setText("Si");
-
-                } else {
-                    ilNCaidas.setVisibility(View.GONE);
-                    etNCaidas.setVisibility(View.GONE);
-
-                    tv_caidas_value.setText("No");
-                }
-            }
-        });
-
-    }
-
-    /**
-     * Funcion encargada de configurar el Spinner de sexo
-     */
-    private void setSpinnerSexo() {
-        //Setear autocompletado Sexo
-        String[] opcionesSexo = new String[]{"Masculino", "Femenino", "Otro"};
-        ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, opcionesSexo);
-        acSexo.setAdapter(adapterSexo);
-    }
-
-    /**
-     * Funcion encargada de inicializar observadores
-     */
-    private void iniciarViewModelObservers() {
-
-        //Crear instancias
-        ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
-        estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
-        nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
-        tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
-        profesionViewModel = ViewModelProviders.of(this).get(ProfesionViewModel.class);
-        entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
-
-        //Observador de estados civiles
-        estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
-            @Override
-            public void onChanged(List<EstadoCivil> estadoCivils) {
-
-                if (estadoCivils != null) {
-                    estadoCivilList = estadoCivils;
-                    estadoCivilAdapter = new EstadoCivilAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, estadoCivilList);
-                    acEstadoCivil.setAdapter(estadoCivilAdapter);
-
-                    Log.d("VM_ESTADO_CIVIL", "Listado cargado");
-                }
-
-                estadoCivilAdapter.notifyDataSetChanged();
-            }
-        });
-
-        //Observador de ciudades
-        ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
-            @Override
-            public void onChanged(List<Ciudad> ciudads) {
-
-                if (ciudads != null) {
-                    ciudadList = ciudads;
-                    ciudadAdapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
-                    acCiudad.setAdapter(ciudadAdapter);
-
-                    Log.d("VM_CIUDAD", "Listado cargado");
-                }
-                ciudadAdapter.notifyDataSetChanged();
-            }
-        });
-
-        //Observador de niveles educacionaes
-        nivelEducacionalViewModel.cargarNivelesEduc().observe(this, new Observer<List<NivelEducacional>>() {
-            @Override
-            public void onChanged(List<NivelEducacional> nivelEducacionals) {
-                if (nivelEducacionals != null) {
-                    nivelEducacionalList = nivelEducacionals;
-                    nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
-                    acNivelEducacional.setAdapter(nivelEducacionalAdapter);
-
-                    Log.d("VM_NIVEL_EDUC", "Listado cargado");
-                }
-                nivelEducacionalAdapter.notifyDataSetChanged();
-            }
-        });
-
-        //Observador de tipos de convivencias
-        tipoConvivenciaViewModel.cargarTiposConvivencias().observe(this, new Observer<List<TipoConvivencia>>() {
-            @Override
-            public void onChanged(List<TipoConvivencia> list) {
-                if (list != null) {
-                    tipoConvivenciaList = list;
-                    tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
-                    acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
-
-                    Log.d("VM_TIPO_CONVIVENCIA", "Listado cargado");
-                }
-                tipoConvivenciaAdapter.notifyDataSetChanged();
-            }
-        });
-
-        //Observador de profesiones
-        profesionViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
-            @Override
-            public void onChanged(List<Profesion> profesions) {
-                if (profesions != null) {
-                    profesionList = profesions;
-                    profesionAdapter = new ProfesionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, profesionList);
-                    acProfesion.setAdapter(profesionAdapter);
-
-                    Log.d("VM_PROFESIONES", "Listado cargado");
-                }
-                profesionAdapter.notifyDataSetChanged();
-            }
-        });
-
-        //Observador para mensajes creacion entrevistado
-        entrevistadoViewModel.mostrarRespuestaRegistro().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-
-                Log.d("VM_NEW_ENTREVISTADO", "MSG_RESPONSE: " + s);
-
-                //Si el registro fue correcto cerrar la actividad
-                if (s.equals("¡Entrevistado registrado!")) {
-                    finish();
-                }
-            }
-        });
-
-        //Observador para mensajes de error de registro entrevistado
-        entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
-
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-
-                Log.d("VM_NEW_ENTREVISTADO", "MSG_ERROR: " + s);
-            }
-        });
-    }
-
-    /**
-     * Instanciacion de Edittexts
+     * Instanciacion de atributos
      */
     private void instanciarRecursosInterfaz() {
         ilNombre = findViewById(R.id.il_nombre_entrevistado);
@@ -439,79 +172,325 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Funcion encargada de inicializar observadores
+     */
+    private void iniciarViewModelObservers() {
+
+        //Crear instancias
+        ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
+        estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
+        nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
+        tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
+        profesionViewModel = ViewModelProviders.of(this).get(ProfesionViewModel.class);
+        entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
+
+        //Observador de estados civiles
+        estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
+            @Override
+            public void onChanged(List<EstadoCivil> estadoCivils) {
+
+                if (estadoCivils != null) {
+                    estadoCivilList = estadoCivils;
+                    estadoCivilAdapter = new EstadoCivilAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, estadoCivilList);
+                    acEstadoCivil.setAdapter(estadoCivilAdapter);
+
+                    estadoCivilAdapter.notifyDataSetChanged();
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+            }
+        });
+
+        //Observador de ciudades
+        ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
+            @Override
+            public void onChanged(List<Ciudad> ciudads) {
+
+                if (ciudads != null) {
+                    ciudadList = ciudads;
+                    ciudadAdapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
+                    acCiudad.setAdapter(ciudadAdapter);
+
+                    ciudadAdapter.notifyDataSetChanged();
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+
+            }
+        });
+
+        //Observador de niveles educacionaes
+        nivelEducacionalViewModel.cargarNivelesEduc().observe(this, new Observer<List<NivelEducacional>>() {
+            @Override
+            public void onChanged(List<NivelEducacional> nivelEducacionals) {
+                if (nivelEducacionals != null) {
+                    nivelEducacionalList = nivelEducacionals;
+                    nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
+                    acNivelEducacional.setAdapter(nivelEducacionalAdapter);
+
+                    nivelEducacionalAdapter.notifyDataSetChanged();
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+
+            }
+        });
+
+        //Observador de tipos de convivencias
+        tipoConvivenciaViewModel.cargarTiposConvivencias().observe(this, new Observer<List<TipoConvivencia>>() {
+            @Override
+            public void onChanged(List<TipoConvivencia> list) {
+                if (list != null) {
+                    tipoConvivenciaList = list;
+                    tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
+                    acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
+
+                    tipoConvivenciaAdapter.notifyDataSetChanged();
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+
+            }
+        });
+
+        //Observador de profesiones
+        profesionViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
+            @Override
+            public void onChanged(List<Profesion> profesions) {
+                if (profesions != null) {
+                    profesionList = profesions;
+                    profesionAdapter = new ProfesionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, profesionList);
+                    acProfesion.setAdapter(profesionAdapter);
+
+                    profesionAdapter.notifyDataSetChanged();
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+            }
+        });
+
+        //Observador para mensajes creacion entrevistado
+        entrevistadoViewModel.mostrarRespuestaRegistro().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                //Si el registro fue correcto cerrar la actividad
+                if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTADO))) {
+                    finish();
+                }
+            }
+        });
+
+        //Observador para mensajes de error de registro entrevistado
+        entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.GONE);
+
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+    }
+
+    /**
+     * Funcion encargada de configurar el Spinner de sexo
+     */
+    private void setSpinnerSexo() {
+        //Setear autocompletado Sexo
+        String[] opcionesSexo = new String[]{getString(R.string.SEXO_MASCULINO), getString(R.string.SEXO_FEMENINO), getString(R.string.SEXO_OTRO)};
+        ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, opcionesSexo);
+        acSexo.setAdapter(adapterSexo);
+    }
+
+    /**
+     * Funcion encargada de configurar logica del picker de fecha
+     */
     private void setPickerFechaNacimiento() {
         //OnClick
         etFechaNacimiento.setOnClickListener(new View.OnClickListener() {
-            int year;
-            int month;
-            int day;
 
             @Override
             public void onClick(View v) {
-
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
-
-                    String fecha = etFechaNacimiento.getText().toString();
-                    String[] fecha_split = fecha.split("-");
-
-                    year = Integer.parseInt(fecha_split[0]);
-                    month = Integer.parseInt(fecha_split[1]);
-                    day = Integer.parseInt(fecha_split[2]);
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NuevoEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month += 1;
-                        etFechaNacimiento.setText(year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, year, month, day);
-
-                datePickerDialog.show();
+                iniciarDatePicker();
             }
         });
 
         //EndIconOnClick
         ilFechaNacimiento.setEndIconOnClickListener(new View.OnClickListener() {
-
-            int year;
-            int month;
-            int day;
-
             @Override
             public void onClick(View v) {
 
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
-
-                    String fecha = etFechaNacimiento.getText().toString();
-                    String[] fecha_split = fecha.split("-");
-
-                    year = Integer.parseInt(fecha_split[0]);
-                    month = Integer.parseInt(fecha_split[1]);
-                    day = Integer.parseInt(fecha_split[2]);
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NuevoEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month += 1;
-                        etFechaNacimiento.setText(year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, year, month, day);
-
-                datePickerDialog.show();
+                iniciarDatePicker();
             }
         });
+    }
+
+    /**
+     * Funcion encargada de abrir el DatePicker para escoger fecha
+     */
+    private void iniciarDatePicker() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
+
+            String fecha = etFechaNacimiento.getText().toString();
+            String[] fecha_split = fecha.split(getString(R.string.REGEX_FECHA));
+
+            year = Integer.parseInt(fecha_split[0]);
+            month = Integer.parseInt(fecha_split[1]);
+            day = Integer.parseInt(fecha_split[2]);
+        }
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(NuevoEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month += 1;
+                etFechaNacimiento.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    /**
+     * Funcion encargada de configurar la logica del switch de caidas
+     */
+    private void setCaidas() {
+
+        switchCaidas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ilNCaidas.setVisibility(View.VISIBLE);
+                    etNCaidas.setVisibility(View.VISIBLE);
+
+                    tv_caidas_value.setText(R.string.SI);
+
+                } else {
+                    ilNCaidas.setVisibility(View.GONE);
+                    etNCaidas.setVisibility(View.GONE);
+
+                    tv_caidas_value.setText(R.string.NO);
+                }
+            }
+        });
+
+    }
+
+    /**
+     * Funcion encargada de configurar la logica del switch de jubilado legal
+     */
+    private void setJubilado() {
+
+        switchJubiladoLegal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    tv_jubilado_value.setText(getString(R.string.SI));
+                } else {
+                    tv_jubilado_value.setText(getString(R.string.NO));
+                }
+            }
+        });
+    }
+
+    /**
+     * Validacion de campos del formulario
+     *
+     * @return True | False segun resultado
+     */
+    private boolean validarCampos() {
+
+        int contador_errores = 0;
+
+        //Comprobar nombre vacio
+        if (Objects.requireNonNull(etNombre.getText()).toString().isEmpty()) {
+            ilNombre.setErrorEnabled(true);
+            ilNombre.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilNombre.setErrorEnabled(false);
+        }
+
+        //Comprobar apellido
+        if (Objects.requireNonNull(etApellido.getText()).toString().isEmpty()) {
+            ilApellido.setErrorEnabled(true);
+            ilApellido.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilApellido.setErrorEnabled(false);
+        }
+
+        //Comprobar Sexo
+        if (acSexo.getText().toString().isEmpty()) {
+            ilSexo.setErrorEnabled(true);
+            ilSexo.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilSexo.setErrorEnabled(false);
+        }
+
+        //Comprobar fecha nacimiento
+        if (Objects.requireNonNull(etFechaNacimiento.getText()).toString().isEmpty()) {
+            ilFechaNacimiento.setErrorEnabled(true);
+            ilFechaNacimiento.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilFechaNacimiento.setErrorEnabled(false);
+        }
+
+        //Comprobar ciudad
+        if (acCiudad.getText().toString().isEmpty()) {
+            ilCiudad.setErrorEnabled(true);
+            ilCiudad.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilCiudad.setErrorEnabled(false);
+        }
+
+        //Comprobar estado civil
+        if (acEstadoCivil.getText().toString().isEmpty()) {
+            ilEstadoCivil.setErrorEnabled(true);
+            ilEstadoCivil.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilEstadoCivil.setErrorEnabled(false);
+        }
+
+        //Comprobar n_convivientes_3_meses
+        if (Objects.requireNonNull(etNConvivientes.getText()).toString().isEmpty()) {
+            ilNConvivientes.setErrorEnabled(true);
+            ilNConvivientes.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilNConvivientes.setErrorEnabled(false);
+        }
+
+
+        if (switchCaidas.isChecked()) {
+
+            if (TextUtils.isEmpty(etNCaidas.getText())) {
+                ilNCaidas.setErrorEnabled(true);
+                ilNCaidas.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+                contador_errores++;
+            } else {
+                ilNCaidas.setErrorEnabled(false);
+            }
+        }
+
+        return contador_errores == 0;
     }
 
 
@@ -538,21 +517,15 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 //Recibir datos de formulario y crear objeto entrevistado
                 Entrevistado entrevistado = new Entrevistado();
 
-                SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
-                int idInvestigador = sharedPreferences.getInt("id_investigador", 0);
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+                int idInvestigador = sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0);
 
                 entrevistado.setIdInvestigador(idInvestigador);
                 entrevistado.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
                 entrevistado.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
                 entrevistado.setSexo(acSexo.getText().toString());
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                Date fechaNac = null;
-                try {
-                    fechaNac = simpleDateFormat.parse(Objects.requireNonNull(etFechaNacimiento.getText()).toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Date fechaNac = Utils.stringToDate(getApplicationContext(), Objects.requireNonNull(etFechaNacimiento.getText()).toString());
                 entrevistado.setFechaNacimiento(fechaNac);
 
                 Ciudad ciudad = new Ciudad();
@@ -605,15 +578,10 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                     entrevistado.setTipoConvivencia(tipoConvivencia);
                 }
 
-
-                EntrevistadoRepositorio entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
-                entrevistadoRepositorio.registrarEntrevistado(entrevistado);
-                Log.d("ENTREVISTADO_CREATE", entrevistado.toString());
+                EntrevistadoRepositorio.getInstance(getApplication()).registrarEntrevistado(entrevistado);
             }
-
             return true;
         }
-
 
         return super.onOptionsItemSelected(item);
     }

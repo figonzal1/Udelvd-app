@@ -56,7 +56,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
         holder.tv_tipo_entrevista.setText(entrevista.getTipoEntrevista().getNombre());
 
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.US);
         final String fechaEntrevista = simpleDateFormat.format(entrevista.getFecha_entrevista());
 
         holder.tv_fecha_registro.setText(fechaEntrevista);
@@ -67,17 +67,17 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
                 Intent intent = new Intent(context, EventosActivity.class);
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("id_entrevista", entrevista.getId());
-                bundle.putInt("id_entrevistado", entrevista.getId_entrevistado());
+                bundle.putInt(context.getString(R.string.KEY_ENTREVISTA_ID_LARGO), entrevista.getId());
+                bundle.putInt(context.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), entrevista.getId_entrevistado());
 
-                bundle.putString("fecha_entrevista", fechaEntrevista);
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA), fechaEntrevista);
 
-                bundle.putString("nombre_entrevistado", entrevistado.getNombre());
-                bundle.putString("apellido_entrevistado", entrevistado.getApellido());
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), entrevistado.getNombre());
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
 
-                bundle.putInt("n_entrevistas", Objects.requireNonNull(params.get("n_entrevistas")));
-                bundle.putString("n_normales", String.valueOf(params.get("n_normales")));
-                bundle.putString("n_extraodrinarias", String.valueOf(params.get("n_extraodrinarias")));
+                bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(context.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(context.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), context.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS));
 
                 intent.putExtras(bundle);
                 context.startActivity(intent);
@@ -95,32 +95,36 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
 
+                        //VER EVENTOS DE ENTREVISTA
                         if (item.getItemId() == R.id.menu_ver_eventos) {
                             Intent intent = new Intent(context, EventosActivity.class);
 
                             Bundle bundle = new Bundle();
-                            bundle.putInt("id_entrevista", entrevista.getId());
-                            bundle.putInt("id_entrevistado", entrevista.getId_entrevistado());
+                            bundle.putInt(context.getString(R.string.KEY_ENTREVISTA_ID_LARGO), entrevista.getId());
+                            bundle.putInt(context.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), entrevista.getId_entrevistado());
 
-                            bundle.putString("fecha_entrevista", fechaEntrevista);
+                            bundle.putString(context.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA), fechaEntrevista);
 
-                            bundle.putString("nombre_entrevistado", entrevistado.getNombre());
-                            bundle.putString("apellido_entrevistado", entrevistado.getApellido());
+                            bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), entrevistado.getNombre());
+                            bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
 
-                            bundle.putInt("n_entrevistas", Objects.requireNonNull(params.get("n_entrevistas")));
-                            bundle.putString("n_normales", String.valueOf(params.get("n_normales")));
-                            bundle.putString("n_extraodrinarias", String.valueOf(params.get("n_extraodrinarias")));
+                            bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(context.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
+                            bundle.putString(context.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(context.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
+                            bundle.putString(context.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), String.valueOf(params.get(context.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS))));
 
                             intent.putExtras(bundle);
                             context.startActivity(intent);
                             return true;
-                        } else if (item.getItemId() == R.id.menu_editar_entrevista) {
+                        }
+
+                        //EDITAR ENTREVISTA
+                        else if (item.getItemId() == R.id.menu_editar_entrevista) {
 
                             Intent intent = new Intent(context, EditarEntrevistaActivity.class);
 
                             Bundle bundle = new Bundle();
-                            bundle.putInt("id_entrevista", entrevista.getId());
-                            bundle.putInt("id_entrevistado", entrevista.getId_entrevistado());
+                            bundle.putInt(context.getString(R.string.KEY_ENTREVISTA_ID_LARGO), entrevista.getId());
+                            bundle.putInt(context.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), entrevista.getId_entrevistado());
                             intent.putExtras(bundle);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);

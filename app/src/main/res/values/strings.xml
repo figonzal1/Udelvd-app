@@ -58,8 +58,11 @@
     <string name="KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA">id_tipo_convivencia</string>
     <string name="KEY_ENTREVISTADO_NOMBRE_PROFESION">nombre_profesion</string>
     <string name="KEY_ENTREVISTADO_ID">id</string>
+    <string name="KEY_ENTREVISTADO_ID_LARGO">id_entrevistado</string>
     <string name="KEY_ENTREVISTADO_NOMBRE">nombre</string>
+    <string name="KEY_ENTREVISTADO_NOMBRE_LARGO">nombre_entrevistado</string>
     <string name="KEY_ENTREVISTADO_APELLIDO">apellido</string>
+    <string name="KEY_ENTREVISTADO_APELLIDO_LARGO">apellido_entrevistado</string>
     <string name="KEY_ENTREVISTADO_SEXO">sexo</string>
     <string name="KEY_ENTREVISTADO_JUBILADO_LEGAL">jubilado_legal</string>
     <string name="KEY_ENTREVISTADO_CAIDAS">caidas</string>
@@ -73,6 +76,11 @@
     <string name="KEY_ENTREVISTADO_N_ENTREVISTAS">n_entrevistas</string>
 
     <string name="KEY_ENTREVISTA_OBJECT">entrevistas</string>
+    <string name="KEY_ENTREVISTA_ID_ENTREVISTADO">id_entrevistado</string>
+    <string name="KEY_ENTREVISTA_ID_LARGO">id_entrevista</string>
+    <string name="KEY_ENTREVISTA_FECHA_ENTREVISTA">fecha_entrevista</string>
+    <string name="KEY_ENTREVISTA_N_NORMALES">n_normales</string>
+    <string name="KEY_ENTREVISTA_N_EXTRAORDINARIAS">n_extraodrinarias</string>
 
     <string name="KEY_ACCION_ID">id</string>
     <string name="KEY_ACCION_NOMBRE">nombre</string>
@@ -190,6 +198,8 @@
     <string name="NULL">null</string>
     <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
     <string name="TAG_VOLLEY_ERR_TIPO_ENTR">VOLLEY_ERR_TIPO_ENTR</string>
+    <string name="TAB_NAME_ENTREVISTADOS">Entrevistados</string>
+    <string name="TAG_NAME_ESTADISTICAS">Estadísticas</string>
 
 
 </resources>

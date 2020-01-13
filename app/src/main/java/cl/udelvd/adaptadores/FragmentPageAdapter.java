@@ -1,10 +1,13 @@
 package cl.udelvd.adaptadores;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import cl.udelvd.R;
 import cl.udelvd.StatsFragment;
 import cl.udelvd.vistas.fragments.EntrevistadoListaFragment;
 
@@ -16,10 +19,10 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
     private final String[] mTabs = new String[2];
 
 
-    public FragmentPageAdapter(@NonNull FragmentManager fm) {
+    public FragmentPageAdapter(@NonNull FragmentManager fm, Context context) {
         super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        mTabs[0] = "Usuarios";
-        mTabs[1] = "Estadísticas";
+        mTabs[0] = context.getString(R.string.TAB_NAME_ENTREVISTADOS);
+        mTabs[1] = context.getString(R.string.TAG_NAME_ESTADISTICAS);
     }
 
 

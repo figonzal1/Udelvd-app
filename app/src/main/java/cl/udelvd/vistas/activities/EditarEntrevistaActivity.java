@@ -1,6 +1,7 @@
 package cl.udelvd.vistas.activities;
 
 import android.app.DatePickerDialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -37,6 +38,7 @@ import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.TipoEntrevista;
 import cl.udelvd.repositorios.EntrevistaRepositorio;
 import cl.udelvd.repositorios.TipoEntrevistaRepositorio;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EntrevistaViewModel;
 import cl.udelvd.viewmodel.TipoEntrevistaViewModel;
 
@@ -66,26 +68,27 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_entrevista);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-        setSupportActionBar(toolbar);
-
-        //Boton cerrar
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("Editar entrevista");
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_EDITAR_ENTREVISTA));
 
         instanciarRecursosInterfaz();
-
-        //iniciarViewModelErrores();
 
         setAutoCompleteTipoEntrevista();
 
         setPickerFechaNacimiento();
 
         obtenerBundles();
+    }
+
+    private void instanciarRecursosInterfaz() {
+
+        progressBar = findViewById(R.id.progress_horizontal_editar_entrevista);
+        progressBar.setVisibility(View.VISIBLE);
+
+        ilFechaEntrevista = findViewById(R.id.il_fecha_entrevista);
+        ilTipoEntrevista = findViewById(R.id.il_tipo_entrevista);
+
+        etFechaEntrevista = findViewById(R.id.et_fecha_entrevista);
+        acTipoEntrevista = findViewById(R.id.et_tipo_entrevista);
     }
 
     private void iniciarViewModelEntrevista() {
@@ -95,8 +98,6 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
             @Override
             public void onChanged(Entrevista entrevistaInternet) {
                 entrevistaIntent = entrevistaInternet;
-
-                Log.d("VM_ENTREVISTA", entrevistaInternet.toString());
                 if (isAutoCompleteTipoEntrevistaReady) {
                     setearInfoEntrevista();
                 }
@@ -110,7 +111,9 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.GONE);
 
-                if (s.equals("¡Entrevista actualizada!")) {
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTA))) {
                     Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
                     finish();
@@ -122,6 +125,9 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
         entrevistaViewModel.mostrarRespuestaError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         });
@@ -132,8 +138,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
      */
     private void setearInfoEntrevista() {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String fecha = simpleDateFormat.format(entrevistaIntent.getFecha_entrevista());
+        String fecha = Utils.dateToString(getApplicationContext(), entrevistaIntent.getFecha_entrevista());
         etFechaEntrevista.setText(fecha);
 
         String nombre = TipoEntrevistaRepositorio.getInstancia(getApplication()).buscarTipoEntrevistaPorId(entrevistaIntent.getTipoEntrevista().getId()).getNombre();
@@ -146,8 +151,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
             Bundle bundle = getIntent().getExtras();
             entrevistaIntent = new Entrevista();
-            entrevistaIntent.setId(bundle.getInt("id_entrevista"));
-            entrevistaIntent.setId_entrevistado(bundle.getInt("id_entrevistado"));
+            entrevistaIntent.setId(bundle.getInt(getString(R.string.KEY_ENTREVISTA_ID_LARGO)));
+            entrevistaIntent.setId_entrevistado(bundle.getInt(getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO)));
         }
     }
 
@@ -169,15 +174,14 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
                     progressBar.setVisibility(View.GONE);
 
-                    Log.d("VM_TIPO_ENTREVISTA", "Listado cargado");
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                     if (isAutoCompleteTipoEntrevistaReady) {
                         iniciarViewModelEntrevista();
                     }
 
+                    tipoEntrevistasAdapter.notifyDataSetChanged();
                 }
-
-                tipoEntrevistasAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -188,92 +192,51 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
     private void setPickerFechaNacimiento() {
         //OnClick
         etFechaEntrevista.setOnClickListener(new View.OnClickListener() {
-            int year;
-            int month;
-            int day;
 
             @Override
             public void onClick(View v) {
-
-                final Calendar c = Calendar.getInstance(TimeZone.getDefault());
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                Log.d("AÑO", String.valueOf(year));
-                Log.d("MES", String.valueOf(month));
-                Log.d("DIA", String.valueOf(day));
-
-                if (Objects.requireNonNull(etFechaEntrevista.getText()).length() > 0) {
-
-                    String fecha = etFechaEntrevista.getText().toString();
-                    String[] fecha_split = fecha.split("-");
-
-                    year = Integer.parseInt(fecha_split[0]);
-                    month = Integer.parseInt(fecha_split[1]);
-                    day = Integer.parseInt(fecha_split[2]);
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditarEntrevistaActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month += 1;
-                        etFechaEntrevista.setText(year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, year, month - 1, day);
-
-                datePickerDialog.show();
+                iniciarDatePicker();
             }
         });
 
         //EndIconOnClick
         ilFechaEntrevista.setEndIconOnClickListener(new View.OnClickListener() {
 
-            int year;
-            int month;
-            int day;
-
             @Override
             public void onClick(View v) {
-
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                if (Objects.requireNonNull(etFechaEntrevista.getText()).length() > 0) {
-
-                    String fecha = etFechaEntrevista.getText().toString();
-                    String[] fecha_split = fecha.split("-");
-
-                    year = Integer.parseInt(fecha_split[0]);
-                    month = Integer.parseInt(fecha_split[1]);
-                    day = Integer.parseInt(fecha_split[2]);
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditarEntrevistaActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month += 1;
-                        etFechaEntrevista.setText(year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, year, month - 1, day);
-
-                datePickerDialog.show();
+                iniciarDatePicker();
             }
         });
     }
 
-    private void instanciarRecursosInterfaz() {
+    /**
+     * Funcion encargada de abrir el DatePicker para escoger fecha
+     */
+    private void iniciarDatePicker() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
 
-        progressBar = findViewById(R.id.progress_horizontal_editar_entrevista);
-        progressBar.setVisibility(View.VISIBLE);
+        if (Objects.requireNonNull(etFechaEntrevista.getText()).length() > 0) {
 
-        ilFechaEntrevista = findViewById(R.id.il_fecha_entrevista);
-        ilTipoEntrevista = findViewById(R.id.il_tipo_entrevista);
+            String fecha = etFechaEntrevista.getText().toString();
+            String[] fecha_split = fecha.split(getString(R.string.REGEX_FECHA));
 
-        etFechaEntrevista = findViewById(R.id.et_fecha_entrevista);
-        acTipoEntrevista = findViewById(R.id.et_tipo_entrevista);
+            year = Integer.parseInt(fecha_split[0]);
+            month = Integer.parseInt(fecha_split[1]);
+            day = Integer.parseInt(fecha_split[2]);
+        }
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(EditarEntrevistaActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month += 1;
+                etFechaEntrevista.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     @Override
@@ -300,14 +263,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                 entrevistaActualizada.setId(entrevistaIntent.getId());
                 entrevistaActualizada.setId_entrevistado(entrevistaIntent.getId_entrevistado());
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                Date fecha = null;
-                try {
-                    fecha = simpleDateFormat.parse(Objects.requireNonNull(etFechaEntrevista.getText()).toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                entrevistaActualizada.setFecha_entrevista(fecha);
+                Date fechaEntrevista = Utils.stringToDate(getApplicationContext(), Objects.requireNonNull(etFechaEntrevista.getText()).toString());
+                entrevistaActualizada.setFecha_entrevista(fechaEntrevista);
 
                 int id_tipo_entrevista = TipoEntrevistaRepositorio.getInstancia(getApplication()).buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString()).getId();
 
@@ -334,7 +291,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
         //Checkear fecha entrevistaIntent
         if (Objects.requireNonNull(etFechaEntrevista.getText()).toString().isEmpty()) {
             ilFechaEntrevista.setErrorEnabled(true);
-            ilFechaEntrevista.setError("Campo requerido");
+            ilFechaEntrevista.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilFechaEntrevista.setErrorEnabled(false);
@@ -342,7 +299,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
         if (acTipoEntrevista.getText().toString().isEmpty()) {
             ilTipoEntrevista.setErrorEnabled(true);
-            ilTipoEntrevista.setError("Campo requerido");
+            ilTipoEntrevista.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilTipoEntrevista.setErrorEnabled(false);

@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ViewPager
 
-        viewPager.setAdapter(new FragmentPageAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new FragmentPageAdapter(getSupportFragmentManager(), getApplicationContext()));
 
         //TabLayout
 

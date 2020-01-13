@@ -16,12 +16,18 @@
     <string name="URL_GET_PROFESIONES">http://192.168.0.14/profesiones</string>
     <string name="URL_GET_TIPOS_CONVIVENCIAS">http://192.168.0.14/tiposConvivencias</string>
     <string name="URL_GET_TIPOS_ENTREVISTAS">http://192.168.0.14/tiposEntrevistas</string>
+    <string name="URL_GET_ENTREVISTAS">http://192.168.0.14/entrevistados/%d/entrevistas</string>
+    <string name="URL_POST_ENTREVISTAS">http://192.168.0.14/entrevistados/%d/entrevistas</string>
+    <string name="URL_GET_ENTREVISTA_ESPECIFICA">http://192.168.0.14/entrevistados/%d/entrevistas/%d</string>
+    <string name="URL_PUT_ENTREVISTA_ESPECIFICA">http://192.168.0.14/entrevistados/%d/entrevistas/%d</string>
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
     <string name="TITULO_TOOLBAR_REGISTRO">Registro</string>
     <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">Crear entrevistado</string>
     <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Editar entrevistado</string>
+    <string name="TITULO_TOOLBAR_NUEVA_ENTREVISTA">Crear entrevista</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTA">Editar entrevista</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY">udelvd</string>
@@ -78,6 +84,7 @@
 
     <string name="KEY_ENTREVISTA_OBJECT">entrevistas</string>
     <string name="KEY_ENTREVISTA_ID_ENTREVISTADO">id_entrevistado</string>
+    <string name="KEY_ENTREVISTA_ID">id</string>
     <string name="KEY_ENTREVISTA_ID_LARGO">id_entrevista</string>
     <string name="KEY_ENTREVISTA_FECHA_ENTREVISTA">fecha_entrevista</string>
     <string name="KEY_ENTREVISTA_N_NORMALES">n_normales</string>
@@ -103,9 +110,12 @@
     <string name="KEY_PROFESION_NOMBRE">nombre</string>
 
     <string name="KEY_TIPO_CONVIVENCIA_ID">id</string>
+    <string name="KEY_TIPO_CONVIVENCIA_ID_LARGO">id_tipo_entrevista</string>
     <string name="KEY_TIPO_CONVIVENCIA_NOMBRE">nombre</string>
 
+    <string name="KEY_TIPO_ENTREVISTA_OBJECT">tipoEntrevista</string>
     <string name="KEY_TIPO_ENTREVISTA_ID">id</string>
+    <string name="KEY_TIPO_ENTREVISTA_ID_LARGO">id_tipo_entrevista</string>
     <string name="KEY_TIPO_ENTREVISTA_NOMBRE">nombre</string>
 
     <string name="KEY_CREATE_TIME">create_time</string>
@@ -202,6 +212,13 @@
     <string name="TAB_NAME_ENTREVISTADOS">Entrevistados</string>
     <string name="TAB_NAME_ESTADISTICAS">Estadísticas</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTADO">VM_EDITAR_ENTREVISTADO</string>
+    <string name="TAG_VIEW_MODEL_TIPO_ENTREVISTA">VM_TIPO_ENTREVISTA</string>
+    <string name="TAG_VIEW_MODEL_NEW_ENTREVISTA">VM_NEW_ENTREVISTA</string>
+    <string name="MSG_REGISTRO_ENTREVISTA">¡Entrevista registrada!</string>
+    <string name="TAG_VOLLEY_ERR_ENTREVISTA">VOLLEY_ERR_ENTREVISTA</string>
+    <string name="MSG_UPDATE_ENTREVISTA">¡Entrevista actualizada!</string>
+    <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTA">VM_EDITAR_ENTREVISTA</string>
+    <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTAS">VM_LISTA_ENTREVISTAS</string>
 
 
 </resources>

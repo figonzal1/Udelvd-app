@@ -45,10 +45,12 @@
     <!-- Formatos -->
     <string name="FORMATO_FECHA">yyyy-mm-dd</string>
     <string name="FORMATO_FECHA_2">yyyy/mm/dd</string>
+    <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT">investigador</string>
     <string name="KEY_INVES_ID">id</string>
+    <string name="KEY_INVES_ID_LARGO">id_investigador</string>
     <string name="KEY_INVES_NOMBRE">nombre</string>
     <string name="KEY_INVES_APELLIDO">apellido</string>
     <string name="KEY_INVES_EMAIL">email</string>
@@ -136,6 +138,16 @@
     <string name="JSON_AUTH">Authorization</string>
     <string name="JSON_AUTH_MSG">Bearer</string>
 
+    <!-- JWT -->
+    <string name="JWT_AUDIENCE_ANDROID">android</string>
+    <string name="JWT_ISSUER_UDELVD">http://udelvd.cl</string>
+    <string name="JWT_JTI_CODE">4f1g23a12aa</string>
+    <string name="JWT_UID">uid</string>
+    <string name="JWT_STATUS_NO_VACIO">NO VACIO</string>
+    <string name="JWT_STATUS_INCOHERENTE">DATOS NO CUADRAN</string>
+    <string name="JWT_STATUS_VACIO">VACIO</string>
+    <string name="JWT_STATUS_EXPIRADO">EXPIRADO:</string>
+
     <!-- VOLLEY -->
     <string name="TAG_VOLLEY_INVES_REGISTRO">VOLLEY_ERR_REGIS_INVEST</string>
     <string name="TIMEOUT_ERROR">TIMEOUT_ERROR</string>
@@ -219,6 +231,12 @@
     <string name="MSG_UPDATE_ENTREVISTA">¡Entrevista actualizada!</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTA">VM_EDITAR_ENTREVISTA</string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTAS">VM_LISTA_ENTREVISTAS</string>
+    <string name="TAG_JWT_STATUS">JWT_STATUS</string>
+    <string name="TAG_JWT_ISSUER">JWT_ISSUER</string>
+    <string name="TAG_JWT_AUDIENCE">JWT_AUDIENCE</string>
+    <string name="TAG_JWT_JTI">JWT_JTI</string>
+    <string name="TAG_JWT_CLAIM_UID">JWT_CLAIM_UID</string>
+    <string name="TAG_JWT_FECHA_EXP">JWT_DATE_EXP</string>
 
 
 </resources>

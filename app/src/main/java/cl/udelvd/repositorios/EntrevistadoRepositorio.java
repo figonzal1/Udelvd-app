@@ -296,8 +296,8 @@ public class EntrevistadoRepositorio {
                     } else {
                         entResponse.setCaidas(true);
                     }
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(application.getString(R.string.FORMATO_FECHA), Locale.US);
-                    Date fechaNac = simpleDateFormat.parse(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+
+                    Date fechaNac = Utils.stringToDate(application, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                     entResponse.setFechaNacimiento(fechaNac);
 
                     entResponse.setnConvivientes3Meses(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
@@ -312,7 +312,7 @@ public class EntrevistadoRepositorio {
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_ENTREVISTADO));
                     }
 
-                } catch (JSONException | ParseException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 

@@ -23,6 +23,7 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.activities.EditarEntrevistaActivity;
 import cl.udelvd.vistas.activities.EventosActivity;
 
@@ -56,8 +57,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
         holder.tv_tipo_entrevista.setText(entrevista.getTipoEntrevista().getNombre());
 
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.US);
-        final String fechaEntrevista = simpleDateFormat.format(entrevista.getFecha_entrevista());
+        final String fechaEntrevista = Utils.dateToString(context, entrevista.getFecha_entrevista());
 
         holder.tv_fecha_registro.setText(fechaEntrevista);
 

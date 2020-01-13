@@ -46,54 +46,54 @@ public class Utils {
      * @param sharedPreferences Usado para buscar JWT guardado
      * @return True | False segun sea el caso
      */
-    private static boolean isJWTExpired(SharedPreferences sharedPreferences) {
+    private static boolean isJWTExpired(Context context, SharedPreferences sharedPreferences) {
 
         //Obtener token shared pref
-        String json = sharedPreferences.getString("TOKEN_LOGIN", "");
-        int id_investigador = sharedPreferences.getInt("id_investigador", 0);
+        String json = sharedPreferences.getString(context.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+        int id_investigador = sharedPreferences.getInt(context.getString(R.string.KEY_INVES_ID_LARGO), 0);
 
         //Si no es vacio
         if (!json.isEmpty()) {
 
-            Log.d("JWT_STATUS", "NO VACIO");
+            Log.d(context.getString(R.string.TAG_JWT_STATUS), context.getString(R.string.JWT_STATUS_NO_VACIO));
 
             JWT jwt = new JWT(json);
 
             String issuer = jwt.getIssuer();
             String audience = Objects.requireNonNull(jwt.getAudience()).get(0);
             String jti = jwt.getId();
-            Claim claim = jwt.getClaim("uid");
+            Claim claim = jwt.getClaim(context.getString(R.string.JWT_UID));
 
             assert jti != null;
             assert issuer != null;
-            Log.d("JWT_ISSUER", issuer);
-            Log.d("JWT_AUDIENCE", audience);
-            Log.d("JWT_JTI", jti);
-            Log.d("JWT_CLAIM_UID", Objects.requireNonNull(claim.asString()));
+            Log.d(context.getString(R.string.TAG_JWT_ISSUER), issuer);
+            Log.d(context.getString(R.string.TAG_JWT_AUDIENCE), audience);
+            Log.d(context.getString(R.string.TAG_JWT_JTI), jti);
+            Log.d(context.getString(R.string.TAG_JWT_CLAIM_UID), Objects.requireNonNull(claim.asString()));
 
-            if (jti.equals("4f1g23a12aa") && audience.equals("android") &&
-                    issuer.equals("http://udelvd.cl") && Objects.equals(claim.asInt(),
+            if (jti.equals(context.getString(R.string.JWT_JTI_CODE)) && audience.equals(context.getString(R.string.JWT_AUDIENCE_ANDROID)) &&
+                    issuer.equals(context.getString(R.string.JWT_ISSUER_UDELVD)) && Objects.equals(claim.asInt(),
                     id_investigador)) {
 
                 Date date = jwt.getExpiresAt();
 
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                SimpleDateFormat format = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA_HORA), Locale.US);
                 assert date != null;
                 String date_s = format.format(date);
 
-                Log.d("JWT_DATE_EXP", date_s);
+                Log.d(context.getString(R.string.TAG_JWT_FECHA_EXP), date_s);
 
                 boolean expired = jwt.isExpired(10);
-                Log.d("JWT_STATUS", "EXPIRADO -> " + expired);
+                Log.d(context.getString(R.string.TAG_JWT_STATUS), String.format("%s %s", context.getString(R.string.JWT_STATUS_EXPIRADO), expired));
                 return expired;
 
             } else {
-                Log.d("JWT_STATUS", "DATOS NO CUADRAN");
+                Log.d(context.getString(R.string.TAG_JWT_STATUS), context.getString(R.string.JWT_STATUS_INCOHERENTE));
                 return true;
             }
 
         } else {
-            Log.d("JWT_STATUS", "VACIO");
+            Log.d(context.getString(R.string.TAG_JWT_STATUS), context.getString(R.string.JWT_STATUS_VACIO));
             return true;
         }
     }
@@ -106,10 +106,8 @@ public class Utils {
      */
     public static void checkJWT(SharedPreferences sharedPreferences, Activity activity) {
 
-        boolean expired = Utils.isJWTExpired(sharedPreferences);
+        boolean expired = Utils.isJWTExpired(activity.getApplicationContext(), sharedPreferences);
         if (expired) {
-
-            Log.d("INTENT", "DESVIANDO A LOGIN ACTIVITY");
             Intent intent = new Intent(activity.getApplication(), LoginActivity.class);
             activity.startActivity(intent);
             activity.finish();

@@ -140,7 +140,7 @@ public class InvestigadorRepositorio {
 
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.TIMEOUT_ERROR));
-                    errorMsg.postValue(application.getString(R.string.TIMEOUR_ERROR_MSG_VM));
+                    errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
@@ -181,7 +181,7 @@ public class InvestigadorRepositorio {
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG))) {
                                 errorMsg.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
                             } else {
-                                errorMsg.postValue(application.getString(R.string.TIMEOUR_ERROR_MSG_VM));
+                                errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -310,7 +310,7 @@ public class InvestigadorRepositorio {
 
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.TIMEOUT_ERROR));
-                    errorMsg.postValue(application.getString(R.string.TIMEOUR_ERROR_MSG_VM));
+                    errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
@@ -363,7 +363,7 @@ public class InvestigadorRepositorio {
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
                                 errorMsg.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
                             } else {
-                                errorMsg.postValue(application.getString(R.string.TIMEOUR_ERROR_MSG_VM));
+                                errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -475,7 +475,7 @@ public class InvestigadorRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.TIMEOUT_ERROR));
-                    errorMsg.postValue(application.getString(R.string.TIMEOUR_ERROR_MSG_VM));
+                    errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
@@ -508,6 +508,7 @@ public class InvestigadorRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.SERVER_ERROR) + errorObject);
+                        errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }

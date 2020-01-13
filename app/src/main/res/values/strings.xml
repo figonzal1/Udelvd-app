@@ -20,6 +20,8 @@
     <string name="URL_POST_ENTREVISTAS">http://192.168.0.14/entrevistados/%d/entrevistas</string>
     <string name="URL_GET_ENTREVISTA_ESPECIFICA">http://192.168.0.14/entrevistados/%d/entrevistas/%d</string>
     <string name="URL_PUT_ENTREVISTA_ESPECIFICA">http://192.168.0.14/entrevistados/%d/entrevistas/%d</string>
+    <string name="URL_GET_EVENTO">http://192.168.0.14/entrevistas/%d/eventos</string>
+    <string name="URL_POST_EVENTO">http://192.168.0.14/entrevistas/%d/eventos</string>
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
@@ -28,6 +30,7 @@
     <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Editar entrevistado</string>
     <string name="TITULO_TOOLBAR_NUEVA_ENTREVISTA">Crear entrevista</string>
     <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTA">Editar entrevista</string>
+    <string name="TITULO_TOOLBAR_CREAR_EVENTO">Crear evento</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY">udelvd</string>
@@ -46,6 +49,7 @@
     <string name="FORMATO_FECHA">yyyy-mm-dd</string>
     <string name="FORMATO_FECHA_2">yyyy/mm/dd</string>
     <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
+    <string name="FORMATO_HORA">HH:mm</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT">investigador</string>
@@ -92,12 +96,14 @@
     <string name="KEY_ENTREVISTA_N_NORMALES">n_normales</string>
     <string name="KEY_ENTREVISTA_N_EXTRAORDINARIAS">n_extraodrinarias</string>
 
+    <string name="KEY_ACCION_OBJECT">accion</string>
     <string name="KEY_ACCION_ID">id</string>
     <string name="KEY_ACCION_NOMBRE">nombre</string>
 
     <string name="KEY_CIUDAD_ID">id</string>
     <string name="KEY_CIUDAD_NOMBRE">nombre</string>
 
+    <string name="KEY_EMOTICON_OBJECT">emoticon</string>
     <string name="KEY_EMOTICON_ID">id</string>
     <string name="KEY_EMOTICON_URL">url</string>
     <string name="KEY_EMOTICON_DESCRIPCION">descripcion</string>
@@ -119,6 +125,13 @@
     <string name="KEY_TIPO_ENTREVISTA_ID">id</string>
     <string name="KEY_TIPO_ENTREVISTA_ID_LARGO">id_tipo_entrevista</string>
     <string name="KEY_TIPO_ENTREVISTA_NOMBRE">nombre</string>
+
+    <string name="KEY_EVENTO_ID">id</string>
+    <string name="KEY_EVENTO_ID_EMOTICON">id_emoticon</string>
+    <string name="KEY_EVENTO_ID_ENTREVISTA">id_entrevista</string>
+    <string name="KEY_EVENTO_ID_ACCION">id_accion</string>
+    <string name="KEY_EVENTO_JUSTIFICACION">justificacion</string>
+    <string name="KEY_EVENTO_HORA_EVENTO">hora_evento</string>
 
     <string name="KEY_CREATE_TIME">create_time</string>
     <string name="KEY_UPDATE_TIME">update_time</string>
@@ -175,6 +188,10 @@
     <string name="TAG_VOLLEY_ERR_NIVEL_EDUC">VOLLEY_ERR_NIVEL_EDUC</string>
     <string name="TAG_VOLLEY_ERR_PROFESION">VOLLEY_ERR_PROFESION</string>
     <string name="TAG_VOLLEY_ERR_TIPO_CONVIV">VOLLEY_ERR_TIPO_CONVIV</string>
+    <string name="TAG_VOLLEY_ERR_TIPO_ENTR">VOLLEY_ERR_TIPO_ENTR</string>
+    <string name="TAG_VOLLEY_ERR_ENTREVISTA">VOLLEY_ERR_ENTREVISTA</string>
+    <string name="TAG_VOLLEY_ERR_EVENTOS">VOLLEY_ERR_EVENTOS</string>
+    <string name="TAG_VOLLEY_ERR_CREAR_EVENTO">VOLLEY_ERR_CREAR_EVENTO</string>
 
     <!-- Miscelaneos -->
     <string name="UPDATE_MSG_VM">mensaje_update</string>
@@ -214,20 +231,19 @@
     <string name="SEXO_FEMENINO">Femenino</string>
     <string name="SEXO_OTRO">Otro</string>
     <string name="REGEX_FECHA">-</string>
+    <string name="REGEX_HORA">:</string>
     <string name="SI">Si</string>
     <string name="NO">No</string>
     <string name="ROL_INVESTIGADOR">Investigador</string>
     <string name="ROL_ADMINITRADOR">Administrador</string>
     <string name="NULL">null</string>
     <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
-    <string name="TAG_VOLLEY_ERR_TIPO_ENTR">VOLLEY_ERR_TIPO_ENTR</string>
     <string name="TAB_NAME_ENTREVISTADOS">Entrevistados</string>
     <string name="TAB_NAME_ESTADISTICAS">Estadísticas</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTADO">VM_EDITAR_ENTREVISTADO</string>
     <string name="TAG_VIEW_MODEL_TIPO_ENTREVISTA">VM_TIPO_ENTREVISTA</string>
     <string name="TAG_VIEW_MODEL_NEW_ENTREVISTA">VM_NEW_ENTREVISTA</string>
     <string name="MSG_REGISTRO_ENTREVISTA">¡Entrevista registrada!</string>
-    <string name="TAG_VOLLEY_ERR_ENTREVISTA">VOLLEY_ERR_ENTREVISTA</string>
     <string name="MSG_UPDATE_ENTREVISTA">¡Entrevista actualizada!</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTA">VM_EDITAR_ENTREVISTA</string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTAS">VM_LISTA_ENTREVISTAS</string>
@@ -237,6 +253,12 @@
     <string name="TAG_JWT_JTI">JWT_JTI</string>
     <string name="TAG_JWT_CLAIM_UID">JWT_CLAIM_UID</string>
     <string name="TAG_JWT_FECHA_EXP">JWT_DATE_EXP</string>
+    <string name="MSG_REGISTRO_EVENTO">¡Evento registrado!</string>
+    <string name="SPINNER_EMOTICON_SELECTED">SELECTED_ITEM</string>
+    <string name="TAG_VIEW_MODEL_ACCIONES">VM_ACCIONES</string>
+    <string name="TAG_VIEW_MODEL_EMOTICON">VM_EMOTICONES</string>
+    <string name="TAG_VIEW_MODEL_EVENTO">VM_EVENTO</string>
+    <string name="VALIDACION_EMOTICON">Elige un emoticón</string>
 
 
 </resources>

@@ -1,7 +1,6 @@
 package cl.udelvd.vistas.activities;
 
 import android.app.DatePickerDialog;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,24 +12,19 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.TimeZone;
 
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.TipoEntrevistaAdapter;
@@ -138,7 +132,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
      */
     private void setearInfoEntrevista() {
 
-        String fecha = Utils.dateToString(getApplicationContext(), entrevistaIntent.getFecha_entrevista());
+        String fecha = Utils.dateToString(getApplicationContext(), false, entrevistaIntent.getFecha_entrevista());
         etFechaEntrevista.setText(fecha);
 
         String nombre = TipoEntrevistaRepositorio.getInstancia(getApplication()).buscarTipoEntrevistaPorId(entrevistaIntent.getTipoEntrevista().getId()).getNombre();
@@ -263,7 +257,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                 entrevistaActualizada.setId(entrevistaIntent.getId());
                 entrevistaActualizada.setId_entrevistado(entrevistaIntent.getId_entrevistado());
 
-                Date fechaEntrevista = Utils.stringToDate(getApplicationContext(), Objects.requireNonNull(etFechaEntrevista.getText()).toString());
+                Date fechaEntrevista = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etFechaEntrevista.getText()).toString());
                 entrevistaActualizada.setFecha_entrevista(fechaEntrevista);
 
                 int id_tipo_entrevista = TipoEntrevistaRepositorio.getInstancia(getApplication()).buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString()).getId();

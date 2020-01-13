@@ -525,7 +525,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 entrevistado.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
                 entrevistado.setSexo(acSexo.getText().toString());
 
-                Date fechaNac = Utils.stringToDate(getApplicationContext(), Objects.requireNonNull(etFechaNacimiento.getText()).toString());
+                Date fechaNac = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etFechaNacimiento.getText()).toString());
                 entrevistado.setFechaNacimiento(fechaNac);
 
                 Ciudad ciudad = new Ciudad();

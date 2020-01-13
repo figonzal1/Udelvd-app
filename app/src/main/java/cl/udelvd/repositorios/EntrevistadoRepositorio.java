@@ -20,13 +20,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import cl.udelvd.R;
@@ -122,7 +119,7 @@ public class EntrevistadoRepositorio {
                         entrevistado.setApellido(jsonUsuarioAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
                         entrevistado.setSexo(jsonUsuarioAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                        Date fechaNac = Utils.stringToDate(application, jsonUsuarioAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                        Date fechaNac = Utils.stringToDate(application, false, jsonUsuarioAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                         entrevistado.setFechaNacimiento(fechaNac);
 
                         Ciudad ciudad = new Ciudad();
@@ -297,7 +294,7 @@ public class EntrevistadoRepositorio {
                         entResponse.setCaidas(true);
                     }
 
-                    Date fechaNac = Utils.stringToDate(application, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    Date fechaNac = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                     entResponse.setFechaNacimiento(fechaNac);
 
                     entResponse.setnConvivientes3Meses(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
@@ -373,7 +370,7 @@ public class EntrevistadoRepositorio {
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO), entrevistado.getApellido());
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_SEXO), entrevistado.getSexo());
 
-                String fechaNac = Utils.dateToString(application, entrevistado.getFechaNacimiento());
+                String fechaNac = Utils.dateToString(application, false, entrevistado.getFechaNacimiento());
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), fechaNac);
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE_CIUDAD), entrevistado.getCiudad().getNombre());
 
@@ -468,7 +465,7 @@ public class EntrevistadoRepositorio {
                     entrevistado.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
                     entrevistado.setSexo(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                    Date fechaNac = Utils.stringToDate(application, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    Date fechaNac = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                     entrevistado.setFechaNacimiento(fechaNac);
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
@@ -629,7 +626,7 @@ public class EntrevistadoRepositorio {
                     entrevistadoInternet.setSexo(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
 
-                    Date fechaNac = Utils.stringToDate(application, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    Date fechaNac = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                     entrevistadoInternet.setFechaNacimiento(fechaNac);
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
@@ -722,7 +719,7 @@ public class EntrevistadoRepositorio {
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO), entrevistado.getApellido());
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_SEXO), entrevistado.getSexo());
 
-                String fechaNac = Utils.dateToString(application, entrevistado.getFechaNacimiento());
+                String fechaNac = Utils.dateToString(application, false, entrevistado.getFechaNacimiento());
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), fechaNac);
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE_CIUDAD), entrevistado.getCiudad().getNombre());
 

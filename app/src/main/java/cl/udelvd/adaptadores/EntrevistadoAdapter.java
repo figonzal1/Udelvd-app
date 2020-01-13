@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,7 +48,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         holder.tv_nombre_apellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
 
         int annos = Utils.calculateYearsOld(entrevistado.getFechaNacimiento());
-        holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", Utils.dateToString(context, entrevistado.getFechaNacimiento()), annos));
+        holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", Utils.dateToString(context, false, entrevistado.getFechaNacimiento()), annos));
 
         if (entrevistado.getN_entrevistas() == 1) {
             holder.tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", entrevistado.getN_entrevistas()));

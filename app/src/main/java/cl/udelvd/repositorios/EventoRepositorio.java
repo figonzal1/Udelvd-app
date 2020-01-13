@@ -23,22 +23,26 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cl.udelvd.R;
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
+import cl.udelvd.utilidades.Utils;
 
 public class EventoRepositorio {
 
     private static final String TAG_GET_EVENTOS_ENTREVISTA = "ListaEventosEntrevista";
     private static final String TAG_CREAR_EVENTO = "CrearEvento";
+
     private static EventoRepositorio instancia;
     private Application application;
 
@@ -91,42 +95,44 @@ public class EventoRepositorio {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray("data");
+                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
                     for (int i = 0; i < jsonData.length(); i++) {
                         JSONObject jsonEvento = jsonData.getJSONObject(i);
 
-                        JSONObject jsonAttributes = jsonEvento.getJSONObject("attributes");
+                        JSONObject jsonAttributes = jsonEvento.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                         Evento evento = new Evento();
-                        evento.setId(jsonEvento.getInt("id"));
+                        evento.setId(jsonEvento.getInt(application.getString(R.string.KEY_EVENTO_ID)));
 
                         Entrevista e = new Entrevista();
-                        e.setId(jsonAttributes.getInt("id_entrevista"));
+                        e.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_LARGO)));
                         evento.setEntrevista(e);
 
-                        evento.setJustificacion(jsonAttributes.getString("justificacion"));
+                        evento.setJustificacion(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
-                        evento.setHora_evento(simpleDateFormat.parse(jsonAttributes.getString("hora_evento")));
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(application.getString(R.string.FORMATO_HORA), Locale.US);
+                        evento.setHora_evento(simpleDateFormat.parse(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
 
-                        JSONObject jsonRelationships = jsonEvento.getJSONObject("relationships");
+                        JSONObject jsonRelationships = jsonEvento.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS));
 
-                        JSONObject jsonAccionData = jsonRelationships.getJSONObject("accion").getJSONObject("data");
+                        JSONObject jsonAccionData = jsonRelationships.getJSONObject(application.getString(R.string.KEY_ACCION_OBJECT)).getJSONObject(application.getString(R.string.JSON_DATA));
                         Accion accion = new Accion();
-                        accion.setId(jsonAccionData.getInt("id"));
-                        accion.setNombre(jsonAccionData.getString("nombre"));
+                        accion.setId(jsonAccionData.getInt(application.getString(R.string.KEY_ACCION_ID)));
+                        accion.setNombre(jsonAccionData.getString(application.getString(R.string.KEY_ACCION_NOMBRE)));
                         evento.setAccion(accion);
 
-                        JSONObject jsonEmoticonData = jsonRelationships.getJSONObject("emoticon").getJSONObject("data");
+                        JSONObject jsonEmoticonData = jsonRelationships
+                                .getJSONObject(application.getString(R.string.KEY_EMOTICON_OBJECT))
+                                .getJSONObject(application.getString(R.string.JSON_DATA));
                         Emoticon emoticon = new Emoticon();
-                        emoticon.setId(jsonEmoticonData.getInt("id"));
-                        emoticon.setDescripcion(jsonEmoticonData.getString("descripcion"));
-                        emoticon.setUrl(jsonEmoticonData.getString("url"));
+                        emoticon.setId(jsonEmoticonData.getInt(application.getString(R.string.KEY_EMOTICON_ID)));
+                        emoticon.setDescripcion(jsonEmoticonData.getString(application.getString(R.string.KEY_EMOTICON_DESCRIPCION)));
+                        emoticon.setUrl(jsonEmoticonData.getString(application.getString(R.string.KEY_EMOTICON_URL)));
                         evento.setEmoticon(emoticon);
 
                         eventoList.add(evento);
@@ -143,11 +149,11 @@ public class EventoRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_EVENTOS", "TIMEOUT_ERROR");
-                    responseErrorMsg.postValue("Servidor no responde, intente más tarde");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), application.getString(R.string.TIMEOUT_ERROR));
+                    responseErrorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 } else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_EVENTOS", "NETWORK_ERROR");
-                    responseErrorMsg.postValue("No tienes conexión a Internet");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), application.getString(R.string.NETWORK_ERROR));
+                    responseErrorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si response
@@ -160,40 +166,40 @@ public class EventoRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_EVENTOS", "AUTHENTICATION_ERROR: " + errorObject);
-                        responseErrorMsg.postValue("Acceso no autorizado");
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                        responseErrorMsg.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_EVENTOS", "SERVER_ERROR: " + errorObject);
-                        responseErrorMsg.postValue("Servidor no responde, intente más tarde");
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseErrorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = "http://192.168.0.14/entrevistas/" + entrevista.getId() + "/eventos";
+        String url = String.format(application.getString(R.string.URL_GET_EVENTO), entrevista.getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "Bearer " + token);
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
                 return params;
             }
         };
@@ -221,32 +227,30 @@ public class EventoRepositorio {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE_CREATE", response);
+                //Log.d("RESPONSE_CREATE", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    JSONObject jsonAttribute = jsonData.getJSONObject("attributes");
+                    JSONObject jsonAttribute = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                     Evento eventoInternet = new Evento();
 
-                    eventoInternet.setJustificacion(jsonAttribute.getString("justificacion"));
+                    eventoInternet.setJustificacion(jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
-                    eventoInternet.setHora_evento(simpleDateFormat.parse(jsonAttribute.getString("hora_evento")));
+                    Date horaEvento = Utils.stringToDate(application, true, jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO)));
+                    eventoInternet.setHora_evento(horaEvento);
 
                     Log.d("MEMORIA", evento.toString());
                     Log.d("INTERNET", evento.toString());
 
-                    String create_time = jsonAttribute.getString("create_time");
+                    String create_time = jsonAttribute.getString(application.getString(R.string.KEY_CREATE_TIME));
 
                     if (evento.equals(eventoInternet) && !create_time.isEmpty()) {
-                        responseMsgRegistro.postValue("¡Evento registrado!");
-                    } else {
-                        Log.d("EQUALS", "no son iguales");
+                        responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_EVENTO));
                     }
-                } catch (JSONException | ParseException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -256,12 +260,13 @@ public class EventoRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERR_CREAR_EVENTO", "TIMEOUT_ERROR");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
+                    //TODO: AGREGAR ERROR
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERR_CREAR_EVENTO", "NETWORK_ERROR");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.NETWORK_ERROR));
                 }
 
                 //Errores cuando el servidor si responde
@@ -274,37 +279,37 @@ public class EventoRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERR_CREAR_EVENTO", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERR_CREAR_EVENTO", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
                     }
                 }
             }
         };
 
-        String url = "http://192.168.0.14/entrevistas/" + evento.getEntrevista().getId() + "/eventos";
+        String url = String.format(application.getString(R.string.URL_POST_EVENTO), evento.getEntrevista().getId());
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
 
             @Override
             protected Map<String, String> getParams() {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("justificacion", evento.getJustificacion());
-                params.put("id_accion", String.valueOf(evento.getAccion().getId()));
-                params.put("id_emoticon", String.valueOf(evento.getEmoticon().getId()));
+                params.put(application.getString(R.string.KEY_EVENTO_JUSTIFICACION), evento.getJustificacion());
+                params.put(application.getString(R.string.KEY_EVENTO_ID_ACCION), String.valueOf(evento.getAccion().getId()));
+                params.put(application.getString(R.string.KEY_EVENTO_ID_EMOTICON), String.valueOf(evento.getEmoticon().getId()));
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
-                params.put("hora_evento", simpleDateFormat.format(evento.getHora_evento()));
+                params.put(application.getString(R.string.KEY_EVENTO_HORA_EVENTO), Utils.dateToString(application, true, evento.getHora_evento()));
 
                 return params;
             }
@@ -312,18 +317,17 @@ public class EventoRepositorio {
             @Override
             public Map<String, String> getHeaders() {
 
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                params.put("Authorization", "Bearer " + token);
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
                 return params;
             }
         };
-
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_CREAR_EVENTO);
     }
 }

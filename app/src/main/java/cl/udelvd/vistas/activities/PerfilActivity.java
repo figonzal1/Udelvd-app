@@ -75,7 +75,7 @@ public class PerfilActivity extends AppCompatActivity {
         } else {
             tv_activado.setText(R.string.PERFIL_NO_ACTIVADO);
         }
-        tv_registro_cuenta.setText(Utils.dateToString(getApplicationContext(), Utils.stringToDate(getApplicationContext(), investigador.getCreateTime())));
+        tv_registro_cuenta.setText(Utils.dateToString(getApplicationContext(), false, Utils.stringToDate(getApplicationContext(), false, investigador.getCreateTime())));
     }
 
     @Override

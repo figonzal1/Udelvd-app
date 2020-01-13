@@ -65,9 +65,9 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                 Intent intent = new Intent(context, EntrevistasListaActivity.class);
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("id_entrevistado", entrevistado.getId());
-                bundle.putString("nombre_entrevistado", entrevistado.getNombre());
-                bundle.putString("apellido_entrevistado", entrevistado.getApellido());
+                bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID), entrevistado.getId());
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), entrevistado.getNombre());
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
                 intent.putExtras(bundle);
                 context.startActivity(intent, bundle);
             }
@@ -87,26 +87,31 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                         if (item.getItemId() == R.id.menu_editar_entrevistado) {
 
                             Intent intent = new Intent(context, EditarEntrevistadoActivity.class);
-                            intent.putExtra("id_entrevistado", entrevistado.getId());
+                            intent.putExtra(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), entrevistado.getId());
                             context.startActivity(intent);
+
+                            return true;
 
                         } else if (item.getItemId() == R.id.menu_ver_entrevistas) {
 
                             Intent intent = new Intent(context, EntrevistasListaActivity.class);
 
                             Bundle bundle = new Bundle();
-                            bundle.putInt("id_entrevistado", entrevistado.getId());
-                            bundle.putString("nombre_entrevistado", entrevistado.getNombre());
-                            bundle.putString("apellido_entrevistado", entrevistado.getApellido());
+                            bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), entrevistado.getId());
+                            bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), entrevistado.getNombre());
+                            bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
                             intent.putExtras(bundle);
                             context.startActivity(intent);
+
+                            return true;
                         }
 
                         //TODO: Ver posibilidad de tener perfil de entrevistado
 
-                        return true;
+                        return false;
                     }
                 });
+
                 popupMenu.show();
             }
         });

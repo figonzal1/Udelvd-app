@@ -1,7 +1,5 @@
 package cl.udelvd.adaptadores;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,6 +27,8 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
 
         EventsSwipeFragment fragment;
         fragment = EventsSwipeFragment.newInstance();
+
+        //Enviar datos a fragments
         fragment.setEvento(eventoList.get(position));
         fragment.setFechaEntrevista(fecha_entrevista);
         fragment.setPosition(position);
@@ -38,7 +38,6 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        Log.d("SIZE", String.valueOf(eventoList.size()));
         return eventoList.size();
     }
 }

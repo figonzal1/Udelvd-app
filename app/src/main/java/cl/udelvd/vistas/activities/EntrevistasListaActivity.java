@@ -31,6 +31,7 @@ import cl.udelvd.R;
 import cl.udelvd.adaptadores.EntrevistaAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EntrevistaViewModel;
 
 public class EntrevistasListaActivity extends AppCompatActivity {
@@ -65,15 +66,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entrevistas_list);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-        setSupportActionBar(toolbar);
-
-        //Boton atras
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("Listado entrevistas");
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        Utils.configurarToolbar(this, getApplicationContext(), 0, "Listado entrevistas");
 
         obtenerDatosBundle();
 
@@ -140,9 +133,9 @@ public class EntrevistasListaActivity extends AppCompatActivity {
 
             entrevistado = new Entrevistado();
 
-            id_entrevistado = bundle.getInt("id_entrevistado");
-            nombre_entrevistado = bundle.getString("nombre_entrevistado");
-            apellido_entrevistado = bundle.getString("apellido_entrevistado");
+            id_entrevistado = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ID_LARGO));
+            nombre_entrevistado = bundle.getString(getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO));
+            apellido_entrevistado = bundle.getString(getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO));
 
             entrevistado.setId(id_entrevistado);
             entrevistado.setNombre(nombre_entrevistado);
@@ -197,9 +190,9 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                     tv_entrevistas_extraordinarias.setText(String.valueOf(tipos.get("extraordinarias")));
 
                     params = new HashMap<>();
-                    params.put("n_entrevistas", entrevistas.size());
-                    params.put("n_normales", tipos.get("normales"));
-                    params.put("n_extraodrinarias", tipos.get("extraordinarias"));
+                    params.put(getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), entrevistas.size());
+                    params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), tipos.get("normales"));
+                    params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), tipos.get("extraordinarias"));
 
                     if (entrevistas.size() > 0) {
 
@@ -210,11 +203,13 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                         entrevistaAdapter.notifyDataSetChanged();
                         rv.setAdapter(entrevistaAdapter);
 
-                        Log.d("VM_LISTA_ENTREVISTAS", "MSG_RESPONSE: " + entrevistas.toString());
+
                     } else {
                         cv_lista_entrevistas.setVisibility(View.INVISIBLE);
                         tv_entrevistas_vacias.setVisibility(View.VISIBLE);
                     }
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), entrevistas.toString()));
                 }
             }
         });
@@ -224,11 +219,11 @@ public class EntrevistasListaActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                showSnackbar(findViewById(R.id.entrevistas_list), s, "Reintentar");
+                showSnackbar(findViewById(R.id.entrevistas_list), s, getString(R.string.SNACKBAR_REINTENTAR));
 
                 swipeRefreshLayout.setRefreshing(false);
 
-                Log.d("VM_LISTA_ENTREVISTAS", "MSG_ERROR: " + s);
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }

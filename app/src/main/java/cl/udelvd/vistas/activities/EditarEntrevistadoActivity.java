@@ -284,8 +284,10 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     isAutoCompleteCiudadReady = true;
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+
+                    ciudadAdapter.notifyDataSetChanged();
                 }
-                ciudadAdapter.notifyDataSetChanged();
+
             }
         });
     }
@@ -306,9 +308,11 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     isEstadoCivilReady = true;
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+
+                    estadoCivilAdapter.notifyDataSetChanged();
                 }
 
-                estadoCivilAdapter.notifyDataSetChanged();
+
             }
         });
     }
@@ -325,8 +329,10 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     acNivelEducacional.setAdapter(nivelEducacionalAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+
+                    nivelEducacionalAdapter.notifyDataSetChanged();
                 }
-                nivelEducacionalAdapter.notifyDataSetChanged();
+
             }
         });
     }
@@ -344,8 +350,10 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     acProfesion.setAdapter(profesionAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+
+                    profesionAdapter.notifyDataSetChanged();
                 }
-                profesionAdapter.notifyDataSetChanged();
+
             }
         });
     }
@@ -363,8 +371,10 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+
+                    tipoConvivenciaAdapter.notifyDataSetChanged();
                 }
-                tipoConvivenciaAdapter.notifyDataSetChanged();
+
             }
         });
     }

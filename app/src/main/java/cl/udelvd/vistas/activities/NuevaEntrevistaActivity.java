@@ -36,6 +36,7 @@ import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.TipoEntrevista;
 import cl.udelvd.repositorios.EntrevistaRepositorio;
 import cl.udelvd.repositorios.TipoEntrevistaRepositorio;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EntrevistaViewModel;
 import cl.udelvd.viewmodel.TipoEntrevistaViewModel;
 
@@ -63,26 +64,36 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_entrevista);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-        setSupportActionBar(toolbar);
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_NUEVA_ENTREVISTA));
 
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("Crear entrevista");
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            id_entrevistado = bundle.getInt("id_entrevistado");
-        }
 
         instanciarRecursosInterfaz();
+
+        obtenerBundles();
 
         iniciarViewModel();
 
         setPickerFechaNacimiento();
+    }
+
+    private void instanciarRecursosInterfaz() {
+
+        progressBar = findViewById(R.id.progress_horizontal_nueva_entrevista);
+
+        ilFechaEntrevista = findViewById(R.id.il_fecha_entrevista);
+        ilTipoEntrevista = findViewById(R.id.il_tipo_entrevista);
+
+        etFechaEntrevista = findViewById(R.id.et_fecha_entrevista);
+        acTipoEntrevista = findViewById(R.id.et_tipo_entrevista);
+    }
+
+    private void obtenerBundles() {
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                id_entrevistado = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ID_LARGO));
+            }
+        }
     }
 
     private void iniciarViewModel() {
@@ -98,10 +109,11 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
                     tipoEntrevistaAdapter = new TipoEntrevistaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoEntrevistaList);
                     acTipoEntrevista.setAdapter(tipoEntrevistaAdapter);
 
-                    Log.d("VM_TIPO_ENTREVISTA", "Listado cargado");
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
+                    tipoEntrevistaAdapter.notifyDataSetChanged();
                 }
-                tipoEntrevistaAdapter.notifyDataSetChanged();
+
             }
         });
 
@@ -113,10 +125,10 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
-                Log.d("VM_NEW_ENTREVISTA", "MSG_RESPONSE: " + s);
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 //Si el registro fue correcto cerrar la actividad
-                if (s.equals("¡Entrevista registrada!")) {
+                if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTA))) {
                     finish();
                 }
             }
@@ -130,99 +142,63 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
-                Log.d("VM_NEW_ENTREVISTA", "MSG_ERROR: " + s);
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
 
-    }
-
-    private void instanciarRecursosInterfaz() {
-
-        progressBar = findViewById(R.id.progress_horizontal_nueva_entrevista);
-
-        ilFechaEntrevista = findViewById(R.id.il_fecha_entrevista);
-        ilTipoEntrevista = findViewById(R.id.il_tipo_entrevista);
-
-        etFechaEntrevista = findViewById(R.id.et_fecha_entrevista);
-        acTipoEntrevista = findViewById(R.id.et_tipo_entrevista);
     }
 
     private void setPickerFechaNacimiento() {
 
         //OnClick
         etFechaEntrevista.setOnClickListener(new View.OnClickListener() {
-            int year;
-            int month;
-            int day;
 
             @Override
             public void onClick(View v) {
-
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                if (Objects.requireNonNull(etFechaEntrevista.getText()).length() > 0) {
-
-                    String fecha = etFechaEntrevista.getText().toString();
-                    String[] fecha_split = fecha.split("-");
-
-                    year = Integer.parseInt(fecha_split[0]);
-                    month = Integer.parseInt(fecha_split[1]);
-                    day = Integer.parseInt(fecha_split[2]);
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NuevaEntrevistaActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month += 1;
-                        etFechaEntrevista.setText(year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, year, month, day);
-
-                datePickerDialog.show();
+                iniciarDatePicker();
             }
         });
 
         //EndIconOnClick
         ilFechaEntrevista.setEndIconOnClickListener(new View.OnClickListener() {
 
-            int year;
-            int month;
-            int day;
-
             @Override
             public void onClick(View v) {
-
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                if (Objects.requireNonNull(etFechaEntrevista.getText()).length() > 0) {
-
-                    String fecha = etFechaEntrevista.getText().toString();
-                    String[] fecha_split = fecha.split("-");
-
-                    year = Integer.parseInt(fecha_split[0]);
-                    month = Integer.parseInt(fecha_split[1]);
-                    day = Integer.parseInt(fecha_split[2]);
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NuevaEntrevistaActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month += 1;
-                        etFechaEntrevista.setText(year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, year, month, day);
-
-                datePickerDialog.show();
+                iniciarDatePicker();
             }
         });
 
+    }
+
+    /**
+     * Funcion encargada de abrir el DatePicker para escoger fecha
+     */
+    private void iniciarDatePicker() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        if (Objects.requireNonNull(etFechaEntrevista.getText()).length() > 0) {
+
+            String fecha = etFechaEntrevista.getText().toString();
+            String[] fecha_split = fecha.split(getString(R.string.REGEX_FECHA));
+
+            year = Integer.parseInt(fecha_split[0]);
+            month = Integer.parseInt(fecha_split[1]);
+            day = Integer.parseInt(fecha_split[2]);
+        }
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(NuevaEntrevistaActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month += 1;
+                etFechaEntrevista.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     private boolean validarCampos() {
@@ -230,7 +206,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
         if (Objects.requireNonNull(etFechaEntrevista.getText()).toString().isEmpty()) {
             ilFechaEntrevista.setErrorEnabled(true);
-            ilFechaEntrevista.setError("Campo requerido");
+            ilFechaEntrevista.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilFechaEntrevista.setErrorEnabled(false);
@@ -238,7 +214,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
         if (Objects.requireNonNull(acTipoEntrevista.getText()).toString().isEmpty()) {
             ilTipoEntrevista.setErrorEnabled(true);
-            ilTipoEntrevista.setError("Campo requerido");
+            ilTipoEntrevista.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilTipoEntrevista.setErrorEnabled(false);
@@ -269,13 +245,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
                 Entrevista entrevista = new Entrevista();
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                Date fecha_entrevista = null;
-                try {
-                    fecha_entrevista = simpleDateFormat.parse(Objects.requireNonNull(etFechaEntrevista.getText()).toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Date fecha_entrevista = Utils.stringToDate(getApplicationContext(), Objects.requireNonNull(etFechaEntrevista.getText()).toString());
                 entrevista.setFecha_entrevista(fecha_entrevista);
 
                 entrevista.setId_entrevistado(id_entrevistado);

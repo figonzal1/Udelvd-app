@@ -17,10 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -31,6 +29,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -53,6 +52,7 @@ import cl.udelvd.repositorios.EstadoCivilRepositorio;
 import cl.udelvd.repositorios.NivelEducacionalRepositorio;
 import cl.udelvd.repositorios.ProfesionRepositorio;
 import cl.udelvd.repositorios.TipoConvivenciaRepositorio;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.CiudadViewModel;
 import cl.udelvd.viewmodel.EntrevistadoViewModel;
 import cl.udelvd.viewmodel.EstadoCivilViewModel;
@@ -128,17 +128,11 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_entrevistado);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-        actionBar.setTitle("Editar entrevistado");
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_EDITAR_ENTREVISTADO));
 
         instanciarRecursosInterfaz();
+
+        obtenerBundle();
 
         setSpinnerSexo();
 
@@ -155,15 +149,18 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         setAutoCompleteProfesion();
         setAutoCompleteTipoConvivencia();
 
-        Bundle bundle = getIntent().getExtras();
-
-        assert bundle != null;
-        int id_entrevistado = bundle.getInt("id_entrevistado");
-        entrevistadoIntent = new Entrevistado();
-        entrevistadoIntent.setId(id_entrevistado);
-
         iniciarViewModelEntrevistado();
 
+    }
+
+    private void obtenerBundle() {
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+
+            int id_entrevistado = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ID_LARGO));
+            entrevistadoIntent = new Entrevistado();
+            entrevistadoIntent.setId(id_entrevistado);
+        }
     }
 
     /**
@@ -212,7 +209,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
      */
     private void setSpinnerSexo() {
         //Setear autocompletado Sexo
-        String[] opcionesSexo = new String[]{"Masculino", "Femenino", "Otro"};
+        String[] opcionesSexo = new String[]{getString(R.string.SEXO_MASCULINO), getString(R.string.SEXO_FEMENINO), getString(R.string.SEXO_OTRO)};
         ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, opcionesSexo);
         acSexo.setAdapter(adapterSexo);
 
@@ -225,76 +222,49 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
     private void setPickerFechaNacimiento() {
         //OnClick
         etFechaNacimiento.setOnClickListener(new View.OnClickListener() {
-            int year;
-            int month;
-            int day;
-
             @Override
             public void onClick(View v) {
-
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
-
-                    String fecha = etFechaNacimiento.getText().toString();
-                    String[] fecha_split = fecha.split("-");
-
-                    year = Integer.parseInt(fecha_split[0]);
-                    month = Integer.parseInt(fecha_split[1]);
-                    day = Integer.parseInt(fecha_split[2]);
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditarEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month += 1;
-                        etFechaNacimiento.setText(year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, year, month, day);
-
-                datePickerDialog.show();
+                iniciarDatePicker();
             }
         });
 
         //EndIconOnClick
         ilFechaNacimiento.setEndIconOnClickListener(new View.OnClickListener() {
-
-            int year;
-            int month;
-            int day;
-
             @Override
             public void onClick(View v) {
-
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
-
-                    String fecha = etFechaNacimiento.getText().toString();
-                    String[] fecha_split = fecha.split("-");
-
-                    year = Integer.parseInt(fecha_split[0]);
-                    month = Integer.parseInt(fecha_split[1]);
-                    day = Integer.parseInt(fecha_split[2]);
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditarEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month += 1;
-                        etFechaNacimiento.setText(year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, year, month, day);
-
-                datePickerDialog.show();
+                iniciarDatePicker();
             }
         });
+    }
+
+    /**
+     * Funcion encargada de abrir el DatePicker para escoger fecha
+     */
+    private void iniciarDatePicker() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
+
+            String fecha = etFechaNacimiento.getText().toString();
+            String[] fecha_split = fecha.split(getString(R.string.REGEX_FECHA));
+
+            year = Integer.parseInt(fecha_split[0]);
+            month = Integer.parseInt(fecha_split[1]);
+            day = Integer.parseInt(fecha_split[2]);
+        }
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(EditarEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month += 1;
+                etFechaNacimiento.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     /**
@@ -313,7 +283,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                     isAutoCompleteCiudadReady = true;
 
-                    Log.d("VM_CIUDAD", "Listado cargado");
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                 }
                 ciudadAdapter.notifyDataSetChanged();
             }
@@ -335,7 +305,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                     isEstadoCivilReady = true;
 
-                    Log.d("VM_ESTADO_CIVIL", "Listado cargado");
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                 }
 
                 estadoCivilAdapter.notifyDataSetChanged();
@@ -354,7 +324,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
                     acNivelEducacional.setAdapter(nivelEducacionalAdapter);
 
-                    Log.d("VM_NIVEL_EDUC", "Listado cargado");
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                 }
                 nivelEducacionalAdapter.notifyDataSetChanged();
             }
@@ -373,7 +343,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     profesionAdapter = new ProfesionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, profesionList);
                     acProfesion.setAdapter(profesionAdapter);
 
-                    Log.d("VM_PROFESION", "Listado cargado");
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                 }
                 profesionAdapter.notifyDataSetChanged();
             }
@@ -392,7 +362,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
                     acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
 
-                    Log.d("VM_TIPO_CONVIVENCIA", "Listado cargado");
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                 }
                 tipoConvivenciaAdapter.notifyDataSetChanged();
             }
@@ -411,13 +381,13 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     ilNCaidas.setVisibility(View.VISIBLE);
                     etNCaidas.setVisibility(View.VISIBLE);
 
-                    tv_switch_caidas.setText("Si");
+                    tv_switch_caidas.setText(getString(R.string.SI));
 
                 } else {
                     ilNCaidas.setVisibility(View.GONE);
                     etNCaidas.setVisibility(View.GONE);
 
-                    tv_switch_caidas.setText("No");
+                    tv_switch_caidas.setText(getString(R.string.NO));
                 }
             }
         });
@@ -435,7 +405,6 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
             @Override
             public void onChanged(Entrevistado entrevistadoInternet) {
                 entrevistadoIntent = entrevistadoInternet;
-                Log.d("VM_ENTREVISTADO", entrevistadoInternet.toString());
 
                 if (isSpinnerSexoReady && isAutoCompleteCiudadReady && isEstadoCivilReady) {
                     setearInfoEntrevistado();
@@ -449,6 +418,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -458,7 +429,9 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.GONE);
 
-                if (s.equals("¡Entrevistado actualizado!")) {
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+                if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTADO))) {
                     Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
                     //Cerrar activity
@@ -480,8 +453,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         acSexo.setText(entrevistadoIntent.getSexo(), false);
 
         //Cargar fecha de nacimiento
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String fecha_nacimiento = simpleDateFormat.format(entrevistadoIntent.getFechaNacimiento());
+        String fecha_nacimiento = Utils.dateToString(getApplicationContext(), entrevistadoIntent.getFechaNacimiento());
         etFechaNacimiento.setText(fecha_nacimiento);
 
         //Buscar ciudad por id en listado obtenido en setAutoCompleteCiudad()
@@ -498,10 +470,10 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
         if (entrevistadoIntent.isJubiladoLegal()) {
             switch_jubilado_legal.setChecked(true);
-            tv_switch_jubilado.setText("Si");
+            tv_switch_jubilado.setText(getString(R.string.SI));
         } else {
             switch_jubilado_legal.setChecked(false);
-            tv_switch_jubilado.setText("No");
+            tv_switch_jubilado.setText(getString(R.string.NO));
         }
 
         if (entrevistadoIntent.isCaidas()) {
@@ -509,12 +481,12 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
             etNCaidas.setVisibility(View.VISIBLE);
             ilNCaidas.setVisibility(View.VISIBLE);
             etNCaidas.setText(String.valueOf(entrevistadoIntent.getNCaidas()));
-            tv_switch_caidas.setText("Si");
+            tv_switch_caidas.setText(getString(R.string.SI));
         } else {
             switch_caidas.setChecked(false);
             etNCaidas.setVisibility(View.GONE);
             ilNCaidas.setVisibility(View.GONE);
-            tv_switch_caidas.setText("No");
+            tv_switch_caidas.setText(getString(R.string.NO));
         }
 
         //OPCIONALES
@@ -561,23 +533,17 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                 Entrevistado entrevistado = new Entrevistado();
 
-                SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
-                int id_investigador = sharedPreferences.getInt("id_investigador", 0);
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+                int id_investigador = sharedPreferences.getInt(getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR), 0);
 
                 entrevistado.setId(entrevistadoIntent.getId());
-                Log.d("Entrevistado id", String.valueOf(entrevistado.getId()));
                 entrevistado.setIdInvestigador(id_investigador);
                 entrevistado.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
                 entrevistado.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
                 entrevistado.setSexo(acSexo.getText().toString());
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                try {
-                    entrevistado.setFechaNacimiento(simpleDateFormat.parse(Objects.requireNonNull(etFechaNacimiento.getText()).toString()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
+                Date fechaNac = Utils.stringToDate(getApplicationContext(), Objects.requireNonNull(etFechaNacimiento.getText()).toString());
+                entrevistado.setFechaNacimiento(fechaNac);
 
                 Ciudad ciudad = new Ciudad();
                 ciudad.setNombre(acCiudad.getText().toString());
@@ -642,7 +608,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         //Comprobar nombre vacio
         if (Objects.requireNonNull(etNombre.getText()).toString().isEmpty()) {
             ilNombre.setErrorEnabled(true);
-            ilNombre.setError("Campo requerido");
+            ilNombre.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilNombre.setErrorEnabled(false);
@@ -651,7 +617,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         //Comprobar apellido
         if (Objects.requireNonNull(etApellido.getText()).toString().isEmpty()) {
             ilApellido.setErrorEnabled(true);
-            ilApellido.setError("Campo requerido");
+            ilApellido.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilApellido.setErrorEnabled(false);
@@ -661,7 +627,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         //Comprobar sexo
         if (acSexo.getText().toString().isEmpty()) {
             ilSexo.setErrorEnabled(true);
-            ilSexo.setError("Campo requerido");
+            ilSexo.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilSexo.setErrorEnabled(false);
@@ -670,7 +636,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         //Comprobar Fecha nacimiento
         if (Objects.requireNonNull(etFechaNacimiento.getText()).toString().isEmpty()) {
             ilFechaNacimiento.setErrorEnabled(true);
-            ilFechaNacimiento.setError("Campo requerido");
+            ilFechaNacimiento.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilFechaNacimiento.setErrorEnabled(false);
@@ -679,7 +645,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         //Comprobar estado civil
         if (acEstadoCivil.getText().toString().isEmpty()) {
             ilEstadoCivil.setErrorEnabled(true);
-            ilEstadoCivil.setError("Campo requerido");
+            ilEstadoCivil.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilEstadoCivil.setErrorEnabled(false);
@@ -688,7 +654,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         //Comprobar n_convivientes_3_meses
         if (Objects.requireNonNull(etNConvivientes.getText()).toString().isEmpty()) {
             ilNConvivientes.setErrorEnabled(true);
-            ilNConvivientes.setError("Campo requerido");
+            ilNConvivientes.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             contador_errores++;
         } else {
             ilNConvivientes.setErrorEnabled(false);
@@ -698,7 +664,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
             if (Objects.requireNonNull(etNCaidas.getText()).toString().isEmpty()) {
                 ilNCaidas.setErrorEnabled(true);
-                ilNCaidas.setError("Campo requerido");
+                ilNCaidas.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 contador_errores++;
             } else {
                 ilNCaidas.setErrorEnabled(false);

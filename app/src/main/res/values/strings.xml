@@ -21,6 +21,7 @@
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
     <string name="TITULO_TOOLBAR_REGISTRO">Registro</string>
     <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">Crear entrevistado</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Editar entrevistado</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY">udelvd</string>
@@ -199,7 +200,8 @@
     <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
     <string name="TAG_VOLLEY_ERR_TIPO_ENTR">VOLLEY_ERR_TIPO_ENTR</string>
     <string name="TAB_NAME_ENTREVISTADOS">Entrevistados</string>
-    <string name="TAG_NAME_ESTADISTICAS">Estadísticas</string>
+    <string name="TAB_NAME_ESTADISTICAS">Estadísticas</string>
+    <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTADO">VM_EDITAR_ENTREVISTADO</string>
 
 
 </resources>

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cl.udelvd.R;
 import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.servicios.VolleySingleton;
 
@@ -75,17 +76,17 @@ public class EmoticonRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonEmoticon = jsonArray.getJSONObject(i);
 
-                        JSONObject jsonAttribute = jsonEmoticon.getJSONObject("attributes");
+                        JSONObject jsonAttribute = jsonEmoticon.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                         Emoticon emoticon = new Emoticon();
-                        emoticon.setId(jsonEmoticon.getInt("id"));
-                        emoticon.setUrl(jsonAttribute.getString("url"));
-                        emoticon.setDescripcion(jsonAttribute.getString("descripcion"));
+                        emoticon.setId(jsonEmoticon.getInt(application.getString(R.string.KEY_EMOTICON_ID)));
+                        emoticon.setUrl(jsonAttribute.getString(application.getString(R.string.KEY_EMOTICON_URL)));
+                        emoticon.setDescripcion(jsonAttribute.getString(application.getString(R.string.KEY_EMOTICON_DESCRIPCION)));
 
                         emoticonList.add(emoticon);
                     }
@@ -101,13 +102,13 @@ public class EmoticonRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERR_EMOTICON", "TIMEOUT_ERROR");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), application.getString(R.string.TIMEOUT_ERROR));
                     //TODO: Agregar error response
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERR_EMOTICON", "NETWORK_ERROR");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), application.getString(R.string.NETWORK_ERROR));
                 }
 
                 //Errores cuando el servidor si responde
@@ -120,38 +121,38 @@ public class EmoticonRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERR_EMOTICON", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERR_EMOTICON", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
                     }
                 }
             }
         };
 
-        String url = "http://192.168.0.14/emoticones";
+        String url = application.getString(R.string.URL_GET_EMOTICONES);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {
 
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                params.put("Authorization", "Bearer " + token);
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
                 return params;
             }
         };

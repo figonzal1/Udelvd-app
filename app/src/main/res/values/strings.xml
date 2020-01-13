@@ -8,6 +8,14 @@
     <string name="URL_POST_ENTREVISTADOS">http://192.168.0.14/entrevistados</string>
     <string name="URL_GET_ENTREVISTADOS">http://192.168.0.14/entrevistados</string>
     <string name="URL_PUT_ENTREVISTADOS">http://192.168.0.14/entrevistados/</string>
+    <string name="URL_GET_ACCIONES">http://192.168.0.14/acciones</string>
+    <string name="URL_GET_CIUDADES">http://192.168.0.14/ciudades</string>
+    <string name="URL_GET_EMOTICONES">http://192.168.0.14/emoticones</string>
+    <string name="URL_GET_ESTADOS_CIVILES">http://192.168.0.14/estadosCiviles</string>
+    <string name="URL_GET_NIVELES_EDUCACIONALES">http://192.168.0.14/nivelesEducacionales</string>
+    <string name="URL_GET_PROFESIONES">http://192.168.0.14/profesiones</string>
+    <string name="URL_GET_TIPOS_CONVIVENCIAS">http://192.168.0.14/tiposConvivencias</string>
+    <string name="URL_GET_TIPOS_ENTREVISTAS">http://192.168.0.14/tiposEntrevistas</string>
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
@@ -29,6 +37,7 @@
 
     <!-- Formatos -->
     <string name="FORMATO_FECHA">yyyy-mm-dd</string>
+    <string name="FORMATO_FECHA_2">yyyy/mm/dd</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT">investigador</string>
@@ -64,6 +73,31 @@
     <string name="KEY_ENTREVISTADO_N_ENTREVISTAS">n_entrevistas</string>
 
     <string name="KEY_ENTREVISTA_OBJECT">entrevistas</string>
+
+    <string name="KEY_ACCION_ID">id</string>
+    <string name="KEY_ACCION_NOMBRE">nombre</string>
+
+    <string name="KEY_CIUDAD_ID">id</string>
+    <string name="KEY_CIUDAD_NOMBRE">nombre</string>
+
+    <string name="KEY_EMOTICON_ID">id</string>
+    <string name="KEY_EMOTICON_URL">url</string>
+    <string name="KEY_EMOTICON_DESCRIPCION">descripcion</string>
+
+    <string name="KEY_ESTADO_CIVIL_ID">id</string>
+    <string name="KEY_ESTADO_CIVIL_NOMRE">nombre</string>
+
+    <string name="KEY_NIVEL_EDUC_ID">id</string>
+    <string name="KEY_NIVEL_EDUC_NOMBRE">nombre</string>
+
+    <string name="KEY_PROFESION_ID">id</string>
+    <string name="KEY_PROFESION_NOMBRE">nombre</string>
+
+    <string name="KEY_TIPO_CONVIVENCIA_ID">id</string>
+    <string name="KEY_TIPO_CONVIVENCIA_NOMBRE">nombre</string>
+
+    <string name="KEY_TIPO_ENTREVISTA_ID">id</string>
+    <string name="KEY_TIPO_ENTREVISTA_NOMBRE">nombre</string>
 
     <string name="KEY_CREATE_TIME">create_time</string>
     <string name="KEY_UPDATE_TIME">update_time</string>
@@ -103,6 +137,13 @@
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE">VOLLEY_ERR_INV_UPDATE</string>
     <string name="TAG_VOLLEY_ERR_ENTREVISTADO">VOLLEY_ERR_ENTREVISTADO</string>
+    <string name="TAG_VOLLEY_ERR_ACCION">VOLLEY_ERR_ACCION</string>
+    <string name="TAG_VOLLEY_ERR_CIUDAD">VOLLEY_ERR_CIUDAD</string>
+    <string name="TAG_VOLLEY_ERR_EMOTICON">VOLLEY_ERR_EMOTICON</string>
+    <string name="TAG_VOLLEY_ERR_EST_CIVIL">VOLLEY_ERR_EST_CIVIL</string>
+    <string name="TAG_VOLLEY_ERR_NIVEL_EDUC">VOLLEY_ERR_NIVEL_EDUC</string>
+    <string name="TAG_VOLLEY_ERR_PROFESION">VOLLEY_ERR_PROFESION</string>
+    <string name="TAG_VOLLEY_ERR_TIPO_CONVIV">VOLLEY_ERR_TIPO_CONVIV</string>
 
     <!-- Miscelaneos -->
     <string name="UPDATE_MSG_VM">mensaje_update</string>
@@ -148,6 +189,7 @@
     <string name="ROL_ADMINITRADOR">Administrador</string>
     <string name="NULL">null</string>
     <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
+    <string name="TAG_VOLLEY_ERR_TIPO_ENTR">VOLLEY_ERR_TIPO_ENTR</string>
 
 
 </resources>

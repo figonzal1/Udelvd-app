@@ -12,18 +12,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -245,7 +241,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
                 Entrevista entrevista = new Entrevista();
 
-                Date fecha_entrevista = Utils.stringToDate(getApplicationContext(), Objects.requireNonNull(etFechaEntrevista.getText()).toString());
+                Date fecha_entrevista = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etFechaEntrevista.getText()).toString());
                 entrevista.setFecha_entrevista(fecha_entrevista);
 
                 entrevista.setId_entrevistado(id_entrevistado);

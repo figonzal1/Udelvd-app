@@ -1,6 +1,5 @@
 package cl.udelvd.vistas.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,17 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Evento;
+import cl.udelvd.utilidades.Utils;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -89,8 +87,7 @@ public class EventsSwipeFragment extends Fragment {
 
         tv_accion.setText(String.valueOf(evento.getAccion().getNombre()));
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
-        tv_hora_evento.setText(simpleDateFormat.format(evento.getHora_evento()));
+        tv_hora_evento.setText(Utils.dateToString(getContext(), true, evento.getHora_evento()));
 
         tv_justificacion.setText(evento.getJustificacion());
 
@@ -103,16 +100,6 @@ public class EventsSwipeFragment extends Fragment {
                         .error(R.drawable.not_found))
                 .transition(withCrossFade())
                 .into(iv_emoticon);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     public void setEvento(Evento evento) {

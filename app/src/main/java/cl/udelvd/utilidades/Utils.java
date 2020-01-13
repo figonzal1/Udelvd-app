@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -163,9 +162,14 @@ public class Utils {
      * @param dFecha  Fecha que será convertida
      * @return String de la fecha
      */
-    public static String dateToString(Context context, Date dFecha) {
-        SimpleDateFormat mFormat =
-                new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.US);
+    public static String dateToString(Context context, boolean is_hora, Date dFecha) {
+        SimpleDateFormat mFormat;
+
+        if (is_hora) {
+            mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_HORA), Locale.US);
+        } else {
+            mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.US);
+        }
 
         return mFormat.format(dFecha);
     }
@@ -177,11 +181,15 @@ public class Utils {
      * @param sFecha Fecha en string que será convertida en date
      * @return dFecha Fecha en Date entregada por le funcion
      */
-    public static Date stringToDate(Context context, String sFecha) {
+    public static Date stringToDate(Context context, boolean is_hora, String sFecha) {
 
-        SimpleDateFormat mFormat =
-                new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA),
-                        Locale.US);
+        SimpleDateFormat mFormat;
+
+        if (is_hora) {
+            mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_HORA), Locale.US);
+        } else {
+            mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.US);
+        }
         Date mDFecha = null;
 
         try {

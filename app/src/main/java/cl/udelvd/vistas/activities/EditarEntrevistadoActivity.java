@@ -26,8 +26,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -463,7 +461,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         acSexo.setText(entrevistadoIntent.getSexo(), false);
 
         //Cargar fecha de nacimiento
-        String fecha_nacimiento = Utils.dateToString(getApplicationContext(), entrevistadoIntent.getFechaNacimiento());
+        String fecha_nacimiento = Utils.dateToString(getApplicationContext(), false, entrevistadoIntent.getFechaNacimiento());
         etFechaNacimiento.setText(fecha_nacimiento);
 
         //Buscar ciudad por id en listado obtenido en setAutoCompleteCiudad()
@@ -552,7 +550,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                 entrevistado.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
                 entrevistado.setSexo(acSexo.getText().toString());
 
-                Date fechaNac = Utils.stringToDate(getApplicationContext(), Objects.requireNonNull(etFechaNacimiento.getText()).toString());
+                Date fechaNac = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etFechaNacimiento.getText()).toString());
                 entrevistado.setFechaNacimiento(fechaNac);
 
                 Ciudad ciudad = new Ciudad();

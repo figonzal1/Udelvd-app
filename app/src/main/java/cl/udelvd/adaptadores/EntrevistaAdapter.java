@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -57,7 +56,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
         holder.tv_tipo_entrevista.setText(entrevista.getTipoEntrevista().getNombre());
 
-        final String fechaEntrevista = Utils.dateToString(context, entrevista.getFecha_entrevista());
+        final String fechaEntrevista = Utils.dateToString(context, false, entrevista.getFecha_entrevista());
 
         holder.tv_fecha_registro.setText(fechaEntrevista);
 

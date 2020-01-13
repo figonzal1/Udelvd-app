@@ -20,8 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -117,7 +115,7 @@ public class EntrevistaRepositorio {
                         entrevista.setId(jsonEntrevista.getInt(application.getString(R.string.KEY_ENTREVISTA_ID)));
                         entrevista.setId_entrevistado(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO)));
 
-                        Date fechaNac = Utils.stringToDate(application, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                        Date fechaNac = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
                         entrevista.setFecha_entrevista(fechaNac);
 
                         //Relationship
@@ -242,7 +240,7 @@ public class EntrevistaRepositorio {
 
                     entrevistaInternet.setId_entrevistado(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO)));
 
-                    Date fechaEntrevista = Utils.stringToDate(application, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    Date fechaEntrevista = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
                     entrevistaInternet.setFecha_entrevista(fechaEntrevista);
 
                     TipoEntrevista tipoEntrevista = new TipoEntrevista();
@@ -314,7 +312,7 @@ public class EntrevistaRepositorio {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.KEY_TIPO_CONVIVENCIA_ID_LARGO), String.valueOf(entrevista.getTipoEntrevista().getId()));
 
-                String fechaEntrevista = Utils.dateToString(application, entrevista.getFecha_entrevista());
+                String fechaEntrevista = Utils.dateToString(application, false, entrevista.getFecha_entrevista());
                 params.put(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA), fechaEntrevista);
 
                 return params;
@@ -379,7 +377,7 @@ public class EntrevistaRepositorio {
 
                     entrevistaInternet.setTipoEntrevista(tipoEntrevista);
 
-                    Date fechaEntrevista = Utils.stringToDate(application, jsonAttribute.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    Date fechaEntrevista = Utils.stringToDate(application, false, jsonAttribute.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
                     entrevistaInternet.setFecha_entrevista(fechaEntrevista);
 
                     mutableLiveData.postValue(entrevistaInternet);
@@ -482,7 +480,7 @@ public class EntrevistaRepositorio {
                     entrevistaInternet.setId(jsonData.getInt(application.getString(R.string.KEY_ENTREVISTA_ID)));
                     entrevistaInternet.setId_entrevistado(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO)));
 
-                    Date fechaEntrevista = Utils.stringToDate(application, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    Date fechaEntrevista = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
                     entrevistaInternet.setFecha_entrevista(fechaEntrevista);
 
                     String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
@@ -547,7 +545,7 @@ public class EntrevistaRepositorio {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.KEY_TIPO_CONVIVENCIA_ID_LARGO), String.valueOf(entrevista.getTipoEntrevista().getId()));
 
-                String fechaEntrevista = Utils.dateToString(application, entrevista.getFecha_entrevista());
+                String fechaEntrevista = Utils.dateToString(application, false, entrevista.getFecha_entrevista());
                 params.put(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA), fechaEntrevista);
 
                 return params;

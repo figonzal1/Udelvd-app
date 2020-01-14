@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -38,7 +36,6 @@ public class EntrevistasListaActivity extends AppCompatActivity {
 
     private RecyclerView rv;
     private EntrevistaAdapter entrevistaAdapter;
-    private FloatingActionButton fabNuevaEntrevista;
     private EntrevistaViewModel entrevistaViewModel;
 
     private TextView tv_nombreCompleto;
@@ -66,7 +63,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entrevistas_list);
 
-        Utils.configurarToolbar(this, getApplicationContext(), 0, "Listado entrevistas");
+        Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_LISTA_ENTREVISTAS));
 
         obtenerDatosBundle();
 
@@ -76,52 +73,8 @@ public class EntrevistasListaActivity extends AppCompatActivity {
 
         iniciarViewModelObservers();
 
-        fabNuevaEntrevista = findViewById(R.id.fb_crear_entrevista);
-        fabNuevaEntrevista.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        floatingButtonNuevaEntrevista();
 
-                /*NewUserDialog dialog = new NewUserDialog();
-                assert getFragmentManager() != null;
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                dialog.show(ft, "NewUserDialog");*/
-
-                /*DialogFragment dialogFragment = new NewUserDialog();
-                assert getFragmentManager() != null;
-                dialogFragment.show(getFragmentManager(),"NewUserDialog");*/
-
-                //TODO: Implementar creacion de entrevistas
-                /*NewInterviewDialog fragment = new NewInterviewDialog();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.add(android.R.id.content, fragment)
-                        .addToBackStack(null).commit();*/
-
-                Intent intent = new Intent(EntrevistasListaActivity.this, NuevaEntrevistaActivity.class);
-                intent.putExtra("id_entrevistado", entrevistado.getId());
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setearRecursosInterfaz() {
-        rv = findViewById(R.id.rv_lista_entrevistas);
-
-        LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
-        rv.setLayoutManager(ly);
-
-        entrevistaAdapter = new EntrevistaAdapter(new ArrayList<Entrevista>(), getApplicationContext(), entrevistado, params);
-        rv.setAdapter(entrevistaAdapter);
-
-        tv_nombreCompleto = findViewById(R.id.tv_entrevistado_nombre);
-        tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
-        tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
-        tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
-
-        tv_nombreCompleto.setText(String.format("%s %s", nombre_entrevistado, apellido_entrevistado));
-
-        cv_lista_entrevistas = findViewById(R.id.card_view_lista_entrevistas);
-        tv_entrevistas_vacias = findViewById(R.id.tv_entrevistas_vacios);
     }
 
     /**
@@ -143,6 +96,26 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         } else {
             Log.d("BUNDLE_STATUS", "bundle vacio");
         }
+    }
+
+    private void setearRecursosInterfaz() {
+        rv = findViewById(R.id.rv_lista_entrevistas);
+
+        LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(ly);
+
+        entrevistaAdapter = new EntrevistaAdapter(new ArrayList<Entrevista>(), getApplicationContext(), entrevistado, params);
+        rv.setAdapter(entrevistaAdapter);
+
+        tv_nombreCompleto = findViewById(R.id.tv_entrevistado_nombre);
+        tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
+        tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
+        tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
+
+        tv_nombreCompleto.setText(String.format("%s %s", nombre_entrevistado, apellido_entrevistado));
+
+        cv_lista_entrevistas = findViewById(R.id.card_view_lista_entrevistas);
+        tv_entrevistas_vacias = findViewById(R.id.tv_entrevistas_vacios);
     }
 
     /**
@@ -224,6 +197,21 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+    }
+
+    /**
+     * Boton flotante para crear entrevistas
+     */
+    private void floatingButtonNuevaEntrevista() {
+        FloatingActionButton fabNuevaEntrevista = findViewById(R.id.fb_crear_entrevista);
+        fabNuevaEntrevista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EntrevistasListaActivity.this, NuevaEntrevistaActivity.class);
+                intent.putExtra(getString(R.string.KEY_ENTREVISTADO_ID_LARGO), entrevistado.getId());
+                startActivity(intent);
             }
         });
     }

@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         instanciarRecursosInterfaz();
 
-        obtenerBundles();
+        obtenerDatosBundles();
 
         setearViewPagerTabsDrawer();
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         tv_nombre_rol_investigador = header.findViewById(R.id.tv_header_nombre_rol);
     }
 
-    private void obtenerBundles() {
+    private void obtenerDatosBundles() {
         investigador = new Investigador();
         investigador.setNombre(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE), ""));
         investigador.setApellido(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_APELLIDO), ""));

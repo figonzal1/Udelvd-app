@@ -62,10 +62,9 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
         Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_NUEVA_ENTREVISTA));
 
-
         instanciarRecursosInterfaz();
 
-        obtenerBundles();
+        obtenerDatosBundles();
 
         iniciarViewModel();
 
@@ -83,7 +82,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
         acTipoEntrevista = findViewById(R.id.et_tipo_entrevista);
     }
 
-    private void obtenerBundles() {
+    private void obtenerDatosBundles() {
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {

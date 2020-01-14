@@ -61,13 +61,13 @@ public class EditarPerfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
-        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, "Editar perfil");
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITUTLO_TOOLBAR_EDITAR_PERFIL));
 
         instanciarRecursosInterfaz();
 
         iniciarViewModel();
 
-        obtenerBundles();
+        obtenerDatosBundles();
 
         cargarDatosInvestigador();
 
@@ -108,11 +108,15 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
                     Investigador investigador = (Investigador) stringObjectMap.get(getString(R.string.KEY_INVES_OBJECT));
 
+
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 
                     if (investigador != null) {
+
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), getString(R.string.VIEW_MODEL_MSG_RESPONSE) + investigador.toString());
+
                         //Guardar en sharedPref investigador con datos actualizados
                         editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE), investigador.getNombre());
                         editor.putString(getString(R.string.SHARED_PREF_INVES_APELLIDO), investigador.getApellido());
@@ -148,7 +152,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
         });
     }
 
-    private void obtenerBundles() {
+    private void obtenerDatosBundles() {
 
         if (getIntent().getExtras() != null) {
 

@@ -70,7 +70,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
         setPickerFechaNacimiento();
 
-        obtenerBundles();
+        obtenerDatosBundles();
     }
 
     private void instanciarRecursosInterfaz() {
@@ -95,6 +95,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                 if (isAutoCompleteTipoEntrevistaReady) {
                     setearInfoEntrevista();
                 }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), entrevistaInternet.toString()));
             }
         });
 
@@ -139,7 +141,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
         acTipoEntrevista.setText(nombre, false);
     }
 
-    private void obtenerBundles() {
+    private void obtenerDatosBundles() {
 
         if (getIntent().getExtras() != null) {
 

@@ -100,6 +100,8 @@ public class EventsSwipeFragment extends Fragment {
                         .error(R.drawable.not_found))
                 .transition(withCrossFade())
                 .into(iv_emoticon);
+
+        //TODO: AGREGAR OPCION EDITAR FRAGMENT
     }
 
     public void setEvento(Evento evento) {

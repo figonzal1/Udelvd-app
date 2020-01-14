@@ -10,9 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -27,6 +25,7 @@ import cl.udelvd.adaptadores.FragmentStatePageAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.Evento;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EventoViewModel;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
@@ -60,7 +59,7 @@ public class EventosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_main);
 
-        configuracionToolbar();
+        Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_EVENTOS));
 
         obtenerDatosBundle();
 
@@ -68,38 +67,22 @@ public class EventosActivity extends AppCompatActivity {
 
         iniciarViewModel();
 
+        floatingButtonCrearEvento();
+
+    }
+
+    private void floatingButtonCrearEvento() {
+
         FloatingActionButton fb_crear_evento = findViewById(R.id.fb_crear_evento);
 
         fb_crear_evento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*NewEventDialog fragment = new NewEventDialog();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.add(android.R.id.content, fragment)
-                        .addToBackStack(null).commit();*/
-
                 Intent intent = new Intent(EventosActivity.this, NuevoEventoActivity.class);
-                intent.putExtra("id_entrevista", entrevista.getId());
+                intent.putExtra(getString(R.string.KEY_ENTREVISTA_ID_LARGO), entrevista.getId());
                 startActivity(intent);
             }
         });
-    }
-
-    /**
-     * Configuracion inicial de toolbar
-     */
-    private void configuracionToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-
-        setSupportActionBar(toolbar);
-
-        //Boton atras
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("Eventos");
-        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -111,18 +94,18 @@ public class EventosActivity extends AppCompatActivity {
             Bundle bundle = getIntent().getExtras();
 
             entrevista = new Entrevista();
-            entrevista.setId(bundle.getInt("id_entrevista"));
-            entrevista.setId_entrevistado(bundle.getInt("id_entrevistado"));
+            entrevista.setId(bundle.getInt(getString(R.string.KEY_ENTREVISTA_ID_LARGO)));
+            entrevista.setId_entrevistado(bundle.getInt(getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO)));
 
-            fecha_entrevista = bundle.getString("fecha_entrevista");
+            fecha_entrevista = bundle.getString(getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA));
 
             entrevistado = new Entrevistado();
-            entrevistado.setNombre(bundle.getString("nombre_entrevistado"));
-            entrevistado.setApellido(bundle.getString("apellido_entrevistado"));
+            entrevistado.setNombre(bundle.getString(getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO)));
+            entrevistado.setApellido(bundle.getString(getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO)));
 
-            n_entrevistas = bundle.getInt("n_entrevistas");
-            n_normales = bundle.getString("n_normales");
-            n_extraordnarias = bundle.getString("n_extraodrinarias");
+            n_entrevistas = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS));
+            n_normales = bundle.getString(getString(R.string.KEY_ENTREVISTA_N_NORMALES));
+            n_extraordnarias = bundle.getString(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS));
 
         } else {
             Log.d("BUNDLE_STATUS_EVENTOS", "VACIO");
@@ -176,7 +159,7 @@ public class EventosActivity extends AppCompatActivity {
 
                     eventoList = eventos;
 
-                    Log.d("EVENTOS_VM", eventoList.toString());
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
 
                     if (eventoList.size() > 0) {
                         fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
@@ -200,10 +183,11 @@ public class EventosActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), getString(R.string.VIEW_MODEL_MSG_RESPONSE));
             }
         });
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

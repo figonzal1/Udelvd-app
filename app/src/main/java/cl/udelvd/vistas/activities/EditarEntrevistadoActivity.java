@@ -130,7 +130,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
         instanciarRecursosInterfaz();
 
-        obtenerBundle();
+        obtenerDatosBundle();
 
         setSpinnerSexo();
 
@@ -151,7 +151,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
     }
 
-    private void obtenerBundle() {
+    private void obtenerDatosBundle() {
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
 
@@ -416,6 +416,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                 if (isSpinnerSexoReady && isAutoCompleteCiudadReady && isEstadoCivilReady) {
                     setearInfoEntrevistado();
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), entrevistadoIntent.toString()));
                 }
             }
         });

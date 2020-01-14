@@ -113,6 +113,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (investigador != null) {
 
+                    Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), investigador.toString()));
+
                     //Guardar en sharedPref investigador recien logeado
                     editor.putInt(getString(R.string.SHARED_PREF_INVES_ID), investigador.getId());
                     editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE), investigador.getNombre());

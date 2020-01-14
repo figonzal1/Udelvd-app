@@ -1,5 +1,7 @@
 package cl.udelvd.modelo;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -59,6 +61,7 @@ public class Entrevista {
         return Objects.hash(getId_entrevistado(), getFecha_entrevista());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Entrevista{" +

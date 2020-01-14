@@ -62,7 +62,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                 Intent intent = new Intent(context, EntrevistasListaActivity.class);
 
                 Bundle bundle = new Bundle();
-                bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID), entrevistado.getId());
+                bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), entrevistado.getId());
                 bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), entrevistado.getNombre());
                 bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
                 intent.putExtras(bundle);

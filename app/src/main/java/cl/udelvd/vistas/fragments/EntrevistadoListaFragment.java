@@ -88,21 +88,6 @@ public class EntrevistadoListaFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), NuevoEntrevistadoActivity.class);
                 startActivity(intent);
-                /*NewUserDialog dialog = new NewUserDialog();
-                assert getFragmentManager() != null;
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                dialog.show(ft, "NewUserDialog");*/
-
-                /*DialogFragment dialogFragment = new NewUserDialog();
-                assert getFragmentManager() != null;
-                dialogFragment.show(getFragmentManager(),"NewUserDialog");*/
-
-                /*NewUserDialog fragment = new NewUserDialog();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.add(android.R.id.content, fragment)
-                        .addToBackStack(null).commit();*/
-
             }
         });
     }
@@ -154,6 +139,8 @@ public class EntrevistadoListaFragment extends Fragment {
         entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
                     showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));

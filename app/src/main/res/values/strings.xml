@@ -97,7 +97,7 @@
     <string name="KEY_ENTREVISTA_ID_LARGO">id_entrevista</string>
     <string name="KEY_ENTREVISTA_FECHA_ENTREVISTA">fecha_entrevista</string>
     <string name="KEY_ENTREVISTA_N_NORMALES">n_normales</string>
-    <string name="KEY_ENTREVISTA_N_EXTRAORDINARIAS">n_extraodrinarias</string>
+    <string name="KEY_ENTREVISTA_N_EXTRAORDINARIAS">n_extraordinarias</string>
 
     <string name="KEY_ACCION_OBJECT">accion</string>
     <string name="KEY_ACCION_ID">id</string>

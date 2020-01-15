@@ -1,7 +1,9 @@
 package cl.udelvd.vistas.activities;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +16,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
@@ -66,6 +69,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
     private Evento evento;
 
     private ProgressBar progressBar;
+    private static final int SPEECH_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
         iniciarViewModels();
 
         setSpinnerEmoticones();
+
+        configurarSpeechIntent();
     }
 
     /**
@@ -251,6 +257,21 @@ public class NuevoEventoActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Intent encargado de abrir el programa Voice To Text Google
+     */
+    private void configurarSpeechIntent() {
+        ilJustificacion.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -291,6 +312,21 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+            assert data != null;
+            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            assert results != null;
+            String spokenText = results.get(0);
+
+            etJustificacion.setText(spokenText);
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private boolean validarCampos() {

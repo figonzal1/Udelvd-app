@@ -10,6 +10,7 @@ import java.util.List;
 
 import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.repositorios.CiudadRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class CiudadViewModel extends AndroidViewModel {
 
@@ -36,4 +37,13 @@ public class CiudadViewModel extends AndroidViewModel {
         return ciudadMutableLiveData;
     }
 
+    /**
+     * Funcion encargada de enviar mensaje de error desde repositorio hacia interfaz de usuario por medio de ViewModel
+     *
+     * @return SingleLiveEvent
+     */
+    public SingleLiveEvent<String> mostrarMsgError() {
+        repositorio = CiudadRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgError();
+    }
 }

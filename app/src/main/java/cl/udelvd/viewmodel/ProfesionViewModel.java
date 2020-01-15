@@ -10,6 +10,7 @@ import java.util.List;
 
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.repositorios.ProfesionRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class ProfesionViewModel extends AndroidViewModel {
 
@@ -35,5 +36,15 @@ public class ProfesionViewModel extends AndroidViewModel {
         }
 
         return profesionMutableLiveData;
+    }
+
+    /**
+     * Funcion encargada de enviar mensaje de error desde repositorio hacia la UI por medio de ViewModel
+     *
+     * @return SingleLiveData
+     */
+    public SingleLiveEvent<String> mostrarMsgError() {
+        repositorio = ProfesionRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgError();
     }
 }

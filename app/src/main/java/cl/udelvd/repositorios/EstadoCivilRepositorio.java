@@ -28,6 +28,7 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.EstadoCivil;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class EstadoCivilRepositorio {
 
@@ -35,6 +36,8 @@ public class EstadoCivilRepositorio {
     private Application application;
 
     private List<EstadoCivil> estadoCivilList;
+
+    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
     private static final String TAG_GET_ESTADOS_CIVILES = "ListaEstadosCiviles";
 
@@ -58,6 +61,10 @@ public class EstadoCivilRepositorio {
             instancia = new EstadoCivilRepositorio(application);
         }
         return instancia;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgError() {
+        return responseMsgError;
     }
 
     /**
@@ -120,11 +127,13 @@ public class EstadoCivilRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -150,6 +159,7 @@ public class EstadoCivilRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
@@ -196,6 +206,12 @@ public class EstadoCivilRepositorio {
         return null;
     }
 
+    /**
+     * Funcion para buscar estado civil
+     *
+     * @param id Nombre del estado civil a buscar
+     * @return Objeto estado civil
+     */
     public EstadoCivil buscarEstadoCivilPorId(int id) {
 
         for (int i = 0; i < estadoCivilList.size(); i++) {

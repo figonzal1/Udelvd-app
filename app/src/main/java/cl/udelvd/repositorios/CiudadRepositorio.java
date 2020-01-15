@@ -29,6 +29,7 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class CiudadRepositorio {
 
@@ -36,6 +37,8 @@ public class CiudadRepositorio {
     private final Application application;
 
     private List<Ciudad> ciudadList;
+
+    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
     private static final String TAG_GET_CIUDADES = "ListaCiudades";
 
@@ -48,6 +51,10 @@ public class CiudadRepositorio {
             instancia = new CiudadRepositorio(application);
         }
         return instancia;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgError() {
+        return responseMsgError;
     }
 
     /**
@@ -108,11 +115,13 @@ public class CiudadRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CIUDAD), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CIUDAD), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -138,6 +147,7 @@ public class CiudadRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CIUDAD), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }

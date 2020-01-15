@@ -10,6 +10,7 @@ import java.util.List;
 
 import cl.udelvd.modelo.EstadoCivil;
 import cl.udelvd.repositorios.EstadoCivilRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class EstadoCivilViewModel extends AndroidViewModel {
 
@@ -33,5 +34,15 @@ public class EstadoCivilViewModel extends AndroidViewModel {
             estadoCivilMutableLiveData = repositorio.obtenerEstadosCiviles();
         }
         return estadoCivilMutableLiveData;
+    }
+
+    /**
+     * Funcion encargada de enviar mensaje de error desde repositorio hacia interfaz de usuario por medio de ViewModel
+     *
+     * @return SingleLiveEvent
+     */
+    public SingleLiveEvent<String> mostrarMsgError() {
+        repositorio = EstadoCivilRepositorio.getInstance(getApplication());
+        return repositorio.getResponseMsgError();
     }
 }

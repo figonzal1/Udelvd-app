@@ -10,6 +10,7 @@ import java.util.List;
 
 import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.repositorios.NivelEducacionalRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class NivelEducacionalViewModel extends AndroidViewModel {
 
@@ -34,5 +35,10 @@ public class NivelEducacionalViewModel extends AndroidViewModel {
         }
 
         return nivelEducMutableLiveData;
+    }
+
+    public SingleLiveEvent<String> mostrarMsgError() {
+        repositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgError();
     }
 }

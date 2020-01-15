@@ -50,6 +50,7 @@ public class EventoRepositorio {
 
     private SingleLiveEvent<String> responseErrorMsg = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private MutableLiveData<List<Evento>> eventosMutableLiveData = new MutableLiveData<>();
 
     private EventoRepositorio(Application application) {
         this.application = application;
@@ -77,10 +78,8 @@ public class EventoRepositorio {
      * @return mutableLiveData Mutable live data con los datos de la entrevista
      */
     public MutableLiveData<List<Evento>> obtenerEventosEntrevista(Entrevista entrevista) {
-        MutableLiveData<List<Evento>> mutableLiveData = new MutableLiveData<>();
-        enviarGetEventosEntrevista(entrevista, mutableLiveData);
-
-        return mutableLiveData;
+        enviarGetEventosEntrevista(entrevista, eventosMutableLiveData);
+        return eventosMutableLiveData;
     }
 
     /**

@@ -3,8 +3,11 @@ package cl.udelvd.vistas.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +17,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -56,7 +58,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     //Map params para eventos
     private Map<String, Integer> params;
 
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,6 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         obtenerDatosBundle();
 
         setearRecursosInterfaz();
-
-        iniciarSwipeRefresh();
 
         iniciarViewModelObservers();
 
@@ -99,6 +99,10 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     }
 
     private void setearRecursosInterfaz() {
+
+        progressBar = findViewById(R.id.progress_bar_entrevistas);
+        progressBar.setVisibility(View.VISIBLE);
+
         rv = findViewById(R.id.rv_lista_entrevistas);
 
         LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
@@ -119,24 +123,6 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     }
 
     /**
-     * Funcion encargada de la lógica del swipe refresh de entrevistas
-     */
-    private void iniciarSwipeRefresh() {
-        swipeRefreshLayout = findViewById(R.id.refresh_entrevistas);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorSecondary), getResources().getColor(R.color.colorPrimary));
-        swipeRefreshLayout.setRefreshing(true);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //Forzar refresh entrevistas
-                entrevistaViewModel.refreshEntrevistas(entrevistado);
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
-    }
-
-    /**
      * Funcion encargada de inicializar los viewModelsObservers
      */
     private void iniciarViewModelObservers() {
@@ -148,7 +134,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
             public void onChanged(List<Entrevista> entrevistas) {
                 if (entrevistas != null) {
 
-                    swipeRefreshLayout.setRefreshing(false);
+                    progressBar.setVisibility(View.INVISIBLE);
 
                     //Contar cantidad de entrevistas
                     if (entrevistas.size() == 1) {
@@ -194,7 +180,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
 
                 showSnackbar(findViewById(R.id.entrevistas_list), s, getString(R.string.SNACKBAR_REINTENTAR));
 
-                swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -256,7 +242,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                         //Refresh listado de usuarios
                         entrevistaViewModel.refreshEntrevistas(entrevistado);
 
-                        swipeRefreshLayout.setRefreshing(true);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
 
@@ -264,10 +250,23 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_actualizar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        } else if (item.getItemId() == R.id.menu_actualizar) {
+
+            progressBar.setVisibility(View.VISIBLE);
+
+            entrevistaViewModel.refreshEntrevistas(entrevistado);
         }
         return super.onOptionsItemSelected(item);
     }

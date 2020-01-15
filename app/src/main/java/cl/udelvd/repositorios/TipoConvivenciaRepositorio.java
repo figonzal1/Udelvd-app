@@ -35,7 +35,7 @@ public class TipoConvivenciaRepositorio {
     private static TipoConvivenciaRepositorio instancia;
     private Application application;
 
-    private List<TipoConvivencia> tipoConvivenciaList;
+    private List<TipoConvivencia> tipoConvivenciaList = new ArrayList<>();
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
@@ -64,18 +64,14 @@ public class TipoConvivenciaRepositorio {
      * @return MutableLivedata usado en viewModel
      */
     public MutableLiveData<List<TipoConvivencia>> obtenerTiposConvivencias() {
-        enviarGetTipoConvivencia(tipoConvivenciaMutableLiveData);
+        enviarGetTipoConvivencia();
         return tipoConvivenciaMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar peticion GET al servidor para obtener listado de tipos de convivencia
-     *
-     * @param tipoConvivenciaMutableLiveData Listado mutable de tipos de convivencia
      */
-    private void enviarGetTipoConvivencia(final MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableLiveData) {
-
-        tipoConvivenciaList = new ArrayList<>();
+    private void enviarGetTipoConvivencia() {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override

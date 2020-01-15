@@ -85,8 +85,18 @@ public class EntrevistadoViewModel extends AndroidViewModel {
      * @param entrevistado Objeto entrevistado
      * @return Mutable Live data con los datos de la persona
      */
-    public MutableLiveData<Entrevistado> mostrarEntrevistado(Entrevistado entrevistado) {
+    public SingleLiveEvent<Entrevistado> mostrarEntrevistado(Entrevistado entrevistado) {
         repositorio = EntrevistadoRepositorio.getInstance(getApplication());
         return repositorio.obtenerEntrevistado(entrevistado);
+    }
+
+    /**
+     * Funcion que obliga a refrescar los datos del entrevistado
+     *
+     * @param entrevistado Datos del entrevistado
+     */
+    public void refreshEntrevistado(Entrevistado entrevistado) {
+        repositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        repositorio.obtenerEntrevistado(entrevistado);
     }
 }

@@ -121,6 +121,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
     private boolean isSpinnerSexoReady = false;
     private boolean isAutoCompleteCiudadReady = false;
     private boolean isEstadoCivilReady = false;
+    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,6 +277,10 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
             @Override
             public void onChanged(List<Ciudad> ciudads) {
+
+
+                Log.d("CARGNDO", "CIUDADES");
+
                 if (ciudads != null) {
                     ciudadList = ciudads;
                     ciudadAdapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
@@ -288,6 +293,28 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     ciudadAdapter.notifyDataSetChanged();
                 }
 
+            }
+        });
+
+        //Cargar Errores de listado
+        ciudadViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+
+                isAutoCompleteCiudadReady = false;
+                Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -312,8 +339,28 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                     estadoCivilAdapter.notifyDataSetChanged();
                 }
+            }
+        });
 
+        //ViewModel usado para detectar errores
+        estadoCivilViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
 
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                isEstadoCivilReady = false;
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -334,6 +381,26 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                     nivelEducacionalAdapter.notifyDataSetChanged();
                 }
+
+            }
+        });
+        //Errores de niveles educacoanles
+        nivelEducacionalViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -359,6 +426,26 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
             }
         });
+        //Observador de errores profesiones
+        profesionViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            }
+        });
     }
 
     private void setAutoCompleteTipoConvivencia() {
@@ -378,6 +465,27 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                     tipoConvivenciaAdapter.notifyDataSetChanged();
                 }
+
+            }
+        });
+
+        //Errores de tipo de convivencia
+        tipoConvivenciaViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -419,12 +527,15 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         entrevistadoViewModel.mostrarEntrevistado(entrevistadoIntent).observe(this, new Observer<Entrevistado>() {
             @Override
             public void onChanged(Entrevistado entrevistadoInternet) {
-                entrevistadoIntent = entrevistadoInternet;
 
-                if (isSpinnerSexoReady && isAutoCompleteCiudadReady && isEstadoCivilReady) {
-                    setearInfoEntrevistado();
+                if (entrevistadoInternet != null) {
+                    entrevistadoIntent = entrevistadoInternet;
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), entrevistadoIntent.toString()));
+                    if (isSpinnerSexoReady && isAutoCompleteCiudadReady && isEstadoCivilReady) {
+                        setearInfoEntrevistado();
+
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), entrevistadoIntent.toString()));
+                    }
                 }
             }
         });
@@ -438,8 +549,10 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -642,10 +755,19 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        //Refresh listado de usuarios
-                        entrevistadoViewModel.refreshListaEntrevistados();
+                        //Refresh info necesaria
+                        estadoCivilViewModel.refreshEstadosCiviles();
+                        ciudadViewModel.refreshCiudades();
+                        nivelEducacionalViewModel.refreshNivelesEduc();
+                        tipoConvivenciaViewModel.refreshTipoConvivencia();
+                        profesionViewModel.refreshProfesiones();
 
-                        progressBar.setVisibility(View.INVISIBLE);
+                        //Iniciar refesh del ultimo observer
+                        entrevistadoViewModel.refreshEntrevistado(entrevistadoIntent);
+
+                        progressBar.setVisibility(View.VISIBLE);
+
+                        isSnackBarShow = false;
                     }
                 });
 

@@ -35,7 +35,8 @@ public class EstadoCivilRepositorio {
     private static EstadoCivilRepositorio instancia;
     private Application application;
 
-    private List<EstadoCivil> estadoCivilList;
+    private List<EstadoCivil> estadoCivilList = new ArrayList<>();
+
     private MutableLiveData<List<EstadoCivil>> estadosCivilesMutable = new MutableLiveData<>();
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
@@ -74,18 +75,14 @@ public class EstadoCivilRepositorio {
      * @return MutableLivedata usado en viewModel
      */
     public MutableLiveData<List<EstadoCivil>> obtenerEstadosCiviles() {
-        enviarGetEstadosCiviles(estadosCivilesMutable);
+        enviarGetEstadosCiviles();
         return estadosCivilesMutable;
     }
 
     /**
      * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de estados civiles
-     *
-     * @param estadosCivilesMutable Lista vacia que será rellenada con lista de estados civiles
      */
-    private void enviarGetEstadosCiviles(final MutableLiveData<List<EstadoCivil>> estadosCivilesMutable) {
-
-        estadoCivilList = new ArrayList<>();
+    private void enviarGetEstadosCiviles() {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override

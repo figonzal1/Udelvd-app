@@ -656,7 +656,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                         tipoConvivenciaViewModel.refreshTipoConvivencia();
                         profesionViewModel.refreshProfesiones();
 
-                        progressBar.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.VISIBLE);
 
                         isSnackBarShow = false;
                     }

@@ -39,6 +39,8 @@ public class TipoConvivenciaRepositorio {
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
+    private MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableLiveData = new MutableLiveData<>();
+
     private static final String TAG_TIPO_CONVIVENCIA = "ListadoTipoConvivencia";
 
     private TipoConvivenciaRepositorio(Application application) {
@@ -62,7 +64,6 @@ public class TipoConvivenciaRepositorio {
      * @return MutableLivedata usado en viewModel
      */
     public MutableLiveData<List<TipoConvivencia>> obtenerTiposConvivencias() {
-        MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableLiveData = new MutableLiveData<>();
         enviarGetTipoConvivencia(tipoConvivenciaMutableLiveData);
         return tipoConvivenciaMutableLiveData;
     }

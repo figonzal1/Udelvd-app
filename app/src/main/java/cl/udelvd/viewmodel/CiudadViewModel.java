@@ -46,4 +46,9 @@ public class CiudadViewModel extends AndroidViewModel {
         repositorio = CiudadRepositorio.getInstancia(getApplication());
         return repositorio.getResponseMsgError();
     }
+
+    public void refreshCiudades() {
+        repositorio = CiudadRepositorio.getInstancia(getApplication());
+        repositorio.obtenerCiudades();
+    }
 }

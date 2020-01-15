@@ -39,6 +39,8 @@ public class NivelEducacionalRepositorio {
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
+    private MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData = new MutableLiveData<>();
+
     private static final String TAG_NIVEL_EDUCACIONAL = "ListadoNivelEducacional";
 
     private NivelEducacionalRepositorio(Application application) {
@@ -63,7 +65,6 @@ public class NivelEducacionalRepositorio {
      * @return MutableLivedata usado en viewModel
      */
     public MutableLiveData<List<NivelEducacional>> obtenerNivelesEducacionales() {
-        MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData = new MutableLiveData<>();
         enviarGetNivelesEduc(nivelEducMutableLiveData);
         return nivelEducMutableLiveData;
     }

@@ -23,6 +23,7 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -110,6 +111,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
+    boolean isSnackBarShow = false;
+
     public NuevoEntrevistadoActivity() {
     }
 
@@ -169,6 +172,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         switchCaidas = findViewById(R.id.switch_caidas_entrevistado);
 
         progressBar = findViewById(R.id.progress_horizontal_registro_entrevistado);
+        progressBar.setVisibility(View.VISIBLE);
 
     }
 
@@ -177,98 +181,22 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
      */
     private void iniciarViewModelObservers() {
 
-        //Crear instancias
-        ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
-        estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
-        nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
-        tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
-        profesionViewModel = ViewModelProviders.of(this).get(ProfesionViewModel.class);
+        viewModelEntrevistado();
+
+        viewModelEstadoCivil();
+
+        viewModelCiudad();
+
+        viewModelNivelEduc();
+
+        viewModelTipoConvivencia();
+
+        viewModelProfesiones();
+    }
+
+    private void viewModelEntrevistado() {
+
         entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
-
-        //Observador de estados civiles
-        estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
-            @Override
-            public void onChanged(List<EstadoCivil> estadoCivils) {
-
-                if (estadoCivils != null) {
-                    estadoCivilList = estadoCivils;
-                    estadoCivilAdapter = new EstadoCivilAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, estadoCivilList);
-                    acEstadoCivil.setAdapter(estadoCivilAdapter);
-
-                    estadoCivilAdapter.notifyDataSetChanged();
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-            }
-        });
-
-        //Observador de ciudades
-        ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
-            @Override
-            public void onChanged(List<Ciudad> ciudads) {
-
-                if (ciudads != null) {
-                    ciudadList = ciudads;
-                    ciudadAdapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
-                    acCiudad.setAdapter(ciudadAdapter);
-
-                    ciudadAdapter.notifyDataSetChanged();
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-
-            }
-        });
-
-        //Observador de niveles educacionaes
-        nivelEducacionalViewModel.cargarNivelesEduc().observe(this, new Observer<List<NivelEducacional>>() {
-            @Override
-            public void onChanged(List<NivelEducacional> nivelEducacionals) {
-                if (nivelEducacionals != null) {
-                    nivelEducacionalList = nivelEducacionals;
-                    nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
-                    acNivelEducacional.setAdapter(nivelEducacionalAdapter);
-
-                    nivelEducacionalAdapter.notifyDataSetChanged();
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-
-            }
-        });
-
-        //Observador de tipos de convivencias
-        tipoConvivenciaViewModel.cargarTiposConvivencias().observe(this, new Observer<List<TipoConvivencia>>() {
-            @Override
-            public void onChanged(List<TipoConvivencia> list) {
-                if (list != null) {
-                    tipoConvivenciaList = list;
-                    tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
-                    acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
-
-                    tipoConvivenciaAdapter.notifyDataSetChanged();
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-
-            }
-        });
-
-        //Observador de profesiones
-        profesionViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
-            @Override
-            public void onChanged(List<Profesion> profesions) {
-                if (profesions != null) {
-                    profesionList = profesions;
-                    profesionAdapter = new ProfesionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, profesionList);
-                    acProfesion.setAdapter(profesionAdapter);
-
-                    profesionAdapter.notifyDataSetChanged();
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-            }
-        });
 
         //Observador para mensajes creacion entrevistado
         entrevistadoViewModel.mostrarRespuestaRegistro().observe(this, new Observer<String>() {
@@ -293,9 +221,223 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             public void onChanged(String s) {
                 progressBar.setVisibility(View.GONE);
 
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                if (!isSnackBarShow) {
+
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+
+    }
+
+    private void viewModelEstadoCivil() {
+        estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
+        //Observador de estados civiles
+        estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
+            @Override
+            public void onChanged(List<EstadoCivil> estadoCivils) {
+
+                if (estadoCivils != null) {
+                    estadoCivilList = estadoCivils;
+                    estadoCivilAdapter = new EstadoCivilAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, estadoCivilList);
+                    acEstadoCivil.setAdapter(estadoCivilAdapter);
+
+                    estadoCivilAdapter.notifyDataSetChanged();
+
+                    progressBar.setVisibility(View.GONE);
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+            }
+        });
+
+        //Estado civil errores
+        //ViewModel usado para detectar errores
+        estadoCivilViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+    }
+
+    private void viewModelCiudad() {
+        ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
+        //Observador de ciudades
+        ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
+            @Override
+            public void onChanged(List<Ciudad> ciudads) {
+
+                if (ciudads != null) {
+                    ciudadList = ciudads;
+                    ciudadAdapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
+                    acCiudad.setAdapter(ciudadAdapter);
+
+                    ciudadAdapter.notifyDataSetChanged();
+
+                    progressBar.setVisibility(View.GONE);
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+
+            }
+        });
+
+        ciudadViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+    }
+
+    private void viewModelNivelEduc() {
+        nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
+        //Observador de niveles educacionaes
+        nivelEducacionalViewModel.cargarNivelesEduc().observe(this, new Observer<List<NivelEducacional>>() {
+            @Override
+            public void onChanged(List<NivelEducacional> nivelEducacionals) {
+                if (nivelEducacionals != null) {
+                    nivelEducacionalList = nivelEducacionals;
+                    nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
+                    acNivelEducacional.setAdapter(nivelEducacionalAdapter);
+
+                    nivelEducacionalAdapter.notifyDataSetChanged();
+
+                    progressBar.setVisibility(View.GONE);
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+
+            }
+        });
+        //Errores de niveles educacoanles
+        nivelEducacionalViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            }
+        });
+    }
+
+    private void viewModelTipoConvivencia() {
+        tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
+        //Observador de tipos de convivencias
+        tipoConvivenciaViewModel.cargarTiposConvivencias().observe(this, new Observer<List<TipoConvivencia>>() {
+            @Override
+            public void onChanged(List<TipoConvivencia> list) {
+                if (list != null) {
+                    tipoConvivenciaList = list;
+                    tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
+                    acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
+
+                    tipoConvivenciaAdapter.notifyDataSetChanged();
+
+                    progressBar.setVisibility(View.GONE);
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+
+            }
+        });
+
+        //Errores de tipo de convivencia
+        tipoConvivenciaViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            }
+        });
+    }
+
+    private void viewModelProfesiones() {
+        profesionViewModel = ViewModelProviders.of(this).get(ProfesionViewModel.class);
+        //Observador de profesiones
+        profesionViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
+            @Override
+            public void onChanged(List<Profesion> profesions) {
+                if (profesions != null) {
+                    profesionList = profesions;
+                    profesionAdapter = new ProfesionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, profesionList);
+                    acProfesion.setAdapter(profesionAdapter);
+
+                    profesionAdapter.notifyDataSetChanged();
+
+                    progressBar.setVisibility(View.GONE);
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                }
+            }
+        });
+
+        //Observador de errores profesiones
+        profesionViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
             }
         });
     }
@@ -493,6 +635,35 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         return contador_errores == 0;
     }
 
+    /**
+     * Funcion para mostrar el snackbar en fragment
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     * @param accion Boton de accion del snackbar
+     */
+    private void showSnackbar(View v, String titulo, String accion) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
+                .setAction(accion, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //Refresh listado de informacion necesaria
+                        estadoCivilViewModel.refreshEstadosCiviles();
+                        ciudadViewModel.refreshCiudades();
+                        nivelEducacionalViewModel.refreshNivelesEduc();
+                        tipoConvivenciaViewModel.refreshTipoConvivencia();
+                        profesionViewModel.refreshProfesiones();
+
+                        progressBar.setVisibility(View.GONE);
+
+                        isSnackBarShow = false;
+                    }
+                });
+
+        snackbar.show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

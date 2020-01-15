@@ -41,4 +41,9 @@ public class NivelEducacionalViewModel extends AndroidViewModel {
         repositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
         return repositorio.getResponseMsgError();
     }
+
+    public void refreshNivelesEduc() {
+        repositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
+        repositorio.obtenerNivelesEducacionales();
+    }
 }

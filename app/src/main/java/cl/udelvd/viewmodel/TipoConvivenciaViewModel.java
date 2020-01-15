@@ -10,6 +10,7 @@ import java.util.List;
 
 import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.repositorios.TipoConvivenciaRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class TipoConvivenciaViewModel extends AndroidViewModel {
 
@@ -35,5 +36,10 @@ public class TipoConvivenciaViewModel extends AndroidViewModel {
         }
 
         return tipoConvivenciaMutableLiveData;
+    }
+
+    public SingleLiveEvent<String> mostrarMsgError() {
+        repositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgError();
     }
 }

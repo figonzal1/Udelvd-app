@@ -28,6 +28,7 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class ProfesionRepositorio {
 
@@ -35,6 +36,8 @@ public class ProfesionRepositorio {
     private Application application;
 
     private List<Profesion> profesionsList;
+
+    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
     private static final String TAG_PROFESION = "ListadoProfesion";
 
@@ -47,6 +50,10 @@ public class ProfesionRepositorio {
             instancia = new ProfesionRepositorio(application);
         }
         return instancia;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgError() {
+        return responseMsgError;
     }
 
     /**
@@ -107,11 +114,13 @@ public class ProfesionRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -137,6 +146,7 @@ public class ProfesionRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }

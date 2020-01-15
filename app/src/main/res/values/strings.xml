@@ -7,6 +7,7 @@
     <string name="URL_PUT_INVESTIGADORES">http://192.168.0.14/investigadores/</string>
     <string name="URL_POST_ENTREVISTADOS">http://192.168.0.14/entrevistados</string>
     <string name="URL_GET_ENTREVISTADOS">http://192.168.0.14/entrevistados</string>
+    <string name="URL_GET_ENTREVISTADO">http://192.168.0.14/entrevistados/</string>
     <string name="URL_PUT_ENTREVISTADOS">http://192.168.0.14/entrevistados/</string>
     <string name="URL_GET_ACCIONES">http://192.168.0.14/acciones</string>
     <string name="URL_GET_CIUDADES">http://192.168.0.14/ciudades</string>

@@ -127,7 +127,7 @@ public class EntrevistadoListaFragment extends Fragment {
             @Override
             public void onChanged(String s) {
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s LISTADO %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
                     showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));

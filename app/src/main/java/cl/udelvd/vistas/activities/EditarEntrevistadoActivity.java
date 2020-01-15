@@ -22,6 +22,7 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -271,6 +272,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
     private void setAutoCompleteCiudad() {
         ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
 
+        //Cargar listado de ciudades
         ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
             @Override
             public void onChanged(List<Ciudad> ciudads) {
@@ -294,6 +296,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
         estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
 
+        //Cargar listado de estados civiles
         estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
             @Override
             public void onChanged(List<EstadoCivil> estadoCivils) {
@@ -318,6 +321,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
     private void setAutoCompleteNivelEducacional() {
         nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
 
+        //Cargar listado de niveles educacionales
         nivelEducacionalViewModel.cargarNivelesEduc().observe(this, new Observer<List<NivelEducacional>>() {
             @Override
             public void onChanged(List<NivelEducacional> nivelEducacionals) {
@@ -339,6 +343,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
         profesionViewModel = ViewModelProviders.of(this).get(ProfesionViewModel.class);
 
+        //Cargar listado de profesiones
         profesionViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
             @Override
             public void onChanged(List<Profesion> profesions) {
@@ -360,6 +365,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
         tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
 
+        //Cargar listado de tipo de convivencia
         tipoConvivenciaViewModel.cargarTiposConvivencias().observe(this, new Observer<List<TipoConvivencia>>() {
             @Override
             public void onChanged(List<TipoConvivencia> list) {
@@ -409,6 +415,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
         entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
 
+        //Cargar datos entrevistado
         entrevistadoViewModel.mostrarEntrevistado(entrevistadoIntent).observe(this, new Observer<Entrevistado>() {
             @Override
             public void onChanged(Entrevistado entrevistadoInternet) {
@@ -422,17 +429,24 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
             }
         });
 
+        //Cargar mensaje de error
         entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
+        //Cargar mensaje de actualizacion correcta
         entrevistadoViewModel.mostrarRespuestaActualizacion().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -535,6 +549,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
         } else if (item.getItemId() == R.id.menu_guardar) {
 
             if (validarCampos()) {
@@ -606,9 +621,35 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                 EntrevistadoRepositorio entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
                 entrevistadoRepositorio.actualizarEntrevistado(entrevistado);
             }
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Funcion para mostrar el snackbar en fragment
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     * @param accion Boton de accion del snackbar
+     */
+    private void showSnackbar(View v, String titulo, String accion) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
+                .setAction(accion, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //Refresh listado de usuarios
+                        entrevistadoViewModel.refreshListaEntrevistados();
+
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+        snackbar.show();
     }
 
     private boolean validarCampos() {

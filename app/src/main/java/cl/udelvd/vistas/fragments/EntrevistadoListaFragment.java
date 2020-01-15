@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,7 +36,7 @@ public class EntrevistadoListaFragment extends Fragment {
     private RecyclerView rv;
     private EntrevistadoViewModel entrevistadoViewModel;
     private EntrevistadoAdapter entrevistadoAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar progressBar;
 
 
     public EntrevistadoListaFragment() {
@@ -47,6 +51,7 @@ public class EntrevistadoListaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -55,18 +60,20 @@ public class EntrevistadoListaFragment extends Fragment {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_lista_entrevistados, container, false);
 
-        configurarRecyclerView(v);
+        instanciarRecursosInterfaz(v);
 
         iniciarViewModelObservers(v);
 
         floatingButtonCrearEntrevistado(v);
 
-        iniciarSwipeRefresh(v);
-
         return v;
     }
 
-    private void configurarRecyclerView(View v) {
+    private void instanciarRecursosInterfaz(View v) {
+
+        progressBar = v.findViewById(R.id.progress_bar_entrevistados);
+        progressBar.setVisibility(View.VISIBLE);
+
         rv = v.findViewById(R.id.rv_lista_usuarios);
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
@@ -93,26 +100,6 @@ public class EntrevistadoListaFragment extends Fragment {
     }
 
     /**
-     * Funcion encargada de configurar la lógica del SwipeRefresh
-     *
-     * @param v Vista usada para buscar swipeRefresh en fragment
-     */
-    private void iniciarSwipeRefresh(View v) {
-        swipeRefreshLayout = v.findViewById(R.id.refresh_usuarios);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorSecondary), getResources().getColor(R.color.colorPrimary));
-        swipeRefreshLayout.setRefreshing(true);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //Forzar refresh
-                entrevistadoViewModel.refreshListaEntrevistados();
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
-    }
-
-    /**
      * Funcion que instancia
      *
      * @param v Vista para mostrar snackbar
@@ -129,7 +116,7 @@ public class EntrevistadoListaFragment extends Fragment {
                 entrevistadoAdapter.notifyDataSetChanged();
                 rv.setAdapter(entrevistadoAdapter);
 
-                swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
             }
@@ -147,7 +134,7 @@ public class EntrevistadoListaFragment extends Fragment {
                 } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                     showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
-                swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -162,7 +149,7 @@ public class EntrevistadoListaFragment extends Fragment {
      */
     private void showSnackbar(View v, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.fragment_list), titulo, Snackbar.LENGTH_INDEFINITE)
+        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, Snackbar.LENGTH_INDEFINITE)
                 .setAction(accion, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -170,10 +157,26 @@ public class EntrevistadoListaFragment extends Fragment {
                         //Refresh listado de usuarios
                         entrevistadoViewModel.refreshListaEntrevistados();
 
-                        swipeRefreshLayout.setRefreshing(true);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
 
         snackbar.show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_actualizar, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.menu_actualizar) {
+            progressBar.setVisibility(View.VISIBLE);
+            entrevistadoViewModel.refreshListaEntrevistados();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

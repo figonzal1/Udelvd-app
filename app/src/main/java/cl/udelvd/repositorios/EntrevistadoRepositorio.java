@@ -44,6 +44,7 @@ public class EntrevistadoRepositorio {
     private final Application application;
 
     private List<Entrevistado> entrevistadoList;
+    private MutableLiveData<List<Entrevistado>> entrevistadoMutableLiveData = new MutableLiveData<>();
 
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
@@ -84,9 +85,8 @@ public class EntrevistadoRepositorio {
      * @return MutableLiveData con listado de usuarios
      */
     public MutableLiveData<List<Entrevistado>> obtenerEntrevistados() {
-        MutableLiveData<List<Entrevistado>> mutableLiveData = new MutableLiveData<>();
-        sendGetEntrevistados(mutableLiveData);
-        return mutableLiveData;
+        sendGetEntrevistados(entrevistadoMutableLiveData);
+        return entrevistadoMutableLiveData;
     }
 
     /**

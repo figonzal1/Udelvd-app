@@ -3,11 +3,12 @@ package cl.udelvd.vistas.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 import java.util.Locale;
@@ -49,10 +52,11 @@ public class EventosActivity extends AppCompatActivity {
 
     private List<Evento> eventoList;
     private EventoViewModel eventoViewModel;
+
     private FragmentStatePageAdapter fragmentStatePageAdapter;
     private ViewPager viewPager;
-
     private ProgressBar progressBar;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,20 +73,6 @@ public class EventosActivity extends AppCompatActivity {
 
         floatingButtonCrearEvento();
 
-    }
-
-    private void floatingButtonCrearEvento() {
-
-        FloatingActionButton fb_crear_evento = findViewById(R.id.fb_crear_evento);
-
-        fb_crear_evento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EventosActivity.this, NuevoEventoActivity.class);
-                intent.putExtra(getString(R.string.KEY_ENTREVISTA_ID_LARGO), entrevista.getId());
-                startActivity(intent);
-            }
-        });
     }
 
     /**
@@ -122,6 +112,9 @@ public class EventosActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.view_pager_events);
 
+        tabLayout = findViewById(R.id.tab_dots);
+        tabLayout.setupWithViewPager(viewPager, true);
+
         tv_nombreApellido = findViewById(R.id.tv_entrevistado_nombre);
         tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
         tv_normales = findViewById(R.id.tv_normales_value);
@@ -154,7 +147,6 @@ public class EventosActivity extends AppCompatActivity {
             public void onChanged(List<Evento> eventos) {
                 if (eventos != null) {
 
-                    //TODO: Poner SwipeFrefresh (?)
                     progressBar.setVisibility(View.INVISIBLE);
 
                     eventoList = eventos;
@@ -182,11 +174,36 @@ public class EventosActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.INVISIBLE);
 
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                showSnackbar(findViewById(R.id.eventos_lista), s, getString(R.string.SNACKBAR_REINTENTAR));
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), getString(R.string.VIEW_MODEL_MSG_RESPONSE));
             }
         });
+    }
+
+    /**
+     * Boton flotante para crear evento
+     */
+    private void floatingButtonCrearEvento() {
+
+        FloatingActionButton fb_crear_evento = findViewById(R.id.fb_crear_evento);
+
+        fb_crear_evento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EventosActivity.this, NuevoEventoActivity.class);
+                intent.putExtra(getString(R.string.KEY_ENTREVISTA_ID_LARGO), entrevista.getId());
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_actualizar, menu);
+        return true;
     }
 
     @Override
@@ -195,8 +212,37 @@ public class EventosActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        } else if (item.getItemId() == R.id.menu_actualizar) {
+
+            //Refrescar eventos
+            progressBar.setVisibility(View.VISIBLE);
+            eventoViewModel.refreshEventos(entrevista);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Funcion para mostrar el snackbar en la actividad
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     * @param accion Boton de accion del snackbar
+     */
+    private void showSnackbar(View v, String titulo, String accion) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
+                .setAction(accion, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //Refresh listado de usuarios
+                        eventoViewModel.refreshEventos(entrevista);
+
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+                });
+
+        snackbar.show();
     }
 }

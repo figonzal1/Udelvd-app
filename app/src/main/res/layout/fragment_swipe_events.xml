@@ -272,6 +272,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/iv_emoticon_evento"
                     tools:text="Descripción emoticón" />
 
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    style="@style/Widget.MaterialComponents.FloatingActionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_edit_pencil_black_24dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:fabSize="mini"
+                    app:layout_constraintBottom_toBottomOf="@+id/divider1"
+                    app:layout_constraintEnd_toEndOf="@+id/divider1"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_detalle_evento" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>

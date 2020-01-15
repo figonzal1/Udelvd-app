@@ -54,4 +54,14 @@ public class EventoViewModel extends AndroidViewModel {
         repositorio = EventoRepositorio.getInstancia(getApplication());
         return repositorio.getResponseMsgRegistro();
     }
+
+    /**
+     * Funcion encargada de forzar refresh de listado de Eventos
+     *
+     * @param entrevista Datos necesarios para buscar eventos
+     */
+    public void refreshEventos(Entrevista entrevista) {
+        repositorio = EventoRepositorio.getInstancia(getApplication());
+        repositorio.obtenerEventosEntrevista(entrevista);
+    }
 }

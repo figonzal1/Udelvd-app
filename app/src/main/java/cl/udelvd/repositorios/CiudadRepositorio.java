@@ -36,7 +36,7 @@ public class CiudadRepositorio {
     private static CiudadRepositorio instancia;
     private final Application application;
 
-    private List<Ciudad> ciudadList;
+    private List<Ciudad> ciudadList = new ArrayList<>();
 
     private MutableLiveData<List<Ciudad>> ciudadesMutableLiveData = new MutableLiveData<>();
 
@@ -65,18 +65,14 @@ public class CiudadRepositorio {
      * @return MutableLiveData usado en viewModel
      */
     public MutableLiveData<List<Ciudad>> obtenerCiudades() {
-        enviarGetCiudades(ciudadesMutableLiveData);
+        enviarGetCiudades();
         return ciudadesMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar la solicitud GET al servidor, para obtener listado de ciudades disponibles.
-     *
-     * @param ciudadesMutableLiveData Lista mutable vacia rellenada con lista de ciudades
      */
-    private void enviarGetCiudades(final MutableLiveData<List<Ciudad>> ciudadesMutableLiveData) {
-
-        ciudadList = new ArrayList<>();
+    private void enviarGetCiudades() {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -100,7 +96,6 @@ public class CiudadRepositorio {
                         ciudad.setNombre(nombre_ciudad);
 
                         ciudadList.add(ciudad);
-
                     }
 
                     ciudadesMutableLiveData.postValue(ciudadList);

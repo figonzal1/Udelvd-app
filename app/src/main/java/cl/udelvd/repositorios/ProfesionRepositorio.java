@@ -35,9 +35,9 @@ public class ProfesionRepositorio {
     private static ProfesionRepositorio instancia;
     private Application application;
 
-    private List<Profesion> profesionsList;
+    private List<Profesion> profesionsList = new ArrayList<>();
 
-    private MutableLiveData<List<Profesion>> profesionMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Profesion>> profesionMutableLiveData = new MutableLiveData<>();    //Instanciar aqui permite refresh
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
@@ -64,18 +64,14 @@ public class ProfesionRepositorio {
      * @return MutableLivedata usado en viewModel
      */
     public MutableLiveData<List<Profesion>> obtenerNivelesEducacionales() {
-        enviarGetProfesion(profesionMutableLiveData);
+        enviarGetProfesion();
         return profesionMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de niveles educacionales
-     *
-     * @param profesionMutableLiveData Lista vacia que será rellenada con lista de niveles educacionales
      */
-    private void enviarGetProfesion(final MutableLiveData<List<Profesion>> profesionMutableLiveData) {
-
-        profesionsList = new ArrayList<>();
+    private void enviarGetProfesion() {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override

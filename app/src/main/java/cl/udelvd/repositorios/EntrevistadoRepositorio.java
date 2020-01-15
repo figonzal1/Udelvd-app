@@ -44,7 +44,8 @@ public class EntrevistadoRepositorio {
     private final Application application;
 
     private List<Entrevistado> entrevistadoList;
-    private MutableLiveData<List<Entrevistado>> entrevistadoMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<Entrevistado> entrevistadoMutableLiveData = new SingleLiveEvent<>();
 
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
@@ -85,24 +86,20 @@ public class EntrevistadoRepositorio {
      * @return MutableLiveData con listado de usuarios
      */
     public MutableLiveData<List<Entrevistado>> obtenerEntrevistados() {
-        sendGetEntrevistados(entrevistadoMutableLiveData);
-        return entrevistadoMutableLiveData;
+        sendGetEntrevistados();
+        return entrevistadosMutableLiveData;
     }
 
     /**
      * Funcion que realizar solicitud GET para obtener listado de usuarios
-     *
-     * @param entrevistadosMutableLiveData Lista mutable vacia rellenada con lista de entrevistados
      */
-    private void sendGetEntrevistados(final MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData) {
-
-        entrevistadoList = new ArrayList<>();
+    private void sendGetEntrevistados() {
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-
+                entrevistadoList = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -435,20 +432,17 @@ public class EntrevistadoRepositorio {
      * @param entrevistado Objeto entrevistado
      * @return MutableLiveData de entrevistado
      */
-    public MutableLiveData<Entrevistado> obtenerEntrevistado(Entrevistado entrevistado) {
-        MutableLiveData<Entrevistado> entrevistadoMutableLiveData = new MutableLiveData<>();
-        enviarGetEntrevistado(entrevistado, entrevistadoMutableLiveData);
+    public SingleLiveEvent<Entrevistado> obtenerEntrevistado(Entrevistado entrevistado) {
+        enviarGetEntrevistado(entrevistado);
         return entrevistadoMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar solicitud GET para obtener datos de entrevistado específico
      *
-     * @param entrevistado                Objeto entrevistado
-     * @param entrevistadoMutableLiveData Información de un entrevistado
+     * @param entrevistado Objeto entrevistado
      */
-    private void enviarGetEntrevistado(final Entrevistado entrevistado, final MutableLiveData<Entrevistado> entrevistadoMutableLiveData) {
-
+    private void enviarGetEntrevistado(final Entrevistado entrevistado) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

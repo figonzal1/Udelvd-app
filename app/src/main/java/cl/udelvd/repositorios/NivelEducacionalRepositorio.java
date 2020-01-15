@@ -35,7 +35,7 @@ public class NivelEducacionalRepositorio {
     private static NivelEducacionalRepositorio instancia;
     private Application application;
 
-    private List<NivelEducacional> nivelEducacionalList;
+    private List<NivelEducacional> nivelEducacionalList = new ArrayList<>();
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
@@ -65,18 +65,14 @@ public class NivelEducacionalRepositorio {
      * @return MutableLivedata usado en viewModel
      */
     public MutableLiveData<List<NivelEducacional>> obtenerNivelesEducacionales() {
-        enviarGetNivelesEduc(nivelEducMutableLiveData);
+        enviarGetNivelesEduc();
         return nivelEducMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de niveles educacionales
-     *
-     * @param nivelEducMutableLiveData Lista vacia que será rellenada con lista de niveles educacionales
      */
-    private void enviarGetNivelesEduc(final MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData) {
-
-        nivelEducacionalList = new ArrayList<>();
+    private void enviarGetNivelesEduc() {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override

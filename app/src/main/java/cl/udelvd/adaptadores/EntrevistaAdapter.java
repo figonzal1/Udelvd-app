@@ -76,7 +76,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
                 bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(context.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
                 bundle.putString(context.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(context.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
-                bundle.putString(context.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), context.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS));
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), String.valueOf(params.get(context.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS))));
 
                 intent.putExtras(bundle);
                 context.startActivity(intent);

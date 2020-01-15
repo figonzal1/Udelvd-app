@@ -38,6 +38,8 @@ public class CiudadRepositorio {
 
     private List<Ciudad> ciudadList;
 
+    private MutableLiveData<List<Ciudad>> ciudadesMutableLiveData = new MutableLiveData<>();
+
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
     private static final String TAG_GET_CIUDADES = "ListaCiudades";
@@ -63,7 +65,6 @@ public class CiudadRepositorio {
      * @return MutableLiveData usado en viewModel
      */
     public MutableLiveData<List<Ciudad>> obtenerCiudades() {
-        MutableLiveData<List<Ciudad>> ciudadesMutableLiveData = new MutableLiveData<>();
         enviarGetCiudades(ciudadesMutableLiveData);
         return ciudadesMutableLiveData;
     }

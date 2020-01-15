@@ -36,6 +36,7 @@ public class EstadoCivilRepositorio {
     private Application application;
 
     private List<EstadoCivil> estadoCivilList;
+    private MutableLiveData<List<EstadoCivil>> estadosCivilesMutable = new MutableLiveData<>();
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
@@ -73,8 +74,6 @@ public class EstadoCivilRepositorio {
      * @return MutableLivedata usado en viewModel
      */
     public MutableLiveData<List<EstadoCivil>> obtenerEstadosCiviles() {
-
-        MutableLiveData<List<EstadoCivil>> estadosCivilesMutable = new MutableLiveData<>();
         enviarGetEstadosCiviles(estadosCivilesMutable);
         return estadosCivilesMutable;
     }

@@ -42,4 +42,9 @@ public class TipoConvivenciaViewModel extends AndroidViewModel {
         repositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
         return repositorio.getResponseMsgError();
     }
+
+    public void refreshTipoConvivencia() {
+        repositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
+        repositorio.obtenerTiposConvivencias();
+    }
 }

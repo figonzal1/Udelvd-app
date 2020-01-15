@@ -37,6 +37,8 @@ public class ProfesionRepositorio {
 
     private List<Profesion> profesionsList;
 
+    private MutableLiveData<List<Profesion>> profesionMutableLiveData = new MutableLiveData<>();
+
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
     private static final String TAG_PROFESION = "ListadoProfesion";
@@ -62,7 +64,6 @@ public class ProfesionRepositorio {
      * @return MutableLivedata usado en viewModel
      */
     public MutableLiveData<List<Profesion>> obtenerNivelesEducacionales() {
-        MutableLiveData<List<Profesion>> profesionMutableLiveData = new MutableLiveData<>();
         enviarGetProfesion(profesionMutableLiveData);
         return profesionMutableLiveData;
     }

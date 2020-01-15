@@ -47,4 +47,9 @@ public class ProfesionViewModel extends AndroidViewModel {
         repositorio = ProfesionRepositorio.getInstancia(getApplication());
         return repositorio.getResponseMsgError();
     }
+
+    public void refreshProfesiones() {
+        repositorio = ProfesionRepositorio.getInstancia(getApplication());
+        repositorio.obtenerNivelesEducacionales();
+    }
 }

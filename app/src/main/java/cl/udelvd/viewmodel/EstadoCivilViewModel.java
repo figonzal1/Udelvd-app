@@ -45,4 +45,12 @@ public class EstadoCivilViewModel extends AndroidViewModel {
         repositorio = EstadoCivilRepositorio.getInstance(getApplication());
         return repositorio.getResponseMsgError();
     }
+
+    /**
+     * Forzar actulizacion de estados civiles
+     */
+    public void refreshEstadosCiviles() {
+        repositorio = EstadoCivilRepositorio.getInstance(getApplication());
+        repositorio.obtenerEstadosCiviles();
+    }
 }

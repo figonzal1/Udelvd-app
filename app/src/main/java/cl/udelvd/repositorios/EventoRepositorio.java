@@ -42,16 +42,24 @@ public class EventoRepositorio {
 
     private static final String TAG_GET_EVENTOS_ENTREVISTA = "ListaEventosEntrevista";
     private static final String TAG_CREAR_EVENTO = "CrearEvento";
+    private static final String TAG_GET_EVENTO = "ObtenerEvento";
 
     private static EventoRepositorio instancia;
     private Application application;
 
     private List<Evento> eventoList = new ArrayList<>();
 
+    //LISTADO
     private MutableLiveData<List<Evento>> eventosMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<String> responseErrorMsgListado = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<String> responseErrorMsg = new SingleLiveEvent<>();
+    //REGISTRO
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseErrorMsgRegistro = new SingleLiveEvent<>();
+
+    //GET EVENTO
+    private SingleLiveEvent<Evento> eventoMutableLiveData = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseErrorMsgEvento = new SingleLiveEvent<>();
 
 
     private EventoRepositorio(Application application) {
@@ -65,12 +73,20 @@ public class EventoRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseErrorMsg() {
-        return responseErrorMsg;
+    public SingleLiveEvent<String> getResponseErrorMsgEvento() {
+        return responseErrorMsgEvento;
     }
 
     public SingleLiveEvent<String> getResponseMsgRegistro() {
         return responseMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgRegistro() {
+        return responseErrorMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgListado() {
+        return responseErrorMsgListado;
     }
 
     /**
@@ -150,10 +166,10 @@ public class EventoRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), application.getString(R.string.TIMEOUT_ERROR));
-                    responseErrorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseErrorMsgListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 } else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), application.getString(R.string.NETWORK_ERROR));
-                    responseErrorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseErrorMsgListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si response
@@ -174,13 +190,13 @@ public class EventoRepositorio {
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                        responseErrorMsg.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                        responseErrorMsgListado.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseErrorMsgListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
@@ -261,13 +277,13 @@ public class EventoRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
-                    responseErrorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseErrorMsgRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.NETWORK_ERROR));
-                    responseErrorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseErrorMsgRegistro.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -293,7 +309,7 @@ public class EventoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseErrorMsgRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
@@ -331,5 +347,124 @@ public class EventoRepositorio {
             }
         };
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_CREAR_EVENTO);
+    }
+
+    /**
+     * Funcion encargada de obtener un evento específico
+     *
+     * @param eventoIntent Información del evento
+     * @return SingleLiveEvent con la informacion
+     */
+    public SingleLiveEvent<Evento> obtenerEvento(Evento eventoIntent) {
+        sendGetEvento(eventoIntent);
+        return eventoMutableLiveData;
+    }
+
+    /**
+     * Funcion encargada de enviar peticion GET para obtener información de un evento especifico
+     *
+     * @param eventoIntent Evento con la informacion asociada
+     */
+    private void sendGetEvento(Evento eventoIntent) {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject("data");
+
+                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+
+                    Evento evento = new Evento();
+                    evento.setId(jsonData.getInt(application.getString(R.string.KEY_EVENTO_ID)));
+
+                    evento.setJustificacion(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
+
+                    evento.setHora_evento(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+
+                    Accion accion = new Accion();
+                    accion.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_ACCION)));
+                    evento.setAccion(accion);
+
+                    Emoticon emoticon = new Emoticon();
+                    emoticon.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_EMOTICON)));
+                    evento.setEmoticon(emoticon);
+
+                    Entrevista entrevista = new Entrevista();
+                    entrevista.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_ENTREVISTA)));
+                    evento.setEntrevista(entrevista);
+
+                    eventoMutableLiveData.postValue(evento);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseErrorMsgEvento.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), application.getString(R.string.NETWORK_ERROR));
+                    responseErrorMsgEvento.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseErrorMsgEvento.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(Locale.US, application.getString(R.string.URL_GET_EVENTO_ESPECIFICO), eventoIntent.getEntrevista().getId(), eventoIntent.getId());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+
+
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTO);
     }
 }

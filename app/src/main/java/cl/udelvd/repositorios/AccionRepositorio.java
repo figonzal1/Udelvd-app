@@ -175,4 +175,15 @@ public class AccionRepositorio {
         }
         return null;
     }
+
+    public Accion buscarAccionPorId(int id) {
+
+        Log.d("ACCIONLIST", String.valueOf(accionList.size()));
+        for (int i = 0; i < accionList.size(); i++) {
+            if (accionList.get(i).getId() == id) {
+                return accionList.get(i);
+            }
+        }
+        return null;
+    }
 }

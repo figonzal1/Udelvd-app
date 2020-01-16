@@ -283,7 +283,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
             }
         });
 
-        eventoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+        eventoViewModel.mostrarErrorRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 progressBar.setVisibility(View.GONE);

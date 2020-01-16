@@ -160,6 +160,8 @@ public class EventosActivity extends AppCompatActivity {
                         viewPager.setVisibility(View.VISIBLE);
                         tv_eventos_vacios.setVisibility(View.INVISIBLE);
 
+                        fragmentStatePageAdapter.notifyDataSetChanged();
+
                     } else {
                         viewPager.setVisibility(View.GONE);
                         tv_eventos_vacios.setVisibility(View.VISIBLE);
@@ -169,7 +171,7 @@ public class EventosActivity extends AppCompatActivity {
         });
 
         //Observador de error al cargar eventos
-        eventoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+        eventoViewModel.mostrarErrorListado().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 

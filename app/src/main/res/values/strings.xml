@@ -23,6 +23,7 @@
     <string name="URL_PUT_ENTREVISTA_ESPECIFICA">http://192.168.0.14/entrevistados/%d/entrevistas/%d</string>
     <string name="URL_GET_EVENTO">http://192.168.0.14/entrevistas/%d/eventos</string>
     <string name="URL_POST_EVENTO">http://192.168.0.14/entrevistas/%d/eventos</string>
+    <string name="URL_GET_EVENTO_ESPECIFICO">http://192.168.0.14/entrevistas/%d/eventos/%d</string>
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
@@ -35,6 +36,7 @@
     <string name="TITULO_TOOLBAR_EVENTOS">Eventos</string>
     <string name="TITULO_TOOLBAR_LISTA_ENTREVISTAS">Listado entrevistas</string>
     <string name="TITUTLO_TOOLBAR_EDITAR_PERFIL">Editar perfil</string>
+    <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Editar evento</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY">udelvd</string>
@@ -131,6 +133,7 @@
     <string name="KEY_TIPO_ENTREVISTA_NOMBRE">nombre</string>
 
     <string name="KEY_EVENTO_ID">id</string>
+    <string name="KEY_EVENTO_ID_LARGO">id_evento</string>
     <string name="KEY_EVENTO_ID_EMOTICON">id_emoticon</string>
     <string name="KEY_EVENTO_ID_ENTREVISTA">id_entrevista</string>
     <string name="KEY_EVENTO_ID_ACCION">id_accion</string>
@@ -196,6 +199,7 @@
     <string name="TAG_VOLLEY_ERR_ENTREVISTA">VOLLEY_ERR_ENTREVISTA</string>
     <string name="TAG_VOLLEY_ERR_EVENTOS">VOLLEY_ERR_EVENTOS</string>
     <string name="TAG_VOLLEY_ERR_CREAR_EVENTO">VOLLEY_ERR_CREAR_EVENTO</string>
+    <string name="TAG_VOLLEY_ERR_EVENTO">VOLLEY_ERR_EVENTO</string>
 
     <!-- Miscelaneos -->
     <string name="UPDATE_MSG_VM">mensaje_update</string>
@@ -265,6 +269,7 @@
     <string name="VALIDACION_EMOTICON">Elige un emoticón</string>
     <string name="TAG_VIEW_MODEL_LISTA_EVENTOS">VM_LISTA_EVENTOS</string>
     <string name="TAG_VIEW_MODEL_EDITAR_PERFIL">VM_EDITAR_PERFIL</string>
+    <string name="TAG_VIEW_MODEL_EDITAR_EVENTO">VM_MODEL_EDITAR_EVENTO</string>
 
 
 </resources>

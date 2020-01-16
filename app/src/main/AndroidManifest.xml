@@ -53,6 +53,9 @@
         <activity
             android:name=".vistas.activities.NuevoEventoActivity"
             android:parentActivityName=".vistas.activities.EventosActivity" />
+        <activity
+            android:name=".vistas.activities.EditarEventoActivity"
+            android:parentActivityName=".vistas.activities.EventosActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

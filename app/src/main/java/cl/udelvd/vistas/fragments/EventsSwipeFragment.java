@@ -1,5 +1,6 @@
 package cl.udelvd.vistas.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,15 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.utilidades.Utils;
+import cl.udelvd.vistas.activities.EditarEventoActivity;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -34,6 +38,7 @@ public class EventsSwipeFragment extends Fragment {
     private TextView tv_hora_evento;
     private TextView tv_justificacion;
     private TextView tv_descripcion_emoticon;
+    private FloatingActionButton fbEditarEvento;
 
 
     public EventsSwipeFragment() {
@@ -76,6 +81,8 @@ public class EventsSwipeFragment extends Fragment {
         tv_justificacion = v.findViewById(R.id.tv_justificacion_evento);
         iv_emoticon = v.findViewById(R.id.iv_emoticon_evento);
         tv_descripcion_emoticon = v.findViewById(R.id.tv_descripcion_emoticon);
+
+        fbEditarEvento = v.findViewById(R.id.fb_editar_evento);
     }
 
     /**
@@ -102,6 +109,15 @@ public class EventsSwipeFragment extends Fragment {
                 .into(iv_emoticon);
 
         //TODO: AGREGAR OPCION EDITAR FRAGMENT
+        fbEditarEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), EditarEventoActivity.class);
+                intent.putExtra(getString(R.string.KEY_EVENTO_ID_ENTREVISTA), evento.getEntrevista().getId());
+                intent.putExtra(getString(R.string.KEY_EVENTO_ID_LARGO), evento.getId());
+                Objects.requireNonNull(getContext()).startActivity(intent);
+            }
+        });
     }
 
     public void setEvento(Evento evento) {

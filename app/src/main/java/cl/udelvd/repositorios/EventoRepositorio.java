@@ -47,7 +47,7 @@ public class EventoRepositorio {
     private static EventoRepositorio instancia;
     private Application application;
 
-    private List<Evento> eventoList = new ArrayList<>();
+    private List<Evento> eventosList = new ArrayList<>();
 
     //LISTADO
     private MutableLiveData<List<Evento>> eventosMutableLiveData = new MutableLiveData<>();
@@ -61,6 +61,8 @@ public class EventoRepositorio {
     private SingleLiveEvent<Evento> eventoMutableLiveData = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseErrorMsgEvento = new SingleLiveEvent<>();
 
+    //PROGRESS DIALOG
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private EventoRepositorio(Application application) {
         this.application = application;
@@ -89,6 +91,10 @@ public class EventoRepositorio {
         return responseErrorMsgListado;
     }
 
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
     /**
      * Funcion encargada de obtener los eventos de una entrevista dada
      *
@@ -106,7 +112,7 @@ public class EventoRepositorio {
      * @param entrevista Datos de entrevista para realizar la busqueda
      */
     private void enviarGetEventosEntrevista(Entrevista entrevista) {
-        eventoList.clear();
+        eventosList.clear();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -151,10 +157,11 @@ public class EventoRepositorio {
                         emoticon.setUrl(jsonEmoticonData.getString(application.getString(R.string.KEY_EMOTICON_URL)));
                         evento.setEmoticon(emoticon);
 
-                        eventoList.add(evento);
+                        eventosList.add(evento);
                     }
 
-                    eventosMutableLiveData.postValue(eventoList);
+                    eventosMutableLiveData.postValue(eventosList);
+                    isLoading.postValue(false);
                 } catch (JSONException | ParseException e) {
                     e.printStackTrace();
                 }
@@ -219,7 +226,7 @@ public class EventoRepositorio {
                 return params;
             }
         };
-
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTOS_ENTREVISTA);
 
     }

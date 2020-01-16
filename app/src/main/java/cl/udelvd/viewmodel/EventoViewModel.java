@@ -23,6 +23,12 @@ public class EventoViewModel extends AndroidViewModel {
         super(application);
     }
 
+    /**
+     * Funcion encargada de enviar listado de eventos desde repositorio a UI
+     *
+     * @param entrevista Datos de entrevista para buscar eventos asociados
+     * @return MutableLiveData con listado de eventos
+     */
     public MutableLiveData<List<Evento>> cargarEventos(Entrevista entrevista) {
 
         if (eventoMutableLiveData == null) {
@@ -33,6 +39,12 @@ public class EventoViewModel extends AndroidViewModel {
         return eventoMutableLiveData;
     }
 
+    /**
+     * Funcion encargada de cargar evento especifico para edicion
+     *
+     * @param eventoIntent Datos basico para busqueda
+     * @return SingleLiveEvento con datos del evento
+     */
     public SingleLiveEvent<Evento> cargarEvento(Evento eventoIntent) {
         repositorio = EventoRepositorio.getInstancia(getApplication());
         return repositorio.obtenerEvento(eventoIntent);
@@ -100,5 +112,15 @@ public class EventoViewModel extends AndroidViewModel {
     public void refreshEvento(Evento evento) {
         repositorio = EventoRepositorio.getInstancia(getApplication());
         repositorio.obtenerEvento(evento);
+    }
+
+    /**
+     * Funcion encargada de enviar alerta a progresDialog
+     *
+     * @return MutableLiveData con booleano asociado
+     */
+    public MutableLiveData<Boolean> isLoading() {
+        repositorio = EventoRepositorio.getInstancia(getApplication());
+        return repositorio.getIsLoading();
     }
 }

@@ -73,6 +73,8 @@ public class TipoConvivenciaRepositorio {
      */
     private void enviarGetTipoConvivencia() {
 
+        tipoConvivenciaList.clear();
+
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

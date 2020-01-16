@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -74,6 +75,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
     private void instanciarRecursosInterfaz() {
 
         progressBar = findViewById(R.id.progress_horizontal_nueva_entrevista);
+        progressBar.setVisibility(View.VISIBLE);
 
         ilFechaEntrevista = findViewById(R.id.il_fecha_entrevista);
         ilTipoEntrevista = findViewById(R.id.il_tipo_entrevista);
@@ -96,10 +98,14 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
         tipoEntrevistaViewModel = ViewModelProviders.of(this).get(TipoEntrevistaViewModel.class);
         entrevistaViewModel = ViewModelProviders.of(this).get(EntrevistaViewModel.class);
 
+        //Cargar listado de tipos de entrevista
         tipoEntrevistaViewModel.cargarTiposEntrevistas().observe(this, new Observer<List<TipoEntrevista>>() {
             @Override
             public void onChanged(List<TipoEntrevista> tipoEntrevistas) {
                 if (tipoEntrevistas != null) {
+
+                    progressBar.setVisibility(View.GONE);
+
                     tipoEntrevistaList = tipoEntrevistas;
                     tipoEntrevistaAdapter = new TipoEntrevistaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoEntrevistaList);
                     acTipoEntrevista.setAdapter(tipoEntrevistaAdapter);
@@ -109,6 +115,23 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
                     tipoEntrevistaAdapter.notifyDataSetChanged();
                 }
 
+            }
+        });
+
+        //Cargar errores de tipos de entrevistas
+        tipoEntrevistaViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.formulario_nueva_entrevista), s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.formulario_nueva_entrevista), s, getString(R.string.SNACKBAR_REINTENTAR));
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -216,6 +239,30 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
         }
 
         return contador_errores == 0;
+    }
+
+    /**
+     * Funcion para mostrar el snackbar en fragment
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     * @param accion Boton de accion del snackbar
+     */
+    private void showSnackbar(View v, String titulo, String accion) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
+                .setAction(accion, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //Refresh listado de informacion necesaria
+                        tipoEntrevistaViewModel.refreshTipoEntrevistas();
+
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+                });
+
+        snackbar.show();
     }
 
     @Override

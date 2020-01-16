@@ -74,6 +74,8 @@ public class NivelEducacionalRepositorio {
      */
     private void enviarGetNivelesEduc() {
 
+        nivelEducacionalList.clear();
+
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

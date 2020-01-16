@@ -28,13 +28,18 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.TipoEntrevista;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class TipoEntrevistaRepositorio {
 
     private static TipoEntrevistaRepositorio instancia;
     private Application application;
 
-    private List<TipoEntrevista> tipoEntrevistaList;
+    private List<TipoEntrevista> tipoEntrevistaList = new ArrayList<>();
+
+    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+
+    private MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutable = new MutableLiveData<>();
 
     private static final String TAG_TIPO_ENTREVISTA = "TiposEntrevistas";
 
@@ -49,25 +54,26 @@ public class TipoEntrevistaRepositorio {
         return instancia;
     }
 
+    public SingleLiveEvent<String> getResponseMsgError() {
+        return responseMsgError;
+    }
+
     /**
      * Funcion encargada de obtener el listado de tipos de entrevista
      *
      * @return MutableLiveData de tipos de entrevista
      */
     public MutableLiveData<List<TipoEntrevista>> obtenerTiposEntrevista() {
-        MutableLiveData<List<TipoEntrevista>> mutableLiveData = new MutableLiveData<>();
-        sendGetTiposEntrevista(mutableLiveData);
-        return mutableLiveData;
+        sendGetTiposEntrevista();
+        return tipoEntrevistaMutable;
     }
 
     /**
      * Funcion encargada de enviar peticion GET al servidor
-     *
-     * @param mutableLiveData Listado mutable de tipos de entrevistas
      */
-    private void sendGetTiposEntrevista(final MutableLiveData<List<TipoEntrevista>> mutableLiveData) {
+    private void sendGetTiposEntrevista() {
 
-        tipoEntrevistaList = new ArrayList<>();
+        tipoEntrevistaList.clear();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -92,7 +98,7 @@ public class TipoEntrevistaRepositorio {
                         tipoEntrevistaList.add(tipoEntrevista);
                     }
 
-                    mutableLiveData.postValue(tipoEntrevistaList);
+                    tipoEntrevistaMutable.postValue(tipoEntrevistaList);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -104,11 +110,13 @@ public class TipoEntrevistaRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -134,6 +142,7 @@ public class TipoEntrevistaRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }

@@ -54,13 +54,14 @@ public class EntrevistaViewModel extends AndroidViewModel {
      * @param entrevista Datos de la entrevista pra ser buscada
      * @return Mutable con el objeto entrevista
      */
-    public MutableLiveData<Entrevista> cargarEntrevista(Entrevista entrevista) {
+    public SingleLiveEvent<Entrevista> cargarEntrevista(Entrevista entrevista) {
         repositorio = EntrevistaRepositorio.getInstancia(getApplication());
         return repositorio.obtenerEntrevistaPersonal(entrevista);
     }
 
     /**
      * Funcion encargada de mostrar la respuesta post registro de entrevista en la UI
+     *
      * @return SingleLiveEvent con evento unico de mensaje
      */
     public SingleLiveEvent<String> mostrarRespuestaRegistro() {
@@ -70,6 +71,7 @@ public class EntrevistaViewModel extends AndroidViewModel {
 
     /**
      * Funcion encargada de mostrar la respuesta erronea post registro de entrevista en la UI
+     *
      * @return SingleLiveEvent con evento unico de mensaje
      */
     public SingleLiveEvent<String> mostrarRespuestaError() {
@@ -85,5 +87,10 @@ public class EntrevistaViewModel extends AndroidViewModel {
     public SingleLiveEvent<String> mostrarRespuestaActualizacion() {
         repositorio = EntrevistaRepositorio.getInstancia(getApplication());
         return repositorio.getResponseMsgActualizacion();
+    }
+
+    public void refreshEntrevista(Entrevista entrevistaIntent) {
+        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        repositorio.obtenerEntrevistaPersonal(entrevistaIntent);
     }
 }

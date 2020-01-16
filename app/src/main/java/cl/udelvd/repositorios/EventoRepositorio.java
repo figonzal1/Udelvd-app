@@ -46,11 +46,13 @@ public class EventoRepositorio {
     private static EventoRepositorio instancia;
     private Application application;
 
-    private List<Evento> eventoList;
+    private List<Evento> eventoList = new ArrayList<>();
+
+    private MutableLiveData<List<Evento>> eventosMutableLiveData = new MutableLiveData<>();
 
     private SingleLiveEvent<String> responseErrorMsg = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
-    private MutableLiveData<List<Evento>> eventosMutableLiveData = new MutableLiveData<>();
+
 
     private EventoRepositorio(Application application) {
         this.application = application;
@@ -78,18 +80,17 @@ public class EventoRepositorio {
      * @return mutableLiveData Mutable live data con los datos de la entrevista
      */
     public MutableLiveData<List<Evento>> obtenerEventosEntrevista(Entrevista entrevista) {
-        enviarGetEventosEntrevista(entrevista, eventosMutableLiveData);
+        enviarGetEventosEntrevista(entrevista);
         return eventosMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar la peticion GET hacia el servidor
      *
-     * @param entrevista      Datos de entrevista para realizar la busqueda
-     * @param mutableLiveData Mutable Live Data usado para enviar datos a viewModel
+     * @param entrevista Datos de entrevista para realizar la busqueda
      */
-    private void enviarGetEventosEntrevista(Entrevista entrevista, final MutableLiveData<List<Evento>> mutableLiveData) {
-        eventoList = new ArrayList<>();
+    private void enviarGetEventosEntrevista(Entrevista entrevista) {
+        eventoList.clear();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -137,7 +138,7 @@ public class EventoRepositorio {
                         eventoList.add(evento);
                     }
 
-                    mutableLiveData.postValue(eventoList);
+                    eventosMutableLiveData.postValue(eventoList);
                 } catch (JSONException | ParseException e) {
                     e.printStackTrace();
                 }

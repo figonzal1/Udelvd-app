@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -147,7 +148,7 @@ public class EventosActivity extends AppCompatActivity {
             public void onChanged(List<Evento> eventos) {
                 if (eventos != null) {
 
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     eventoList = eventos;
 
@@ -172,11 +173,17 @@ public class EventosActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
 
-                showSnackbar(findViewById(R.id.eventos_lista), s, getString(R.string.SNACKBAR_REINTENTAR));
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.eventos_lista), s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.eventos_lista), s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else {
+                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                }
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), getString(R.string.VIEW_MODEL_MSG_RESPONSE));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
         });
     }

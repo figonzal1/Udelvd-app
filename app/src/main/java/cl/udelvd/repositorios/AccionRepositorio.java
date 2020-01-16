@@ -28,6 +28,7 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class AccionRepositorio {
 
@@ -35,7 +36,11 @@ public class AccionRepositorio {
     private static AccionRepositorio instancia;
     private Application application;
 
-    private List<Accion> accionList;
+    private List<Accion> accionList = new ArrayList<>();
+
+    private MutableLiveData<List<Accion>> accionMutableLiveData = new MutableLiveData<>();
+
+    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
     private AccionRepositorio(Application application) {
         this.application = application;
@@ -48,25 +53,26 @@ public class AccionRepositorio {
         return instancia;
     }
 
+    public SingleLiveEvent<String> getResponseMsgError() {
+        return responseMsgError;
+    }
+
     /**
      * Funcion encargada de obtener el listado de acciones desde el servidor
      *
      * @return MutableList con la lista de acciones
      */
     public MutableLiveData<List<Accion>> obtenerAcciones() {
-        MutableLiveData<List<Accion>> mutableLiveData = new MutableLiveData<>();
-        sendGetAcciones(mutableLiveData);
-        return mutableLiveData;
+        sendGetAcciones();
+        return accionMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar peticion GET al servidor
-     *
-     * @param mutableLiveData MutableLiveData con listado de acciones
      */
-    private void sendGetAcciones(final MutableLiveData<List<Accion>> mutableLiveData) {
+    private void sendGetAcciones() {
 
-        accionList = new ArrayList<>();
+        accionList.clear();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -90,7 +96,7 @@ public class AccionRepositorio {
                         accionList.add(accion);
                     }
 
-                    mutableLiveData.postValue(accionList);
+                    accionMutableLiveData.postValue(accionList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -103,11 +109,13 @@ public class AccionRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -133,6 +141,7 @@ public class AccionRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }

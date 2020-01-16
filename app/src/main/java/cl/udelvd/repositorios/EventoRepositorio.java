@@ -261,12 +261,13 @@ public class EventoRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
-                    //TODO: AGREGAR ERROR
+                    responseErrorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.NETWORK_ERROR));
+                    responseErrorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -292,6 +293,7 @@ public class EventoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseErrorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }

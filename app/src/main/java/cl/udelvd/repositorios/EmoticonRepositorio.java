@@ -28,6 +28,7 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class EmoticonRepositorio {
 
@@ -35,7 +36,11 @@ public class EmoticonRepositorio {
     private static EmoticonRepositorio instancia;
     private Application application;
 
-    private List<Emoticon> emoticonList;
+    private List<Emoticon> emoticonList = new ArrayList<>();
+
+    private MutableLiveData<List<Emoticon>> emoticonMutableLiveData = new MutableLiveData<>();
+
+    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
     private EmoticonRepositorio(Application application) {
         this.application = application;
@@ -48,25 +53,26 @@ public class EmoticonRepositorio {
         return instancia;
     }
 
+    public SingleLiveEvent<String> getResponseMsgError() {
+        return responseMsgError;
+    }
+
     /**
      * Funcion encargada de obtener el listado de emoticones del sistema
      *
      * @return listaMutable con listado de emoticones
      */
     public MutableLiveData<List<Emoticon>> obtenerEmoticones() {
-        MutableLiveData<List<Emoticon>> mutableLiveData = new MutableLiveData<>();
-        sendGetEmoticones(mutableLiveData);
-        return mutableLiveData;
+        sendGetEmoticones();
+        return emoticonMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar peticion GET para obtener emoticones del sistema
-     *
-     * @param mutableLiveData listado con datos de emoticones
      */
-    private void sendGetEmoticones(final MutableLiveData<List<Emoticon>> mutableLiveData) {
+    private void sendGetEmoticones() {
 
-        emoticonList = new ArrayList<>();
+        emoticonList.clear();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -91,7 +97,7 @@ public class EmoticonRepositorio {
                         emoticonList.add(emoticon);
                     }
 
-                    mutableLiveData.postValue(emoticonList);
+                    emoticonMutableLiveData.postValue(emoticonList);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -103,12 +109,13 @@ public class EmoticonRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), application.getString(R.string.TIMEOUT_ERROR));
-                    //TODO: Agregar error response
+                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -134,6 +141,7 @@ public class EmoticonRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }

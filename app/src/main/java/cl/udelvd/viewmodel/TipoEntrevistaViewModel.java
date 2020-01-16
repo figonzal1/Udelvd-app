@@ -10,6 +10,7 @@ import java.util.List;
 
 import cl.udelvd.modelo.TipoEntrevista;
 import cl.udelvd.repositorios.TipoEntrevistaRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class TipoEntrevistaViewModel extends AndroidViewModel {
 
@@ -33,5 +34,15 @@ public class TipoEntrevistaViewModel extends AndroidViewModel {
             tipoEntrevistaMutableLiveData = repositorio.obtenerTiposEntrevista();
         }
         return tipoEntrevistaMutableLiveData;
+    }
+
+    public SingleLiveEvent<String> mostrarMsgError() {
+        repositorio = TipoEntrevistaRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgError();
+    }
+
+    public void refreshTipoEntrevistas() {
+        repositorio = TipoEntrevistaRepositorio.getInstancia(getApplication());
+        repositorio.obtenerTiposEntrevista();
     }
 }

@@ -74,6 +74,8 @@ public class CiudadRepositorio {
      */
     private void enviarGetCiudades() {
 
+        ciudadList.clear();
+
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

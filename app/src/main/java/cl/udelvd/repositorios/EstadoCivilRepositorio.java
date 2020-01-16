@@ -84,6 +84,8 @@ public class EstadoCivilRepositorio {
      */
     private void enviarGetEstadosCiviles() {
 
+        estadoCivilList.clear();
+
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

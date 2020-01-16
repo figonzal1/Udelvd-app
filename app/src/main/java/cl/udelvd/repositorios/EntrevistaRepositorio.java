@@ -46,8 +46,9 @@ public class EntrevistaRepositorio {
     private static final String TAG_NEW_ENTREVISTA = "NuevaEntrevista";
     private static final String TAG_UPDATE_ENTREVISTA = "ActualizarEntrevista";
 
-    private List<Entrevista> entrevistaList;
-    private MutableLiveData<List<Entrevista>> entrevistaMutableLiveData = new MutableLiveData<>();
+    private List<Entrevista> entrevistaList = new ArrayList<>();
+    private MutableLiveData<List<Entrevista>> entrevistasMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<Entrevista> entrevistaMutableLiveData = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
@@ -83,19 +84,18 @@ public class EntrevistaRepositorio {
      * @return Listado mutable con entrevistas de usuario
      */
     public MutableLiveData<List<Entrevista>> obtenerEntrevistasPersonales(Entrevistado entrevistado) {
-        sendGetEntrevistasPersonales(entrevistado, entrevistaMutableLiveData);
-        return entrevistaMutableLiveData;
+        sendGetEntrevistasPersonales(entrevistado);
+        return entrevistasMutableLiveData;
     }
 
     /**
      * Funcion que envía peticion GET para obtener listado de entrevistas
      *
-     * @param entrevistado                 Objeto entrevistado
-     * @param mutableEntrevistasPersonales Lista mutable de entrevistas
+     * @param entrevistado Objeto entrevistado
      */
-    private void sendGetEntrevistasPersonales(Entrevistado entrevistado, final MutableLiveData<List<Entrevista>> mutableEntrevistasPersonales) {
+    private void sendGetEntrevistasPersonales(Entrevistado entrevistado) {
 
-        entrevistaList = new ArrayList<>();
+        entrevistaList.clear();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -131,7 +131,7 @@ public class EntrevistaRepositorio {
                         entrevistaList.add(entrevista);
                     }
 
-                    mutableEntrevistasPersonales.postValue(entrevistaList);
+                    entrevistasMutableLiveData.postValue(entrevistaList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -267,11 +267,13 @@ public class EntrevistaRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -297,6 +299,7 @@ public class EntrevistaRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.SERVER_ERROR) + errorObject);
+                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
@@ -342,19 +345,17 @@ public class EntrevistaRepositorio {
      * @param entrevista Datos de la entrevista
      * @return Objeto mutable de la entrevista solicitada
      */
-    public MutableLiveData<Entrevista> obtenerEntrevistaPersonal(Entrevista entrevista) {
-        MutableLiveData<Entrevista> mutableLiveData = new MutableLiveData<>();
-        enviarGetEntrevistaPersonal(entrevista, mutableLiveData);
-        return mutableLiveData;
+    public SingleLiveEvent<Entrevista> obtenerEntrevistaPersonal(Entrevista entrevista) {
+        enviarGetEntrevistaPersonal(entrevista);
+        return entrevistaMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar la peticion GET al servidor para obtener la entrevista solicitada
      *
-     * @param entrevista      Objeto entrevista con datos de consulta
-     * @param mutableLiveData Mutable live data con datos de entrevista
+     * @param entrevista Objeto entrevista con datos de consulta
      */
-    private void enviarGetEntrevistaPersonal(Entrevista entrevista, final MutableLiveData<Entrevista> mutableLiveData) {
+    private void enviarGetEntrevistaPersonal(Entrevista entrevista) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -380,7 +381,7 @@ public class EntrevistaRepositorio {
                     Date fechaEntrevista = Utils.stringToDate(application, false, jsonAttribute.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
                     entrevistaInternet.setFecha_entrevista(fechaEntrevista);
 
-                    mutableLiveData.postValue(entrevistaInternet);
+                    entrevistaMutableLiveData.postValue(entrevistaInternet);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -393,11 +394,13 @@ public class EntrevistaRepositorio {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -423,6 +426,7 @@ public class EntrevistaRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }

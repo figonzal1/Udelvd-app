@@ -553,6 +553,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                 } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.formulario_editar_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                } else {
+                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));

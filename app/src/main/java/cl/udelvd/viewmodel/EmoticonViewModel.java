@@ -10,6 +10,7 @@ import java.util.List;
 
 import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.repositorios.EmoticonRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class EmoticonViewModel extends AndroidViewModel {
 
@@ -32,5 +33,15 @@ public class EmoticonViewModel extends AndroidViewModel {
             emoticonMutableLiveData = repositorio.obtenerEmoticones();
         }
         return emoticonMutableLiveData;
+    }
+
+    public SingleLiveEvent<String> mostrarMsgError() {
+        repositorio = EmoticonRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgError();
+    }
+
+    public void refreshEmoticones() {
+        repositorio = EmoticonRepositorio.getInstancia(getApplication());
+        repositorio.obtenerEmoticones();
     }
 }

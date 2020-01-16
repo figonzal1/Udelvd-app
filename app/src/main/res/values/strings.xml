@@ -261,7 +261,7 @@
     <string name="SPINNER_EMOTICON_SELECTED">SELECTED_ITEM</string>
     <string name="TAG_VIEW_MODEL_ACCIONES">VM_ACCIONES</string>
     <string name="TAG_VIEW_MODEL_EMOTICON">VM_EMOTICONES</string>
-    <string name="TAG_VIEW_MODEL_EVENTO">VM_EVENTO</string>
+    <string name="TAG_VIEW_MODEL_NUEVO_EVENTO">VM_NUEVO_EVENTO</string>
     <string name="VALIDACION_EMOTICON">Elige un emoticón</string>
     <string name="TAG_VIEW_MODEL_LISTA_EVENTOS">VM_LISTA_EVENTOS</string>
     <string name="TAG_VIEW_MODEL_EDITAR_PERFIL">VM_EDITAR_PERFIL</string>

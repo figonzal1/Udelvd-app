@@ -22,6 +22,7 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -46,7 +47,6 @@ import cl.udelvd.viewmodel.EventoViewModel;
 
 public class NuevoEventoActivity extends AppCompatActivity {
 
-    private int id_entrevista;
     private TextInputLayout ilAcciones;
     private TextInputLayout ilHoraEvento;
     private TextInputLayout ilJustificacion;
@@ -67,9 +67,11 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
     private Spinner spinner;
     private Evento evento;
+    private Entrevista entrevistaIntent;
 
     private ProgressBar progressBar;
     private static final int SPEECH_REQUEST_CODE = 100;
+    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +99,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
     private void obtenerDatosBundle() {
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
-            id_entrevista = bundle.getInt(getString(R.string.KEY_EVENTO_ID_ENTREVISTA));
+            entrevistaIntent = new Entrevista();
+            entrevistaIntent.setId(bundle.getInt(getString(R.string.KEY_EVENTO_ID_ENTREVISTA)));
         }
     }
 
@@ -181,12 +184,14 @@ public class NuevoEventoActivity extends AppCompatActivity {
     private void iniciarViewModels() {
 
         accionViewModel = ViewModelProviders.of(this).get(AccionViewModel.class);
+
+        //Observer de listado de acciones
         accionViewModel.cargarAcciones().observe(this, new Observer<List<Accion>>() {
             @Override
             public void onChanged(List<Accion> list) {
 
                 if (list != null) {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     accionList = list;
                     accionAdapter = new AccionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
@@ -200,14 +205,36 @@ public class NuevoEventoActivity extends AppCompatActivity {
             }
         });
 
+        //Observer de errores de acciones
+        accionViewModel.moestrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+
 
         emoticonViewModel = ViewModelProviders.of(this).get(EmoticonViewModel.class);
+
+        //Observer con listado de emoticones
         emoticonViewModel.cargarEmoticones().observe(this, new Observer<List<Emoticon>>() {
             @Override
             public void onChanged(List<Emoticon> emoticons) {
                 if (emoticons != null) {
 
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     emoticonList = emoticons;
                     emoticonAdapter = new EmoticonAdapter(getApplicationContext(), emoticonList);
@@ -218,20 +245,59 @@ public class NuevoEventoActivity extends AppCompatActivity {
             }
         });
 
+        //Observer para errores de listado de emoticones
+        emoticonViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            }
+        });
+
         eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
         eventoViewModel.mostrarRespuestaRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
 
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_REGISTRO_EVENTO))) {
                     finish();
                 }
+            }
+        });
+
+        eventoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -272,6 +338,35 @@ public class NuevoEventoActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Funcion para mostrar el snackbar en fragment
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     * @param accion Boton de accion del snackbar
+     */
+    private void showSnackbar(View v, String titulo, String accion) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
+                .setAction(accion, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //Refresh listado de informacion necesaria
+                        accionViewModel.refreshAcciones();
+                        emoticonViewModel.refreshEmoticones();
+
+                        eventoViewModel.refreshEventos(entrevistaIntent);
+
+                        progressBar.setVisibility(View.VISIBLE);
+
+                        isSnackBarShow = false;
+                    }
+                });
+
+        snackbar.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -295,7 +390,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 Entrevista entrevista = new Entrevista();
-                entrevista.setId(id_entrevista);
+                entrevista.setId(entrevistaIntent.getId());
                 evento.setEntrevista(entrevista);
 
                 int id = AccionRepositorio.getInstancia(getApplication()).buscarAccionPorNombre(acAcciones.getText().toString()).getId();

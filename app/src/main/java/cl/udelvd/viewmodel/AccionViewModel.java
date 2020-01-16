@@ -10,6 +10,7 @@ import java.util.List;
 
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.repositorios.AccionRepositorio;
+import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class AccionViewModel extends AndroidViewModel {
 
@@ -32,5 +33,15 @@ public class AccionViewModel extends AndroidViewModel {
             repositorio = AccionRepositorio.getInstancia(getApplication());
         }
         return repositorio.obtenerAcciones();
+    }
+
+    public SingleLiveEvent<String> moestrarMsgError() {
+        repositorio = AccionRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgError();
+    }
+
+    public void refreshAcciones() {
+        repositorio = AccionRepositorio.getInstancia(getApplication());
+        repositorio.obtenerAcciones();
     }
 }

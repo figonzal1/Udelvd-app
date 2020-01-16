@@ -21,8 +21,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.FragmentStatePageAdapter;
@@ -70,9 +72,9 @@ public class EventosActivity extends AppCompatActivity {
 
         setearRecursosInterfaz();
 
-        iniciarViewModel();
-
         floatingButtonCrearEvento();
+
+        iniciarViewModel();
 
     }
 
@@ -108,10 +110,16 @@ public class EventosActivity extends AppCompatActivity {
      */
     private void setearRecursosInterfaz() {
 
+        eventoList = new ArrayList<>();
+
         progressBar = findViewById(R.id.progress_bar_eventos);
         progressBar.setVisibility(View.VISIBLE);
 
         viewPager = findViewById(R.id.view_pager_events);
+        viewPager.setVisibility(View.INVISIBLE);
+
+        tv_eventos_vacios = findViewById(R.id.tv_eventos_vacios);
+        tv_eventos_vacios.setVisibility(View.INVISIBLE);
 
         tabLayout = findViewById(R.id.tab_dots);
         tabLayout.setupWithViewPager(viewPager, true);
@@ -132,8 +140,6 @@ public class EventosActivity extends AppCompatActivity {
             tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", n_entrevistas));
         }
 
-        tv_eventos_vacios = findViewById(R.id.tv_eventos_vacios);
-
     }
 
     /**
@@ -142,30 +148,42 @@ public class EventosActivity extends AppCompatActivity {
     private void iniciarViewModel() {
         eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
 
+        eventoViewModel.isLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    viewPager.setVisibility(View.INVISIBLE);
+                    tv_eventos_vacios.setVisibility(View.INVISIBLE);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    viewPager.setVisibility(View.VISIBLE);
+
+                    if (eventoList.size() == 0) {
+                        tv_eventos_vacios.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_eventos_vacios.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
+
         //Observador de carga de eventos
         eventoViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
             @Override
             public void onChanged(List<Evento> eventos) {
                 if (eventos != null) {
-
-                    progressBar.setVisibility(View.GONE);
-
                     eventoList = eventos;
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
 
-                    if (eventoList.size() > 0) {
-                        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
-                        viewPager.setAdapter(fragmentStatePageAdapter);
-                        viewPager.setVisibility(View.VISIBLE);
-                        tv_eventos_vacios.setVisibility(View.INVISIBLE);
+                    fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
 
-                        fragmentStatePageAdapter.notifyDataSetChanged();
+                    fragmentStatePageAdapter.notifyDataSetChanged();
 
-                    } else {
-                        viewPager.setVisibility(View.GONE);
-                        tv_eventos_vacios.setVisibility(View.VISIBLE);
-                    }
+                    viewPager.setAdapter(fragmentStatePageAdapter);
+                    Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
                 }
             }
         });
@@ -175,7 +193,7 @@ public class EventosActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.INVISIBLE);
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.eventos_lista), s, getString(R.string.SNACKBAR_REINTENTAR));
@@ -225,7 +243,9 @@ public class EventosActivity extends AppCompatActivity {
 
             //Refrescar eventos
             progressBar.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.INVISIBLE);
             eventoViewModel.refreshEventos(entrevista);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -249,6 +269,7 @@ public class EventosActivity extends AppCompatActivity {
                         eventoViewModel.refreshEventos(entrevista);
 
                         progressBar.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.INVISIBLE);
                     }
                 });
 

@@ -54,6 +54,8 @@ public class EntrevistaRepositorio {
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
 
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+
     private EntrevistaRepositorio(Application application) {
         this.application = application;
     }
@@ -75,6 +77,10 @@ public class EntrevistaRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgActualizacion() {
         return responseMsgActualizacion;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -132,6 +138,7 @@ public class EntrevistaRepositorio {
                     }
 
                     entrevistasMutableLiveData.postValue(entrevistaList);
+                    isLoading.postValue(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -204,6 +211,7 @@ public class EntrevistaRepositorio {
                 return params;
             }
         };
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ENTREVISTAS);
     }
 

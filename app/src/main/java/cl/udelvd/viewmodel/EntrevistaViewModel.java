@@ -89,8 +89,23 @@ public class EntrevistaViewModel extends AndroidViewModel {
         return repositorio.getResponseMsgActualizacion();
     }
 
+    /**
+     * Funcion para forzar recarga de entrevista
+     *
+     * @param entrevistaIntent Datos de entrevista
+     */
     public void refreshEntrevista(Entrevista entrevistaIntent) {
         repositorio = EntrevistaRepositorio.getInstancia(getApplication());
         repositorio.obtenerEntrevistaPersonal(entrevistaIntent);
+    }
+
+    /**
+     * Funcion que maneja la logica del progress dialog
+     *
+     * @return MutableLiveData con booleano de carga
+     */
+    public MutableLiveData<Boolean> isLoading() {
+        repositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return repositorio.getIsLoading();
     }
 }

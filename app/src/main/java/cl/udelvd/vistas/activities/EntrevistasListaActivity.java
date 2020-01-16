@@ -59,6 +59,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     private Map<String, Integer> params;
 
     private ProgressBar progressBar;
+    private List<Entrevista> entrevistasList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     }
 
     private void setearRecursosInterfaz() {
+        entrevistasList = new ArrayList<>();
 
         progressBar = findViewById(R.id.progress_bar_entrevistas);
         progressBar.setVisibility(View.VISIBLE);
@@ -108,8 +110,8 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
         rv.setLayoutManager(ly);
 
-        entrevistaAdapter = new EntrevistaAdapter(new ArrayList<Entrevista>(), getApplicationContext(), entrevistado, params);
-        rv.setAdapter(entrevistaAdapter);
+        tv_entrevistas_vacias = findViewById(R.id.tv_entrevistas_vacios);
+        tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
 
         tv_nombreCompleto = findViewById(R.id.tv_entrevistado_nombre);
         tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
@@ -119,7 +121,8 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         tv_nombreCompleto.setText(String.format("%s %s", nombre_entrevistado, apellido_entrevistado));
 
         cv_lista_entrevistas = findViewById(R.id.card_view_lista_entrevistas);
-        tv_entrevistas_vacias = findViewById(R.id.tv_entrevistas_vacios);
+        cv_lista_entrevistas.setVisibility(View.INVISIBLE);
+
     }
 
     /**
@@ -128,14 +131,33 @@ public class EntrevistasListaActivity extends AppCompatActivity {
     private void iniciarViewModelObservers() {
         entrevistaViewModel = ViewModelProviders.of(this).get(EntrevistaViewModel.class);
 
+        entrevistaViewModel.isLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    cv_lista_entrevistas.setVisibility(View.INVISIBLE);
+                    tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    cv_lista_entrevistas.setVisibility(View.VISIBLE);
+
+                    if (entrevistasList.size() == 0) {
+                        tv_entrevistas_vacias.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
+
         //Observador de listado de entrevistas
         entrevistaViewModel.cargarEntrevistas(entrevistado).observe(this, new Observer<List<Entrevista>>() {
             @Override
             public void onChanged(List<Entrevista> entrevistas) {
                 if (entrevistas != null) {
 
-                    progressBar.setVisibility(View.INVISIBLE);
-
+                    entrevistasList = entrevistas;
                     //Contar cantidad de entrevistas
                     if (entrevistas.size() == 1) {
                         tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", entrevistas.size()));
@@ -153,20 +175,9 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                     params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), tipos.get("normales"));
                     params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), tipos.get("extraordinarias"));
 
-                    if (entrevistas.size() > 0) {
-
-                        cv_lista_entrevistas.setVisibility(View.VISIBLE);
-                        tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
-
-                        entrevistaAdapter = new EntrevistaAdapter(entrevistas, getApplicationContext(), entrevistado, params);
-                        entrevistaAdapter.notifyDataSetChanged();
-                        rv.setAdapter(entrevistaAdapter);
-
-
-                    } else {
-                        cv_lista_entrevistas.setVisibility(View.INVISIBLE);
-                        tv_entrevistas_vacias.setVisibility(View.VISIBLE);
-                    }
+                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, getApplicationContext(), entrevistado, params);
+                    entrevistaAdapter.notifyDataSetChanged();
+                    rv.setAdapter(entrevistaAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), entrevistas.toString()));
                 }
@@ -242,7 +253,10 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                         //Refresh listado de usuarios
                         entrevistaViewModel.refreshEntrevistas(entrevistado);
 
-                        progressBar.setVisibility(View.INVISIBLE);
+                        cv_lista_entrevistas.setVisibility(View.INVISIBLE);
+
+                        progressBar.setVisibility(View.VISIBLE);
+
                     }
                 });
 
@@ -263,6 +277,8 @@ public class EntrevistasListaActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.menu_actualizar) {
+
+            cv_lista_entrevistas.setVisibility(View.INVISIBLE);
 
             progressBar.setVisibility(View.VISIBLE);
 

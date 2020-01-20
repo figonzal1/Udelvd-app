@@ -37,9 +37,11 @@ public class TipoEntrevistaRepositorio {
 
     private List<TipoEntrevista> tipoEntrevistaList = new ArrayList<>();
 
+    private MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutable = new MutableLiveData<>();
+
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
-    private MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutable = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_TIPO_ENTREVISTA = "TiposEntrevistas";
 
@@ -56,6 +58,10 @@ public class TipoEntrevistaRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgError() {
         return responseMsgError;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -79,7 +85,7 @@ public class TipoEntrevistaRepositorio {
             @Override
             public void onResponse(String response) {
 
-                //Log.d("RESPONSE_TIPO_ENTRE", response);
+                Log.d("RESPONSE_TIPO_ENTRE", response);
 
                 try {
                     JSONObject jsonObject;
@@ -99,6 +105,8 @@ public class TipoEntrevistaRepositorio {
                     }
 
                     tipoEntrevistaMutable.postValue(tipoEntrevistaList);
+
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -108,6 +116,9 @@ public class TipoEntrevistaRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -148,7 +159,7 @@ public class TipoEntrevistaRepositorio {
             }
         };
 
-        String url = application.getString(R.string.URL_GET_TIPOS_ENTREVISTAS);
+        String url = String.format(application.getString(R.string.URL_GET_TIPOS_ENTREVISTAS), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -167,6 +178,7 @@ public class TipoEntrevistaRepositorio {
                 return params;
             }
         };
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_TIPO_ENTREVISTA);
     }
 

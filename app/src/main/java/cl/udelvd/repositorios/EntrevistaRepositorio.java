@@ -47,6 +47,7 @@ public class EntrevistaRepositorio {
     private static final String TAG_UPDATE_ENTREVISTA = "ActualizarEntrevista";
 
     private List<Entrevista> entrevistaList = new ArrayList<>();
+
     private MutableLiveData<List<Entrevista>> entrevistasMutableLiveData = new MutableLiveData<>();
     private SingleLiveEvent<Entrevista> entrevistaMutableLiveData = new SingleLiveEvent<>();
 
@@ -193,7 +194,7 @@ public class EntrevistaRepositorio {
         };
 
 
-        String url = String.format(Locale.US, application.getString(R.string.URL_GET_ENTREVISTAS), entrevistado.getId());
+        String url = String.format(Locale.US, application.getString(R.string.URL_GET_ENTREVISTAS), application.getString(R.string.HEROKU_DOMAIN), entrevistado.getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -264,6 +265,8 @@ public class EntrevistaRepositorio {
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_ENTREVISTA));
                     }
 
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -273,6 +276,9 @@ public class EntrevistaRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -313,7 +319,7 @@ public class EntrevistaRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_POST_ENTREVISTAS), entrevista.getId_entrevistado());
+        String url = String.format(application.getString(R.string.URL_POST_ENTREVISTAS), application.getString(R.string.HEROKU_DOMAIN), entrevista.getId_entrevistado());
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
 
@@ -343,6 +349,8 @@ public class EntrevistaRepositorio {
                 return params;
             }
         };
+
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NEW_ENTREVISTA);
 
     }
@@ -441,7 +449,7 @@ public class EntrevistaRepositorio {
         };
 
 
-        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTA_ESPECIFICA), entrevista.getId_entrevistado(), entrevista.getId());
+        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTA_ESPECIFICA), application.getString(R.string.HEROKU_DOMAIN), entrevista.getId_entrevistado(), entrevista.getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
@@ -548,7 +556,7 @@ public class EntrevistaRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_PUT_ENTREVISTA_ESPECIFICA), entrevista.getId_entrevistado(), entrevista.getId());
+        String url = String.format(application.getString(R.string.URL_PUT_ENTREVISTA_ESPECIFICA), application.getString(R.string.HEROKU_DOMAIN), entrevista.getId_entrevistado(), entrevista.getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
             @Override

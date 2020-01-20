@@ -2,9 +2,10 @@
     <string name="app_name">Un Dia En La Vida De</string>
 
     <!-- URLS-->
-    <string name="URL_GET_INVESTIGADORES">https://udelvd-dev.herokuapp.com/investigadores</string>
-    <string name="URL_LOGIN_INVESTIGADORES">https://udelvd-dev.herokuapp.com/investigadores/login</string>
-    <string name="URL_PUT_INVESTIGADORES">https://udelvd-dev.herokuapp.com/investigadores/</string>
+    <string name="HEROKU_DOMAIN">https://udelvd-dev.herokuapp.com/</string>
+    <string name="URL_GET_INVESTIGADORES">%sinvestigadores</string>
+    <string name="URL_LOGIN_INVESTIGADORES">%sinvestigadores/login</string>
+    <string name="URL_PUT_INVESTIGADORES">%sinvestigadores/%d</string>
     <string name="URL_POST_ENTREVISTADOS">https://udelvd-dev.herokuapp.com/entrevistados</string>
     <string name="URL_GET_ENTREVISTADOS">https://udelvd-dev.herokuapp.com/entrevistados</string>
     <string name="URL_GET_ENTREVISTADO">https://udelvd-dev.herokuapp.com/entrevistados/</string>
@@ -16,14 +17,14 @@
     <string name="URL_GET_NIVELES_EDUCACIONALES">https://udelvd-dev.herokuapp.com/nivelesEducacionales</string>
     <string name="URL_GET_PROFESIONES">https://udelvd-dev.herokuapp.com/profesiones</string>
     <string name="URL_GET_TIPOS_CONVIVENCIAS">https://udelvd-dev.herokuapp.com/tiposConvivencias</string>
-    <string name="URL_GET_TIPOS_ENTREVISTAS">https://udelvd-dev.herokuapp.com/tiposEntrevistas</string>
-    <string name="URL_GET_ENTREVISTAS">https://udelvd-dev.herokuapp.com/entrevistados/%d/entrevistas</string>
-    <string name="URL_POST_ENTREVISTAS">https://udelvd-dev.herokuapp.com/entrevistados/%d/entrevistas</string>
-    <string name="URL_GET_ENTREVISTA_ESPECIFICA">https://udelvd-dev.herokuapp.com/entrevistados/%d/entrevistas/%d</string>
-    <string name="URL_PUT_ENTREVISTA_ESPECIFICA">https://udelvd-dev.herokuapp.com/entrevistados/%d/entrevistas/%d</string>
-    <string name="URL_GET_EVENTO">https://udelvd-dev.herokuapp.com/entrevistas/%d/eventos</string>
-    <string name="URL_POST_EVENTO">https://udelvd-dev.herokuapp.com/entrevistas/%d/eventos</string>
-    <string name="URL_GET_EVENTO_ESPECIFICO">https://udelvd-dev.herokuapp.com/entrevistas/%d/eventos/%d</string>
+    <string name="URL_GET_TIPOS_ENTREVISTAS">%stiposEntrevistas</string>
+    <string name="URL_GET_ENTREVISTAS">%sentrevistados/%d/entrevistas</string>
+    <string name="URL_POST_ENTREVISTAS">%sentrevistados/%d/entrevistas</string>
+    <string name="URL_GET_ENTREVISTA_ESPECIFICA">%sentrevistados/%d/entrevistas/%d</string>
+    <string name="URL_PUT_ENTREVISTA_ESPECIFICA">%sentrevistados/%d/entrevistas/%d</string>
+    <string name="URL_GET_EVENTO">%sentrevistas/%d/eventos</string>
+    <string name="URL_POST_EVENTO">%sentrevistas/%d/eventos</string>
+    <string name="URL_GET_EVENTO_ESPECIFICO">%sentrevistas/%d/eventos/%d</string>
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>

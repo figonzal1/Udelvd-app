@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
@@ -35,6 +36,8 @@ import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EntrevistaViewModel;
 
 public class EntrevistasListaActivity extends AppCompatActivity {
+
+    private static final int REQUEST_CODE_CREAR_ENTREVISTA = 300;
 
     private RecyclerView rv;
     private EntrevistaAdapter entrevistaAdapter;
@@ -208,7 +211,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(EntrevistasListaActivity.this, NuevaEntrevistaActivity.class);
                 intent.putExtra(getString(R.string.KEY_ENTREVISTADO_ID_LARGO), entrevistado.getId());
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_CREAR_ENTREVISTA);
             }
         });
     }
@@ -285,5 +288,17 @@ public class EntrevistasListaActivity extends AppCompatActivity {
             entrevistaViewModel.refreshEntrevistas(entrevistado);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == REQUEST_CODE_CREAR_ENTREVISTA) {
+            if (resultCode == RESULT_OK) {
+                entrevistaViewModel.refreshEntrevistas(entrevistado);
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

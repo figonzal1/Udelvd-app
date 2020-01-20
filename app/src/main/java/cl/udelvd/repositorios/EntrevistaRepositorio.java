@@ -62,6 +62,9 @@ public class EntrevistaRepositorio {
     private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
 
+    //Eliminar
+    private SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
+
     //PROGRESS DIALOG
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
@@ -416,6 +419,8 @@ public class EntrevistaRepositorio {
 
                     entrevistaMutableLiveData.postValue(entrevistaInternet);
 
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -425,6 +430,8 @@ public class EntrevistaRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorEntrevista.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -483,6 +490,8 @@ public class EntrevistaRepositorio {
                 return params;
             }
         };
+
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ENTREVISTA);
     }
 
@@ -534,6 +543,8 @@ public class EntrevistaRepositorio {
                         responseMsgActualizacion.postValue(application.getString(R.string.MSG_UPDATE_ENTREVISTA));
                     }
 
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -544,6 +555,8 @@ public class EntrevistaRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -613,16 +626,17 @@ public class EntrevistaRepositorio {
                 return params;
             }
         };
+
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_UPDATE_ENTREVISTA);
     }
 
-
-    //PROGRESS DIALOG
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
+    /*
+    ELIMINAR ENTREVISTA
+     */
+    public SingleLiveEvent<String> getResponseMsgErrorEliminar() {
+        return responseMsgErrorEliminar;
     }
-
-
     public void eliminarEntrevista(Entrevista entrevista) {
         sendDeleteEntrevista(entrevista);
     }
@@ -632,19 +646,25 @@ public class EntrevistaRepositorio {
             @Override
             public void onResponse(String response) {
                 Log.d("RESPONSE", response);
+                isLoading.postValue(false);
             }
         };
 
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorEliminar.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -670,6 +690,7 @@ public class EntrevistaRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
@@ -693,6 +714,13 @@ public class EntrevistaRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_DELETE_ENTREVISTA);
     }
+
+    //PROGRESS DIALOG
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
 }

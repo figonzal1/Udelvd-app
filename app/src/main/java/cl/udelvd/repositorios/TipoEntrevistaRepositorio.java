@@ -39,7 +39,7 @@ public class TipoEntrevistaRepositorio {
 
     private MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutable = new MutableLiveData<>();
 
-    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
@@ -56,8 +56,8 @@ public class TipoEntrevistaRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgError() {
-        return responseMsgError;
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
     }
 
     public MutableLiveData<Boolean> getIsLoading() {
@@ -85,7 +85,7 @@ public class TipoEntrevistaRepositorio {
             @Override
             public void onResponse(String response) {
 
-                Log.d("RESPONSE_TIPO_ENTRE", response);
+                //Log.d("RESPONSE_TIPO_ENTRE", response);
 
                 try {
                     JSONObject jsonObject;
@@ -121,13 +121,13 @@ public class TipoEntrevistaRepositorio {
 
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -153,7 +153,7 @@ public class TipoEntrevistaRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
@@ -182,35 +182,5 @@ public class TipoEntrevistaRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_TIPO_ENTREVISTA);
     }
 
-    /**
-     * Funcion encargada de buscar una TipoEntrevista dado parametro
-     *
-     * @param nombre Nombre del tipo entrevista
-     * @return Objeto tipoEntrevista
-     */
-    public TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
 
-        for (int i = 0; i < tipoEntrevistaList.size(); i++) {
-            if (tipoEntrevistaList.get(i).getNombre().equals(nombre)) {
-                return tipoEntrevistaList.get(i);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Funcion encargada de buscar una TipoEntrevista dado parametro
-     *
-     * @param id Id del tipo entrevista
-     * @return Objeto tipoEntrevista
-     */
-    public TipoEntrevista buscarTipoEntrevistaPorId(int id) {
-
-        for (int i = 0; i < tipoEntrevistaList.size(); i++) {
-            if (tipoEntrevistaList.get(i).getId() == id) {
-                return tipoEntrevistaList.get(i);
-            }
-        }
-        return null;
-    }
 }

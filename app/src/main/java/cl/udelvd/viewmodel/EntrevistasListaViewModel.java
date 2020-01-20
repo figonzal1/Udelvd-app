@@ -56,7 +56,7 @@ public class EntrevistasListaViewModel extends AndroidViewModel {
      *
      * @return SingleLiveEvent de mensajeria
      */
-    public SingleLiveEvent<String> mostrarErroresListado() {
+    public SingleLiveEvent<String> mostrarMsgErrorListado() {
         entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
         return entrevistaRepositorio.getResponseMsgErrorListado();
     }
@@ -69,5 +69,10 @@ public class EntrevistasListaViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> isLoading() {
         entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
         return entrevistaRepositorio.getIsLoading();
+    }
+
+    public SingleLiveEvent<String> mostrarMsgErrorEliminar() {
+        entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return entrevistaRepositorio.getResponseMsgErrorEliminar();
     }
 }

@@ -1,15 +1,13 @@
 package cl.udelvd.vistas.activities;
 
-import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,10 +19,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -32,10 +28,8 @@ import cl.udelvd.adaptadores.TipoEntrevistaAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.TipoEntrevista;
 import cl.udelvd.repositorios.EntrevistaRepositorio;
-import cl.udelvd.repositorios.TipoEntrevistaRepositorio;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.EntrevistaViewModel;
-import cl.udelvd.viewmodel.TipoEntrevistaViewModel;
+import cl.udelvd.viewmodel.EditarEntrevistaViewModel;
 
 public class EditarEntrevistaActivity extends AppCompatActivity {
 
@@ -49,11 +43,11 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
     private Entrevista entrevistaIntent;
 
-    private EntrevistaViewModel entrevistaViewModel;
-    private TipoEntrevistaViewModel tipoEntrevistaViewModel;
+    private EditarEntrevistaViewModel editarEntrevistaViewModel;
 
     private List<TipoEntrevista> tipoEntrevistasList;
     private TipoEntrevistaAdapter tipoEntrevistasAdapter;
+
     private boolean isAutoCompleteTipoEntrevistaReady = false;
 
 
@@ -71,9 +65,6 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
         setAutoCompleteTipoEntrevista();
 
         setPickerFechaNacimiento();
-
-        iniciarViewModelEntrevista();
-
     }
 
     private void instanciarRecursosInterfaz() {
@@ -86,6 +77,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
         etFechaEntrevista = findViewById(R.id.et_fecha_entrevista);
         acTipoEntrevista = findViewById(R.id.et_tipo_entrevista);
+
+        editarEntrevistaViewModel = ViewModelProviders.of(this).get(EditarEntrevistaViewModel.class);
     }
 
     private void obtenerDatosBundles() {
@@ -104,10 +97,33 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
      */
     private void setAutoCompleteTipoEntrevista() {
 
-        tipoEntrevistaViewModel = ViewModelProviders.of(this).get(TipoEntrevistaViewModel.class);
+        editarEntrevistaViewModel.isLoadingTiposEntrevistas().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    //Desactivar entradas
+                    ilTipoEntrevista.setEnabled(false);
+                    acTipoEntrevista.setEnabled(false);
+
+                    ilFechaEntrevista.setEnabled(false);
+                    etFechaEntrevista.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    //Desactivar entradas
+                    ilTipoEntrevista.setEnabled(true);
+                    acTipoEntrevista.setEnabled(true);
+
+                    ilFechaEntrevista.setEnabled(true);
+                    etFechaEntrevista.setEnabled(true);
+                }
+            }
+        });
 
         //Cargar listado de tipos de entrevistas
-        tipoEntrevistaViewModel.cargarTiposEntrevistas().observe(this, new Observer<List<TipoEntrevista>>() {
+        editarEntrevistaViewModel.cargarTiposEntrevistas().observe(this, new Observer<List<TipoEntrevista>>() {
             @Override
             public void onChanged(List<TipoEntrevista> tipoEntrevistas) {
 
@@ -123,25 +139,23 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    /*if (isAutoCompleteTipoEntrevistaReady) {
+                    if (isAutoCompleteTipoEntrevistaReady) {
                         iniciarViewModelEntrevista();
-                    }*/
+                    }
                     tipoEntrevistasAdapter.notifyDataSetChanged();
                 }
             }
         });
 
         //Cargar errores de tipos de entrevista
-        tipoEntrevistaViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+        editarEntrevistaViewModel.mostrarMsgErrorTipoEntrevistaListado().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.GONE);
-
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), s, getString(R.string.SNACKBAR_REINTENTAR));
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else {
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_LONG, s, null);
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -152,13 +166,35 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
     private void iniciarViewModelEntrevista() {
 
-        entrevistaViewModel = ViewModelProviders.of(this).get(EntrevistaViewModel.class);
+        editarEntrevistaViewModel.isLoadingEntrevista().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
 
-        entrevistaViewModel.cargarEntrevista(entrevistaIntent).observe(this, new Observer<Entrevista>() {
+                    //Desactivar entradas
+                    ilTipoEntrevista.setEnabled(false);
+                    acTipoEntrevista.setEnabled(false);
+
+                    ilFechaEntrevista.setEnabled(false);
+                    etFechaEntrevista.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    //Activar entradas
+                    ilTipoEntrevista.setEnabled(true);
+                    acTipoEntrevista.setEnabled(true);
+
+                    ilFechaEntrevista.setEnabled(true);
+                    etFechaEntrevista.setEnabled(true);
+                }
+            }
+        });
+
+        editarEntrevistaViewModel.cargarEntrevista(entrevistaIntent).observe(this, new Observer<Entrevista>() {
             @Override
             public void onChanged(Entrevista entrevistaInternet) {
                 entrevistaIntent = entrevistaInternet;
-                progressBar.setVisibility(View.GONE);
 
                 if (isAutoCompleteTipoEntrevistaReady) {
                     setearInfoEntrevista();
@@ -168,37 +204,49 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
             }
         });
 
-        //Manejar respuesta de actualizacion
-        entrevistaViewModel.mostrarRespuestaActualizacion().observe(this, new Observer<String>() {
+        //Manejar respuesta de actualizacion de entrevista
+        editarEntrevistaViewModel.mostrarMsgActualizacion().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-
-                progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTA))) {
-                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-
+                    //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                    Intent intent = getIntent();
+                    intent.putExtra("msg_actualizacion", s);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
 
-        //Manejar errores de entrevista
-        entrevistaViewModel.mostrarRespuestaError().observe(this, new Observer<String>() {
+        //Manejar errores de actualizacion de entrevista
+        editarEntrevistaViewModel.mostrarMsgErrorActualizacion().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), s, getString(R.string.SNACKBAR_REINTENTAR));
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 } else {
-                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_LONG, s, null);
+                }
+            }
+        });
+
+        //Manejar errores de carga de entrevista
+        editarEntrevistaViewModel.mostrarMsgErrorEntrevista().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else {
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_LONG, s, null);
                 }
             }
         });
@@ -212,7 +260,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
         String fecha = Utils.dateToString(getApplicationContext(), false, entrevistaIntent.getFecha_entrevista());
         etFechaEntrevista.setText(fecha);
 
-        String nombre = TipoEntrevistaRepositorio.getInstancia(getApplication()).buscarTipoEntrevistaPorId(entrevistaIntent.getTipoEntrevista().getId()).getNombre();
+        String nombre = buscarTipoEntrevistaPorId(entrevistaIntent.getTipoEntrevista().getId()).getNombre();
         acTipoEntrevista.setText(nombre, false);
     }
 
@@ -225,7 +273,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarDatePicker();
+                Utils.iniciarDatePicker(etFechaEntrevista, getApplicationContext());
             }
         });
 
@@ -234,39 +282,9 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarDatePicker();
+                Utils.iniciarDatePicker(etFechaEntrevista, getApplicationContext());
             }
         });
-    }
-
-    /**
-     * Funcion encargada de abrir el DatePicker para escoger fecha
-     */
-    private void iniciarDatePicker() {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        if (Objects.requireNonNull(etFechaEntrevista.getText()).length() > 0) {
-
-            String fecha = etFechaEntrevista.getText().toString();
-            String[] fecha_split = fecha.split(getString(R.string.REGEX_FECHA));
-
-            year = Integer.parseInt(fecha_split[0]);
-            month = Integer.parseInt(fecha_split[1]);
-            day = Integer.parseInt(fecha_split[2]);
-        }
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(EditarEntrevistaActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month += 1;
-                etFechaEntrevista.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
-            }
-        }, year, month, day);
-
-        datePickerDialog.show();
     }
 
     @Override
@@ -296,7 +314,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                 Date fechaEntrevista = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etFechaEntrevista.getText()).toString());
                 entrevistaActualizada.setFecha_entrevista(fechaEntrevista);
 
-                int id_tipo_entrevista = TipoEntrevistaRepositorio.getInstancia(getApplication()).buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString()).getId();
+                int id_tipo_entrevista = buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString()).getId();
 
                 TipoEntrevista tipoEntrevista = new TipoEntrevista();
                 tipoEntrevista.setId(id_tipo_entrevista);
@@ -345,24 +363,57 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
      * @param titulo Titulo del snackbar
      * @param accion Boton de accion del snackbar
      */
-    private void showSnackbar(View v, String titulo, String accion) {
+    private void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
-                .setAction(accion, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        Snackbar snackbar = Snackbar.make(v, titulo, tipo_snackbar);
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        //Refresh listado de informacion necesaria
-                        isAutoCompleteTipoEntrevistaReady = false;
+                    //Refresh listado de informacion necesaria
+                    isAutoCompleteTipoEntrevistaReady = false;
 
-                        tipoEntrevistaViewModel.refreshTipoEntrevistas();
+                    editarEntrevistaViewModel.refreshTipoEntrevistas();
 
-                        entrevistaViewModel.refreshEntrevista(entrevistaIntent);
+                    editarEntrevistaViewModel.refreshEntrevista(entrevistaIntent);
 
-                        progressBar.setVisibility(View.VISIBLE);
-                    }
-                });
-
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            });
+        }
         snackbar.show();
+    }
+
+    /**
+     * Funcion encargada de buscar una TipoEntrevista dado parametro
+     *
+     * @param id Id del tipo entrevista
+     * @return Objeto tipoEntrevista
+     */
+    public TipoEntrevista buscarTipoEntrevistaPorId(int id) {
+
+        for (int i = 0; i < tipoEntrevistasList.size(); i++) {
+            if (tipoEntrevistasList.get(i).getId() == id) {
+                return tipoEntrevistasList.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Funcion encargada de buscar una TipoEntrevista dado parametro
+     *
+     * @param nombre Nombre del tipo entrevista
+     * @return Objeto tipoEntrevista
+     */
+    public TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
+
+        for (int i = 0; i < tipoEntrevistasList.size(); i++) {
+            if (tipoEntrevistasList.get(i).getNombre().equals(nombre)) {
+                return tipoEntrevistasList.get(i);
+            }
+        }
+        return null;
     }
 }

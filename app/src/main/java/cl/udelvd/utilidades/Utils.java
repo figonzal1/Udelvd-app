@@ -1,11 +1,14 @@
 package cl.udelvd.utilidades;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import com.auth0.android.jwt.JWT;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -200,5 +204,34 @@ public class Utils {
         }
 
         return mDFecha;
+    }
+
+    /**
+     * Funcion encargada de abrir el DatePicker para escoger fecha
+     */
+    public static void iniciarDatePicker(final EditText editText, Context context) {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        if (Objects.requireNonNull(editText.getText()).length() > 0) {
+
+            String fecha = editText.getText().toString();
+            String[] fecha_split = fecha.split(context.getString(R.string.REGEX_FECHA));
+
+            year = Integer.parseInt(fecha_split[0]);
+            month = Integer.parseInt(fecha_split[1]);
+            day = Integer.parseInt(fecha_split[2]);
+        }
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                editText.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
+            }
+        }, year, month - 1, day);
+
+        datePickerDialog.show();
     }
 }

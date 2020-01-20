@@ -38,7 +38,7 @@ public class NuevaEntrevistaViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> mostrarMsgErrorTiposEntrevistas() {
         tipoEntrevistaRepositorio = TipoEntrevistaRepositorio.getInstancia(getApplication());
-        return tipoEntrevistaRepositorio.getResponseMsgError();
+        return tipoEntrevistaRepositorio.getResponseMsgErrorListado();
     }
 
     public MutableLiveData<Boolean> isLoadingTiposEntrevistas() {

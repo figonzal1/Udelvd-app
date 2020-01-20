@@ -41,6 +41,7 @@ import cl.udelvd.vistas.fragments.DeleteDialogFragment;
 public class EntrevistasListaActivity extends AppCompatActivity implements DeleteDialogFragment.DeleteDialogListener {
 
     private static final int REQUEST_CODE_CREAR_ENTREVISTA = 300;
+    private static final int REQUEST_CODE_EDITAR_ENTREVISTA = 301;
 
     private RecyclerView rv;
     private EntrevistaAdapter entrevistaAdapter;
@@ -181,7 +182,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                     params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), tipos.get("normales"));
                     params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), tipos.get("extraordinarias"));
 
-                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, EntrevistasListaActivity.this, getSupportFragmentManager(), entrevistado, params);
+                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, EntrevistasListaActivity.this, getSupportFragmentManager(), entrevistado, params, REQUEST_CODE_EDITAR_ENTREVISTA);
                     entrevistaAdapter.notifyDataSetChanged();
                     rv.setAdapter(entrevistaAdapter);
 
@@ -191,7 +192,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
         });
 
         //Observador para errores
-        entrevistasListaViewModel.mostrarErroresListado().observe(this, new Observer<String>() {
+        entrevistasListaViewModel.mostrarMsgErrorListado().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
@@ -201,6 +202,17 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                     showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+
+        entrevistasListaViewModel.mostrarMsgErrorEliminar().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else {
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                }
             }
         });
     }
@@ -300,6 +312,22 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
 
         if (requestCode == REQUEST_CODE_CREAR_ENTREVISTA) {
             if (resultCode == RESULT_OK) {
+
+                assert data != null;
+                Bundle bundle = data.getExtras();
+                assert bundle != null;
+                showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, bundle.getString("msg_registro"), null);
+
+                entrevistasListaViewModel.refreshEntrevistas(entrevistado);
+            }
+        } else if (requestCode == REQUEST_CODE_EDITAR_ENTREVISTA) {
+            if (resultCode == RESULT_OK) {
+
+                assert data != null;
+                Bundle bundle = data.getExtras();
+                assert bundle != null;
+                showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, bundle.getString("msg_actualizacion"), null);
+
                 entrevistasListaViewModel.refreshEntrevistas(entrevistado);
             }
         }

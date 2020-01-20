@@ -12,6 +12,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -25,19 +26,23 @@ import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.activities.EditarEntrevistaActivity;
 import cl.udelvd.vistas.activities.EventosActivity;
+import cl.udelvd.vistas.fragments.DeleteDialogFragment;
 
 public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.EntrevistaViewHolder> {
 
+    private static final String TAG_DELETE_DIALOG_NAME = "DeleteDialogFragment";
     private final List<Entrevista> entrevistaList;
-    private Context context;
+    private FragmentManager fragmentManager;
     private Entrevistado entrevistado;
     private Map<String, Integer> params;
+    private Context context;
 
-    public EntrevistaAdapter(List<Entrevista> entrevistaList, Context context, Entrevistado entrevistado, Map<String, Integer> params) {
+    public EntrevistaAdapter(List<Entrevista> entrevistaList, Context context, FragmentManager fragmentManager, Entrevistado entrevistado, Map<String, Integer> params) {
         this.entrevistaList = entrevistaList;
-        this.context = context;
+        this.fragmentManager = fragmentManager;
         this.entrevistado = entrevistado;
         this.params = params;
+        this.context = context;
     }
 
     @NonNull
@@ -52,7 +57,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
         final Entrevista entrevista = entrevistaList.get(position);
 
-        holder.tv_entrevista_nombre.setText(String.format(Locale.US, "Entrevista %d", position + 1));
+        holder.tv_entrevista_nombre.setText(String.format(Locale.US, context.getString(R.string.FORMATO_ENTREVISTA_N), position + 1));
 
         holder.tv_tipo_entrevista.setText(entrevista.getTipoEntrevista().getNombre());
 
@@ -127,6 +132,14 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
                             intent.putExtras(bundle);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
+
+                            return true;
+                        }
+
+                        //ELIMINAR ENTREVISTA
+                        else if (item.getItemId() == R.id.menu_eliminar_entrevista) {
+                            DeleteDialogFragment dialog = new DeleteDialogFragment(entrevista);
+                            dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
 
                             return true;
                         }

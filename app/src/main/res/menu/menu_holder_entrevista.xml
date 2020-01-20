@@ -8,4 +8,8 @@
     <item
         android:id="@+id/menu_editar_entrevista"
         android:title="Editar entrevista" />
+
+    <item
+        android:id="@+id/menu_eliminar_entrevista"
+        android:title="Eliminar entrevista" />
 </menu>

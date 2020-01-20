@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +32,6 @@ import cl.udelvd.adaptadores.TipoEntrevistaAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.TipoEntrevista;
 import cl.udelvd.repositorios.EntrevistaRepositorio;
-import cl.udelvd.repositorios.TipoEntrevistaRepositorio;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.NuevaEntrevistaViewModel;
 
@@ -193,9 +191,10 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
                 //Si el registro fue correcto cerrar la actividad
                 if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTA))) {
 
-                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
                     Intent intent = getIntent();
+                    intent.putExtra("msg_registro", s);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -344,8 +343,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
                 entrevista.setId_entrevistado(id_entrevistado);
 
                 TipoEntrevista tipoEntrevista = new TipoEntrevista();
-                TipoEntrevistaRepositorio repositorio = TipoEntrevistaRepositorio.getInstancia(getApplication());
-                int id = repositorio.buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString()).getId();
+                int id = buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString()).getId();
                 tipoEntrevista.setId(id);
                 entrevista.setTipoEntrevista(tipoEntrevista);
 
@@ -354,5 +352,21 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Funcion encargada de buscar una TipoEntrevista dado parametro
+     *
+     * @param nombre Nombre del tipo entrevista
+     * @return Objeto tipoEntrevista
+     */
+    public TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
+
+        for (int i = 0; i < tipoEntrevistaList.size(); i++) {
+            if (tipoEntrevistaList.get(i).getNombre().equals(nombre)) {
+                return tipoEntrevistaList.get(i);
+            }
+        }
+        return null;
     }
 }

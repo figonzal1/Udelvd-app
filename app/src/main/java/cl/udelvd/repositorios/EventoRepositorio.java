@@ -209,7 +209,7 @@ public class EventoRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_EVENTO), entrevista.getId());
+        String url = String.format(application.getString(R.string.URL_GET_EVENTO), application.getString(R.string.HEROKU_DOMAIN), entrevista.getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
@@ -322,7 +322,7 @@ public class EventoRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_POST_EVENTO), evento.getEntrevista().getId());
+        String url = String.format(application.getString(R.string.URL_POST_EVENTO), application.getString(R.string.HEROKU_DOMAIN), evento.getEntrevista().getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
 
@@ -453,7 +453,7 @@ public class EventoRepositorio {
             }
         };
 
-        String url = String.format(Locale.US, application.getString(R.string.URL_GET_EVENTO_ESPECIFICO), eventoIntent.getEntrevista().getId(), eventoIntent.getId());
+        String url = String.format(Locale.US, application.getString(R.string.URL_GET_EVENTO_ESPECIFICO), application.getString(R.string.HEROKU_DOMAIN), eventoIntent.getEntrevista().getId(), eventoIntent.getId());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
             @Override

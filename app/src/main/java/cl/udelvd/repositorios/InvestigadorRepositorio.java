@@ -375,7 +375,7 @@ public class InvestigadorRepositorio {
             }
         };
 
-        String url = application.getString(R.string.URL_LOGIN_INVESTIGADORES);
+        String url = String.format(application.getString(R.string.URL_LOGIN_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener,
                 errorListener) {

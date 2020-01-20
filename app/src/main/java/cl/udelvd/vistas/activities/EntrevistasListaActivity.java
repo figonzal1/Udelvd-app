@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,16 +33,18 @@ import cl.udelvd.R;
 import cl.udelvd.adaptadores.EntrevistaAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.repositorios.EntrevistaRepositorio;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.EntrevistaViewModel;
+import cl.udelvd.viewmodel.EntrevistasListaViewModel;
+import cl.udelvd.vistas.fragments.DeleteDialogFragment;
 
-public class EntrevistasListaActivity extends AppCompatActivity {
+public class EntrevistasListaActivity extends AppCompatActivity implements DeleteDialogFragment.DeleteDialogListener {
 
     private static final int REQUEST_CODE_CREAR_ENTREVISTA = 300;
 
     private RecyclerView rv;
     private EntrevistaAdapter entrevistaAdapter;
-    private EntrevistaViewModel entrevistaViewModel;
+    private EntrevistasListaViewModel entrevistasListaViewModel;
 
     private TextView tv_nombreCompleto;
     private TextView tv_n_entrevistas;
@@ -126,15 +129,15 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         cv_lista_entrevistas = findViewById(R.id.card_view_lista_entrevistas);
         cv_lista_entrevistas.setVisibility(View.INVISIBLE);
 
+        entrevistasListaViewModel = ViewModelProviders.of(this).get(EntrevistasListaViewModel.class);
     }
 
     /**
      * Funcion encargada de inicializar los viewModelsObservers
      */
     private void iniciarViewModelObservers() {
-        entrevistaViewModel = ViewModelProviders.of(this).get(EntrevistaViewModel.class);
 
-        entrevistaViewModel.isLoading().observe(this, new Observer<Boolean>() {
+        entrevistasListaViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
@@ -155,7 +158,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         });
 
         //Observador de listado de entrevistas
-        entrevistaViewModel.cargarEntrevistas(entrevistado).observe(this, new Observer<List<Entrevista>>() {
+        entrevistasListaViewModel.cargarEntrevistas(entrevistado).observe(this, new Observer<List<Entrevista>>() {
             @Override
             public void onChanged(List<Entrevista> entrevistas) {
                 if (entrevistas != null) {
@@ -178,7 +181,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
                     params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), tipos.get("normales"));
                     params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), tipos.get("extraordinarias"));
 
-                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, getApplicationContext(), entrevistado, params);
+                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, EntrevistasListaActivity.this, getSupportFragmentManager(), entrevistado, params);
                     entrevistaAdapter.notifyDataSetChanged();
                     rv.setAdapter(entrevistaAdapter);
 
@@ -188,14 +191,15 @@ public class EntrevistasListaActivity extends AppCompatActivity {
         });
 
         //Observador para errores
-        entrevistaViewModel.mostrarRespuestaError().observe(this, new Observer<String>() {
+        entrevistasListaViewModel.mostrarErroresListado().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
-                showSnackbar(findViewById(R.id.entrevistas_list), s, getString(R.string.SNACKBAR_REINTENTAR));
-
-                progressBar.setVisibility(View.INVISIBLE);
-
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else {
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
@@ -246,23 +250,24 @@ public class EntrevistasListaActivity extends AppCompatActivity {
      * @param titulo Titulo del snackbar
      * @param accion Boton de accion del snackbar
      */
-    private void showSnackbar(View v, String titulo, String accion) {
+    private void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
-                .setAction(accion, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        Snackbar snackbar = Snackbar.make(v, titulo, tipo_snackbar);
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        //Refresh listado de usuarios
-                        entrevistaViewModel.refreshEntrevistas(entrevistado);
+                    //Refresh listado de usuarios
+                    entrevistasListaViewModel.refreshEntrevistas(entrevistado);
 
-                        cv_lista_entrevistas.setVisibility(View.INVISIBLE);
+                    cv_lista_entrevistas.setVisibility(View.INVISIBLE);
 
-                        progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
 
-                    }
-                });
-
+                }
+            });
+        }
         snackbar.show();
     }
 
@@ -285,7 +290,7 @@ public class EntrevistasListaActivity extends AppCompatActivity {
 
             progressBar.setVisibility(View.VISIBLE);
 
-            entrevistaViewModel.refreshEntrevistas(entrevistado);
+            entrevistasListaViewModel.refreshEntrevistas(entrevistado);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -295,10 +300,14 @@ public class EntrevistasListaActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_CREAR_ENTREVISTA) {
             if (resultCode == RESULT_OK) {
-                entrevistaViewModel.refreshEntrevistas(entrevistado);
+                entrevistasListaViewModel.refreshEntrevistas(entrevistado);
             }
         }
-
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, Entrevista entrevista) {
+        EntrevistaRepositorio.getInstancia(getApplication()).eliminarEntrevista(entrevista);
     }
 }

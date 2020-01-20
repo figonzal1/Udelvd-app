@@ -36,11 +36,6 @@ public class NuevaEntrevistaViewModel extends AndroidViewModel {
         return tipoEntrevistaMutable;
     }
 
-    public void refreshTipoEntrevistas() {
-        tipoEntrevistaRepositorio = TipoEntrevistaRepositorio.getInstancia(getApplication());
-        tipoEntrevistaRepositorio.obtenerTiposEntrevista();
-    }
-
     public SingleLiveEvent<String> mostrarMsgErrorTiposEntrevistas() {
         tipoEntrevistaRepositorio = TipoEntrevistaRepositorio.getInstancia(getApplication());
         return tipoEntrevistaRepositorio.getResponseMsgError();
@@ -57,7 +52,7 @@ public class NuevaEntrevistaViewModel extends AndroidViewModel {
      */
     public SingleLiveEvent<String> mostrarMsgErrorRegistro() {
         entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
-        return entrevistaRepositorio.getResponseMsgError();
+        return entrevistaRepositorio.getResponseMsgErrorRegistro();
     }
 
     public SingleLiveEvent<String> mostrarMsgRegistro() {
@@ -73,5 +68,10 @@ public class NuevaEntrevistaViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> isLoadingRegistroEntrevista() {
         entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
         return entrevistaRepositorio.getIsLoading();
+    }
+
+    public void refreshTipoEntrevistas() {
+        tipoEntrevistaRepositorio = TipoEntrevistaRepositorio.getInstancia(getApplication());
+        tipoEntrevistaRepositorio.obtenerTiposEntrevista();
     }
 }

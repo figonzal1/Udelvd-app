@@ -188,12 +188,13 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 //Si el registro fue correcto cerrar la actividad
                 if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTA))) {
+
+                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
                     Intent intent = getIntent();
                     setResult(RESULT_OK, intent);
                     finish();
@@ -204,8 +205,6 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
         nuevaEntrevistaViewModel.mostrarMsgErrorRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-
-                //progressBar.setVisibility(View.GONE);
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));

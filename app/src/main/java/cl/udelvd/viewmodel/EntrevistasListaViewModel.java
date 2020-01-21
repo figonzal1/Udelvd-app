@@ -71,6 +71,11 @@ public class EntrevistasListaViewModel extends AndroidViewModel {
         return entrevistaRepositorio.getIsLoading();
     }
 
+    public SingleLiveEvent<String> mostrarMsgEliminar() {
+        entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return entrevistaRepositorio.getResponseMsgEliminar();
+    }
+
     public SingleLiveEvent<String> mostrarMsgErrorEliminar() {
         entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
         return entrevistaRepositorio.getResponseMsgErrorEliminar();

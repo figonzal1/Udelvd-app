@@ -67,6 +67,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
         holder.tv_fecha_registro.setText(fechaEntrevista);
 
+        //Click de cardview
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +91,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
             }
         });
 
+        //Click en el submenu
         holder.iv_menu_entrevista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -274,6 +274,8 @@
     <string name="TAG_VIEW_MODEL_EDITAR_PERFIL">VM_EDITAR_PERFIL</string>
     <string name="TAG_VIEW_MODEL_EDITAR_EVENTO">VM_MODEL_EDITAR_EVENTO</string>
     <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
+    <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
+    <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA">VM_ELIMINAR_ENTREVISTA</string>
 
 
 </resources>

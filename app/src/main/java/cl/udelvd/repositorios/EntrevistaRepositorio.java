@@ -63,6 +63,7 @@ public class EntrevistaRepositorio {
     private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
 
     //Eliminar
+    private SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
 
     //PROGRESS DIALOG
@@ -634,9 +635,15 @@ public class EntrevistaRepositorio {
     /*
     ELIMINAR ENTREVISTA
      */
+
+    public SingleLiveEvent<String> getResponseMsgEliminar() {
+        return responseMsgEliminar;
+    }
+
     public SingleLiveEvent<String> getResponseMsgErrorEliminar() {
         return responseMsgErrorEliminar;
     }
+
     public void eliminarEntrevista(Entrevista entrevista) {
         sendDeleteEntrevista(entrevista);
     }
@@ -645,7 +652,20 @@ public class EntrevistaRepositorio {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonData = jsonObject.getJSONArray("data");
+
+                    if (jsonData.length() == 0) {
+                        responseMsgEliminar.postValue(application.getString(R.string.MSG_DELETE_ENTREVISTA));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 isLoading.postValue(false);
             }
         };

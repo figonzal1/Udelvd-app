@@ -67,6 +67,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
 
     private ProgressBar progressBar;
     private List<Entrevista> entrevistasList;
+    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,23 +197,52 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             @Override
             public void onChanged(String s) {
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else {
-                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else {
+                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                        isSnackBarShow = true;
+                    }
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
+        //Observador para eliminacion de entrevista
+        entrevistasListaViewModel.mostrarMsgEliminar().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTA))) {
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                    EntrevistaRepositorio.getInstancia(getApplication()).obtenerEntrevistasPersonales(entrevistado);
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            }
+        });
+
+        //Observador para errores al eliminar
         entrevistasListaViewModel.mostrarMsgErrorEliminar().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else {
-                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else {
+                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                        isSnackBarShow = true;
+                    }
                 }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -277,6 +307,9 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
 
                     progressBar.setVisibility(View.VISIBLE);
 
+                    isSnackBarShow = false;
+
+
                 }
             });
         }
@@ -303,6 +336,8 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             progressBar.setVisibility(View.VISIBLE);
 
             entrevistasListaViewModel.refreshEntrevistas(entrevistado);
+
+            isSnackBarShow = false;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -331,6 +366,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 entrevistasListaViewModel.refreshEntrevistas(entrevistado);
             }
         }
+        isSnackBarShow = false;
         super.onActivityResult(requestCode, resultCode, data);
     }
 

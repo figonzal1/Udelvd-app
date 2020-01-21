@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -31,7 +31,7 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.InvestigadorViewModel;
+import cl.udelvd.viewmodel.EditarPerfilViewModel;
 
 public class EditarPerfilActivity extends AppCompatActivity {
 
@@ -55,6 +55,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private Investigador investigador;
 
     private SwitchCompat switchCompat;
+    private EditarPerfilViewModel editarPefilViewModel;
+    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,19 +97,32 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
         //ProgressBar
         progressBar = findViewById(R.id.progress_horizontal_registro);
+
+        editarPefilViewModel = ViewModelProviders.of(this).get(EditarPerfilViewModel.class);
     }
 
     private void iniciarViewModel() {
-        InvestigadorViewModel investigadorViewModel = ViewModelProviders.of(this).get(InvestigadorViewModel.class);
 
-        investigadorViewModel.mostrarMsgRespuestaActualizacion().observe(this, new Observer<Map<String, Object>>() {
+        //Observador de loading
+        editarPefilViewModel.isLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        //Observador de mensajeria de actualizacion
+        editarPefilViewModel.mostrarMsgActualizacion().observe(this, new Observer<Map<String, Object>>() {
             @Override
             public void onChanged(Map<String, Object> stringObjectMap) {
 
                 if (stringObjectMap != null) {
 
                     Investigador investigador = (Investigador) stringObjectMap.get(getString(R.string.KEY_INVES_OBJECT));
-
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
@@ -138,16 +153,37 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
                         if (msg_update.equals(getString(R.string.MSG_INVEST_ACTUALIZADO))) {
 
-                            Toast.makeText(getApplicationContext(), msg_update, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), msg_update, Toast.LENGTH_LONG).show();
 
                             //Cerrar formulario
                             //Setear codigo OK
                             Intent intent = getIntent();
-                            setResult(EDIT_PROFILE_CODE, intent);
+                            intent.putExtra("msg_update", msg_update);
+                            setResult(RESULT_OK, intent);
                             finish();
                         }
                     }
                 }
+            }
+        });
+
+        //Observador de mensajeria de errores de actualizacion
+        editarPefilViewModel.mostrarMsgErrorActualizacion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (!isSnackBarShow) {
+
+                    if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM)) || s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.editar_perfil), Snackbar.LENGTH_INDEFINITE, s);
+                    } else {
+                        showSnackbar(findViewById(R.id.editar_perfil), Snackbar.LENGTH_LONG, s);
+                    }
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -189,6 +225,18 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Funcion para mostrar el snackbar en fragment
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     */
+    private void showSnackbar(View v, int tipo_snackbar, String titulo) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, tipo_snackbar);
+        snackbar.show();
     }
 
     /**
@@ -312,7 +360,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 }
 
                 invesActualizado.setIdRol(investigador.getIdRol());
-                invesActualizado.setNombreRol(invesActualizado.getNombreRol());
+                invesActualizado.setNombreRol(investigador.getNombreRol());
 
                 InvestigadorRepositorio.getInstance(getApplication()).actualizarInvestigador(invesActualizado);
             }

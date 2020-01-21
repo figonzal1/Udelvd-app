@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
@@ -29,15 +31,24 @@ public class InvestigadorRepositorio {
     private static InvestigadorRepositorio instancia;
     private final Application application;
 
+    //LOGIN
     private final SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
+    //REGISTRO
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorLogin = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
+
+    //Actualizacion
+    private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
 
-    private final SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
+    //PROGRESS DIALOG
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
     private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
     private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
+
 
     private InvestigadorRepositorio(Application application) {
         this.application = application;
@@ -56,20 +67,32 @@ public class InvestigadorRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getErrorMsg() {
-        return errorMsg;
-    }
-
     public SingleLiveEvent<Map<String, Object>> getResponseMsgLogin() {
         return responseMsgLogin;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorLogin() {
+        return responseMsgErrorLogin;
     }
 
     public SingleLiveEvent<String> getResponseMsgRegistro() {
         return responseMsgRegistro;
     }
 
+    public SingleLiveEvent<String> getResponseMsgErrorRegistro() {
+        return responseMsgErrorRegistro;
+    }
+
     public SingleLiveEvent<Map<String, Object>> getResponseMsgActualizacion() {
         return responseMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorActualizacion() {
+        return responseMsgErrorActualizacion;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -127,6 +150,8 @@ public class InvestigadorRepositorio {
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_INVEST_REGISTRADO));
                     }
 
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -138,15 +163,17 @@ public class InvestigadorRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.TIMEOUT_ERROR));
-                    errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.NETWORK_ERROR));
-                    errorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorRegistro.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuandoel servidor si response
@@ -167,7 +194,7 @@ public class InvestigadorRepositorio {
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                        errorMsg.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                        responseMsgErrorRegistro.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
 
                     //Error de servidor
@@ -179,9 +206,9 @@ public class InvestigadorRepositorio {
                             assert errorObject != null;
                             //Si el error es de mail repetido, postear error msg
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG))) {
-                                errorMsg.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
+                                responseMsgErrorRegistro.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
                             } else {
-                                errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                                responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -220,6 +247,7 @@ public class InvestigadorRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_REGISTRO);
     }
 
@@ -297,6 +325,8 @@ public class InvestigadorRepositorio {
                         result.put(application.getString(R.string.LOGIN_MSG_VM), application.getString(R.string.LOGIN_MSG_VM_WELCOME));
 
                         responseMsgLogin.postValue(result);
+
+                        isLoading.postValue(false);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -308,15 +338,16 @@ public class InvestigadorRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                isLoading.postValue(false);
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.TIMEOUT_ERROR));
-                    errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.NETWORK_ERROR));
-                    errorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorLogin.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -343,9 +374,9 @@ public class InvestigadorRepositorio {
                             assert errorObject != null;
 
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_AUTH_MSG))) {
-                                errorMsg.postValue(application.getString(R.string.SERVER_ERROR_AUTH_MSG_VM));
+                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_AUTH_MSG_VM));
                             } else {
-                                errorMsg.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                                responseMsgErrorLogin.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -361,9 +392,9 @@ public class InvestigadorRepositorio {
 
                             //Si el error es de email no existente
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
-                                errorMsg.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
+                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
                             } else {
-                                errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                                responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -395,6 +426,7 @@ public class InvestigadorRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_LOGIN);
     }
 
@@ -443,7 +475,7 @@ public class InvestigadorRepositorio {
                     }
 
                     //Buscar en JSON nombre del rol
-                    JSONObject jsonObjectRolData = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES))
+                    JSONObject jsonObjectRolData = jsonData.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
                             .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
                             .getJSONObject(application.getString(R.string.JSON_DATA));
                     invResponse.setNombreRol(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
@@ -462,6 +494,7 @@ public class InvestigadorRepositorio {
 
                         responseMsgActualizacion.postValue(result);
                     }
+                    isLoading.postValue(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -473,15 +506,18 @@ public class InvestigadorRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.TIMEOUT_ERROR));
-                    errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.NETWORK_ERROR));
-                    errorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorActualizacion.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si response
@@ -502,20 +538,20 @@ public class InvestigadorRepositorio {
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                        errorMsg.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                        responseMsgErrorActualizacion.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.SERVER_ERROR) + errorObject);
-                        errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
 
-        String url = application.getString(R.string.URL_PUT_INVESTIGADORES) + investigadorForm.getId();
+        String url = String.format(application.getString(R.string.URL_PUT_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN), investigadorForm.getId());
 
         StringRequest request = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
 
@@ -547,6 +583,7 @@ public class InvestigadorRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_ACTUALIZACION);
     }
 }

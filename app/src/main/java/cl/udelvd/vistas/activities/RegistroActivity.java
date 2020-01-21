@@ -2,15 +2,11 @@ package cl.udelvd.vistas.activities;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -21,7 +17,6 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.InvestigadorViewModel;
 
 public class RegistroActivity extends AppCompatActivity {
 
@@ -46,7 +41,7 @@ public class RegistroActivity extends AppCompatActivity {
 
         Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_REGISTRO));
 
-        iniciarViewModel();
+        //iniciarViewModel();
 
         instanciarRecursosInterfaz();
     }
@@ -105,7 +100,7 @@ public class RegistroActivity extends AppCompatActivity {
     /**
      * Funcion encargada del manejo de ViewModels
      */
-    private void iniciarViewModel() {
+    /*private void iniciarViewModel() {
 
         final InvestigadorViewModel investigadorViewModel =
                 ViewModelProviders.of(this).get(InvestigadorViewModel.class);
@@ -138,7 +133,7 @@ public class RegistroActivity extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 
     /**
      * Funcion para validaciond e campos

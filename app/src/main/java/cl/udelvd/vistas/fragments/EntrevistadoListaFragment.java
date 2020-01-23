@@ -38,7 +38,6 @@ public class EntrevistadoListaFragment extends Fragment {
     private EntrevistadoAdapter entrevistadoAdapter;
     private ProgressBar progressBar;
 
-
     public EntrevistadoListaFragment() {
         // Required empty public constructor
     }
@@ -46,6 +45,7 @@ public class EntrevistadoListaFragment extends Fragment {
 
     public static EntrevistadoListaFragment newInstance() {
         return new EntrevistadoListaFragment();
+
     }
 
     @Override
@@ -62,11 +62,25 @@ public class EntrevistadoListaFragment extends Fragment {
 
         instanciarRecursosInterfaz(v);
 
+        obtenerDatosBundle(v);
+
         iniciarViewModelObservers(v);
 
         floatingButtonCrearEntrevistado(v);
 
         return v;
+    }
+
+    private void obtenerDatosBundle(View v) {
+
+        if (getArguments() != null) {
+            String msg_login = getArguments().getString(getString(R.string.INTENT_KEY_MSG_LOGIN));
+
+            if (msg_login != null) {
+                Snackbar.make(v.findViewById(R.id.entrevistados_lista), msg_login, Snackbar.LENGTH_LONG).show();
+            }
+
+        }
     }
 
     private void instanciarRecursosInterfaz(View v) {

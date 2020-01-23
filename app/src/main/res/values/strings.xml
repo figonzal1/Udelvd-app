@@ -277,5 +277,17 @@
     <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA">VM_ELIMINAR_ENTREVISTA</string>
 
+    <!-- INTENT KEY -->
+    <string name="INTENT_KEY_MSG_LOGIN">msg_login</string>
+    <string name="INTENT_KEY_MSG_ACTUALIZACION">msg_actualizacion</string>
+    <string name="INTENT_KEY_MSG_REGISTRO">msg_registro</string>
+    <string name="INTENT_KEY_NORMALES">normales</string>
+    <string name="INTENT_KEY_EXTRAORDINARIAS">extraordinarias</string>
+
+    <!--Dialog -->
+    <string name="DIALOG_MESSAGE">¿Está seguro que quiere eliminar esta entrevista?</string>
+    <string name="DIALOG_POSITIVE_BTN">Eliminar</string>
+    <string name="DIALOG_NEGATIVE_BTN">Cancelar</string>
+
 
 </resources>

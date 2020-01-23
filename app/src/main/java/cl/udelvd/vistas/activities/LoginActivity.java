@@ -13,13 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -30,15 +31,19 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.InvestigadorViewModel;
+import cl.udelvd.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final int REGISTRAR_INVESTIGADOR_CODE = 200;
     private TextInputLayout ilEmail;
     private TextInputLayout ilPassword;
     private TextInputEditText etEmail;
     private TextInputEditText etPassword;
     private ProgressBar progressBar;
+
+    private LoginViewModel loginViewModel;
+    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
     }
 
     /**
@@ -95,12 +102,32 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void iniciarViewModels() {
 
-        InvestigadorViewModel investigadorViewModel =
-                ViewModelProviders.of(this).get(InvestigadorViewModel.class);
+        //Observador de carga
+        loginViewModel.isLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    ilEmail.setEnabled(false);
+                    etEmail.setEnabled(false);
+
+                    ilPassword.setEnabled(false);
+                    etPassword.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    ilEmail.setEnabled(true);
+                    etEmail.setEnabled(true);
+
+                    ilPassword.setEnabled(true);
+                    etPassword.setEnabled(true);
+                }
+            }
+        });
 
         //Observador de Mensajeria Para Login Correcto
-        investigadorViewModel.mostrarMsgRespuestaLogin().observe(this, new Observer<Map<String,
-                Object>>() {
+        loginViewModel.mostrarMsgLogin().observe(this, new Observer<Map<String, Object>>() {
             @Override
             public void onChanged(Map<String, Object> stringObjectMap) {
 
@@ -139,25 +166,35 @@ public class LoginActivity extends AppCompatActivity {
                     if (msg_login.equals(getString(R.string.MSG_INVEST_LOGIN))) {
 
                         //Mostrar mensaje en pantalla
-                        Toast.makeText(getApplicationContext(), msg_login, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), msg_login, Toast.LENGTH_LONG).show();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("msg_login", msg_login);
                         startActivity(intent);
                         finish();
                     }
+
                 }
             }
+
         });
 
         //Observador de Mensajeria Para Login Incorrecto
-        investigadorViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+        loginViewModel.mostrarMsgErrorLogin().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                if (!isSnackBarShow) {
+
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.login_investigador), s);
+                    } else {
+                        showSnackbar(findViewById(R.id.login_investigador), s);
+                    }
+                }
             }
         });
     }
@@ -220,9 +257,40 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(@NonNull View widget) {
 
                 Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REGISTRAR_INVESTIGADOR_CODE);
             }
         };
         spans.setSpan(clickSpan, 19, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == REGISTRAR_INVESTIGADOR_CODE) {
+
+            if (resultCode == RESULT_OK) {
+
+                assert data != null;
+                Bundle bundle = data.getExtras();
+
+                assert bundle != null;
+                showSnackbar(findViewById(R.id.login_investigador), bundle.getString("msg_registro"));
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * Funcion para mostrar el snackbar en fragment
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     */
+    private void showSnackbar(View v, String titulo) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_LONG);
+        snackbar.show();
+        isSnackBarShow = false;
     }
 }

@@ -1,13 +1,18 @@
 package cl.udelvd.vistas.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -17,6 +22,7 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utilidades.Utils;
+import cl.udelvd.viewmodel.RegistroViewModel;
 
 public class RegistroActivity extends AppCompatActivity {
 
@@ -34,6 +40,9 @@ public class RegistroActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
+    private RegistroViewModel registroViewModel;
+    private boolean isSnackBarShow = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,34 +50,14 @@ public class RegistroActivity extends AppCompatActivity {
 
         Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_REGISTRO));
 
-        //iniciarViewModel();
-
         instanciarRecursosInterfaz();
+
+        iniciarViewModel();
+
+        botonRegistro();
     }
 
-    /**
-     * Funcion encargada de configurar las views de la ista Registro
-     */
-    private void instanciarRecursosInterfaz() {
-
-        //Instancias formulario
-        //Inputs Layouts
-        ilNombre = findViewById(R.id.il_nombre_investigador);
-        ilApellido = findViewById(R.id.il_apellido_investigador);
-        ilEmail = findViewById(R.id.il_email_investigador);
-        ilPassword = findViewById(R.id.il_password_investigador);
-        ilConfirmacionPassword = findViewById(R.id.il_confirm_password_investigador);
-
-        //Edit texts
-        etNombre = findViewById(R.id.et_nombre_investigador);
-        etApellido = findViewById(R.id.et_apellido_investigador);
-        etEmail = findViewById(R.id.et_email_investigador);
-        etPassword = findViewById(R.id.et_password_investigador);
-        etConfirmacionPassword = findViewById(R.id.et_confirm_password_investigador);
-
-        //ProgressBar
-        progressBar = findViewById(R.id.progress_horizontal_registro);
-
+    private void botonRegistro() {
         //Boton registro
         Button btnRegistrar = findViewById(R.id.btn_registrar);
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
@@ -98,42 +87,118 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     /**
+     * Funcion encargada de configurar las views de la ista Registro
+     */
+    private void instanciarRecursosInterfaz() {
+
+        //ProgressBar
+        progressBar = findViewById(R.id.progress_horizontal_registro_investigador);
+
+        //Instancias formulario
+        //Inputs Layouts
+        ilNombre = findViewById(R.id.il_nombre_investigador);
+        ilApellido = findViewById(R.id.il_apellido_investigador);
+        ilEmail = findViewById(R.id.il_email_investigador);
+        ilPassword = findViewById(R.id.il_password_investigador);
+        ilConfirmacionPassword = findViewById(R.id.il_confirm_password_investigador);
+
+        //Edit texts
+        etNombre = findViewById(R.id.et_nombre_investigador);
+        etApellido = findViewById(R.id.et_apellido_investigador);
+        etEmail = findViewById(R.id.et_email_investigador);
+        etPassword = findViewById(R.id.et_password_investigador);
+        etConfirmacionPassword = findViewById(R.id.et_confirm_password_investigador);
+
+        registroViewModel = ViewModelProviders.of(this).get(RegistroViewModel.class);
+    }
+
+    /**
      * Funcion encargada del manejo de ViewModels
      */
-    /*private void iniciarViewModel() {
+    private void iniciarViewModel() {
 
-        final InvestigadorViewModel investigadorViewModel =
-                ViewModelProviders.of(this).get(InvestigadorViewModel.class);
+        //Observador de carga
+        registroViewModel.isLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    //Desactivar entradas
+                    ilNombre.setEnabled(false);
+                    etNombre.setEnabled(false);
+
+                    ilApellido.setEnabled(false);
+                    etApellido.setEnabled(false);
+
+                    ilEmail.setEnabled(false);
+                    etEmail.setEnabled(false);
+
+                    ilPassword.setEnabled(false);
+                    ilConfirmacionPassword.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    //Activar entradas
+                    ilNombre.setEnabled(true);
+                    etNombre.setEnabled(true);
+
+                    ilApellido.setEnabled(true);
+                    etApellido.setEnabled(true);
+
+                    ilEmail.setEnabled(true);
+                    etEmail.setEnabled(true);
+
+                    ilPassword.setEnabled(true);
+                    ilConfirmacionPassword.setEnabled(true);
+                }
+            }
+        });
 
         //Observador mensaje positivo
-        investigadorViewModel.mostrarMsgRespuestaRegistro().observe(this, new Observer<String>() {
+        registroViewModel.mostrarMsgRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
                 Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
                 //Si el registro fue correcto cerrar la actividad
                 if (s.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
+                    Intent intent = getIntent();
+                    intent.putExtra("msg_registro", s);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
 
         //Observador mensaje error
-        investigadorViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+        registroViewModel.mostrarMsgErrorRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.INVISIBLE);
+
+                if (!isSnackBarShow) {
+
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.registro_investigador), s);
+                        isSnackBarShow = true;
+                    } else {
+                        showSnackbar(findViewById(R.id.registro_investigador), s);
+                        isSnackBarShow = true;
+                    }
+                }
+
                 Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
             }
         });
 
-    }*/
+    }
 
     /**
      * Funcion para validaciond e campos
@@ -215,5 +280,17 @@ public class RegistroActivity extends AppCompatActivity {
 
         //Si no hay errores, pasa a registro
         return contador_errores == 0;
+    }
+
+    /**
+     * Funcion para mostrar el snackbar en fragment
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     */
+    private void showSnackbar(View v, String titulo) {
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_LONG);
+        snackbar.show();
+        isSnackBarShow = false;
     }
 }

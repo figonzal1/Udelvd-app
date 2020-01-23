@@ -175,13 +175,13 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
 
                     //Contar tipos de entrevistas
                     Map<String, Integer> tipos = contarTipos(entrevistas);
-                    tv_entrevistas_normales.setText(String.valueOf(tipos.get("normales")));
-                    tv_entrevistas_extraordinarias.setText(String.valueOf(tipos.get("extraordinarias")));
+                    tv_entrevistas_normales.setText(String.valueOf(tipos.get(getString(R.string.INTENT_KEY_NORMALES))));
+                    tv_entrevistas_extraordinarias.setText(String.valueOf(tipos.get(getString(R.string.INTENT_KEY_EXTRAORDINARIAS))));
 
                     params = new HashMap<>();
                     params.put(getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), entrevistas.size());
-                    params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), tipos.get("normales"));
-                    params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), tipos.get("extraordinarias"));
+                    params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), tipos.get(getString(R.string.INTENT_KEY_NORMALES)));
+                    params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), tipos.get(getString(R.string.INTENT_KEY_EXTRAORDINARIAS)));
 
                     entrevistaAdapter = new EntrevistaAdapter(entrevistas, EntrevistasListaActivity.this, getSupportFragmentManager(), entrevistado, params, REQUEST_CODE_EDITAR_ENTREVISTA);
                     entrevistaAdapter.notifyDataSetChanged();
@@ -351,7 +351,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 assert data != null;
                 Bundle bundle = data.getExtras();
                 assert bundle != null;
-                showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, bundle.getString("msg_registro"), null);
+                showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO)), null);
 
                 entrevistasListaViewModel.refreshEntrevistas(entrevistado);
             }
@@ -361,7 +361,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 assert data != null;
                 Bundle bundle = data.getExtras();
                 assert bundle != null;
-                showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, bundle.getString("msg_actualizacion"), null);
+                showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION)), null);
 
                 entrevistasListaViewModel.refreshEntrevistas(entrevistado);
             }

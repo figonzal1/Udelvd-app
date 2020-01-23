@@ -219,7 +219,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                 if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTA))) {
                     //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
                     Intent intent = getIntent();
-                    intent.putExtra("msg_actualizacion", s);
+                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), s);
                     setResult(RESULT_OK, intent);
                     finish();
                 }

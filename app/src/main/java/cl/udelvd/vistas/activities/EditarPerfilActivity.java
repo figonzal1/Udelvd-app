@@ -96,7 +96,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
         etConfirmacionPassword = findViewById(R.id.et_confirm_password_investigador);
 
         //ProgressBar
-        progressBar = findViewById(R.id.progress_horizontal_registro);
+        progressBar = findViewById(R.id.progress_horizontal_editar_perfil);
 
         editarPefilViewModel = ViewModelProviders.of(this).get(EditarPerfilViewModel.class);
     }

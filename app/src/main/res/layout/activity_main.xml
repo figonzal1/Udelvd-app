@@ -8,52 +8,59 @@
     android:fitsSystemWindows="false"
     tools:context=".vistas.activities.MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/main_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/include"
-            layout="@layout/toolbar_layout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager_main"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toTopOf="@+id/tabs"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include" />
+            <include
+                android:id="@+id/include"
+                layout="@layout/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:tabGravity="fill"
-            app:tabIconTint="@color/colorOnPrimary"
-            app:tabIndicatorAnimationDuration="@android:integer/config_longAnimTime"
-            app:tabIndicatorColor="@color/colorSecondary"
-            app:tabIndicatorFullWidth="true"
-            app:tabIndicatorGravity="top"
-            app:tabIndicatorHeight="3dp"
-            app:tabInlineLabel="true"
-            app:tabMode="fixed"
-            app:tabRippleColor="@color/colorPrimaryVariant"
-            app:tabSelectedTextColor="@color/colorOnPrimary"
-            app:tabTextColor="@color/colorPrimaryVariant" />
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager_main"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintBottom_toTopOf="@+id/tabs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tabGravity="fill"
+                app:tabIconTint="@color/colorOnPrimary"
+                app:tabIndicatorAnimationDuration="@android:integer/config_longAnimTime"
+                app:tabIndicatorColor="@color/colorSecondary"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorGravity="top"
+                app:tabIndicatorHeight="3dp"
+                app:tabInlineLabel="true"
+                app:tabMode="fixed"
+                app:tabRippleColor="@color/colorPrimaryVariant"
+                app:tabSelectedTextColor="@color/colorOnPrimary"
+                app:tabTextColor="@color/colorPrimaryVariant" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
     <!-- Contenido de navigation drawer -->

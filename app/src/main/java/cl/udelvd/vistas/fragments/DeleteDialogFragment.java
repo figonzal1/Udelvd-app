@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
 
+import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevista;
 
 public class DeleteDialogFragment extends DialogFragment {
@@ -31,13 +32,13 @@ public class DeleteDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        builder.setMessage("¿Está seguro que quiere eliminar esta entrevista?")
-                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.DIALOG_MESSAGE))
+                .setPositiveButton(getString(R.string.DIALOG_POSITIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         listener.onDialogPositiveClick(DeleteDialogFragment.this, entrevista);
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dismiss();
                     }

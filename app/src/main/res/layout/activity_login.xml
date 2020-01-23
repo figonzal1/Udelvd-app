@@ -1,197 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_investigador"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".vistas.activities.LoginActivity">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guia_izq"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/activity_vertical_margin" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guia_der"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="42dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_end="@dimen/activity_vertical_margin" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guia_horizontal"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.50" />
+        android:layout_height="match_parent"
+        tools:context=".vistas.activities.LoginActivity">
 
-    <View
-        android:id="@+id/view_white"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/guia_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guia_izq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/activity_vertical_margin" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_login"
-        style="@style/Widget.MaterialComponents.CardView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorSurface"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guia_der"
-        app:layout_constraintStart_toStartOf="@+id/guia_izq"
-        app:layout_constraintTop_toBottomOf="@+id/iv_logo_login"
-        app:layout_constraintVertical_bias="0.30">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guia_der"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="42dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_end="@dimen/activity_vertical_margin" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guia_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.50" />
 
-            <ProgressBar
-                android:id="@+id/progress_horizontal_login"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <View
+            android:id="@+id/view_white"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/guia_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_email_login"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:hint="Email"
-                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
-                app:endIconMode="clear_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
-                app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_login"
-                app:layout_constraintTop_toTopOf="@id/progress_horizontal_login">
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_login"
+            style="@style/Widget.MaterialComponents.CardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorSurface"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guia_der"
+            app:layout_constraintStart_toStartOf="@+id/guia_izq"
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo_login"
+            app:layout_constraintVertical_bias="0.30">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_email_login"
-                    android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/progress_horizontal_login"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto"
-                    android:inputType="textEmailAddress"
-                    android:singleLine="true" />
+                    android:indeterminate="true"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/iv_icono_nombre"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="16dp"
-                android:contentDescription="Icono nombre"
-                android:scaleType="centerCrop"
-                android:tint="@color/colorSecondaryVariant"
-                app:layout_constraintBottom_toBottomOf="@+id/il_email_login"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/il_email_login"
-                app:srcCompat="@drawable/ic_person_black_24dp" />
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_password_login"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:hint="Contraseña"
-                app:layout_constraintBottom_toTopOf="@+id/btn_login"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
-                app:layout_constraintTop_toBottomOf="@+id/il_email_login"
-                app:passwordToggleEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_password_login"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_email_login"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Email"
+                    app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
+                    app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_login"
+                    app:layout_constraintTop_toTopOf="@id/progress_horizontal_login">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_email_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/iv_icono_nombre"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="16dp"
+                    android:contentDescription="Icono nombre"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorSecondaryVariant"
+                    app:layout_constraintBottom_toBottomOf="@+id/il_email_login"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/il_email_login"
+                    app:srcCompat="@drawable/ic_person_black_24dp" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_password_login"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Contraseña"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_login"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
+                    app:layout_constraintTop_toBottomOf="@+id/il_email_login"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_password_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/iv_icono_password"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="16dp"
+                    android:contentDescription="Icono password"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorSecondaryVariant"
+                    app:layout_constraintBottom_toBottomOf="@+id/il_password_login"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/il_password_login"
+                    app:srcCompat="@drawable/ic_lock_black_24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_login"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/roboto"
-                    android:inputType="textPassword"
-                    android:singleLine="true" />
+                    android:text="Iniciar sesión"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/iv_icono_password"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="16dp"
-                android:contentDescription="Icono password"
-                android:scaleType="centerCrop"
-                android:tint="@color/colorSecondaryVariant"
-                app:layout_constraintBottom_toBottomOf="@+id/il_password_login"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/il_password_login"
-                app:srcCompat="@drawable/ic_lock_black_24dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_login"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/roboto"
-                android:text="Iniciar sesión"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
 
 
-    <ImageView
-        android:id="@+id/iv_logo_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="Logo Aplicacion"
-        android:src="@drawable/home_circle"
-        app:layout_constraintBottom_toTopOf="@+id/guia_horizontal"
-        app:layout_constraintEnd_toStartOf="@+id/guia_der"
-        app:layout_constraintStart_toStartOf="@+id/guia_izq"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/iv_logo_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Logo Aplicacion"
+            android:src="@drawable/home_circle"
+            app:layout_constraintBottom_toTopOf="@+id/guia_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/guia_der"
+            app:layout_constraintStart_toStartOf="@+id/guia_izq"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_registro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="¿No tienes cuenta? Regístrate"
-        app:layout_constraintEnd_toStartOf="@+id/guia_der"
-        app:layout_constraintStart_toStartOf="@+id/guia_izq"
-        app:layout_constraintTop_toBottomOf="@id/cv_login" />
+        <TextView
+            android:id="@+id/tv_registro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="¿No tienes cuenta? Regístrate"
+            app:layout_constraintEnd_toStartOf="@+id/guia_der"
+            app:layout_constraintStart_toStartOf="@+id/guia_izq"
+            app:layout_constraintTop_toBottomOf="@id/cv_login" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -149,7 +149,7 @@
                     app:srcCompat="@drawable/ic_email_black_24dp" />
 
                 <ProgressBar
-                    android:id="@+id/progress_horizontal_registro"
+                    android:id="@+id/progress_horizontal_editar_perfil"
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

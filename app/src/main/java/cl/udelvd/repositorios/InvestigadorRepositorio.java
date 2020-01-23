@@ -33,9 +33,10 @@ public class InvestigadorRepositorio {
 
     //LOGIN
     private final SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorLogin = new SingleLiveEvent<>();
+
     //REGISTRO
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorLogin = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
 
     //Actualizacion
@@ -220,7 +221,7 @@ public class InvestigadorRepositorio {
         };
 
 
-        String url = application.getString(R.string.URL_GET_INVESTIGADORES);
+        String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN));
 
         //Hacer peticion post
         StringRequest request = new StringRequest(Request.Method.POST, url,

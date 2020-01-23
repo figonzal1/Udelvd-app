@@ -8,11 +8,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
@@ -129,10 +132,21 @@ public class PerfilActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //Recibe codigo desde edicion de perfil
-        if (resultCode == EDIT_PROFILE_CODE) {
-            Log.d(getString(R.string.TAG_EDIT_PROFILE_RESULT), getString(R.string.EDIT_PROFILE_RESULT_MSG));
-            recreate();
+        if (requestCode == EDIT_PROFILE_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                assert data != null;
+                Bundle bundle = data.getExtras();
+
+                assert bundle != null;
+
+                showSnackbar(findViewById(R.id.perfil_investigador), bundle.getString("msg_update"));
+
+                cargarDatosInvestigador();
+
+                Log.d(getString(R.string.TAG_EDIT_PROFILE_RESULT), getString(R.string.EDIT_PROFILE_RESULT_MSG));
+
+            }
         }
     }
 
@@ -144,5 +158,17 @@ public class PerfilActivity extends AppCompatActivity {
         Intent intent = getIntent();
         setResult(PROFILE_ACTIVITY_CODE, intent);
         finish();
+    }
+
+    /**
+     * Funcion para mostrar el snackbar en fragment
+     *
+     * @param v      View donde se mostrara el snackbar
+     * @param titulo Titulo del snackbar
+     */
+    private void showSnackbar(View v, String titulo) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 }

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_email_investigador;
     private TextView tv_nombre_rol_investigador;
     private ViewPager viewPager;
+    private String msg_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
         investigador.setApellido(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_APELLIDO), ""));
         investigador.setNombreRol(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), ""));
         investigador.setEmail(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), ""));
+
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+            msg_login = bundle.getString(getString(R.string.INTENT_KEY_MSG_LOGIN));
+        }
     }
 
     /**
@@ -88,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ViewPager
 
-        viewPager.setAdapter(new FragmentPageAdapter(getSupportFragmentManager(), getApplicationContext()));
+        viewPager.setAdapter(new FragmentPageAdapter(getSupportFragmentManager(), getApplicationContext(), msg_login));
 
         //TabLayout
 

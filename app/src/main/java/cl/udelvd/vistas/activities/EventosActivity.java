@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +31,7 @@ import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.EventoViewModel;
+import cl.udelvd.viewmodel.ListadoEventosViewModel;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
@@ -54,7 +53,7 @@ public class EventosActivity extends AppCompatActivity {
     private Entrevistado entrevistado;
 
     private List<Evento> eventoList;
-    private EventoViewModel eventoViewModel;
+    private ListadoEventosViewModel listadoEventosViewModel;
 
     private FragmentStatePageAdapter fragmentStatePageAdapter;
     private ViewPager viewPager;
@@ -100,8 +99,6 @@ public class EventosActivity extends AppCompatActivity {
             n_normales = bundle.getString(getString(R.string.KEY_ENTREVISTA_N_NORMALES));
             n_extraordnarias = bundle.getString(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS));
 
-        } else {
-            Log.d("BUNDLE_STATUS_EVENTOS", "VACIO");
         }
     }
 
@@ -140,15 +137,16 @@ public class EventosActivity extends AppCompatActivity {
             tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", n_entrevistas));
         }
 
+        listadoEventosViewModel = ViewModelProviders.of(this).get(ListadoEventosViewModel.class);
     }
 
     /**
      * Iniciar observadores de viewModels
      */
     private void iniciarViewModel() {
-        eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
 
-        eventoViewModel.isLoading().observe(this, new Observer<Boolean>() {
+
+        listadoEventosViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
 
@@ -170,7 +168,7 @@ public class EventosActivity extends AppCompatActivity {
         });
 
         //Observador de carga de eventos
-        eventoViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
+        listadoEventosViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
             @Override
             public void onChanged(List<Evento> eventos) {
                 if (eventos != null) {
@@ -189,7 +187,7 @@ public class EventosActivity extends AppCompatActivity {
         });
 
         //Observador de error al cargar eventos
-        eventoViewModel.mostrarErrorListado().observe(this, new Observer<String>() {
+        listadoEventosViewModel.mostrarMsgErrorListado().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
@@ -200,7 +198,7 @@ public class EventosActivity extends AppCompatActivity {
                 } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.eventos_lista), s, getString(R.string.SNACKBAR_REINTENTAR));
                 } else {
-                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                    showSnackbar(findViewById(R.id.eventos_lista), s, null);
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
@@ -244,7 +242,8 @@ public class EventosActivity extends AppCompatActivity {
             //Refrescar eventos
             progressBar.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.INVISIBLE);
-            eventoViewModel.refreshEventos(entrevista);
+
+            listadoEventosViewModel.refreshEventos(entrevista);
             return true;
         }
 
@@ -260,19 +259,21 @@ public class EventosActivity extends AppCompatActivity {
      */
     private void showSnackbar(View v, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
-                .setAction(accion, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
 
-                        //Refresh listado de usuarios
-                        eventoViewModel.refreshEventos(entrevista);
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        progressBar.setVisibility(View.VISIBLE);
-                        viewPager.setVisibility(View.INVISIBLE);
-                    }
-                });
+                    //Refresh listado de usuarios
+                    listadoEventosViewModel.refreshEventos(entrevista);
 
+                    progressBar.setVisibility(View.VISIBLE);
+                    viewPager.setVisibility(View.INVISIBLE);
+                }
+            });
+        }
         snackbar.show();
     }
 }

@@ -32,7 +32,7 @@ import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.ListadoEventosViewModel;
+import cl.udelvd.viewmodel.EventosListaViewModel;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
@@ -54,7 +54,7 @@ public class EventosActivity extends AppCompatActivity {
     private Entrevistado entrevistado;
 
     private List<Evento> eventoList;
-    private ListadoEventosViewModel listadoEventosViewModel;
+    private EventosListaViewModel eventosListaViewModel;
 
     private FragmentStatePageAdapter fragmentStatePageAdapter;
     private ViewPager viewPager;
@@ -139,7 +139,7 @@ public class EventosActivity extends AppCompatActivity {
             tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", n_entrevistas));
         }
 
-        listadoEventosViewModel = ViewModelProviders.of(this).get(ListadoEventosViewModel.class);
+        eventosListaViewModel = ViewModelProviders.of(this).get(EventosListaViewModel.class);
     }
 
     /**
@@ -148,7 +148,7 @@ public class EventosActivity extends AppCompatActivity {
     private void iniciarViewModel() {
 
 
-        listadoEventosViewModel.isLoading().observe(this, new Observer<Boolean>() {
+        eventosListaViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
 
@@ -170,7 +170,7 @@ public class EventosActivity extends AppCompatActivity {
         });
 
         //Observador de carga de eventos
-        listadoEventosViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
+        eventosListaViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
             @Override
             public void onChanged(List<Evento> eventos) {
                 if (eventos != null) {
@@ -189,7 +189,7 @@ public class EventosActivity extends AppCompatActivity {
         });
 
         //Observador de error al cargar eventos
-        listadoEventosViewModel.mostrarMsgErrorListado().observe(this, new Observer<String>() {
+        eventosListaViewModel.mostrarMsgErrorListado().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
@@ -243,7 +243,7 @@ public class EventosActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.INVISIBLE);
 
-            listadoEventosViewModel.refreshEventos(entrevista);
+            eventosListaViewModel.refreshEventos(entrevista);
             return true;
         }
 
@@ -267,7 +267,7 @@ public class EventosActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     //Refresh listado de usuarios
-                    listadoEventosViewModel.refreshEventos(entrevista);
+                    eventosListaViewModel.refreshEventos(entrevista);
 
                     progressBar.setVisibility(View.VISIBLE);
                     viewPager.setVisibility(View.INVISIBLE);
@@ -291,7 +291,7 @@ public class EventosActivity extends AppCompatActivity {
 
                 if (msg_registro != null) {
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, msg_registro, null);
-                    listadoEventosViewModel.refreshEventos(entrevista);
+                    eventosListaViewModel.refreshEventos(entrevista);
                 }
             }
         }

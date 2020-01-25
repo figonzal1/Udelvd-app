@@ -155,6 +155,17 @@
                 app:layout_constraintStart_toEndOf="@+id/iv_emoticon_evento"
                 app:layout_constraintTop_toBottomOf="@+id/tv_seleccionar_emoticon" />
 
+            <ImageView
+                android:id="@+id/iv_justificacion_evento"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="Icono justificacion evento"
+                android:tint="@color/colorSecondaryVariant"
+                app:layout_constraintBottom_toBottomOf="@+id/il_justificacion_evento"
+                app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                app:layout_constraintTop_toTopOf="@+id/il_justificacion_evento"
+                app:srcCompat="@drawable/ic_question_answer_black_24dp" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_justificacion_evento"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -167,7 +178,7 @@
                 app:endIconMode="custom"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/iv_hora_evento"
+                app:layout_constraintStart_toEndOf="@+id/iv_justificacion_evento"
                 app:layout_constraintTop_toBottomOf="@+id/spinner_emoticon">
 
                 <com.google.android.material.textfield.TextInputEditText

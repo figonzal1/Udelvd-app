@@ -1,7 +1,8 @@
 package cl.udelvd.vistas.activities;
 
-import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,9 +11,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
@@ -22,9 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -35,12 +34,11 @@ import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.AccionViewModel;
-import cl.udelvd.viewmodel.EmoticonViewModel;
-import cl.udelvd.viewmodel.EventoViewModel;
+import cl.udelvd.viewmodel.EditarEventoViewModel;
 
 public class EditarEventoActivity extends AppCompatActivity {
 
+    private static final int SPEECH_REQUEST_CODE = 200;
     private TextInputLayout ilAcciones;
     private TextInputLayout ilHoraEvento;
     private TextInputLayout ilJustificacion;
@@ -53,19 +51,18 @@ public class EditarEventoActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Spinner spinner;
 
+    private EditarEventoViewModel editarEventoViewModel;
+
     private List<Accion> accionList;
     private AccionAdapter accionAdapter;
-    private AccionViewModel accionViewModel;
 
     private EmoticonAdapter emoticonAdapter;
     private List<Emoticon> emoticonList;
-    private EmoticonViewModel emoticonViewModel;
-
-    private EventoViewModel eventoViewModel;
 
     private boolean isSnackBarShow = false;
     private boolean isAutoCompleteAcciones = false;
     private boolean isSpinnerEmoticones = false;
+    private boolean isGetEvento = false;
 
 
     @Override
@@ -79,181 +76,19 @@ public class EditarEventoActivity extends AppCompatActivity {
 
         obtenerDatosBundle();
 
-        setPickerHoraEvento();
+        iniciarViewModelEvento();
 
         setAutoCompleteAcciones();
 
         setAutoCompleteEmoticones();
 
-        setSpinnerEmoticones();
+        setPickerHoraEvento();
 
-        iniciarViewModelEvento();
-    }
+        configurarSpinnerEmoticones();
 
-    private void iniciarViewModelEvento() {
+        configurarSpeechIntent();
 
-        eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
 
-        //Cargar datos de evento
-        eventoViewModel.cargarEvento(eventoIntent).observe(this, new Observer<Evento>() {
-            @Override
-            public void onChanged(Evento evento) {
-                if (evento != null) {
-                    eventoIntent = evento;
-
-                    if (isSpinnerEmoticones && isAutoCompleteAcciones) {
-                        setearInfoEvento();
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoIntent.toString()));
-                    }
-                }
-            }
-        });
-
-        eventoViewModel.mostrarErrorEvento().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
-
-                if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    }
-                }
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
-        });
-
-    }
-
-    private void setearInfoEvento() {
-
-        etHoraEvento.setText(Utils.dateToString(getApplicationContext(), true, eventoIntent.getHora_evento()));
-
-        int posicion = buscarPosicionEmoticonoPorId(eventoIntent.getEmoticon().getId());
-        spinner.setSelection(posicion);
-
-        etJustificacion.setText(eventoIntent.getJustificacion());
-
-        String nombreAccion = Objects.requireNonNull(buscarAccionPorId(eventoIntent.getAccion().getId())).getNombre();
-        acAcciones.setText(nombreAccion, false);
-    }
-
-    /**
-     * Funcion encargada de configurar el spinner de emoticones en formulario de eventos
-     */
-    private void setSpinnerEmoticones() {
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(getString(R.string.SPINNER_EMOTICON_SELECTED), spinner.getSelectedItem().toString());
-
-                Emoticon emoticon = emoticonList.get(position);
-                eventoIntent.setEmoticon(emoticon);
-                spinner.setSelected(true);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                spinner.setSelected(false);
-            }
-        });
-    }
-
-    private void setAutoCompleteEmoticones() {
-        emoticonViewModel = ViewModelProviders.of(this).get(EmoticonViewModel.class);
-
-        //Observer con listado de emoticones
-        emoticonViewModel.cargarEmoticones().observe(this, new Observer<List<Emoticon>>() {
-            @Override
-            public void onChanged(List<Emoticon> emoticons) {
-                if (emoticons != null) {
-
-                    progressBar.setVisibility(View.GONE);
-
-                    emoticonList = emoticons;
-                    emoticonAdapter = new EmoticonAdapter(getApplicationContext(), emoticonList);
-                    spinner.setAdapter(emoticonAdapter);
-
-                    isSpinnerEmoticones = true;
-
-                    //IniciarViewModel Evento
-                    //iniciarViewModelEvento();
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                }
-            }
-        });
-
-        //Observer para errores de listado de emoticones
-        emoticonViewModel.mostrarMsgError().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
-
-                if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    }
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
-            }
-        });
-    }
-
-    private void setAutoCompleteAcciones() {
-        accionViewModel = ViewModelProviders.of(this).get(AccionViewModel.class);
-
-        //Observer de listado de acciones
-        accionViewModel.cargarAcciones().observe(this, new Observer<List<Accion>>() {
-            @Override
-            public void onChanged(List<Accion> list) {
-
-                if (list != null) {
-                    progressBar.setVisibility(View.GONE);
-
-                    accionList = list;
-                    accionAdapter = new AccionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
-                    acAcciones.setAdapter(accionAdapter);
-
-                    isAutoCompleteAcciones = true;
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-
-                    accionAdapter.notifyDataSetChanged();
-                }
-
-            }
-        });
-
-        //Observer de errores de acciones
-        accionViewModel.moestrarMsgError().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
-
-                if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    }
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
-        });
     }
 
     private void instanciarRecursosInterfaz() {
@@ -270,6 +105,8 @@ public class EditarEventoActivity extends AppCompatActivity {
         etJustificacion = findViewById(R.id.et_justificacion_evento);
 
         spinner = findViewById(R.id.spinner_emoticon);
+
+        editarEventoViewModel = ViewModelProviders.of(this).get(EditarEventoViewModel.class);
     }
 
     private void obtenerDatosBundle() {
@@ -296,7 +133,7 @@ public class EditarEventoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarHourPicker();
+                Utils.iniciarHourPicker(etHoraEvento, EditarEventoActivity.this);
             }
         });
 
@@ -305,42 +142,331 @@ public class EditarEventoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarHourPicker();
+                Utils.iniciarHourPicker(etHoraEvento, EditarEventoActivity.this);
             }
         });
 
     }
 
-    /**
-     * Funcion encargada de abrir el HourPicker para escoger fecha
-     */
-    private void iniciarHourPicker() {
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR);
-        int minute = c.get(Calendar.MINUTE);
+    private void setAutoCompleteAcciones() {
 
-        if (Objects.requireNonNull(etHoraEvento.getText()).length() > 0) {
-
-            String fecha = etHoraEvento.getText().toString();
-            String[] fecha_split = fecha.split(getString(R.string.REGEX_HORA));
-
-            hour = Integer.parseInt(fecha_split[0]);
-            minute = Integer.parseInt(fecha_split[1]);
-        }
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(EditarEventoActivity.this, new TimePickerDialog.OnTimeSetListener() {
+        //Observer de carga de acciones
+        editarEventoViewModel.isLoadingAcciones().observe(this, new Observer<Boolean>() {
             @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                if (minute <= 9) {
-                    etHoraEvento.setText(String.format(Locale.US, "%d:0%d", hourOfDay, minute));
+            public void onChanged(Boolean aBoolean) {
+
+                if (aBoolean) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    ilHoraEvento.setEnabled(false);
+                    etHoraEvento.setEnabled(false);
+
+                    spinner.setEnabled(false);
+
+                    ilAcciones.setEnabled(false);
+                    acAcciones.setEnabled(false);
+
+                    ilJustificacion.setEnabled(false);
+                    etJustificacion.setEnabled(false);
                 } else {
-                    etHoraEvento.setText(String.format(Locale.US, "%d:%d", hourOfDay, minute));
+                    progressBar.setVisibility(View.GONE);
+
+                    ilHoraEvento.setEnabled(true);
+                    etHoraEvento.setEnabled(true);
+
+                    spinner.setEnabled(true);
+
+                    ilAcciones.setEnabled(true);
+                    acAcciones.setEnabled(true);
+
+                    ilJustificacion.setEnabled(true);
+                    etJustificacion.setEnabled(true);
                 }
             }
-        }, hour, minute, true);
+        });
 
-        timePickerDialog.show();
+        //Observer de listado de acciones
+        editarEventoViewModel.cargarAcciones().observe(this, new Observer<List<Accion>>() {
+            @Override
+            public void onChanged(List<Accion> list) {
+
+                if (list != null) {
+                    progressBar.setVisibility(View.GONE);
+
+                    accionList = list;
+                    accionAdapter = new AccionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
+                    acAcciones.setAdapter(accionAdapter);
+
+                    isAutoCompleteAcciones = true;
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+
+                    accionAdapter.notifyDataSetChanged();
+
+                    setearInfoEvento();
+                }
+
+            }
+        });
+
+        //Observer de errores de acciones
+        editarEventoViewModel.mostrarMsgErrorAcciones().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else {
+                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, null);
+                        isSnackBarShow = true;
+                    }
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
     }
+
+    private void setAutoCompleteEmoticones() {
+
+        editarEventoViewModel.isLoadingEmoticones().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    ilHoraEvento.setEnabled(false);
+                    etHoraEvento.setEnabled(false);
+
+                    spinner.setEnabled(false);
+
+                    ilAcciones.setEnabled(false);
+                    acAcciones.setEnabled(false);
+
+                    ilJustificacion.setEnabled(false);
+                    etJustificacion.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    ilHoraEvento.setEnabled(true);
+                    etHoraEvento.setEnabled(true);
+
+                    spinner.setEnabled(true);
+
+                    ilAcciones.setEnabled(true);
+                    acAcciones.setEnabled(true);
+
+                    ilJustificacion.setEnabled(true);
+                    etJustificacion.setEnabled(true);
+                }
+            }
+        });
+
+        //Observer con listado de emoticones
+        editarEventoViewModel.cargarEmoticones().observe(this, new Observer<List<Emoticon>>() {
+            @Override
+            public void onChanged(List<Emoticon> emoticons) {
+                if (emoticons != null) {
+
+                    progressBar.setVisibility(View.GONE);
+
+                    emoticonList = emoticons;
+                    emoticonAdapter = new EmoticonAdapter(getApplicationContext(), emoticonList);
+                    spinner.setAdapter(emoticonAdapter);
+
+                    isSpinnerEmoticones = true;
+
+                    setearInfoEvento();
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                }
+            }
+        });
+
+        //Observer para errores de listado de emoticones
+        editarEventoViewModel.mostrarMsgErrorEmoticones().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else {
+                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, null);
+                        isSnackBarShow = true;
+                    }
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            }
+        });
+    }
+
+    /**
+     * Funcion encargada de configurar el spinner de emoticones en formulario de eventos
+     */
+    private void configurarSpinnerEmoticones() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(getString(R.string.SPINNER_EMOTICON_SELECTED), spinner.getSelectedItem().toString());
+
+                Emoticon emoticon = emoticonList.get(position);
+                eventoIntent.setEmoticon(emoticon);
+                spinner.setSelected(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                spinner.setSelected(false);
+            }
+        });
+    }
+
+    /**
+     * Intent encargado de abrir el programa Voice To Text Google
+     */
+    private void configurarSpeechIntent() {
+        ilJustificacion.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+            }
+        });
+    }
+
+    private void iniciarViewModelEvento() {
+
+        //Observer para oading de evento
+        editarEventoViewModel.isLoadingEvento().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    ilHoraEvento.setEnabled(false);
+                    etHoraEvento.setEnabled(false);
+
+                    spinner.setEnabled(false);
+
+                    ilAcciones.setEnabled(false);
+                    acAcciones.setEnabled(false);
+
+                    ilJustificacion.setEnabled(false);
+                    etJustificacion.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    ilHoraEvento.setEnabled(true);
+                    etHoraEvento.setEnabled(true);
+
+                    spinner.setEnabled(true);
+
+                    ilAcciones.setEnabled(true);
+                    acAcciones.setEnabled(true);
+
+                    ilJustificacion.setEnabled(true);
+                    etJustificacion.setEnabled(true);
+                }
+            }
+        });
+
+        //Cargar datos de evento
+        editarEventoViewModel.cargarEvento(eventoIntent).observe(this, new Observer<Evento>() {
+            @Override
+            public void onChanged(Evento evento) {
+                if (evento != null) {
+                    eventoIntent = evento;
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoIntent.toString()));
+
+                    isGetEvento = true;
+
+                    setearInfoEvento();
+                }
+            }
+        });
+
+        editarEventoViewModel.mostrarMsgErrorEvento().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else {
+                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, null);
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+
+        //Observador para actualizar evento
+        editarEventoViewModel.mostrarMsgActualizacion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (s.equals()) {
+                    
+                }
+            }
+        });
+
+        //Observador para mensaje de edicion de evento
+        editarEventoViewModel.mostrarMsgErrorActualizacion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else {
+                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, null);
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+
+    }
+
+    private void setearInfoEvento() {
+
+        if (isAutoCompleteAcciones && isSpinnerEmoticones && isGetEvento) {
+
+            etHoraEvento.setText(Utils.dateToString(getApplicationContext(), true, eventoIntent.getHora_evento()));
+
+            int posicion = buscarPosicionEmoticonoPorId(eventoIntent.getEmoticon().getId());
+            spinner.setSelection(posicion);
+
+            etJustificacion.setText(eventoIntent.getJustificacion());
+
+            String nombreAccion = Objects.requireNonNull(buscarAccionPorId(eventoIntent.getAccion().getId())).getNombre();
+            acAcciones.setText(nombreAccion, false);
+        }
+    }
+
 
     /**
      * Funcion para mostrar el snackbar en fragment
@@ -351,23 +477,26 @@ public class EditarEventoActivity extends AppCompatActivity {
      */
     private void showSnackbar(View v, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
-                .setAction(accion, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
 
-                        //Refresh listado de informacion necesaria
-                        accionViewModel.refreshAcciones();
-                        emoticonViewModel.refreshEmoticones();
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        eventoViewModel.refreshEvento(eventoIntent);
+                    //Refresh listado de informacion necesaria
+                    editarEventoViewModel.refreshAcciones();
+                    editarEventoViewModel.refreshEmoticones();
 
-                        progressBar.setVisibility(View.VISIBLE);
+                    //editarEventoViewModel.refreshEvento(eventoIntent);
 
-                        isSnackBarShow = false;
-                    }
-                });
+                    progressBar.setVisibility(View.VISIBLE);
 
+                    isSnackBarShow = false;
+                }
+            });
+        }
+        isSnackBarShow = false;
         snackbar.show();
     }
 
@@ -410,6 +539,25 @@ public class EditarEventoActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == SPEECH_REQUEST_CODE) {
+
+            if (resultCode == RESULT_OK) {
+
+                assert data != null;
+                List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                assert results != null;
+                String spokenText = results.get(0);
+
+                etJustificacion.setText(spokenText);
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private int buscarPosicionEmoticonoPorId(int id) {

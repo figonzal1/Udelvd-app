@@ -57,9 +57,11 @@ public class EventoRepositorio {
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseErrorMsgRegistro = new SingleLiveEvent<>();
 
-    //GET EVENTO
+    //GET EVENTO & ACTUALIZACION
     private SingleLiveEvent<Evento> eventoMutableLiveData = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseErrorMsgEvento = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseErrorMsgEvento = new SingleLiveEvent<>(); //Al cargar evento
+    private SingleLiveEvent<String> responseErrorMsgActualizacion = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
 
     //PROGRESS DIALOG
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
@@ -75,9 +77,6 @@ public class EventoRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseErrorMsgEvento() {
-        return responseErrorMsgEvento;
-    }
 
     public SingleLiveEvent<String> getResponseMsgRegistro() {
         return responseMsgRegistro;
@@ -89,6 +88,18 @@ public class EventoRepositorio {
 
     public SingleLiveEvent<String> getResponseErrorMsgListado() {
         return responseErrorMsgListado;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgActualizacion() {
+        return responseMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgActualizacion() {
+        return responseErrorMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgEvento() {
+        return responseErrorMsgEvento;
     }
 
     public MutableLiveData<Boolean> getIsLoading() {
@@ -384,7 +395,6 @@ public class EventoRepositorio {
      *
      * @param eventoIntent Evento con la informacion asociada
      */
-    //TODO: Agregar loading en editar evento
     private void sendGetEvento(Evento eventoIntent) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -392,9 +402,9 @@ public class EventoRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                     Evento evento = new Evento();
                     evento.setId(jsonData.getInt(application.getString(R.string.KEY_EVENTO_ID)));
@@ -417,6 +427,8 @@ public class EventoRepositorio {
 
                     eventoMutableLiveData.postValue(evento);
 
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -426,6 +438,9 @@ public class EventoRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
                     responseErrorMsgEvento.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -484,7 +499,7 @@ public class EventoRepositorio {
             }
         };
 
-
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTO);
     }
 }

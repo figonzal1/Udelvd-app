@@ -149,6 +149,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
     }
 
     private void setAutoCompleteAccion() {
+
         nuevoEventoViewModel.isLoadingAcciones().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
@@ -157,6 +158,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
                     ilAcciones.setEnabled(false);
                     acAcciones.setEnabled(false);
+
+                    spinner.setEnabled(false);
 
                     ilHoraEvento.setEnabled(false);
                     etHoraEvento.setEnabled(false);
@@ -168,6 +171,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
                     ilAcciones.setEnabled(true);
                     acAcciones.setEnabled(true);
+
+                    spinner.setEnabled(true);
 
                     ilHoraEvento.setEnabled(true);
                     etHoraEvento.setEnabled(true);
@@ -230,6 +235,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
                     ilAcciones.setEnabled(false);
                     acAcciones.setEnabled(false);
 
+                    spinner.setEnabled(false);
+
                     ilHoraEvento.setEnabled(false);
                     etHoraEvento.setEnabled(false);
 
@@ -240,6 +247,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
                     ilAcciones.setEnabled(true);
                     acAcciones.setEnabled(true);
+
+                    spinner.setEnabled(true);
 
                     ilHoraEvento.setEnabled(true);
                     etHoraEvento.setEnabled(true);
@@ -337,6 +346,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
                     ilAcciones.setEnabled(false);
                     acAcciones.setEnabled(false);
 
+                    spinner.setEnabled(false);
+
                     ilHoraEvento.setEnabled(false);
                     etHoraEvento.setEnabled(false);
 
@@ -347,6 +358,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
                     ilAcciones.setEnabled(true);
                     acAcciones.setEnabled(true);
+
+                    spinner.setEnabled(true);
 
                     ilHoraEvento.setEnabled(true);
                     etHoraEvento.setEnabled(true);

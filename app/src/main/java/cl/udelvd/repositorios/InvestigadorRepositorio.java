@@ -149,9 +149,8 @@ public class InvestigadorRepositorio {
 
                     if (investigador.equals(invResponse)) {
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_INVEST_REGISTRADO));
+                        isLoading.postValue(false);
                     }
-
-                    isLoading.postValue(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -494,8 +493,10 @@ public class InvestigadorRepositorio {
                         result.put(application.getString(R.string.UPDATE_MSG_VM), application.getString(R.string.UPDATE_MSG_VM_SAVE));
 
                         responseMsgActualizacion.postValue(result);
+
+                        isLoading.postValue(false);
                     }
-                    isLoading.postValue(false);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -1,11 +1,5 @@
 package cl.udelvd.vistas.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -34,8 +34,6 @@ import cl.udelvd.modelo.Accion;
 import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
-import cl.udelvd.repositorios.AccionRepositorio;
-import cl.udelvd.repositorios.EmoticonRepositorio;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.AccionViewModel;
 import cl.udelvd.viewmodel.EmoticonViewModel;
@@ -135,12 +133,12 @@ public class EditarEventoActivity extends AppCompatActivity {
 
         etHoraEvento.setText(Utils.dateToString(getApplicationContext(), true, eventoIntent.getHora_evento()));
 
-        int posicion = EmoticonRepositorio.getInstancia(getApplication()).buscarPosicionEmoticonoPorId(eventoIntent.getEmoticon().getId());
+        int posicion = buscarPosicionEmoticonoPorId(eventoIntent.getEmoticon().getId());
         spinner.setSelection(posicion);
 
         etJustificacion.setText(eventoIntent.getJustificacion());
 
-        String nombreAccion = AccionRepositorio.getInstancia(getApplication()).buscarAccionPorId(eventoIntent.getAccion().getId()).getNombre();
+        String nombreAccion = Objects.requireNonNull(buscarAccionPorId(eventoIntent.getAccion().getId())).getNombre();
         acAcciones.setText(nombreAccion, false);
     }
 
@@ -412,5 +410,23 @@ public class EditarEventoActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private int buscarPosicionEmoticonoPorId(int id) {
+        for (int i = 0; i < emoticonList.size(); i++) {
+            if (emoticonList.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private Accion buscarAccionPorId(int id) {
+        for (int i = 0; i < accionList.size(); i++) {
+            if (accionList.get(i).getId() == id) {
+                return accionList.get(i);
+            }
+        }
+        return null;
     }
 }

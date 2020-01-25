@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,6 +53,8 @@ public class EmoticonAdapter extends ArrayAdapter<Emoticon> {
             convertView = mInflater.inflate(R.layout.spinner_emoticones, parent, false);
 
             holder.iv_emoticon = convertView.findViewById(R.id.id_emoticon);
+            holder.tv_descripcion_emoticon = convertView.findViewById(R.id.tv_descripcion_emoticon);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -65,6 +68,8 @@ public class EmoticonAdapter extends ArrayAdapter<Emoticon> {
                 .transition(withCrossFade())
                 .into(holder.iv_emoticon);
 
+        holder.tv_descripcion_emoticon.setText(emoticon.getDescripcion());
+
         return convertView;
     }
 
@@ -75,5 +80,6 @@ public class EmoticonAdapter extends ArrayAdapter<Emoticon> {
 
     private static class ViewHolder {
         ImageView iv_emoticon;
+        TextView tv_descripcion_emoticon;
     }
 }

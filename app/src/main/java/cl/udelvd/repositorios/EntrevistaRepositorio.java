@@ -155,6 +155,9 @@ public class EntrevistaRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -277,9 +280,9 @@ public class EntrevistaRepositorio {
 
                     if (entrevista.equals(entrevistaInternet) && !create_time.isEmpty()) {
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_ENTREVISTA));
-                    }
 
-                    isLoading.postValue(false);
+                        isLoading.postValue(false);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -661,12 +664,13 @@ public class EntrevistaRepositorio {
 
                     if (jsonData.length() == 0) {
                         responseMsgEliminar.postValue(application.getString(R.string.MSG_DELETE_ENTREVISTA));
+                        isLoading.postValue(false);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                isLoading.postValue(false);
+
             }
         };
 

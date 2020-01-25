@@ -37,10 +37,11 @@ public class AccionRepositorio {
     private Application application;
 
     private List<Accion> accionList = new ArrayList<>();
-
     private MutableLiveData<List<Accion>> accionMutableLiveData = new MutableLiveData<>();
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private AccionRepositorio(Application application) {
         this.application = application;
@@ -55,6 +56,10 @@ public class AccionRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgError() {
         return responseMsgError;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -98,6 +103,8 @@ public class AccionRepositorio {
 
                     accionMutableLiveData.postValue(accionList);
 
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -107,6 +114,9 @@ public class AccionRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -147,7 +157,7 @@ public class AccionRepositorio {
             }
         };
 
-        String url = application.getString(R.string.URL_GET_ACCIONES);
+        String url = String.format(application.getString(R.string.URL_GET_ACCIONES), application.getString(R.string.HEROKU_DOMAIN));
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {
@@ -163,27 +173,7 @@ public class AccionRepositorio {
                 return params;
             }
         };
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ACCIONES);
-    }
-
-    public Accion buscarAccionPorNombre(String nombre) {
-
-        for (int i = 0; i < accionList.size(); i++) {
-            if (nombre.equals(accionList.get(i).getNombre())) {
-                return accionList.get(i);
-            }
-        }
-        return null;
-    }
-
-    public Accion buscarAccionPorId(int id) {
-
-        Log.d("ACCIONLIST", String.valueOf(accionList.size()));
-        for (int i = 0; i < accionList.size(); i++) {
-            if (accionList.get(i).getId() == id) {
-                return accionList.get(i);
-            }
-        }
-        return null;
     }
 }

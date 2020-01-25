@@ -2,6 +2,7 @@ package cl.udelvd.utilidades;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -233,5 +235,36 @@ public class Utils {
         }, year, month - 1, day);
 
         datePickerDialog.show();
+    }
+
+    /**
+     * Funcion encargada de configurar el picker para selecciona Hora
+     */
+    public static void iniciarHourPicker(final EditText editText, Context context) {
+        final Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR);
+        int minute = c.get(Calendar.MINUTE);
+
+        if (Objects.requireNonNull(editText.getText()).length() > 0) {
+
+            String fecha = editText.getText().toString();
+            String[] fecha_split = fecha.split(context.getString(R.string.REGEX_HORA));
+
+            hour = Integer.parseInt(fecha_split[0]);
+            minute = Integer.parseInt(fecha_split[1]);
+        }
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                if (minute <= 9) {
+                    editText.setText(String.format(Locale.US, "%d:0%d", hourOfDay, minute));
+                } else {
+                    editText.setText(String.format(Locale.US, "%d:%d", hourOfDay, minute));
+                }
+            }
+        }, hour, minute, true);
+
+        timePickerDialog.show();
     }
 }

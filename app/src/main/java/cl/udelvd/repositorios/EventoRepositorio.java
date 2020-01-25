@@ -384,6 +384,7 @@ public class EventoRepositorio {
      *
      * @param eventoIntent Evento con la informacion asociada
      */
+    //TODO: Agregar loading en editar evento
     private void sendGetEvento(Evento eventoIntent) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override

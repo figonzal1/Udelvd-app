@@ -179,13 +179,4 @@ public class EmoticonRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EMOTICONES);
 
     }
-
-    public int buscarPosicionEmoticonoPorId(int id) {
-        for (int i = 0; i < emoticonList.size(); i++) {
-            if (emoticonList.get(i).getId() == id) {
-                return i;
-            }
-        }
-        return -1;
-    }
 }

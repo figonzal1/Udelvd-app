@@ -13,11 +13,11 @@ import cl.udelvd.modelo.Evento;
 import cl.udelvd.repositorios.EventoRepositorio;
 import cl.udelvd.utilidades.SingleLiveEvent;
 
-public class ListadoEventosViewModel extends AndroidViewModel {
+public class EventosListaViewModel extends AndroidViewModel {
 
     private EventoRepositorio eventoRepositorio;
 
-    public ListadoEventosViewModel(@NonNull Application application) {
+    public EventosListaViewModel(@NonNull Application application) {
         super(application);
     }
 

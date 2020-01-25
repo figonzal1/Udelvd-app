@@ -1,6 +1,5 @@
 package cl.udelvd.vistas.activities;
 
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,9 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -38,12 +34,9 @@ import cl.udelvd.modelo.Accion;
 import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
-import cl.udelvd.repositorios.AccionRepositorio;
 import cl.udelvd.repositorios.EventoRepositorio;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.AccionViewModel;
-import cl.udelvd.viewmodel.EmoticonViewModel;
-import cl.udelvd.viewmodel.EventoViewModel;
+import cl.udelvd.viewmodel.NuevoEventoViewModel;
 
 public class NuevoEventoActivity extends AppCompatActivity {
 
@@ -55,9 +48,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
     private TextInputEditText etHoraEvento;
     private TextInputEditText etJustificacion;
 
-    private AccionViewModel accionViewModel;
-    private EmoticonViewModel emoticonViewModel;
-    private EventoViewModel eventoViewModel;
+    private NuevoEventoViewModel nuevoEventoViewModel;
 
     private AccionAdapter accionAdapter;
     private EmoticonAdapter emoticonAdapter;
@@ -86,12 +77,17 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
         setPickerHoraEvento();
 
-        iniciarViewModels();
+        setAutoCompleteAccion();
 
-        setSpinnerEmoticones();
+        setAutoCompleteEmoticon();
+
+        configurarSpinnerEmoticones();
 
         configurarSpeechIntent();
+
+        iniciarViewModelEvento();
     }
+
 
     /**
      * Obtener datos desde actividad de listado de eventos
@@ -123,6 +119,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
         etJustificacion = findViewById(R.id.et_justificacion_evento);
 
         spinner = findViewById(R.id.spinner_emoticon);
+
+        nuevoEventoViewModel = ViewModelProviders.of(this).get(NuevoEventoViewModel.class);
     }
 
     /**
@@ -135,7 +133,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarHourPicker();
+                Utils.iniciarHourPicker(etHoraEvento, NuevoEventoActivity.this);
             }
         });
 
@@ -144,54 +142,49 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarHourPicker();
+                Utils.iniciarHourPicker(etHoraEvento, NuevoEventoActivity.this);
             }
         });
 
     }
 
-    /**
-     * Funcion encargada de abrir el HourPicker para escoger fecha
-     */
-    private void iniciarHourPicker() {
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR);
-        int minute = c.get(Calendar.MINUTE);
-
-        if (Objects.requireNonNull(etHoraEvento.getText()).length() > 0) {
-
-            String fecha = etHoraEvento.getText().toString();
-            String[] fecha_split = fecha.split(getString(R.string.REGEX_HORA));
-
-            hour = Integer.parseInt(fecha_split[0]);
-            minute = Integer.parseInt(fecha_split[1]);
-        }
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(NuevoEventoActivity.this, new TimePickerDialog.OnTimeSetListener() {
+    private void setAutoCompleteAccion() {
+        nuevoEventoViewModel.isLoadingAcciones().observe(this, new Observer<Boolean>() {
             @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                if (minute <= 9) {
-                    etHoraEvento.setText(String.format(Locale.US, "%d:0%d", hourOfDay, minute));
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    ilAcciones.setEnabled(false);
+                    acAcciones.setEnabled(false);
+
+                    ilHoraEvento.setEnabled(false);
+                    etHoraEvento.setEnabled(false);
+
+                    ilJustificacion.setEnabled(false);
+                    etJustificacion.setEnabled(false);
                 } else {
-                    etHoraEvento.setText(String.format(Locale.US, "%d:%d", hourOfDay, minute));
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    ilAcciones.setEnabled(true);
+                    acAcciones.setEnabled(true);
+
+                    ilHoraEvento.setEnabled(true);
+                    etHoraEvento.setEnabled(true);
+
+                    ilJustificacion.setEnabled(true);
+                    etJustificacion.setEnabled(true);
                 }
             }
-        }, hour, minute, true);
-
-        timePickerDialog.show();
-    }
-
-    private void iniciarViewModels() {
-
-        accionViewModel = ViewModelProviders.of(this).get(AccionViewModel.class);
+        });
 
         //Observer de listado de acciones
-        accionViewModel.cargarAcciones().observe(this, new Observer<List<Accion>>() {
+        nuevoEventoViewModel.cargarAcciones().observe(this, new Observer<List<Accion>>() {
             @Override
             public void onChanged(List<Accion> list) {
 
                 if (list != null) {
-                    progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.INVISIBLE);
 
                     accionList = list;
                     accionAdapter = new AccionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
@@ -206,30 +199,59 @@ public class NuevoEventoActivity extends AppCompatActivity {
         });
 
         //Observer de errores de acciones
-        accionViewModel.moestrarMsgError().observe(this, new Observer<String>() {
+        nuevoEventoViewModel.mostrarMsgErrorAcciones().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
+
+                progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
                         isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, null);
                         isSnackBarShow = true;
                     }
                 }
-
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
+    }
 
+    private void setAutoCompleteEmoticon() {
 
-        emoticonViewModel = ViewModelProviders.of(this).get(EmoticonViewModel.class);
+        nuevoEventoViewModel.isLoadingEmoticones().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    ilAcciones.setEnabled(false);
+                    acAcciones.setEnabled(false);
+
+                    ilHoraEvento.setEnabled(false);
+                    etHoraEvento.setEnabled(false);
+
+                    ilJustificacion.setEnabled(false);
+                    etJustificacion.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    ilAcciones.setEnabled(true);
+                    acAcciones.setEnabled(true);
+
+                    ilHoraEvento.setEnabled(true);
+                    etHoraEvento.setEnabled(true);
+
+                    ilJustificacion.setEnabled(true);
+                    etJustificacion.setEnabled(true);
+                }
+            }
+        });
 
         //Observer con listado de emoticones
-        emoticonViewModel.cargarEmoticones().observe(this, new Observer<List<Emoticon>>() {
+        nuevoEventoViewModel.cargarEmoticones().observe(this, new Observer<List<Emoticon>>() {
             @Override
             public void onChanged(List<Emoticon> emoticons) {
                 if (emoticons != null) {
@@ -246,58 +268,23 @@ public class NuevoEventoActivity extends AppCompatActivity {
         });
 
         //Observer para errores de listado de emoticones
-        emoticonViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+        nuevoEventoViewModel.mostrarMsgErrorEmoticones().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
+
+                progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
                         isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, null);
                         isSnackBarShow = true;
                     }
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
-            }
-        });
-
-        eventoViewModel = ViewModelProviders.of(this).get(EventoViewModel.class);
-        eventoViewModel.mostrarRespuestaRegistro().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.GONE);
-
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
-                if (s.equals(getString(R.string.MSG_REGISTRO_EVENTO))) {
-                    finish();
-                }
-            }
-        });
-
-        eventoViewModel.mostrarErrorRegistro().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
-
-                if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    }
-                }
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -305,7 +292,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
     /**
      * Funcion encargada de configurar el spinner de emoticones en formulario de eventos
      */
-    private void setSpinnerEmoticones() {
+    private void configurarSpinnerEmoticones() {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -338,6 +325,77 @@ public class NuevoEventoActivity extends AppCompatActivity {
         });
     }
 
+    private void iniciarViewModelEvento() {
+
+        nuevoEventoViewModel.isLoadingEvento().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    ilAcciones.setEnabled(false);
+                    acAcciones.setEnabled(false);
+
+                    ilHoraEvento.setEnabled(false);
+                    etHoraEvento.setEnabled(false);
+
+                    ilJustificacion.setEnabled(false);
+                    etJustificacion.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    ilAcciones.setEnabled(true);
+                    acAcciones.setEnabled(true);
+
+                    ilHoraEvento.setEnabled(true);
+                    etHoraEvento.setEnabled(true);
+
+                    ilJustificacion.setEnabled(true);
+                    etJustificacion.setEnabled(true);
+                }
+            }
+        });
+
+        //Observador de mensajeria de registro
+        nuevoEventoViewModel.mostrarMsgRegistro().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                if (s.equals(getString(R.string.MSG_REGISTRO_EVENTO))) {
+                    Intent intent = getIntent();
+                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+        });
+
+        //Observador de mensajeria de error de registro
+        nuevoEventoViewModel.mostrarMsgErrorRegistro().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (!isSnackBarShow) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
+                        isSnackBarShow = true;
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, null);
+                        isSnackBarShow = true;
+                    }
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+    }
+
     /**
      * Funcion para mostrar el snackbar en fragment
      *
@@ -347,23 +405,23 @@ public class NuevoEventoActivity extends AppCompatActivity {
      */
     private void showSnackbar(View v, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
-                .setAction(accion, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
 
-                        //Refresh listado de informacion necesaria
-                        accionViewModel.refreshAcciones();
-                        emoticonViewModel.refreshEmoticones();
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        eventoViewModel.refreshEventos(entrevistaIntent);
+                    //Refresh listado de informacion necesaria
+                    nuevoEventoViewModel.refreshAcciones();
+                    nuevoEventoViewModel.refreshEmoticones();
 
-                        progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
 
-                        isSnackBarShow = false;
-                    }
-                });
-
+                    isSnackBarShow = false;
+                }
+            });
+        }
         snackbar.show();
     }
 
@@ -383,8 +441,6 @@ public class NuevoEventoActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.menu_guardar) {
 
-            progressBar.setVisibility(View.INVISIBLE);
-
             if (validarCampos()) {
 
                 progressBar.setVisibility(View.VISIBLE);
@@ -393,7 +449,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
                 entrevista.setId(entrevistaIntent.getId());
                 evento.setEntrevista(entrevista);
 
-                int id = AccionRepositorio.getInstancia(getApplication()).buscarAccionPorNombre(acAcciones.getText().toString()).getId();
+                int id = Objects.requireNonNull(buscarAccionPorNombre(acAcciones.getText().toString())).getId();
                 Accion accion = new Accion();
                 accion.setId(id);
                 evento.setAccion(accion);
@@ -405,6 +461,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
                 EventoRepositorio.getInstancia(getApplication()).registrarEvento(evento);
             }
 
+            return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -412,6 +470,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
+        //SPEECH TEXT
         if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
             assert data != null;
             List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
@@ -463,5 +522,22 @@ public class NuevoEventoActivity extends AppCompatActivity {
 
 
         return contador_errores == 0;
+    }
+
+    /**
+     * Funcion para buscar accion por nombre
+     *
+     * @param nombre Nombre de la accion a buscar
+     * @return Objeto accion con toda la informacion
+     */
+    private Accion buscarAccionPorNombre(String nombre) {
+
+        for (int i = 0; i < accionList.size(); i++) {
+            if (accionList.get(i).getNombre().equals(nombre)) {
+                return accionList.get(i);
+            }
+        }
+
+        return null;
     }
 }

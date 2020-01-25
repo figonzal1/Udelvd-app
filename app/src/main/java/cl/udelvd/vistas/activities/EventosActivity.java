@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -59,6 +60,7 @@ public class EventosActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ProgressBar progressBar;
     private TabLayout tabLayout;
+    private static final int REQUEST_CODE_NUEVO_EVENTO = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,12 +195,10 @@ public class EventosActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.INVISIBLE);
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.eventos_lista), s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.eventos_lista), s, getString(R.string.SNACKBAR_REINTENTAR));
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 } else {
-                    showSnackbar(findViewById(R.id.eventos_lista), s, null);
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, null);
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
@@ -218,7 +218,7 @@ public class EventosActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(EventosActivity.this, NuevoEventoActivity.class);
                 intent.putExtra(getString(R.string.KEY_ENTREVISTA_ID_LARGO), entrevista.getId());
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_NUEVO_EVENTO);
             }
         });
     }
@@ -257,9 +257,9 @@ public class EventosActivity extends AppCompatActivity {
      * @param titulo Titulo del snackbar
      * @param accion Boton de accion del snackbar
      */
-    private void showSnackbar(View v, String titulo, String accion) {
+    private void showSnackbar(View v, int snack_length, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
+        Snackbar snackbar = Snackbar.make(v, titulo, snack_length);
 
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {
@@ -275,5 +275,27 @@ public class EventosActivity extends AppCompatActivity {
             });
         }
         snackbar.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == REQUEST_CODE_NUEVO_EVENTO) {
+
+            if (resultCode == RESULT_OK) {
+
+                assert data != null;
+                Bundle bundle = data.getExtras();
+                assert bundle != null;
+                String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
+
+                if (msg_registro != null) {
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, msg_registro, null);
+                    listadoEventosViewModel.refreshEventos(entrevista);
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

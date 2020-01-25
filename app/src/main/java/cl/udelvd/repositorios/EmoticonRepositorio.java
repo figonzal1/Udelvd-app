@@ -37,10 +37,11 @@ public class EmoticonRepositorio {
     private Application application;
 
     private List<Emoticon> emoticonList = new ArrayList<>();
-
     private MutableLiveData<List<Emoticon>> emoticonMutableLiveData = new MutableLiveData<>();
 
     private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private EmoticonRepositorio(Application application) {
         this.application = application;
@@ -55,6 +56,10 @@ public class EmoticonRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgError() {
         return responseMsgError;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -98,6 +103,8 @@ public class EmoticonRepositorio {
                     }
 
                     emoticonMutableLiveData.postValue(emoticonList);
+
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -107,6 +114,9 @@ public class EmoticonRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -147,7 +157,7 @@ public class EmoticonRepositorio {
             }
         };
 
-        String url = application.getString(R.string.URL_GET_EMOTICONES);
+        String url = String.format(application.getString(R.string.URL_GET_EMOTICONES), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
@@ -165,6 +175,7 @@ public class EmoticonRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EMOTICONES);
 
     }

@@ -1,6 +1,5 @@
 package cl.udelvd.vistas.activities;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -21,10 +19,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -222,7 +218,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarDatePicker();
+                Utils.iniciarDatePicker(etFechaEntrevista, NuevaEntrevistaActivity.this);
             }
         });
 
@@ -231,40 +227,10 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarDatePicker();
+                Utils.iniciarDatePicker(etFechaEntrevista, NuevaEntrevistaActivity.this);
             }
         });
 
-    }
-
-    /**
-     * Funcion encargada de abrir el DatePicker para escoger fecha
-     */
-    private void iniciarDatePicker() {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        if (Objects.requireNonNull(etFechaEntrevista.getText()).length() > 0) {
-
-            String fecha = etFechaEntrevista.getText().toString();
-            String[] fecha_split = fecha.split(getString(R.string.REGEX_FECHA));
-
-            year = Integer.parseInt(fecha_split[0]);
-            month = Integer.parseInt(fecha_split[1]);
-            day = Integer.parseInt(fecha_split[2]);
-        }
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(NuevaEntrevistaActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month += 1;
-                etFechaEntrevista.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
-            }
-        }, year, month, day);
-
-        datePickerDialog.show();
     }
 
     private boolean validarCampos() {

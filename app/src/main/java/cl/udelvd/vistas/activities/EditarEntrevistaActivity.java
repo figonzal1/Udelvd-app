@@ -286,7 +286,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Utils.iniciarDatePicker(etFechaEntrevista, getApplicationContext());
+                Utils.iniciarDatePicker(etFechaEntrevista, EditarEntrevistaActivity.this);
             }
         });
 
@@ -295,7 +295,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Utils.iniciarDatePicker(etFechaEntrevista, getApplicationContext());
+                Utils.iniciarDatePicker(etFechaEntrevista, EditarEntrevistaActivity.this);
             }
         });
     }

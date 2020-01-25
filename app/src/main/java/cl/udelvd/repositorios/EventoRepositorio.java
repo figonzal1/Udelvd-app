@@ -161,7 +161,9 @@ public class EventoRepositorio {
                     }
 
                     eventosMutableLiveData.postValue(eventosList);
+
                     isLoading.postValue(false);
+
                 } catch (JSONException | ParseException e) {
                     e.printStackTrace();
                 }
@@ -171,6 +173,9 @@ public class EventoRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), application.getString(R.string.TIMEOUT_ERROR));
                     responseErrorMsgListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -271,6 +276,9 @@ public class EventoRepositorio {
                     String create_time = jsonAttribute.getString(application.getString(R.string.KEY_CREATE_TIME));
 
                     if (evento.equals(eventoInternet) && !create_time.isEmpty()) {
+
+                        isLoading.postValue(false);
+
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_EVENTO));
                     }
                 } catch (JSONException e) {
@@ -282,6 +290,9 @@ public class EventoRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
                     responseErrorMsgRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
@@ -353,6 +364,7 @@ public class EventoRepositorio {
                 return params;
             }
         };
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_CREAR_EVENTO);
     }
 

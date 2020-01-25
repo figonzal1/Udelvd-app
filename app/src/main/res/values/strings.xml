@@ -10,9 +10,9 @@
     <string name="URL_GET_ENTREVISTADOS">https://udelvd-dev.herokuapp.com/entrevistados</string>
     <string name="URL_GET_ENTREVISTADO">https://udelvd-dev.herokuapp.com/entrevistados/</string>
     <string name="URL_PUT_ENTREVISTADOS">https://udelvd-dev.herokuapp.com/entrevistados/</string>
-    <string name="URL_GET_ACCIONES">https://udelvd-dev.herokuapp.com/acciones</string>
+    <string name="URL_GET_ACCIONES">%sacciones</string>
     <string name="URL_GET_CIUDADES">https://udelvd-dev.herokuapp.com/ciudades</string>
-    <string name="URL_GET_EMOTICONES">https://udelvd-dev.herokuapp.com/emoticones</string>
+    <string name="URL_GET_EMOTICONES">%semoticones</string>
     <string name="URL_GET_ESTADOS_CIVILES">https://udelvd-dev.herokuapp.com/estadosCiviles</string>
     <string name="URL_GET_NIVELES_EDUCACIONALES">https://udelvd-dev.herokuapp.com/nivelesEducacionales</string>
     <string name="URL_GET_PROFESIONES">https://udelvd-dev.herokuapp.com/profesiones</string>

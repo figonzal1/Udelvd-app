@@ -27,7 +27,7 @@
             tools:visibility="visible" />
 
         <TextView
-            android:id="@+id/tv_entrevistas_vacios"
+            android:id="@+id/tv_entrevistados_vacios"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

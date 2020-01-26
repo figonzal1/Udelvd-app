@@ -3,13 +3,22 @@
 
     <item
         android:id="@+id/menu_ver_entrevistado"
-        android:title="Ver información básica" />
+        android:orderInCategory="3"
+        android:title="@string/MENU_ENTREVISTADO_INFO_BASICA"
+        android:visible="false" />
 
     <item
         android:id="@+id/menu_editar_entrevistado"
-        android:title="Editar entrevistado" />
+        android:orderInCategory="2"
+        android:title="@string/MENU_ENTREVISTADO_EDITAR" />
 
     <item
         android:id="@+id/menu_ver_entrevistas"
-        android:title="Ver entrevistas" />
+        android:orderInCategory="1"
+        android:title="@string/MENU_ENTREVISTADO_VER_ENTREVISTAS" />
+
+    <item
+        android:id="@+id/menu_eliminar_entrevistado"
+        android:orderInCategory="3"
+        android:title="@string/MENU_ENTREVISTADO_ELIMINAR" />
 </menu>

@@ -5,6 +5,6 @@
     <item
         android:id="@+id/menu_actualizar"
         android:icon="@drawable/ic_refresh_black_24dp"
-        android:title="Actualizar"
+        android:title="@string/MENU_ACTUALIZAR"
         app:showAsAction="ifRoom" />
 </menu>

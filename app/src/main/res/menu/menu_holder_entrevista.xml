@@ -3,13 +3,16 @@
 
     <item
         android:id="@+id/menu_ver_eventos"
-        android:title="Ver eventos" />
+        android:orderInCategory="1"
+        android:title="@string/MENU_ENTREVISTA_VER_EVENTO" />
 
     <item
         android:id="@+id/menu_editar_entrevista"
-        android:title="Editar entrevista" />
+        android:orderInCategory="2"
+        android:title="@string/MENU_ENTREVISTA_EDITAR" />
 
     <item
         android:id="@+id/menu_eliminar_entrevista"
-        android:title="Eliminar entrevista" />
+        android:orderInCategory="3"
+        android:title="@string/MENU_ENTREVISTA_ELIMINAR" />
 </menu>

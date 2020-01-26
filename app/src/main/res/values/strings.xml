@@ -8,7 +8,7 @@
     <string name="URL_LOGIN_INVESTIGADORES">%sinvestigadores/login</string>
     <string name="URL_PUT_INVESTIGADORES">%sinvestigadores/%d</string>
     <string name="URL_POST_ENTREVISTADOS">https://udelvd-dev.herokuapp.com/entrevistados</string>
-    <string name="URL_GET_ENTREVISTADOS">https://udelvd-dev.herokuapp.com/entrevistados</string>
+    <string name="URL_GET_ENTREVISTADOS">%sentrevistados</string>
     <string name="URL_GET_ENTREVISTADO">https://udelvd-dev.herokuapp.com/entrevistados/</string>
     <string name="URL_PUT_ENTREVISTADOS">https://udelvd-dev.herokuapp.com/entrevistados/</string>
     <string name="URL_GET_ACCIONES">%sacciones</string>
@@ -62,6 +62,7 @@
     <string name="FORMATO_FECHA_2">yyyy/mm/dd</string>
     <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
     <string name="FORMATO_HORA">HH:mm</string>
+    <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT">investigador</string>
@@ -277,7 +278,7 @@
     <string name="TAG_VIEW_MODEL_LISTA_EVENTOS">VM_LISTA_EVENTOS</string>
     <string name="TAG_VIEW_MODEL_EDITAR_PERFIL">VM_EDITAR_PERFIL</string>
     <string name="TAG_VIEW_MODEL_EDITAR_EVENTO">VM_MODEL_EDITAR_EVENTO</string>
-    <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
+
     <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA">VM_ELIMINAR_ENTREVISTA</string>
     <string name="MSG_UPDATE_EVENTO">¡Evento actualizado!</string>
@@ -295,6 +296,24 @@
     <string name="DIALOG_MESSAGE">¿Está seguro que quiere eliminar esta entrevista?</string>
     <string name="DIALOG_POSITIVE_BTN">Eliminar</string>
     <string name="DIALOG_NEGATIVE_BTN">Cancelar</string>
+
+    <!-- Menu -->
+    <string name="MENU_ENTREVISTADO_INFO_BASICA">Ver información básica</string>
+    <string name="MENU_ENTREVISTADO_EDITAR">Editar entrevistado</string>
+    <string name="MENU_ENTREVISTADO_VER_ENTREVISTAS">Ver entrevistas</string>
+    <string name="MENU_ENTREVISTADO_ELIMINAR">Eliminar entrevistado</string>
+    <string name="MENU_ACTUALIZAR">Actualizar</string>
+    <string name="MENU_CERRAR_SESION">Cerrar sesión</string>
+    <string name="MENU_GENERAL">General</string>
+    <string name="MENU_MI_PERFIL">Mi perfil</string>
+    <string name="MENU_LISTA_ENTREVISTADOS">Entrevistados</string>
+    <string name="MENU_ESTADISTICAS">Estadísticas</string>
+    <string name="MENU_CONFIGURACION">Configuración</string>
+    <string name="MENU_GUARDAR_DATOS">Guardar</string>
+    <string name="MENU_ENTREVISTA_VER_EVENTO">Ver eventos</string>
+    <string name="MENU_ENTREVISTA_EDITAR">Editar entrevista</string>
+    <string name="MENU_ENTREVISTA_ELIMINAR">Eliminar entrevista</string>
+    <string name="MENU_PERFIL_EDITAR">Editar perfil</string>
 
 
 </resources>

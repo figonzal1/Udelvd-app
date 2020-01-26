@@ -36,9 +36,9 @@ import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.repositorios.EntrevistaRepositorio;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EntrevistasListaViewModel;
-import cl.udelvd.vistas.fragments.DeleteDialogFragment;
+import cl.udelvd.vistas.fragments.DeleteDialogListener;
 
-public class EntrevistasListaActivity extends AppCompatActivity implements DeleteDialogFragment.DeleteDialogListener {
+public class EntrevistasListaActivity extends AppCompatActivity implements DeleteDialogListener {
 
     private static final int REQUEST_CODE_CREAR_ENTREVISTA = 300;
     private static final int REQUEST_CODE_EDITAR_ENTREVISTA = 301;
@@ -371,7 +371,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, Entrevista entrevista) {
-        EntrevistaRepositorio.getInstancia(getApplication()).eliminarEntrevista(entrevista);
+    public void onDialogPositiveClick(DialogFragment dialog, Object object) {
+        EntrevistaRepositorio.getInstancia(getApplication()).eliminarEntrevista((Entrevista) object);
     }
 }

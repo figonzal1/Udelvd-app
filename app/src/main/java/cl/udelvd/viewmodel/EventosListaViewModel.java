@@ -40,4 +40,14 @@ public class EventosListaViewModel extends AndroidViewModel {
         eventoRepositorio = EventoRepositorio.getInstancia(getApplication());
         eventoRepositorio.obtenerEventosEntrevista(entrevista);
     }
+
+    public SingleLiveEvent<String> mostrarMsgEliminar() {
+        eventoRepositorio = EventoRepositorio.getInstancia(getApplication());
+        return eventoRepositorio.getResponseMsgEliminar();
+    }
+
+    public SingleLiveEvent<String> mostrarMsgErrorEliminar() {
+        eventoRepositorio = EventoRepositorio.getInstancia(getApplication());
+        return eventoRepositorio.getResponseErrorMsgEliminar();
+    }
 }

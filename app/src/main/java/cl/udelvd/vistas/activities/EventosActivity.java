@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -31,12 +32,14 @@ import cl.udelvd.adaptadores.FragmentStatePageAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.Evento;
+import cl.udelvd.repositorios.EventoRepositorio;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EventosListaViewModel;
+import cl.udelvd.vistas.fragments.DeleteDialogListener;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
-public class EventosActivity extends AppCompatActivity {
+public class EventosActivity extends AppCompatActivity implements DeleteDialogListener {
 
 
     private String n_normales;
@@ -66,7 +69,7 @@ public class EventosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events_main);
+        setContentView(R.layout.activity_eventos_main);
 
         Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_EVENTOS));
 
@@ -158,7 +161,7 @@ public class EventosActivity extends AppCompatActivity {
                     viewPager.setVisibility(View.INVISIBLE);
                     tv_eventos_vacios.setVisibility(View.INVISIBLE);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
 
                     if (eventoList.size() == 0) {
@@ -179,7 +182,7 @@ public class EventosActivity extends AppCompatActivity {
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
 
-                    fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this);
+                    fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this, EventosActivity.this);
 
                     fragmentStatePageAdapter.notifyDataSetChanged();
 
@@ -194,7 +197,7 @@ public class EventosActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
@@ -203,6 +206,35 @@ public class EventosActivity extends AppCompatActivity {
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            }
+        });
+
+        //Observador para actualizacion
+        eventosListaViewModel.mostrarMsgEliminar().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (s.equals(getString(R.string.MSG_DELETE_EVENTO))) {
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
+                    EventoRepositorio.getInstancia(getApplication()).obtenerEventosEntrevista(entrevista);
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            }
+        });
+
+        eventosListaViewModel.mostrarMsgErrorEliminar().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
+
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else {
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, null);
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -310,9 +342,12 @@ public class EventosActivity extends AppCompatActivity {
                 }
             }
         }
-        Log.d("REQUEST_CODE", String.valueOf(requestCode));
-
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, Object object) {
+        EventoRepositorio.getInstancia(getApplication()).eliminarEvento((Evento) object);
     }
 }

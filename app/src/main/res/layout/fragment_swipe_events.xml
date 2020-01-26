@@ -273,13 +273,26 @@
                     tools:text="Descripción emoticón" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fb_editar_evento"
                     style="@style/Widget.MaterialComponents.FloatingActionButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/fb_editar_evento"
                     android:layout_marginEnd="16dp"
                     android:src="@drawable/ic_edit_pencil_black_24dp"
                     app:backgroundTint="@color/colorPrimary"
+                    app:fabSize="mini"
+                    app:layout_constraintBottom_toBottomOf="@+id/divider1"
+                    app:layout_constraintEnd_toStartOf="@+id/fb_eliminar_evento"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_detalle_evento" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fb_eliminar_evento"
+                    style="@style/Widget.MaterialComponents.FloatingActionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_delete_black_24dp"
+                    app:backgroundTint="@color/red"
                     app:fabSize="mini"
                     app:layout_constraintBottom_toBottomOf="@+id/divider1"
                     app:layout_constraintEnd_toEndOf="@+id/divider1"

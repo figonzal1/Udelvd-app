@@ -43,8 +43,14 @@ public class EntrevistadoRepositorio {
     private static EntrevistadoRepositorio instancia;
     private final Application application;
 
+    /*
+    LISTADO
+     */
     private List<Entrevistado> entrevistadoList;
     private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+
+
     private SingleLiveEvent<Entrevistado> entrevistadoMutableLiveData = new SingleLiveEvent<>();
 
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
@@ -55,6 +61,8 @@ public class EntrevistadoRepositorio {
     private static final String TAG_ENTREVISTADO_REGISTRO = "RegistroEntrevistado";
     private static final String TAG_ENTREVISTADO = "ObtenerEntrevistado";
     private static final String TAG_ENTREVISTADO_ACTUALIZADO = "ActualizarEntrevistado";
+
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private EntrevistadoRepositorio(Application application) {
         this.application = application;
@@ -68,6 +76,10 @@ public class EntrevistadoRepositorio {
         return instancia;
     }
 
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
     public SingleLiveEvent<String> getErrorMsg() {
         return errorMsg;
     }
@@ -78,6 +90,10 @@ public class EntrevistadoRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgActualizacion() {
         return responseMsgActualizacion;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -174,6 +190,7 @@ public class EntrevistadoRepositorio {
 
                     entrevistadosMutableLiveData.postValue(entrevistadoList);
 
+                    isLoading.postValue(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -185,12 +202,14 @@ public class EntrevistadoRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.TIMEOUT_ERROR));
-                    errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 } else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.NETWORK_ERROR));
-                    errorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si response
@@ -211,19 +230,19 @@ public class EntrevistadoRepositorio {
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                        errorMsg.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = application.getString(R.string.URL_GET_ENTREVISTADOS);
+        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN));
 
         //Hacer request
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener,
@@ -241,6 +260,7 @@ public class EntrevistadoRepositorio {
                 return params;
             }
         };
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADOS_LISTA);
     }
 

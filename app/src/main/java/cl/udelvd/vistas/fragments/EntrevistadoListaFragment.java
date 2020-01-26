@@ -10,8 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,16 +29,22 @@ import java.util.List;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.EntrevistadoAdapter;
 import cl.udelvd.modelo.Entrevistado;
-import cl.udelvd.viewmodel.EntrevistadoViewModel;
+import cl.udelvd.viewmodel.EntrevistadoListaViewModel;
 import cl.udelvd.vistas.activities.NuevoEntrevistadoActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class EntrevistadoListaFragment extends Fragment {
 
+    private static final int REQUEST_CODE_NUEVA_ENTREVISTA = 200;
     private RecyclerView rv;
-    private EntrevistadoViewModel entrevistadoViewModel;
+    private EntrevistadoListaViewModel entrevistadoListaViewModel;
     private EntrevistadoAdapter entrevistadoAdapter;
     private ProgressBar progressBar;
+    private TextView tv_entrevistados_vacios;
+    private List<Entrevistado> entrevistadoList;
+    private View v;
 
     public EntrevistadoListaFragment() {
         // Required empty public constructor
@@ -58,7 +66,7 @@ public class EntrevistadoListaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View v = inflater.inflate(R.layout.fragment_lista_entrevistados, container, false);
+        v = inflater.inflate(R.layout.fragment_lista_entrevistados, container, false);
 
         instanciarRecursosInterfaz(v);
 
@@ -85,14 +93,21 @@ public class EntrevistadoListaFragment extends Fragment {
 
     private void instanciarRecursosInterfaz(View v) {
 
+        entrevistadoList = new ArrayList<>();
+
         progressBar = v.findViewById(R.id.progress_bar_entrevistados);
         progressBar.setVisibility(View.VISIBLE);
 
         rv = v.findViewById(R.id.rv_lista_usuarios);
+        rv.setVisibility(View.VISIBLE);
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
         rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getContext()));
+
+        tv_entrevistados_vacios = v.findViewById(R.id.tv_entrevistados_vacios);
+
+        entrevistadoListaViewModel = ViewModelProviders.of(this).get(EntrevistadoListaViewModel.class);
     }
 
     /**
@@ -108,7 +123,7 @@ public class EntrevistadoListaFragment extends Fragment {
             public void onClick(View view) {
 
                 Intent intent = new Intent(getActivity(), NuevoEntrevistadoActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_NUEVA_ENTREVISTA);
             }
         });
     }
@@ -119,12 +134,34 @@ public class EntrevistadoListaFragment extends Fragment {
      * @param v Vista para mostrar snackbar
      */
     private void iniciarViewModelObservers(final View v) {
-        entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
+
+        entrevistadoListaViewModel.isLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
+                    rv.setVisibility(View.INVISIBLE);
+
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    rv.setVisibility(View.VISIBLE);
+
+                    if (entrevistadoList.size() == 0) {
+                        tv_entrevistados_vacios.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
 
         //Manejador de listado de usuarios
-        entrevistadoViewModel.mostrarListaEntrevistados().observe(this, new Observer<List<Entrevistado>>() {
+        entrevistadoListaViewModel.cargarListaEntrevistados().observe(this, new Observer<List<Entrevistado>>() {
             @Override
-            public void onChanged(List<Entrevistado> entrevistadoList) {
+            public void onChanged(List<Entrevistado> lista) {
+
+                entrevistadoList = lista;
 
                 entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList, getContext());
                 entrevistadoAdapter.notifyDataSetChanged();
@@ -137,18 +174,20 @@ public class EntrevistadoListaFragment extends Fragment {
         });
 
         //Manejador de Respuestas erroreas en fragment
-        entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+        entrevistadoListaViewModel.mostrarMsgErrorListado().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s LISTADO %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                    showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
                 progressBar.setVisibility(View.INVISIBLE);
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));
+                } else {
+                    showSnackbar(v, s, null);
+                }
+
             }
         });
     }
@@ -163,17 +202,20 @@ public class EntrevistadoListaFragment extends Fragment {
      */
     private void showSnackbar(View v, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, Snackbar.LENGTH_INDEFINITE)
-                .setAction(accion, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, Snackbar.LENGTH_INDEFINITE);
 
-                        //Refresh listado de usuarios
-                        entrevistadoViewModel.refreshListaEntrevistados();
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        progressBar.setVisibility(View.INVISIBLE);
-                    }
-                });
+                    //Refresh listado de usuarios
+                    entrevistadoListaViewModel.refreshListaEntrevistados();
+
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            });
+        }
 
         snackbar.show();
     }
@@ -189,8 +231,28 @@ public class EntrevistadoListaFragment extends Fragment {
 
         if (item.getItemId() == R.id.menu_actualizar) {
             progressBar.setVisibility(View.VISIBLE);
-            entrevistadoViewModel.refreshListaEntrevistados();
+            entrevistadoListaViewModel.refreshListaEntrevistados();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == REQUEST_CODE_NUEVA_ENTREVISTA) {
+
+            if (resultCode == RESULT_OK) {
+                Bundle bundle = new Bundle();
+
+                String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
+
+                if (msg_registro != null) {
+                    showSnackbar(v.findViewById(R.id.entrevistados_lista), msg_registro, null);
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

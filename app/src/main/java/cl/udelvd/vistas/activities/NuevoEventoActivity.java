@@ -167,7 +167,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
                     ilJustificacion.setEnabled(false);
                     etJustificacion.setEnabled(false);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     ilAcciones.setEnabled(true);
                     acAcciones.setEnabled(true);
@@ -189,7 +189,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
             public void onChanged(List<Accion> list) {
 
                 if (list != null) {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     accionList = list;
                     accionAdapter = new AccionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
@@ -208,7 +208,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
                     if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
@@ -243,7 +243,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
                     ilJustificacion.setEnabled(false);
                     etJustificacion.setEnabled(false);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     ilAcciones.setEnabled(true);
                     acAcciones.setEnabled(true);
@@ -281,7 +281,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
                     if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
@@ -354,7 +354,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
                     ilJustificacion.setEnabled(false);
                     etJustificacion.setEnabled(false);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     ilAcciones.setEnabled(true);
                     acAcciones.setEnabled(true);
@@ -375,11 +375,12 @@ public class NuevoEventoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
-
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_REGISTRO_EVENTO))) {
+
+                    progressBar.setVisibility(View.GONE);
+
                     Intent intent = getIntent();
                     intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
                     setResult(RESULT_OK, intent);
@@ -393,7 +394,7 @@ public class NuevoEventoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
                     if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {

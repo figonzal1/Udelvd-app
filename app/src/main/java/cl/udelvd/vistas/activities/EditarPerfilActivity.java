@@ -110,7 +110,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -146,7 +146,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
                         String msg_update = (String) stringObjectMap.get(getString(R.string.UPDATE_MSG_VM));
 
-                        progressBar.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.GONE);
 
                         assert msg_update != null;
                         Log.d(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE), msg_update);
@@ -172,7 +172,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
 

@@ -111,7 +111,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                     ilFechaEntrevista.setEnabled(false);
                     etFechaEntrevista.setEnabled(false);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     //Desactivar entradas
                     ilTipoEntrevista.setEnabled(true);
@@ -153,6 +153,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
+                progressBar.setVisibility(View.GONE);
+
                 if (!isSnackBarShow) {
                     if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
@@ -184,7 +186,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                     ilFechaEntrevista.setEnabled(false);
                     etFechaEntrevista.setEnabled(false);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     //Activar entradas
                     ilTipoEntrevista.setEnabled(true);
@@ -202,6 +204,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                 entrevistaIntent = entrevistaInternet;
 
                 if (isAutoCompleteTipoEntrevistaReady) {
+                    progressBar.setVisibility(View.GONE);
+
                     setearInfoEntrevista();
                 }
 
@@ -217,7 +221,9 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTA))) {
-                    //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+                    progressBar.setVisibility(View.GONE);
+
                     Intent intent = getIntent();
                     intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), s);
                     setResult(RESULT_OK, intent);
@@ -230,6 +236,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
         editarEntrevistaViewModel.mostrarMsgErrorActualizacion().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
@@ -249,6 +257,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity {
         editarEntrevistaViewModel.mostrarMsgErrorEntrevista().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 

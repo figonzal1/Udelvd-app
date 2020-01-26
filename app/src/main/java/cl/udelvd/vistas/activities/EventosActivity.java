@@ -61,6 +61,7 @@ public class EventosActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TabLayout tabLayout;
     private static final int REQUEST_CODE_NUEVO_EVENTO = 200;
+    private static final int REQUEST_CODE_EDITAR_EVENTO = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +179,7 @@ public class EventosActivity extends AppCompatActivity {
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
 
-                    fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista);
+                    fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this);
 
                     fragmentStatePageAdapter.notifyDataSetChanged();
 
@@ -294,7 +295,23 @@ public class EventosActivity extends AppCompatActivity {
                     eventosListaViewModel.refreshEventos(entrevista);
                 }
             }
+        } else if (requestCode == REQUEST_CODE_EDITAR_EVENTO) {
+
+            if (resultCode == RESULT_OK) {
+
+                assert data != null;
+                Bundle bundle = data.getExtras();
+                assert bundle != null;
+                String msg_actualizacion = bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
+
+                if (msg_actualizacion != null) {
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
+                    eventosListaViewModel.refreshEventos(entrevista);
+                }
+            }
         }
+        Log.d("REQUEST_CODE", String.valueOf(requestCode));
+
 
         super.onActivityResult(requestCode, resultCode, data);
     }

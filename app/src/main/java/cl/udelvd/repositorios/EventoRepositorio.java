@@ -43,6 +43,7 @@ public class EventoRepositorio {
     private static final String TAG_GET_EVENTOS_ENTREVISTA = "ListaEventosEntrevista";
     private static final String TAG_CREAR_EVENTO = "CrearEvento";
     private static final String TAG_GET_EVENTO = "ObtenerEvento";
+    private static final String TAG_ACTUALIZAR_EVENTO = "ActualizarEvento";
 
     private static EventoRepositorio instancia;
     private Application application;
@@ -501,5 +502,122 @@ public class EventoRepositorio {
 
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTO);
+    }
+
+
+    public void actualizarEvento(Evento evento) {
+        sendPutEvento(evento);
+    }
+
+    private void sendPutEvento(final Evento evento) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                    Evento eventoInternet = new Evento();
+                    eventoInternet.setId(jsonData.getInt(application.getString(R.string.KEY_EVENTO_ID)));
+                    eventoInternet.setHora_evento(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+                    eventoInternet.setJustificacion(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
+
+                    String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
+
+                    if (evento.equals(eventoInternet) && !update_time.isEmpty()) {
+                        responseMsgActualizacion.postValue(application.getString(R.string.MSG_UPDATE_EVENTO));
+
+                        isLoading.postValue(false);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseErrorMsgActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), application.getString(R.string.NETWORK_ERROR));
+                    responseErrorMsgActualizacion.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseErrorMsgActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(application.getString(R.string.URL_PUT_EVENTO), application.getString(R.string.HEROKU_DOMAIN), evento.getEntrevista().getId(), evento.getId());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.KEY_EVENTO_JUSTIFICACION), evento.getJustificacion());
+                params.put(application.getString(R.string.KEY_EVENTO_ID_ACCION), String.valueOf(evento.getAccion().getId()));
+                params.put(application.getString(R.string.KEY_EVENTO_ID_EMOTICON), String.valueOf(evento.getEmoticon().getId()));
+
+                params.put(application.getString(R.string.KEY_EVENTO_HORA_EVENTO), Utils.dateToString(application, true, evento.getHora_evento()));
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ACTUALIZAR_EVENTO);
     }
 }

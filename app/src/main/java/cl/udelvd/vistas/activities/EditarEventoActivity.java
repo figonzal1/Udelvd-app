@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ import cl.udelvd.modelo.Accion;
 import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
+import cl.udelvd.repositorios.EventoRepositorio;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EditarEventoViewModel;
 
@@ -424,8 +426,13 @@ public class EditarEventoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                if (s.equals()) {
-                    
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                if (s.equals(getString(R.string.MSG_UPDATE_EVENTO))) {
+                    Intent intent = getIntent();
+                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), s);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
             }
         });
@@ -517,15 +524,15 @@ public class EditarEventoActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.menu_guardar) {
 
 
-            /*if (validarCampos()) {
+            if (validarCampos()) {
 
                 progressBar.setVisibility(View.VISIBLE);
 
                 Entrevista entrevista = new Entrevista();
-                entrevista.setId(entrevistaIntent.getId());
+                entrevista.setId(eventoIntent.getEntrevista().getId());
                 eventoIntent.setEntrevista(entrevista);
 
-                int id = AccionRepositorio.getInstancia(getApplication()).buscarAccionPorNombre(acAcciones.getText().toString()).getId();
+                int id = Objects.requireNonNull(buscarAccionPorNombre(acAcciones.getText().toString())).getId();
                 Accion accion = new Accion();
                 accion.setId(id);
                 eventoIntent.setAccion(accion);
@@ -534,8 +541,8 @@ public class EditarEventoActivity extends AppCompatActivity {
 
                 eventoIntent.setJustificacion(Objects.requireNonNull(etJustificacion.getText()).toString());
 
-                EventoRepositorio.getInstancia(getApplication()).registrarEvento(eventoIntent);
-            }*/
+                EventoRepositorio.getInstancia(getApplication()).actualizarEvento(eventoIntent);
+            }
 
         }
         return super.onOptionsItemSelected(item);
@@ -560,6 +567,47 @@ public class EditarEventoActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private boolean validarCampos() {
+
+        int contador_errores = 0;
+
+        //Hora evento
+        if (Objects.requireNonNull(etHoraEvento.getText()).toString().isEmpty()) {
+            ilHoraEvento.setErrorEnabled(true);
+            ilHoraEvento.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilHoraEvento.setErrorEnabled(false);
+        }
+
+        //Accion
+        if (acAcciones.getText().toString().isEmpty()) {
+            ilAcciones.setErrorEnabled(true);
+            ilAcciones.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilAcciones.setErrorEnabled(false);
+        }
+
+        //Spinner emoticon
+        if (!spinner.isSelected()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.VALIDACION_EMOTICON), Toast.LENGTH_LONG).show();
+            contador_errores++;
+        }
+
+        //Et justificacion
+        if (Objects.requireNonNull(etJustificacion.getText()).toString().isEmpty()) {
+            ilJustificacion.setErrorEnabled(true);
+            ilJustificacion.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+            ilJustificacion.setErrorEnabled(false);
+        }
+
+
+        return contador_errores == 0;
+    }
+
     private int buscarPosicionEmoticonoPorId(int id) {
         for (int i = 0; i < emoticonList.size(); i++) {
             if (emoticonList.get(i).getId() == id) {
@@ -572,6 +620,16 @@ public class EditarEventoActivity extends AppCompatActivity {
     private Accion buscarAccionPorId(int id) {
         for (int i = 0; i < accionList.size(); i++) {
             if (accionList.get(i).getId() == id) {
+                return accionList.get(i);
+            }
+        }
+        return null;
+    }
+
+    private Accion buscarAccionPorNombre(String nombre) {
+
+        for (int i = 0; i < accionList.size(); i++) {
+            if (accionList.get(i).getNombre().equals(nombre)) {
                 return accionList.get(i);
             }
         }

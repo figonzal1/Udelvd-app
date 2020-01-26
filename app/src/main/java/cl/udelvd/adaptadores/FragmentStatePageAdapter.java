@@ -1,5 +1,7 @@
 package cl.udelvd.adaptadores;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -14,11 +16,13 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
 
     private List<Evento> eventoList;
     private String fecha_entrevista;
+    private Activity activity;
 
-    public FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior, List<Evento> eventoList, String fecha_entrevista) {
+    public FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior, List<Evento> eventoList, String fecha_entrevista, Activity activity) {
         super(fm, behavior);
         this.eventoList = eventoList;
         this.fecha_entrevista = fecha_entrevista;
+        this.activity = activity;
     }
 
     @NonNull
@@ -32,6 +36,7 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
         fragment.setEvento(eventoList.get(position));
         fragment.setFechaEntrevista(fecha_entrevista);
         fragment.setPosition(position);
+        fragment.setActivity(activity);
 
         return fragment;
     }

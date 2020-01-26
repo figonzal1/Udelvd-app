@@ -1,5 +1,6 @@
 package cl.udelvd.vistas.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Locale;
-import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Evento;
@@ -40,6 +40,8 @@ public class EventsSwipeFragment extends Fragment {
     private TextView tv_descripcion_emoticon;
     private FloatingActionButton fbEditarEvento;
 
+    private static final int REQUEST_CODE_EDITAR_EVENTO = 300;
+    private Activity activity;
 
     public EventsSwipeFragment() {
         // Required empty public constructor
@@ -112,10 +114,10 @@ public class EventsSwipeFragment extends Fragment {
         fbEditarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditarEventoActivity.class);
+                Intent intent = new Intent(activity.getApplicationContext(), EditarEventoActivity.class);
                 intent.putExtra(getString(R.string.KEY_EVENTO_ID_ENTREVISTA), evento.getEntrevista().getId());
                 intent.putExtra(getString(R.string.KEY_EVENTO_ID_LARGO), evento.getId());
-                Objects.requireNonNull(getContext()).startActivity(intent);
+                activity.startActivityForResult(intent, REQUEST_CODE_EDITAR_EVENTO);
             }
         });
     }
@@ -130,5 +132,9 @@ public class EventsSwipeFragment extends Fragment {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 }

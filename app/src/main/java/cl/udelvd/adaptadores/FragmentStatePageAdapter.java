@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.List;
 
 import cl.udelvd.modelo.Evento;
+import cl.udelvd.vistas.fragments.DeleteDialogListener;
 import cl.udelvd.vistas.fragments.EventsSwipeFragment;
 
 public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
@@ -17,12 +18,16 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
     private List<Evento> eventoList;
     private String fecha_entrevista;
     private Activity activity;
+    private FragmentManager fragmentManager;
+    private DeleteDialogListener listener;
 
-    public FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior, List<Evento> eventoList, String fecha_entrevista, Activity activity) {
+    public FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior, List<Evento> eventoList, String fecha_entrevista, Activity activity, DeleteDialogListener listener) {
         super(fm, behavior);
         this.eventoList = eventoList;
         this.fecha_entrevista = fecha_entrevista;
         this.activity = activity;
+        this.fragmentManager = fm;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,6 +42,8 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
         fragment.setFechaEntrevista(fecha_entrevista);
         fragment.setPosition(position);
         fragment.setActivity(activity);
+        fragment.setFragmentManager(fragmentManager);
+        fragment.setListener(listener);
 
         return fragment;
     }

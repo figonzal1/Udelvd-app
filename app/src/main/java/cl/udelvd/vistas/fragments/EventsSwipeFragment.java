@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,6 +28,7 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 public class EventsSwipeFragment extends Fragment {
 
+    private static final String TAG_DELETE_DIALOG_NAME = "EliminarEvento";
     private Evento evento;
     private String fecha_entrevista;
     private int position;
@@ -39,9 +41,14 @@ public class EventsSwipeFragment extends Fragment {
     private TextView tv_justificacion;
     private TextView tv_descripcion_emoticon;
     private FloatingActionButton fbEditarEvento;
+    private FloatingActionButton fbEliminarEvento;
 
     private static final int REQUEST_CODE_EDITAR_EVENTO = 300;
+
     private Activity activity;
+    private FragmentManager fragmentManager;
+    private DeleteDialogListener listener;
+
 
     public EventsSwipeFragment() {
         // Required empty public constructor
@@ -85,6 +92,7 @@ public class EventsSwipeFragment extends Fragment {
         tv_descripcion_emoticon = v.findViewById(R.id.tv_descripcion_emoticon);
 
         fbEditarEvento = v.findViewById(R.id.fb_editar_evento);
+        fbEliminarEvento = v.findViewById(R.id.fb_eliminar_evento);
     }
 
     /**
@@ -110,7 +118,7 @@ public class EventsSwipeFragment extends Fragment {
                 .transition(withCrossFade())
                 .into(iv_emoticon);
 
-        //TODO: AGREGAR OPCION EDITAR FRAGMENT
+
         fbEditarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +126,14 @@ public class EventsSwipeFragment extends Fragment {
                 intent.putExtra(getString(R.string.KEY_EVENTO_ID_ENTREVISTA), evento.getEntrevista().getId());
                 intent.putExtra(getString(R.string.KEY_EVENTO_ID_LARGO), evento.getId());
                 activity.startActivityForResult(intent, REQUEST_CODE_EDITAR_EVENTO);
+            }
+        });
+
+        fbEliminarEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DeleteEventoDialogFragment dialog = new DeleteEventoDialogFragment(listener, evento);
+                dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
             }
         });
     }
@@ -136,5 +152,13 @@ public class EventsSwipeFragment extends Fragment {
 
     public void setActivity(Activity activity) {
         this.activity = activity;
+    }
+
+    public void setFragmentManager(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
+    }
+
+    public void setListener(DeleteDialogListener listener) {
+        this.listener = listener;
     }
 }

@@ -16,15 +16,16 @@ import androidx.fragment.app.DialogFragment;
 import java.util.Objects;
 
 import cl.udelvd.R;
-import cl.udelvd.modelo.Entrevista;
+import cl.udelvd.modelo.Evento;
 
-public class DeleteDialogFragment extends DialogFragment {
+public class DeleteEventoDialogFragment extends DialogFragment {
 
-    private Entrevista entrevista;
+    private Evento evento;
     private DeleteDialogListener listener;
 
-    public DeleteDialogFragment(Entrevista entrevista) {
-        this.entrevista = entrevista;
+    public DeleteEventoDialogFragment(DeleteDialogListener listener, Evento evento) {
+        this.evento = evento;
+        this.listener = listener;
     }
 
     @NonNull
@@ -32,10 +33,10 @@ public class DeleteDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        builder.setMessage(getString(R.string.DIALOG_MESSAGE))
+        builder.setMessage("¿Estas seguro que quieres eliminar este evento?")
                 .setPositiveButton(getString(R.string.DIALOG_POSITIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogPositiveClick(DeleteDialogFragment.this, entrevista);
+                        listener.onDialogPositiveClick(DeleteEventoDialogFragment.this, evento);
                     }
                 })
                 .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
@@ -56,9 +57,5 @@ public class DeleteDialogFragment extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         listener = (DeleteDialogListener) context;
-    }
-
-    public interface DeleteDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog, Entrevista entrevista);
     }
 }

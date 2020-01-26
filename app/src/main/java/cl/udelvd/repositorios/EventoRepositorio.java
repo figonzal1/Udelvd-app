@@ -44,6 +44,7 @@ public class EventoRepositorio {
     private static final String TAG_CREAR_EVENTO = "CrearEvento";
     private static final String TAG_GET_EVENTO = "ObtenerEvento";
     private static final String TAG_ACTUALIZAR_EVENTO = "ActualizarEvento";
+    private static final String TAG_ELIMINAR_EVENTO = "EliminarEvento";
 
     private static EventoRepositorio instancia;
     private Application application;
@@ -64,6 +65,10 @@ public class EventoRepositorio {
     private SingleLiveEvent<String> responseErrorMsgActualizacion = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
 
+    //Eliminar Evento
+    private SingleLiveEvent<String> responseErrorMsgEliminar = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
+
     //PROGRESS DIALOG
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
@@ -77,7 +82,6 @@ public class EventoRepositorio {
         }
         return instancia;
     }
-
 
     public SingleLiveEvent<String> getResponseMsgRegistro() {
         return responseMsgRegistro;
@@ -103,9 +107,21 @@ public class EventoRepositorio {
         return responseErrorMsgEvento;
     }
 
+    public SingleLiveEvent<String> getResponseMsgEliminar() {
+        return responseMsgEliminar;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgEliminar() {
+        return responseErrorMsgEliminar;
+    }
+
     public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
     }
+
+    /*
+    LISTADO DE EVENTOS
+     */
 
     /**
      * Funcion encargada de obtener los eventos de una entrevista dada
@@ -248,6 +264,10 @@ public class EventoRepositorio {
 
     }
 
+    /*
+    REGISTRO DE EVENTO
+     */
+
     /**
      * Funcion encargada de registrar evento en el sistema
      *
@@ -380,6 +400,10 @@ public class EventoRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_CREAR_EVENTO);
     }
 
+    /*
+    OBTENER EVENTO ESPECIFICO
+     */
+
     /**
      * Funcion encargada de obtener un evento específico
      *
@@ -504,7 +528,9 @@ public class EventoRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTO);
     }
 
-
+    /*
+    ACTUALIZar EVENTO
+     */
     public void actualizarEvento(Evento evento) {
         sendPutEvento(evento);
     }
@@ -619,5 +645,101 @@ public class EventoRepositorio {
 
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ACTUALIZAR_EVENTO);
+    }
+
+    /*
+    ELIMINAR EVENTO
+     */
+    public void eliminarEvento(Evento evento) {
+        sendDeleteEvento(evento);
+    }
+
+    private void sendDeleteEvento(Evento evento) {
+
+        Response.Listener<String> resposeListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("RESPONSe", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+
+                    if (jsonData.length() == 0) {
+                        responseMsgEliminar.postValue(application.getString(R.string.MSG_DELETE_EVENTO));
+                        isLoading.postValue(false);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
+                    responseErrorMsgEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
+                    responseErrorMsgEliminar.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseErrorMsgEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(Locale.US, application.getString(R.string.URL_DELETE_EVENTO), application.getString(R.string.HEROKU_DOMAIN), evento.getEntrevista().getId(), evento.getId());
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, resposeListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ELIMINAR_EVENTO);
     }
 }

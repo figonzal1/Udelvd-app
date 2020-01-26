@@ -26,11 +26,11 @@ import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.activities.EditarEntrevistaActivity;
 import cl.udelvd.vistas.activities.EventosActivity;
-import cl.udelvd.vistas.fragments.DeleteDialogFragment;
+import cl.udelvd.vistas.fragments.DeleteEntrevistaDialogFragment;
 
 public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.EntrevistaViewHolder> {
 
-    private static final String TAG_DELETE_DIALOG_NAME = "DeleteDialogFragment";
+    private static final String TAG_DELETE_DIALOG_NAME = "DeleteEntrevistaDialogFragment";
     private final List<Entrevista> entrevistaList;
     private FragmentManager fragmentManager;
     private Entrevistado entrevistado;
@@ -141,7 +141,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
                         //ELIMINAR ENTREVISTA
                         else if (item.getItemId() == R.id.menu_eliminar_entrevista) {
-                            DeleteDialogFragment dialog = new DeleteDialogFragment(entrevista);
+                            DeleteEntrevistaDialogFragment dialog = new DeleteEntrevistaDialogFragment(entrevista);
                             dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
 
                             return true;

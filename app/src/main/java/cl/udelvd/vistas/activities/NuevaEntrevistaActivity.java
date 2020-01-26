@@ -107,7 +107,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
                     ilFechaEntrevista.setEnabled(false);
                     etFechaEntrevista.setEnabled(false);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     //Activar entradas
                     ilTipoEntrevista.setEnabled(true);
@@ -125,6 +125,8 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
             public void onChanged(List<TipoEntrevista> tipoEntrevistas) {
                 if (tipoEntrevistas != null) {
 
+                    progressBar.setVisibility(View.GONE);
+
                     tipoEntrevistaList = tipoEntrevistas;
                     tipoEntrevistaAdapter = new TipoEntrevistaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoEntrevistaList);
                     acTipoEntrevista.setAdapter(tipoEntrevistaAdapter);
@@ -141,6 +143,8 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
         nuevaEntrevistaViewModel.mostrarMsgErrorTiposEntrevistas().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
@@ -166,7 +170,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
                     ilFechaEntrevista.setEnabled(false);
                     etFechaEntrevista.setEnabled(false);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
                     //Desactivar entradas
                     ilTipoEntrevista.setEnabled(true);
@@ -188,9 +192,10 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
                 if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTA))) {
 
                     //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
 
                     Intent intent = getIntent();
-                    intent.putExtra("msg_registro", s);
+                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -200,6 +205,8 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
         nuevaEntrevistaViewModel.mostrarMsgErrorRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
+                progressBar.setVisibility(View.GONE);
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                     showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));

@@ -392,6 +392,9 @@ public class EditarEventoActivity extends AppCompatActivity {
             @Override
             public void onChanged(Evento evento) {
                 if (evento != null) {
+
+                    progressBar.setVisibility(View.GONE);
+
                     eventoIntent = evento;
                     Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoIntent.toString()));
 
@@ -429,6 +432,9 @@ public class EditarEventoActivity extends AppCompatActivity {
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_UPDATE_EVENTO))) {
+
+                    progressBar.setVisibility(View.GONE);
+
                     Intent intent = getIntent();
                     intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), s);
                     setResult(RESULT_OK, intent);
@@ -441,6 +447,7 @@ public class EditarEventoActivity extends AppCompatActivity {
         editarEventoViewModel.mostrarMsgErrorActualizacion().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {

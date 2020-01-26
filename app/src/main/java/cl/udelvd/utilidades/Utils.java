@@ -230,7 +230,7 @@ public class Utils {
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                editText.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
+                editText.setText(String.format(Locale.US, "%d-%d-%d", year, month + 1, dayOfMonth));
             }
         }, year, month - 1, day);
 

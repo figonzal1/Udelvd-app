@@ -36,12 +36,13 @@ public class ProfesionRepositorio {
     private Application application;
 
     private List<Profesion> profesionsList = new ArrayList<>();
-
     private MutableLiveData<List<Profesion>> profesionMutableLiveData = new MutableLiveData<>();    //Instanciar aqui permite refresh
+    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_PROFESION = "ListadoProfesion";
+
 
     private ProfesionRepositorio(Application application) {
         this.application = application;
@@ -54,8 +55,12 @@ public class ProfesionRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgError() {
-        return responseMsgError;
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -101,6 +106,8 @@ public class ProfesionRepositorio {
                     }
 
                     profesionMutableLiveData.postValue(profesionsList);
+
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -111,15 +118,18 @@ public class ProfesionRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -145,13 +155,13 @@ public class ProfesionRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = application.getString(R.string.URL_GET_PROFESIONES);
+        String url = String.format(application.getString(R.string.URL_GET_PROFESIONES), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -170,41 +180,7 @@ public class ProfesionRepositorio {
             }
         };
 
-
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_PROFESION);
-    }
-
-    /**
-     * Funcion para buscar profesion según parametro
-     *
-     * @param nombre Nombre de la prefesion a buscar
-     * @return Profesion
-     */
-    public Profesion buscarProfesionPorNombre(String nombre) {
-
-        for (int i = 0; i < profesionsList.size(); i++) {
-
-            if (profesionsList.get(i).getNombre().equals(nombre)) {
-                return profesionsList.get(i);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Funcion para buscar profesion según parametro
-     *
-     * @param id Id de la profesion a buscar
-     * @return Profesion
-     */
-    public Profesion buscarProfesionPorId(int id) {
-
-        for (int i = 0; i < profesionsList.size(); i++) {
-
-            if (profesionsList.get(i).getId() == id) {
-                return profesionsList.get(i);
-            }
-        }
-        return null;
     }
 }

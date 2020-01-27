@@ -36,10 +36,10 @@ public class NivelEducacionalRepositorio {
     private Application application;
 
     private List<NivelEducacional> nivelEducacionalList = new ArrayList<>();
-
-    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
-
     private MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_NIVEL_EDUCACIONAL = "ListadoNivelEducacional";
 
@@ -55,8 +55,12 @@ public class NivelEducacionalRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgError() {
-        return responseMsgError;
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -102,6 +106,8 @@ public class NivelEducacionalRepositorio {
                     }
 
                     nivelEducMutableLiveData.postValue(nivelEducacionalList);
+
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -112,15 +118,18 @@ public class NivelEducacionalRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NIVEL_EDUC), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NIVEL_EDUC), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -146,13 +155,13 @@ public class NivelEducacionalRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NIVEL_EDUC), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = application.getString(R.string.URL_GET_NIVELES_EDUCACIONALES);
+        String url = String.format(application.getString(R.string.URL_GET_NIVELES_EDUCACIONALES), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -170,26 +179,7 @@ public class NivelEducacionalRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_NIVEL_EDUCACIONAL);
-    }
-
-    public NivelEducacional buscarNivelEducacionalPorNombre(String nombre) {
-
-        for (int i = 0; i < nivelEducacionalList.size(); i++) {
-            if (nivelEducacionalList.get(i).getNombre().equals(nombre)) {
-                return nivelEducacionalList.get(i);
-            }
-        }
-        return null;
-    }
-
-    public NivelEducacional buscarNivelEducacionalPorId(int id) {
-
-        for (int i = 0; i < nivelEducacionalList.size(); i++) {
-            if (nivelEducacionalList.get(i).getId() == id) {
-                return nivelEducacionalList.get(i);
-            }
-        }
-        return null;
     }
 }

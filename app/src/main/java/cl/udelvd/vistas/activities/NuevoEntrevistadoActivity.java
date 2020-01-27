@@ -1,7 +1,7 @@
 package cl.udelvd.vistas.activities;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,10 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,10 +26,8 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -47,16 +43,8 @@ import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.repositorios.EntrevistadoRepositorio;
-import cl.udelvd.repositorios.EstadoCivilRepositorio;
-import cl.udelvd.repositorios.NivelEducacionalRepositorio;
-import cl.udelvd.repositorios.TipoConvivenciaRepositorio;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.CiudadViewModel;
-import cl.udelvd.viewmodel.EntrevistadoViewModel;
-import cl.udelvd.viewmodel.EstadoCivilViewModel;
-import cl.udelvd.viewmodel.NivelEducacionalViewModel;
-import cl.udelvd.viewmodel.ProfesionViewModel;
-import cl.udelvd.viewmodel.TipoConvivenciaViewModel;
+import cl.udelvd.viewmodel.NuevoEntrevistadoViewModel;
 
 public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
@@ -72,8 +60,11 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private SwitchMaterial switchCaidas;
     private TextView tv_caidas_value;
     private TextInputLayout ilNCaidas;
+
+    //Opcionales
     private TextInputLayout ilTipoConvivencia;
     private TextInputLayout ilProfesion;
+    private TextInputLayout ilNivelEducacional;
 
     private TextInputEditText etNombre;
     private TextInputEditText etApellido;
@@ -81,19 +72,15 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     private TextInputEditText etFechaNacimiento;
     private TextInputEditText etNConvivientes;
     private AppCompatAutoCompleteTextView acCiudad;
-    private AppCompatAutoCompleteTextView acNivelEducacional;
     private AppCompatAutoCompleteTextView acEstadoCivil;
     private TextInputEditText etNCaidas;
+
+    //Opcionales
+    private AppCompatAutoCompleteTextView acNivelEducacional;
     private AppCompatAutoCompleteTextView acTipoConvivencia;
     private AppCompatAutoCompleteTextView acProfesion;
 
-    //ViewModels
-    private CiudadViewModel ciudadViewModel;
-    private EstadoCivilViewModel estadoCivilViewModel;
-    private NivelEducacionalViewModel nivelEducacionalViewModel;
-    private TipoConvivenciaViewModel tipoConvivenciaViewModel;
-    private ProfesionViewModel profesionViewModel;
-    private EntrevistadoViewModel entrevistadoViewModel;
+    private NuevoEntrevistadoViewModel nuevoEntrevistadoViewModel;
 
     //Listados
     private List<Ciudad> ciudadList;
@@ -149,8 +136,10 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         ilEstadoCivil = findViewById(R.id.il_estado_civil_entrevistado);
         ilNConvivientes = findViewById(R.id.il_n_convivientes_entrevistado);
         ilNCaidas = findViewById(R.id.il_n_caidas_entrevistado);
+
         ilTipoConvivencia = findViewById(R.id.il_tipo_convivencia_entrevistado);
         ilProfesion = findViewById(R.id.il_profesion_entrevistado);
+        ilNivelEducacional = findViewById(R.id.il_nivel_educacional_entrevistado);
 
         tv_jubilado_value = findViewById(R.id.tv_switch_jubilado_value);
         tv_caidas_value = findViewById(R.id.tv_switch_caidas);
@@ -164,6 +153,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         acCiudad = findViewById(R.id.et_ciudad_entrevistado);
         acEstadoCivil = findViewById(R.id.et_estado_civil_entrevistado);
         acSexo = findViewById(R.id.et_sexo_entrevistado);
+
         acNivelEducacional = findViewById(R.id.et_nivel_educacional_entrevistado);
         acTipoConvivencia = findViewById(R.id.et_tipo_convivencia_entrevistado);
         acProfesion = findViewById(R.id.et_profesion_entrevistado);
@@ -173,6 +163,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progress_horizontal_registro_entrevistado);
         progressBar.setVisibility(View.VISIBLE);
+
+        nuevoEntrevistadoViewModel = ViewModelProviders.of(this).get(NuevoEntrevistadoViewModel.class);
 
     }
 
@@ -196,38 +188,57 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
     private void viewModelEntrevistado() {
 
-        entrevistadoViewModel = ViewModelProviders.of(this).get(EntrevistadoViewModel.class);
+        //Observador de loading post boton guardar
+        nuevoEntrevistadoViewModel.isLoadingEntrevistado().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    activarInputs(false);
+
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    activarInputs(true);
+                }
+            }
+        });
 
         //Observador para mensajes creacion entrevistado
-        entrevistadoViewModel.mostrarRespuestaRegistro().observe(this, new Observer<String>() {
+        nuevoEntrevistadoViewModel.mostrarMsgRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 //Si el registro fue correcto cerrar la actividad
                 if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTADO))) {
+
+                    Intent intent = getIntent();
+                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
 
         //Observador para mensajes de error de registro entrevistado
-        entrevistadoViewModel.mostrarErrorRespuesta().observe(this, new Observer<String>() {
+        nuevoEntrevistadoViewModel.mostrarMsgErrorRegistro().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
 
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
                         isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
                         isSnackBarShow = true;
                     }
                 }
@@ -239,9 +250,25 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     }
 
     private void viewModelEstadoCivil() {
-        estadoCivilViewModel = ViewModelProviders.of(this).get(EstadoCivilViewModel.class);
+
+        //Observador loading para estado civil
+        nuevoEntrevistadoViewModel.isLoadingEstadosCiviles().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    activarInputs(false);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    activarInputs(true);
+                }
+            }
+        });
+
         //Observador de estados civiles
-        estadoCivilViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
+        nuevoEntrevistadoViewModel.cargarEstadosCiviles().observe(this, new Observer<List<EstadoCivil>>() {
             @Override
             public void onChanged(List<EstadoCivil> estadoCivils) {
 
@@ -261,7 +288,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
         //Estado civil errores
         //ViewModel usado para detectar errores
-        estadoCivilViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+        nuevoEntrevistadoViewModel.mostrarMsgErrorListadoEstadosCiviles().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
@@ -269,11 +296,11 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
                 if (!isSnackBarShow) {
 
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
                         isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
                         isSnackBarShow = true;
                     }
                 }
@@ -284,9 +311,27 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     }
 
     private void viewModelCiudad() {
-        ciudadViewModel = ViewModelProviders.of(this).get(CiudadViewModel.class);
+
+        //Observador de loading ciudades
+        nuevoEntrevistadoViewModel.isLoadingCiudades().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    activarInputs(false);
+
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    activarInputs(true);
+                }
+            }
+        });
+
         //Observador de ciudades
-        ciudadViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
+        nuevoEntrevistadoViewModel.cargarCiudades().observe(this, new Observer<List<Ciudad>>() {
             @Override
             public void onChanged(List<Ciudad> ciudads) {
 
@@ -305,16 +350,16 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             }
         });
 
-        ciudadViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+        nuevoEntrevistadoViewModel.mostrarMsgErrorListadoCiudades().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
                         isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
                         isSnackBarShow = true;
                     }
                 }
@@ -324,11 +369,28 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     }
 
     private void viewModelNivelEduc() {
-        nivelEducacionalViewModel = ViewModelProviders.of(this).get(NivelEducacionalViewModel.class);
+
+        //Observador loading para niveles educacionales
+        nuevoEntrevistadoViewModel.isLoadingNivelesEducacionales().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    activarInputs(false);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    activarInputs(true);
+                }
+            }
+        });
+
         //Observador de niveles educacionaes
-        nivelEducacionalViewModel.cargarNivelesEduc().observe(this, new Observer<List<NivelEducacional>>() {
+        nuevoEntrevistadoViewModel.cargarNivelesEducacionales().observe(this, new Observer<List<NivelEducacional>>() {
             @Override
             public void onChanged(List<NivelEducacional> nivelEducacionals) {
+
                 if (nivelEducacionals != null) {
                     nivelEducacionalList = nivelEducacionals;
                     nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
@@ -344,16 +406,16 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             }
         });
         //Errores de niveles educacoanles
-        nivelEducacionalViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+        nuevoEntrevistadoViewModel.mostrarMsgErrorListadoNivelesEduc().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
                         isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
                         isSnackBarShow = true;
                     }
                 }
@@ -364,11 +426,28 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     }
 
     private void viewModelTipoConvivencia() {
-        tipoConvivenciaViewModel = ViewModelProviders.of(this).get(TipoConvivenciaViewModel.class);
+
+        //Observer loading de tipos de convivencia
+        nuevoEntrevistadoViewModel.isLoadingTiposConvivencias().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    activarInputs(false);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    activarInputs(true);
+                }
+            }
+        });
+
         //Observador de tipos de convivencias
-        tipoConvivenciaViewModel.cargarTiposConvivencias().observe(this, new Observer<List<TipoConvivencia>>() {
+        nuevoEntrevistadoViewModel.cargarTiposConvivencia().observe(this, new Observer<List<TipoConvivencia>>() {
             @Override
             public void onChanged(List<TipoConvivencia> list) {
+
                 if (list != null) {
                     tipoConvivenciaList = list;
                     tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
@@ -385,15 +464,15 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         });
 
         //Errores de tipo de convivencia
-        tipoConvivenciaViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+        nuevoEntrevistadoViewModel.mostrarMsgErrorListadoTiposConvivencias().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
                         isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
                         isSnackBarShow = true;
                     }
                 }
@@ -404,9 +483,25 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
     }
 
     private void viewModelProfesiones() {
-        profesionViewModel = ViewModelProviders.of(this).get(ProfesionViewModel.class);
+
+        nuevoEntrevistadoViewModel.isLoadingProfesiones().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    activarInputs(false);
+
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    activarInputs(true);
+                }
+            }
+        });
+
         //Observador de profesiones
-        profesionViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
+        nuevoEntrevistadoViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
             @Override
             public void onChanged(List<Profesion> profesions) {
                 if (profesions != null) {
@@ -424,15 +519,15 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         });
 
         //Observador de errores profesiones
-        profesionViewModel.mostrarMsgError().observe(this, new Observer<String>() {
+        nuevoEntrevistadoViewModel.mostrarMsgErrorListadoProfesiones().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
+                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
                         showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
                         isSnackBarShow = true;
-                    } else if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
+                    } else {
+                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
                         isSnackBarShow = true;
                     }
                 }
@@ -461,7 +556,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                iniciarDatePicker();
+                Utils.iniciarDatePicker(etFechaNacimiento, NuevoEntrevistadoActivity.this);
             }
         });
 
@@ -469,40 +564,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         ilFechaNacimiento.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                iniciarDatePicker();
+                Utils.iniciarDatePicker(etFechaNacimiento, NuevoEntrevistadoActivity.this);
             }
         });
-    }
-
-    /**
-     * Funcion encargada de abrir el DatePicker para escoger fecha
-     */
-    private void iniciarDatePicker() {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        if (Objects.requireNonNull(etFechaNacimiento.getText()).length() > 0) {
-
-            String fecha = etFechaNacimiento.getText().toString();
-            String[] fecha_split = fecha.split(getString(R.string.REGEX_FECHA));
-
-            year = Integer.parseInt(fecha_split[0]);
-            month = Integer.parseInt(fecha_split[1]);
-            day = Integer.parseInt(fecha_split[2]);
-        }
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(NuevoEntrevistadoActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month += 1;
-                etFechaNacimiento.setText(String.format(Locale.US, "%d-%d-%d", year, month, dayOfMonth));
-            }
-        }, year, month, day);
-
-        datePickerDialog.show();
     }
 
     /**
@@ -644,24 +708,27 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
      */
     private void showSnackbar(View v, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE)
-                .setAction(accion, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
 
-                        //Refresh listado de informacion necesaria
-                        estadoCivilViewModel.refreshEstadosCiviles();
-                        ciudadViewModel.refreshCiudades();
-                        nivelEducacionalViewModel.refreshNivelesEduc();
-                        tipoConvivenciaViewModel.refreshTipoConvivencia();
-                        profesionViewModel.refreshProfesiones();
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        progressBar.setVisibility(View.VISIBLE);
+                    //Refresh listado de informacion necesaria
+                    nuevoEntrevistadoViewModel.refreshEstadosCiviles();
+                    nuevoEntrevistadoViewModel.refreshCiudades();
+                    nuevoEntrevistadoViewModel.refreshNivelesEduc();
+                    nuevoEntrevistadoViewModel.refreshTipoConvivencia();
+                    nuevoEntrevistadoViewModel.refreshProfesiones();
 
-                        isSnackBarShow = false;
-                    }
-                });
+                    progressBar.setVisibility(View.VISIBLE);
 
+                    isSnackBarShow = false;
+                }
+            });
+        }
+        isSnackBarShow = false;
         snackbar.show();
     }
 
@@ -703,12 +770,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 ciudad.setNombre(acCiudad.getText().toString());
                 entrevistado.setCiudad(ciudad);
 
-                EstadoCivilRepositorio estadoCivilRepositorio = EstadoCivilRepositorio.getInstance(getApplication());
                 EstadoCivil estadoCivil = new EstadoCivil();
-                estadoCivil.setId(
-                        estadoCivilRepositorio.buscarEstadoCivilPorNombre(
-                                acEstadoCivil.getText().toString()
-                        ).getId());
+                estadoCivil.setId(Objects.requireNonNull(buscarEstadoCivilPorNombre(acEstadoCivil.getText().toString())).getId());
                 entrevistado.setEstadoCivil(estadoCivil);
 
                 entrevistado.setnConvivientes3Meses(Integer.parseInt(Objects.requireNonNull(etNConvivientes.getText()).toString()));
@@ -721,12 +784,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
                 if (!acNivelEducacional.getText().toString().isEmpty()) {
 
-                    NivelEducacionalRepositorio nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
                     NivelEducacional nivelEducacional = new NivelEducacional();
-                    nivelEducacional.setId(
-                            nivelEducacionalRepositorio.buscarNivelEducacionalPorNombre(
-                                    acNivelEducacional.getText().toString()
-                            ).getId());
+                    nivelEducacional.setId(Objects.requireNonNull(buscarNivelEducacionalPorNombre(acNivelEducacional.getText().toString())).getId());
                     entrevistado.setNivelEducacional(nivelEducacional);
                 }
 
@@ -739,13 +798,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
                 if (!acTipoConvivencia.getText().toString().isEmpty()) {
 
-                    TipoConvivenciaRepositorio tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
-
                     TipoConvivencia tipoConvivencia = new TipoConvivencia();
-                    tipoConvivencia.setId(
-                            tipoConvivenciaRepositorio.buscarTipoConvivenciaPorNombre(
-                                    acTipoConvivencia.getText().toString()
-                            ).getId());
+                    tipoConvivencia.setId(Objects.requireNonNull(buscarTipoConvivenciaPorNombre(acTipoConvivencia.getText().toString())).getId());
                     entrevistado.setTipoConvivencia(tipoConvivencia);
                 }
 
@@ -755,5 +809,73 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void activarInputs(boolean activado) {
+
+        ilNombre.setEnabled(activado);
+        etNombre.setEnabled(activado);
+
+        ilApellido.setEnabled(activado);
+        etApellido.setEnabled(activado);
+
+        ilSexo.setEnabled(activado);
+        acSexo.setEnabled(activado);
+
+        ilFechaNacimiento.setEnabled(activado);
+        etFechaNacimiento.setEnabled(activado);
+
+        ilCiudad.setEnabled(activado);
+        acCiudad.setEnabled(activado);
+
+        ilEstadoCivil.setEnabled(activado);
+        acEstadoCivil.setEnabled(activado);
+
+        ilNConvivientes.setEnabled(activado);
+        etNConvivientes.setEnabled(activado);
+
+        switchJubiladoLegal.setEnabled(activado);
+
+        switchCaidas.setEnabled(activado);
+
+        ilNCaidas.setEnabled(activado);
+        etNCaidas.setEnabled(activado);
+
+        ilTipoConvivencia.setEnabled(activado);
+        acTipoConvivencia.setEnabled(activado);
+
+        ilProfesion.setEnabled(activado);
+        acProfesion.setEnabled(activado);
+
+        ilNivelEducacional.setEnabled(activado);
+        acNivelEducacional.setEnabled(activado);
+    }
+
+    private EstadoCivil buscarEstadoCivilPorNombre(String nombre) {
+
+        for (int i = 0; i < estadoCivilList.size(); i++) {
+            if (estadoCivilList.get(i).getNombre().equals(nombre)) {
+                return estadoCivilList.get(i);
+            }
+        }
+        return null;
+    }
+
+    private NivelEducacional buscarNivelEducacionalPorNombre(String nombre) {
+        for (int i = 0; i < nivelEducacionalList.size(); i++) {
+            if (nivelEducacionalList.get(i).getNombre().equals(nombre)) {
+                return nivelEducacionalList.get(i);
+            }
+        }
+        return null;
+    }
+
+    private TipoConvivencia buscarTipoConvivenciaPorNombre(String nombre) {
+        for (int i = 0; i < tipoConvivenciaList.size(); i++) {
+            if (tipoConvivenciaList.get(i).getNombre().equals(nombre)) {
+                return tipoConvivenciaList.get(i);
+            }
+        }
+        return null;
     }
 }

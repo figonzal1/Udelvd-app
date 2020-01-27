@@ -40,7 +40,7 @@ public class TipoConvivenciaViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> mostrarMsgError() {
         repositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
-        return repositorio.getResponseMsgError();
+        return repositorio.getResponseMsgErrorListado();
     }
 
     public void refreshTipoConvivencia() {

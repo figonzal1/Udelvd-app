@@ -597,13 +597,13 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
         //Buscar ciudad por id en listado obtenido en setAutoCompleteCiudad()
         CiudadRepositorio ciudadRepositorio = CiudadRepositorio.getInstancia(getApplication());
-        String nombreCiudad = ciudadRepositorio.buscarCiudadPorId(entrevistadoIntent.getCiudad().getId()).getNombre();
-        acCiudad.setText(nombreCiudad);
+        //String nombreCiudad = ciudadRepositorio.buscarCiudadPorId(entrevistadoIntent.getCiudad().getId()).getNombre();
+        //acCiudad.setText(nombreCiudad);
 
         //Buscar estado civil por id en listado obtenido en setAutoCompleteEstadoCivil()
         EstadoCivilRepositorio estadoCivilRepositorio = EstadoCivilRepositorio.getInstance(getApplication());
-        String nombreEstadoCivil = estadoCivilRepositorio.buscarEstadoCivilPorId(entrevistadoIntent.getEstadoCivil().getId()).getNombre();
-        acEstadoCivil.setText(nombreEstadoCivil, false);
+        //String nombreEstadoCivil = estadoCivilRepositorio.buscarEstadoCivilPorId(entrevistadoIntent.getEstadoCivil().getId()).getNombre();
+        //acEstadoCivil.setText(nombreEstadoCivil, false);
 
         etNConvivientes.setText(String.valueOf(entrevistadoIntent.getNConvivientes3Meses()));
 
@@ -631,20 +631,20 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
         //OPCIONALES
         if (entrevistadoIntent.getNivelEducacional() != null) {
             NivelEducacionalRepositorio nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
-            String nombre = nivelEducacionalRepositorio.buscarNivelEducacionalPorId(entrevistadoIntent.getNivelEducacional().getId()).getNombre();
-            acNivelEducacional.setText(nombre, false);
+            //String nombre = nivelEducacionalRepositorio.buscarNivelEducacionalPorId(entrevistadoIntent.getNivelEducacional().getId()).getNombre();
+            //acNivelEducacional.setText(nombre, false);
         }
 
         if (entrevistadoIntent.getProfesion() != null) {
             ProfesionRepositorio profesionRepositorio = ProfesionRepositorio.getInstancia(getApplication());
-            String nombre = profesionRepositorio.buscarProfesionPorId(entrevistadoIntent.getProfesion().getId()).getNombre();
-            acProfesion.setText(nombre);
+            //String nombre = profesionRepositorio.buscarProfesionPorId(entrevistadoIntent.getProfesion().getId()).getNombre();
+            //acProfesion.setText(nombre);
         }
 
         if (entrevistadoIntent.getTipoConvivencia() != null) {
             TipoConvivenciaRepositorio tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
-            String nombre = tipoConvivenciaRepositorio.buscarTipoConvivenciaPorId(entrevistadoIntent.getTipoConvivencia().getId()).getNombre();
-            acTipoConvivencia.setText(nombre, false);
+            //String nombre = tipoConvivenciaRepositorio.buscarTipoConvivenciaPorId(entrevistadoIntent.getTipoConvivencia().getId()).getNombre();
+            //acTipoConvivencia.setText(nombre, false);
         }
 
         progressBar.setVisibility(View.GONE);
@@ -690,9 +690,9 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
                 entrevistado.setCiudad(ciudad);
 
                 EstadoCivilRepositorio estadoCivilRepositorio = EstadoCivilRepositorio.getInstance(getApplication());
-                int id_estado_civil = estadoCivilRepositorio.buscarEstadoCivilPorNombre(acEstadoCivil.getText().toString()).getId();
+                //int id_estado_civil = estadoCivilRepositorio.buscarEstadoCivilPorNombre(acEstadoCivil.getText().toString()).getId();
                 EstadoCivil estadoCivil = new EstadoCivil();
-                estadoCivil.setId(id_estado_civil);
+                //estadoCivil.setId(id_estado_civil);
                 entrevistado.setEstadoCivil(estadoCivil);
 
                 entrevistado.setnConvivientes3Meses(Integer.parseInt(Objects.requireNonNull(etNConvivientes.getText()).toString()));
@@ -713,9 +713,9 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                 if (!acNivelEducacional.getText().toString().isEmpty()) {
                     NivelEducacionalRepositorio nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
-                    int id_nivel_educacional = nivelEducacionalRepositorio.buscarNivelEducacionalPorNombre(acNivelEducacional.getText().toString()).getId();
+                    //int id_nivel_educacional = nivelEducacionalRepositorio.buscarNivelEducacionalPorNombre(acNivelEducacional.getText().toString()).getId();
                     NivelEducacional nivelEducacional = new NivelEducacional();
-                    nivelEducacional.setId(id_nivel_educacional);
+                    //nivelEducacional.setId(id_nivel_educacional);
                     entrevistado.setNivelEducacional(nivelEducacional);
                 }
 
@@ -727,9 +727,9 @@ public class EditarEntrevistadoActivity extends AppCompatActivity {
 
                 if (!acTipoConvivencia.getText().toString().isEmpty()) {
                     TipoConvivenciaRepositorio tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
-                    int id_tipo_convivencia = tipoConvivenciaRepositorio.buscarTipoConvivenciaPorNombre(acTipoConvivencia.getText().toString()).getId();
+                    //int id_tipo_convivencia = tipoConvivenciaRepositorio.buscarTipoConvivenciaPorNombre(acTipoConvivencia.getText().toString()).getId();
                     TipoConvivencia tipoConvivencia = new TipoConvivencia();
-                    tipoConvivencia.setId(id_tipo_convivencia);
+                    //tipoConvivencia.setId(id_tipo_convivencia);
                     entrevistado.setTipoConvivencia(tipoConvivencia);
                 }
 

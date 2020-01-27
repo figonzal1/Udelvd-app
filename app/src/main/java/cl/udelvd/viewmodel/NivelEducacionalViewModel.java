@@ -39,7 +39,7 @@ public class NivelEducacionalViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> mostrarMsgError() {
         repositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
-        return repositorio.getResponseMsgError();
+        return repositorio.getResponseMsgErrorListado();
     }
 
     public void refreshNivelesEduc() {

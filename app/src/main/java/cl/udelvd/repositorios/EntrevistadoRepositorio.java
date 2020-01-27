@@ -50,10 +50,18 @@ public class EntrevistadoRepositorio {
     private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
     private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
+    /*
+    REGISTRO
+     */
+    private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
 
+    /*
+
+     */
     private SingleLiveEvent<Entrevistado> entrevistadoMutableLiveData = new SingleLiveEvent<>();
 
-    private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+
     private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
 
@@ -86,6 +94,10 @@ public class EntrevistadoRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgRegistro() {
         return responseMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorRegistro() {
+        return responseMsgErrorRegistro;
     }
 
     public SingleLiveEvent<String> getResponseMsgActualizacion() {
@@ -324,6 +336,8 @@ public class EntrevistadoRepositorio {
 
                     if (entrevistado.equals(entResponse) && !create_time.isEmpty()) {
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_ENTREVISTADO));
+
+                        isLoading.postValue(false);
                     }
 
                 } catch (JSONException e) {
@@ -336,15 +350,18 @@ public class EntrevistadoRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.TIMEOUT_ERROR));
-                    errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.NETWORK_ERROR));
-                    errorMsg.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorRegistro.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -371,13 +388,13 @@ public class EntrevistadoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        errorMsg.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = application.getString(R.string.URL_POST_ENTREVISTADOS);
+        String url = String.format(application.getString(R.string.URL_POST_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
 
@@ -443,6 +460,7 @@ public class EntrevistadoRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADO_REGISTRO);
     }
 

@@ -43,7 +43,7 @@ public class EstadoCivilViewModel extends AndroidViewModel {
      */
     public SingleLiveEvent<String> mostrarMsgError() {
         repositorio = EstadoCivilRepositorio.getInstance(getApplication());
-        return repositorio.getResponseMsgError();
+        return repositorio.getResponseMsgErrorListado();
     }
 
     /**

@@ -36,10 +36,10 @@ public class EstadoCivilRepositorio {
     private Application application;
 
     private List<EstadoCivil> estadoCivilList = new ArrayList<>();
-
     private MutableLiveData<List<EstadoCivil>> estadosCivilesMutable = new MutableLiveData<>();
+    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_GET_ESTADOS_CIVILES = "ListaEstadosCiviles";
 
@@ -65,8 +65,12 @@ public class EstadoCivilRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgError() {
-        return responseMsgError;
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -114,6 +118,8 @@ public class EstadoCivilRepositorio {
 
                     estadosCivilesMutable.postValue(estadoCivilList);
 
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -123,15 +129,18 @@ public class EstadoCivilRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -157,14 +166,14 @@ public class EstadoCivilRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
 
-        String url = application.getString(R.string.URL_GET_ESTADOS_CIVILES);
+        String url = String.format(application.getString(R.string.URL_GET_ESTADOS_CIVILES), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -183,42 +192,7 @@ public class EstadoCivilRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_GET_ESTADOS_CIVILES);
-    }
-
-    /**
-     * Funcion para buscar estado civil
-     *
-     * @param nombre Nombre del estado civil a buscar
-     * @return Objeto estado civil
-     */
-    public EstadoCivil buscarEstadoCivilPorNombre(String nombre) {
-
-        for (int i = 0; i < estadoCivilList.size(); i++) {
-            EstadoCivil estadoCivil = estadoCivilList.get(i);
-
-            if (estadoCivil.getNombre().equals(nombre)) {
-                return estadoCivil;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Funcion para buscar estado civil
-     *
-     * @param id Nombre del estado civil a buscar
-     * @return Objeto estado civil
-     */
-    public EstadoCivil buscarEstadoCivilPorId(int id) {
-
-        for (int i = 0; i < estadoCivilList.size(); i++) {
-            EstadoCivil estadoCivil = estadoCivilList.get(i);
-
-            if (estadoCivil.getId() == id) {
-                return estadoCivil;
-            }
-        }
-        return null;
     }
 }

@@ -183,9 +183,9 @@ public class EntrevistadoListaFragment extends Fragment {
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(v, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, getString(R.string.SNACKBAR_REINTENTAR));
                 } else {
-                    showSnackbar(v, s, null);
+                    showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, null);
                 }
 
             }
@@ -200,9 +200,9 @@ public class EntrevistadoListaFragment extends Fragment {
      * @param titulo Titulo del snackbar
      * @param accion Boton de accion del snackbar
      */
-    private void showSnackbar(View v, String titulo, String accion) {
+    private void showSnackbar(View v, String titulo, int snackbar_largo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, Snackbar.LENGTH_INDEFINITE);
+        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, snackbar_largo);
 
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {
@@ -243,12 +243,16 @@ public class EntrevistadoListaFragment extends Fragment {
         if (requestCode == REQUEST_CODE_NUEVA_ENTREVISTA) {
 
             if (resultCode == RESULT_OK) {
-                Bundle bundle = new Bundle();
 
+                assert data != null;
+                Bundle bundle = data.getExtras();
+
+                assert bundle != null;
                 String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
 
                 if (msg_registro != null) {
-                    showSnackbar(v.findViewById(R.id.entrevistados_lista), msg_registro, null);
+                    showSnackbar(v.findViewById(R.id.entrevistados_lista), msg_registro, Snackbar.LENGTH_LONG, null);
+                    entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
             }
         }

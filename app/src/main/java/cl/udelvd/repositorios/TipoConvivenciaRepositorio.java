@@ -36,12 +36,14 @@ public class TipoConvivenciaRepositorio {
     private Application application;
 
     private List<TipoConvivencia> tipoConvivenciaList = new ArrayList<>();
-
-    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
-
     private MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableLiveData = new MutableLiveData<>();
 
+    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+
     private static final String TAG_TIPO_CONVIVENCIA = "ListadoTipoConvivencia";
+
 
     private TipoConvivenciaRepositorio(Application application) {
         this.application = application;
@@ -54,8 +56,12 @@ public class TipoConvivenciaRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgError() {
-        return responseMsgError;
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -103,6 +109,8 @@ public class TipoConvivenciaRepositorio {
 
                     tipoConvivenciaMutableLiveData.postValue(tipoConvivenciaList);
 
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -112,15 +120,18 @@ public class TipoConvivenciaRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -146,14 +157,14 @@ public class TipoConvivenciaRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
 
-        String url = application.getString(R.string.URL_GET_TIPOS_CONVIVENCIAS);
+        String url = String.format(application.getString(R.string.URL_GET_TIPOS_CONVIVENCIAS), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -172,40 +183,7 @@ public class TipoConvivenciaRepositorio {
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_TIPO_CONVIVENCIA);
-    }
-
-    /**
-     * Funcion encargada de buscar tipo convivencia según parámetro
-     *
-     * @param nombre Nombre del tipo de convivencia
-     * @return TipoConvivencia
-     */
-    public TipoConvivencia buscarTipoConvivenciaPorNombre(String nombre) {
-
-        for (int i = 0; i < tipoConvivenciaList.size(); i++) {
-
-            if (tipoConvivenciaList.get(i).getNombre().equals(nombre)) {
-                return tipoConvivenciaList.get(i);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Funcion encargada de buscar tipo convivencia según parámetro
-     *
-     * @param id Id del tipo de convivencia
-     * @return TipoConvivencia
-     */
-    public TipoConvivencia buscarTipoConvivenciaPorId(int id) {
-        for (int i = 0; i < tipoConvivenciaList.size(); i++) {
-
-            if (tipoConvivenciaList.get(i).getId() == id) {
-                return tipoConvivenciaList.get(i);
-            }
-        }
-        return null;
     }
 }

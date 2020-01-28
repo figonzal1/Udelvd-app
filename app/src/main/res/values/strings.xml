@@ -29,6 +29,7 @@
     <string name="URL_GET_EVENTO_ESPECIFICO">%sentrevistas/%d/eventos/%d</string>
     <string name="URL_PUT_EVENTO">%sentrevistas/%d/eventos/%d</string>
     <string name="URL_DELETE_EVENTO">%sentrevistas/%d/eventos/%d</string>
+    <string name="URL_DELETE_ENTREVISTADO">%sentrevistados/%d</string>
 
 
     <!-- Titulos Toolbar -->
@@ -278,24 +279,29 @@
     <string name="TAG_VIEW_MODEL_LISTA_EVENTOS">VM_LISTA_EVENTOS</string>
     <string name="TAG_VIEW_MODEL_EDITAR_PERFIL">VM_EDITAR_PERFIL</string>
     <string name="TAG_VIEW_MODEL_EDITAR_EVENTO">VM_MODEL_EDITAR_EVENTO</string>
-
     <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA">VM_ELIMINAR_ENTREVISTA</string>
     <string name="MSG_UPDATE_EVENTO">¡Evento actualizado!</string>
     <string name="MSG_DELETE_EVENTO">¡Evento eliminado!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_EVENTO">VM_ELIMINAR_EVENTO</string>
+    <string name="MSG_DELETE_ENTREVISTADO">¡Entrevistado eliminado!</string>
+    <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO">VM_ELIMINAR_ENTREVISTADO</string>
 
     <!-- INTENT KEY -->
     <string name="INTENT_KEY_MSG_LOGIN">msg_login</string>
     <string name="INTENT_KEY_MSG_ACTUALIZACION">msg_actualizacion</string>
+    <string name="INTENT_KEY_MSG_ELIMINAR">msg_eliminar</string>
     <string name="INTENT_KEY_MSG_REGISTRO">msg_registro</string>
     <string name="INTENT_KEY_NORMALES">normales</string>
     <string name="INTENT_KEY_EXTRAORDINARIAS">extraordinarias</string>
 
     <!--Dialog -->
-    <string name="DIALOG_MESSAGE">¿Está seguro que quiere eliminar esta entrevista?</string>
+    <string name="DIALOG_MESSAGE_ENTREVISTA">¿Está seguro que quiere eliminar esta entrevista?</string>
     <string name="DIALOG_POSITIVE_BTN">Eliminar</string>
     <string name="DIALOG_NEGATIVE_BTN">Cancelar</string>
+    <string name="DIALOG_MESSAGE_ENTREVISTADO">¿Está seguro que quiere eliminar este entrevistado?</string>
+    <string name="DIALOG_MESSAGE_EVENTO">¿Está seguro que quiere eliminar este evento?</string>
+
 
     <!-- Menu -->
     <string name="MENU_ENTREVISTADO_INFO_BASICA">Ver información básica</string>

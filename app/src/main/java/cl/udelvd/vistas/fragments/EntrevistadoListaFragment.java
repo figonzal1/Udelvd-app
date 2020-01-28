@@ -25,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.EntrevistadoAdapter;
@@ -104,7 +105,7 @@ public class EntrevistadoListaFragment extends Fragment {
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
-        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getActivity(), EntrevistadoListaFragment.this));
+        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getContext(), EntrevistadoListaFragment.this, Objects.requireNonNull(getActivity()).getSupportFragmentManager()));
 
         tv_entrevistados_vacios = v.findViewById(R.id.tv_entrevistados_vacios);
 
@@ -164,7 +165,7 @@ public class EntrevistadoListaFragment extends Fragment {
 
                 entrevistadoList = lista;
 
-                entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList, getContext(), EntrevistadoListaFragment.this);
+                entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList, getContext(), EntrevistadoListaFragment.this, Objects.requireNonNull(getActivity()).getSupportFragmentManager());
                 entrevistadoAdapter.notifyDataSetChanged();
                 rv.setAdapter(entrevistadoAdapter);
 
@@ -189,6 +190,32 @@ public class EntrevistadoListaFragment extends Fragment {
                     showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, null);
                 }
 
+            }
+        });
+
+        entrevistadoListaViewModel.mostrarMsgEliminar().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
+                    showSnackbar(v.findViewById(R.id.entrevistados_lista), s, Snackbar.LENGTH_LONG, null);
+                    entrevistadoListaViewModel.refreshListaEntrevistados();
+                }
+            }
+        });
+
+        entrevistadoListaViewModel.mostrarMsgErrorEliminar().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.INVISIBLE);
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                    showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, getString(R.string.SNACKBAR_REINTENTAR));
+                } else {
+                    showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, null);
+                }
             }
         });
     }

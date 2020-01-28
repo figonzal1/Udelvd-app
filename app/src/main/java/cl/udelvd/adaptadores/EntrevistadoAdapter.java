@@ -12,6 +12,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -22,19 +23,23 @@ import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.activities.EditarEntrevistadoActivity;
 import cl.udelvd.vistas.activities.EntrevistasListaActivity;
+import cl.udelvd.vistas.fragments.DeleteEntrevistadoDialogFragment;
 import cl.udelvd.vistas.fragments.EntrevistadoListaFragment;
 
 public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapter.EntrevistadoViewHolder> {
 
+    private static final String TAG_DELETE_DIALOG_NAME = "EliminarEntrevistado";
     private final List<Entrevistado> entrevistadoList;
     private Context context;
     private static final int REQUEST_CODE_EDITAR_ENTREVISTADO = 300;
     private EntrevistadoListaFragment entrevistadoListaFragment;
+    private FragmentManager fragmentManager;
 
-    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment) {
+    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment, FragmentManager fragmentManager) {
         this.entrevistadoList = entrevistadoList;
         this.context = context;
         this.entrevistadoListaFragment = entrevistadoListaFragment;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -103,6 +108,11 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
                             bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
                             intent.putExtras(bundle);
                             context.startActivity(intent);
+
+                            return true;
+                        } else if (item.getItemId() == R.id.menu_eliminar_entrevistado) {
+                            DeleteEntrevistadoDialogFragment dialog = new DeleteEntrevistadoDialogFragment(entrevistado);
+                            dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
 
                             return true;
                         }

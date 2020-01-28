@@ -37,7 +37,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class EntrevistadoListaFragment extends Fragment {
 
-    private static final int REQUEST_CODE_NUEVA_ENTREVISTA = 200;
+    private static final int REQUEST_CODE_NUEVA_ENTREVISTADO = 200;
     private RecyclerView rv;
     private EntrevistadoListaViewModel entrevistadoListaViewModel;
     private EntrevistadoAdapter entrevistadoAdapter;
@@ -45,6 +45,7 @@ public class EntrevistadoListaFragment extends Fragment {
     private TextView tv_entrevistados_vacios;
     private List<Entrevistado> entrevistadoList;
     private View v;
+    private static final int REQUEST_CODE_EDITAR_ENTREVISTADO = 300;
 
     public EntrevistadoListaFragment() {
         // Required empty public constructor
@@ -103,7 +104,7 @@ public class EntrevistadoListaFragment extends Fragment {
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
-        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getContext()));
+        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getActivity(), EntrevistadoListaFragment.this));
 
         tv_entrevistados_vacios = v.findViewById(R.id.tv_entrevistados_vacios);
 
@@ -123,7 +124,7 @@ public class EntrevistadoListaFragment extends Fragment {
             public void onClick(View view) {
 
                 Intent intent = new Intent(getActivity(), NuevoEntrevistadoActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_NUEVA_ENTREVISTA);
+                startActivityForResult(intent, REQUEST_CODE_NUEVA_ENTREVISTADO);
             }
         });
     }
@@ -163,7 +164,7 @@ public class EntrevistadoListaFragment extends Fragment {
 
                 entrevistadoList = lista;
 
-                entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList, getContext());
+                entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList, getContext(), EntrevistadoListaFragment.this);
                 entrevistadoAdapter.notifyDataSetChanged();
                 rv.setAdapter(entrevistadoAdapter);
 
@@ -240,7 +241,7 @@ public class EntrevistadoListaFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        if (requestCode == REQUEST_CODE_NUEVA_ENTREVISTA) {
+        if (requestCode == REQUEST_CODE_NUEVA_ENTREVISTADO) {
 
             if (resultCode == RESULT_OK) {
 
@@ -255,8 +256,20 @@ public class EntrevistadoListaFragment extends Fragment {
                     entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
             }
-        }
+        } else if (requestCode == REQUEST_CODE_EDITAR_ENTREVISTADO) {
+            if (resultCode == RESULT_OK) {
 
-        super.onActivityResult(requestCode, resultCode, data);
+                assert data != null;
+                Bundle bundle = data.getExtras();
+
+                assert bundle != null;
+                String msg_actualizacion = bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
+
+                if (msg_actualizacion != null) {
+                    showSnackbar(v.findViewById(R.id.entrevistados_lista), msg_actualizacion, Snackbar.LENGTH_LONG, null);
+                    entrevistadoListaViewModel.refreshListaEntrevistados();
+                }
+            }
+        }
     }
 }

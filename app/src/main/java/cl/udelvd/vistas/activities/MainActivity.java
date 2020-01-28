@@ -236,11 +236,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PROFILE_ACTIVITY_CODE) {
             navigationView.setCheckedItem(R.id.menu_entrevistados);
             Objects.requireNonNull(tabLayout.getTabAt(0)).select();
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

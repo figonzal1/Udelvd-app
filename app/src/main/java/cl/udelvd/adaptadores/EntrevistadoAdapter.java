@@ -22,15 +22,19 @@ import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.activities.EditarEntrevistadoActivity;
 import cl.udelvd.vistas.activities.EntrevistasListaActivity;
+import cl.udelvd.vistas.fragments.EntrevistadoListaFragment;
 
 public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapter.EntrevistadoViewHolder> {
 
     private final List<Entrevistado> entrevistadoList;
     private Context context;
+    private static final int REQUEST_CODE_EDITAR_ENTREVISTADO = 300;
+    private EntrevistadoListaFragment entrevistadoListaFragment;
 
-    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context) {
+    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment) {
         this.entrevistadoList = entrevistadoList;
         this.context = context;
+        this.entrevistadoListaFragment = entrevistadoListaFragment;
     }
 
     @NonNull
@@ -48,7 +52,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
         holder.tv_nombre_apellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
 
         int annos = Utils.calculateYearsOld(entrevistado.getFechaNacimiento());
-        holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", Utils.dateToString(context, false, entrevistado.getFechaNacimiento()), annos));
+        holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", Utils.dateToString(context.getApplicationContext(), false, entrevistado.getFechaNacimiento()), annos));
 
         if (entrevistado.getN_entrevistas() == 1) {
             holder.tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", entrevistado.getN_entrevistas()));
@@ -85,7 +89,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<EntrevistadoAdapte
 
                             Intent intent = new Intent(context, EditarEntrevistadoActivity.class);
                             intent.putExtra(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), entrevistado.getId());
-                            context.startActivity(intent);
+                            entrevistadoListaFragment.startActivityForResult(intent, REQUEST_CODE_EDITAR_ENTREVISTADO);
 
                             return true;
 

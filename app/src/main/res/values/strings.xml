@@ -9,8 +9,8 @@
     <string name="URL_PUT_INVESTIGADORES">%sinvestigadores/%d</string>
     <string name="URL_POST_ENTREVISTADOS">%sentrevistados</string>
     <string name="URL_GET_ENTREVISTADOS">%sentrevistados</string>
-    <string name="URL_GET_ENTREVISTADO">https://udelvd-dev.herokuapp.com/entrevistados/</string>
-    <string name="URL_PUT_ENTREVISTADOS">https://udelvd-dev.herokuapp.com/entrevistados/</string>
+    <string name="URL_GET_ENTREVISTADO">%sentrevistados/%d</string>
+    <string name="URL_PUT_ENTREVISTADOS">%sentrevistados/%d</string>
     <string name="URL_GET_ACCIONES">%sacciones</string>
     <string name="URL_GET_CIUDADES">%sciudades</string>
     <string name="URL_GET_EMOTICONES">%semoticones</string>

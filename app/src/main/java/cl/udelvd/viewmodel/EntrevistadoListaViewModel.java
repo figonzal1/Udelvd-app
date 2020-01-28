@@ -39,4 +39,14 @@ public class EntrevistadoListaViewModel extends AndroidViewModel {
         entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
         entrevistadoRepositorio.obtenerEntrevistados();
     }
+
+    public SingleLiveEvent<String> mostrarMsgErrorEliminar() {
+        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        return entrevistadoRepositorio.getResponseMsgErrorEliminar();
+    }
+
+    public SingleLiveEvent<String> mostrarMsgEliminar() {
+        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        return entrevistadoRepositorio.getResponseMsgEliminar();
+    }
 }

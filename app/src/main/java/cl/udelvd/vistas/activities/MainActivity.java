@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
@@ -23,10 +24,13 @@ import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.FragmentPageAdapter;
+import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.Investigador;
+import cl.udelvd.repositorios.EntrevistadoRepositorio;
 import cl.udelvd.utilidades.Utils;
+import cl.udelvd.vistas.fragments.DeleteDialogListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DeleteDialogListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -242,5 +246,10 @@ public class MainActivity extends AppCompatActivity {
             Objects.requireNonNull(tabLayout.getTabAt(0)).select();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, Object object) {
+        EntrevistadoRepositorio.getInstance(getApplication()).eliminarEntrevistado((Entrevistado) object);
     }
 }

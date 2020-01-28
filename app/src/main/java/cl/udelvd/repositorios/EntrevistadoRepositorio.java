@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cl.udelvd.R;
@@ -64,11 +65,17 @@ public class EntrevistadoRepositorio {
     private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
 
+    private static final String TAG_ENTREVISTADO_ELIMINAR = "EliminarEntrevistado";
+    /*
+    ELIMINAR
+     */
+    private SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
 
     private static final String TAG_ENTREVISTADOS_LISTA = "ListaEntrevistados";
     private static final String TAG_ENTREVISTADO_REGISTRO = "RegistroEntrevistado";
     private static final String TAG_ENTREVISTADO = "ObtenerEntrevistado";
     private static final String TAG_ENTREVISTADO_ACTUALIZADO = "ActualizarEntrevistado";
+    private SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
 
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
@@ -106,6 +113,14 @@ public class EntrevistadoRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgErrorActualizacion() {
         return responseMsgErrorActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgEliminar() {
+        return responseMsgEliminar;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorEliminar() {
+        return responseMsgErrorEliminar;
     }
 
     public MutableLiveData<Boolean> getIsLoading() {
@@ -825,5 +840,99 @@ public class EntrevistadoRepositorio {
 
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO_ACTUALIZADO);
+    }
+
+    public void eliminarEntrevistado(Entrevistado entrevistado) {
+        sendDeleteEntrevistado(entrevistado);
+    }
+
+    private void sendDeleteEntrevistado(Entrevistado entrevistado) {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+
+                    if (jsonData.length() == 0) {
+                        responseMsgEliminar.postValue(application.getString(R.string.MSG_DELETE_ENTREVISTADO));
+                        isLoading.postValue(false);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorEliminar.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(Locale.US, application.getString(R.string.URL_DELETE_ENTREVISTADO), application.getString(R.string.HEROKU_DOMAIN), entrevistado.getId());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO_ELIMINAR);
+
     }
 }

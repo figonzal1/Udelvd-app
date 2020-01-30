@@ -47,8 +47,10 @@ public class EntrevistadoRepositorio {
     /*
     LISTADO
      */
-    private List<Entrevistado> entrevistadoList;
-    private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
+    private List<Entrevistado> entrevistadosList = new ArrayList<>();
+    private List<Entrevistado> entrevistadosSgtPagina = new ArrayList<>();
+    private SingleLiveEvent<List<Entrevistado>> entrevistadosPrimeraPaginaLiveData = new SingleLiveEvent<>();
+    private SingleLiveEvent<List<Entrevistado>> entrevistadosSgtPaginaLiveData = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     /*
@@ -78,6 +80,7 @@ public class EntrevistadoRepositorio {
     private SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
 
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+
 
     private EntrevistadoRepositorio(Application application) {
         this.application = application;
@@ -132,21 +135,35 @@ public class EntrevistadoRepositorio {
      *
      * @return MutableLiveData con listado de usuarios
      */
-    public MutableLiveData<List<Entrevistado>> obtenerEntrevistados() {
-        sendGetEntrevistados();
-        return entrevistadosMutableLiveData;
+    public SingleLiveEvent<List<Entrevistado>> obtenerEntrevistados(int page) {
+        sendGetEntrevistados(page);
+        if (page == 1) {
+            return entrevistadosPrimeraPaginaLiveData;
+        } else {
+            return entrevistadosSgtPaginaLiveData;
+        }
+    }
+
+    public SingleLiveEvent<List<Entrevistado>> obtenerSiguientePagina() {
+        return entrevistadosSgtPaginaLiveData;
     }
 
     /**
      * Funcion que realizar solicitud GET para obtener listado de usuarios
      */
-    private void sendGetEntrevistados() {
+    private void sendGetEntrevistados(final int page) {
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                entrevistadoList = new ArrayList<>();
+                //Reiniciar listado cuando se pregunta por primera pagina
+                if (page == 1) {
+                    entrevistadosList.clear();
+                } else {
+                    entrevistadosSgtPagina.clear();
+                }
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -216,12 +233,22 @@ public class EntrevistadoRepositorio {
                                 jsonRelationships.getJSONObject(application.getString(R.string.KEY_ENTREVISTA_OBJECT)).getJSONObject(application.getString(R.string.JSON_DATA)).getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))
                         );
 
-                        entrevistadoList.add(entrevistado);
+                        if (page == 1) {
+                            entrevistadosList.add(entrevistado);
+                        } else {
+                            entrevistadosSgtPagina.add(entrevistado);
+                        }
                     }
 
-                    entrevistadosMutableLiveData.postValue(entrevistadoList);
 
-                    isLoading.postValue(false);
+                    if (page == 1) {
+                        //Log.d("CARGANDO_PAGINA", "1");
+                        entrevistadosPrimeraPaginaLiveData.postValue(entrevistadosList);
+                        isLoading.postValue(false);
+                    } else {
+                        //Log.d("CARGANDO_PAGINA", String.valueOf(page));
+                        entrevistadosSgtPaginaLiveData.postValue(entrevistadosSgtPagina); //Enviar a ViewModel listado paginado
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -273,7 +300,7 @@ public class EntrevistadoRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN));
+        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN), page);
 
         //Hacer request
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener,
@@ -291,7 +318,10 @@ public class EntrevistadoRepositorio {
                 return params;
             }
         };
-        isLoading.postValue(true);
+        //Si es la primera pagina, activar progress dialog
+        if (page == 1) {
+            isLoading.postValue(true);
+        }
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADOS_LISTA);
     }
 

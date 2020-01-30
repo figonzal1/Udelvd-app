@@ -25,19 +25,29 @@ public class EntrevistadoListaViewModel extends AndroidViewModel {
         return entrevistadoRepositorio.getIsLoading();
     }
 
-    public MutableLiveData<List<Entrevistado>> cargarListaEntrevistados() {
+    public SingleLiveEvent<List<Entrevistado>> mostrarPrimeraPagina(int page) {
         entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
-        return entrevistadoRepositorio.obtenerEntrevistados();
+        return entrevistadoRepositorio.obtenerEntrevistados(page);
+    }
+
+    public void cargarSiguientePagina(int page) {
+        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        entrevistadoRepositorio.obtenerEntrevistados(page);
+    }
+
+    public SingleLiveEvent<List<Entrevistado>> mostrarSiguientePagina() {
+        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        return entrevistadoRepositorio.obtenerSiguientePagina();
+    }
+
+    public void refreshListaEntrevistados() {
+        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        entrevistadoRepositorio.obtenerEntrevistados(1);
     }
 
     public SingleLiveEvent<String> mostrarMsgErrorListado() {
         entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
         return entrevistadoRepositorio.getResponseMsgErrorListado();
-    }
-
-    public void refreshListaEntrevistados() {
-        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
-        entrevistadoRepositorio.obtenerEntrevistados();
     }
 
     public SingleLiveEvent<String> mostrarMsgErrorEliminar() {

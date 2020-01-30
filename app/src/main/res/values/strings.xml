@@ -8,7 +8,7 @@
     <string name="URL_LOGIN_INVESTIGADORES">%sinvestigadores/login</string>
     <string name="URL_PUT_INVESTIGADORES">%sinvestigadores/%d</string>
     <string name="URL_POST_ENTREVISTADOS">%sentrevistados</string>
-    <string name="URL_GET_ENTREVISTADOS">%sentrevistados</string>
+    <string name="URL_GET_ENTREVISTADOS">%sentrevistados/pagina/%d</string>
     <string name="URL_GET_ENTREVISTADO">%sentrevistados/%d</string>
     <string name="URL_PUT_ENTREVISTADOS">%sentrevistados/%d</string>
     <string name="URL_GET_ACCIONES">%sacciones</string>

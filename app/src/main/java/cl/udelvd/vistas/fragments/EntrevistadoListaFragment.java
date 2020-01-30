@@ -105,7 +105,13 @@ public class EntrevistadoListaFragment extends Fragment {
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
-        rv.setAdapter(new EntrevistadoAdapter(new ArrayList<Entrevistado>(), getContext(), EntrevistadoListaFragment.this, Objects.requireNonNull(getActivity()).getSupportFragmentManager()));
+        rv.setAdapter(new EntrevistadoAdapter(
+                new ArrayList<Entrevistado>(),
+                getContext(),
+                EntrevistadoListaFragment.this,
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+                entrevistadoListaViewModel)
+        );
 
         tv_entrevistados_vacios = v.findViewById(R.id.tv_entrevistados_vacios);
 
@@ -148,30 +154,54 @@ public class EntrevistadoListaFragment extends Fragment {
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
-
-                    if (entrevistadoList.size() == 0) {
-                        tv_entrevistados_vacios.setVisibility(View.VISIBLE);
-                    } else {
-                        tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
-                    }
                 }
             }
         });
 
-        //Manejador de listado de usuarios
-        entrevistadoListaViewModel.cargarListaEntrevistados().observe(this, new Observer<List<Entrevistado>>() {
+        entrevistadoListaViewModel.mostrarPrimeraPagina(1).observe(this, new Observer<List<Entrevistado>>() {
             @Override
-            public void onChanged(List<Entrevistado> lista) {
+            public void onChanged(List<Entrevistado> listado) {
 
-                entrevistadoList = lista;
+                entrevistadoList = listado;
+                entrevistadoAdapter = new EntrevistadoAdapter(
+                        entrevistadoList,
+                        getContext(),
+                        EntrevistadoListaFragment.this,
+                        Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+                        entrevistadoListaViewModel
+                );
 
-                entrevistadoAdapter = new EntrevistadoAdapter(entrevistadoList, getContext(), EntrevistadoListaFragment.this, Objects.requireNonNull(getActivity()).getSupportFragmentManager());
                 entrevistadoAdapter.notifyDataSetChanged();
                 rv.setAdapter(entrevistadoAdapter);
 
                 progressBar.setVisibility(View.INVISIBLE);
+                if (entrevistadoList.size() == 0) {
+                    tv_entrevistados_vacios.setVisibility(View.VISIBLE);
+                } else {
+                    tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
+                }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+            }
+        });
+
+        entrevistadoListaViewModel.mostrarSiguientePagina().observe(this, new Observer<List<Entrevistado>>() {
+            @Override
+            public void onChanged(List<Entrevistado> entrevistados) {
+
+
+                entrevistadoAdapter.agregarEntrevistados(entrevistados);
+                entrevistadoAdapter.notifyDataSetChanged();
+
+                entrevistadoList = entrevistadoAdapter.getEntrevistadoList();
+
+                if (entrevistadoList.size() == 0) {
+                    tv_entrevistados_vacios.setVisibility(View.VISIBLE);
+                } else {
+                    tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG) + "PAGINA");
             }
         });
 
@@ -219,7 +249,6 @@ public class EntrevistadoListaFragment extends Fragment {
             }
         });
     }
-
 
     /**
      * Funcion para mostrar el snackbar en fragment

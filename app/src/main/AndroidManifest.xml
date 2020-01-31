@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".RecuperacionActivity"></activity>
         <!-- Main -->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
@@ -46,7 +47,18 @@
         <activity
             android:name=".vistas.activities.RegistroActivity"
             android:parentActivityName=".vistas.activities.LoginActivity" />
-        <activity android:name=".vistas.activities.LoginActivity" /> <!-- Eventos -->
+        <activity android:name=".vistas.activities.LoginActivity">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="udelvd-dev.herokuapp.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity> <!-- Eventos -->
         <activity
             android:name=".vistas.activities.EventosActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />

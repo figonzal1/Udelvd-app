@@ -6,6 +6,7 @@
     <string name="HEROKU_DOMAIN">http://192.168.0.22/</string>
     <string name="URL_GET_INVESTIGADORES">%sinvestigadores</string>
     <string name="URL_LOGIN_INVESTIGADORES">%sinvestigadores/login</string>
+    <string name="URL_GET_RECUPERAR_INVESTIGADOR">%sinvestigadores/recuperar/%s</string>
     <string name="URL_PUT_INVESTIGADORES">%sinvestigadores/%d</string>
     <string name="URL_POST_ENTREVISTADOS">%sentrevistados</string>
     <string name="URL_GET_ENTREVISTADOS">%sentrevistados/pagina/%d</string>
@@ -165,6 +166,9 @@
     <string name="JSON_CONTENT_TYPE_MSG">application/x-www-form-urlencoded</string>
     <string name="JSON_AUTH">Authorization</string>
     <string name="JSON_AUTH_MSG">Bearer</string>
+    <string name="JSON_RECOVERY">recovery</string>
+    <string name="JSON_RECOVERY_STATUS">status</string>
+    <string name="JSON_RECOVERY_DL">dynamicLink</string>
 
     <!-- JWT -->
     <string name="JWT_AUDIENCE_ANDROID">android</string>
@@ -181,6 +185,7 @@
     <string name="TIMEOUT_ERROR">TIMEOUT_ERROR</string>
     <string name="NETWORK_ERROR">NETWORK_ERROR</string>
     <string name="TIMEOUT_ERROR_MSG_VM">Servidor no responde, intente más tarde</string>
+    <string name="SERVER_ERROR_MSG_VM">¡Ups! Ha ocurrido un problema</string>
     <string name="NETWORK_ERROR_MSG_VM">No tienes conexión a Internet</string>
     <string name="AUTHENTICATION_ERROR">AUTHENTICATION_ERROR:</string>
     <string name="AUTHENTICATION_ERROR_MSG_VM">Acceso no autorizado</string>
@@ -195,6 +200,7 @@
     <string name="SERVER_ERROR_REGISTRO_MSG_2">Email does not exist</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE">VOLLEY_ERR_INV_UPDATE</string>
+    <string name="TAG_VOLLEY_ERR_INV_RECUPERAR">VOLLEY_ERR_INV_RECUPERAR</string>
     <string name="TAG_VOLLEY_ERR_ENTREVISTADO">VOLLEY_ERR_ENTREVISTADO</string>
     <string name="TAG_VOLLEY_ERR_ACCION">VOLLEY_ERR_ACCION</string>
     <string name="TAG_VOLLEY_ERR_CIUDAD">VOLLEY_ERR_CIUDAD</string>
@@ -230,6 +236,7 @@
     <string name="VIEW_MODEL_MSG_RESPONSE_ERROR">MSG_ERROR:</string>
     <string name="MSG_INVEST_LOGIN">¡Bienvenido!</string>
     <string name="TAG_VM_INVES_LOGIN">VM_INVEST_LOGIN</string>
+    <string name="TAG_VM_INVES_RECUPERAR">VM_INVEST_RECUPERAR</string>
     <string name="TAG_TAB_SELECTED">TAB_SELECTED</string>
     <string name="TAG_TOKEN_LOGOUT">LOGOUT</string>
     <string name="TOKEN_LOGOUT_MSG">BORRANDO TOKEN:</string>
@@ -286,6 +293,8 @@
     <string name="TAG_VIEW_MODEL_ELIMINAR_EVENTO">VM_ELIMINAR_EVENTO</string>
     <string name="MSG_DELETE_ENTREVISTADO">¡Entrevistado eliminado!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO">VM_ELIMINAR_ENTREVISTADO</string>
+    <string name="RECOVERY_MSG_VM">email sended</string>
+    <string name="RECOVERY_MSG_VM_RESPONSE">Email de recuperación enviado</string>
 
     <!-- INTENT KEY -->
     <string name="INTENT_KEY_MSG_LOGIN">msg_login</string>

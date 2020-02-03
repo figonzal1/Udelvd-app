@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".RecuperacionActivity"></activity>
+        <activity android:name=".vistas.activities.RecuperacionActivity"></activity>
         <!-- Main -->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>

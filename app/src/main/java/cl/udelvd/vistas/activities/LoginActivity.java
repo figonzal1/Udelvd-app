@@ -55,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         iniciarViewModels();
 
         configurarlinkRegistro();
+
+        configurarlinkRecuperar();
     }
 
     /**
@@ -185,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
 
-                Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
 
@@ -261,6 +263,26 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         spans.setSpan(clickSpan, 19, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    /**
+     * Funcion encargada de manejar la logica del link azul "Registro"
+     */
+    private void configurarlinkRecuperar() {
+        //Logica de textview de registro
+        TextView tv_recuperacion = findViewById(R.id.tv_recuperar);
+        tv_recuperacion.setMovementMethod(LinkMovementMethod.getInstance());
+        Spannable spans = (Spannable) tv_recuperacion.getText();
+        ClickableSpan clickSpan = new ClickableSpan() {
+
+            @Override
+            public void onClick(@NonNull View widget) {
+
+                Intent intent = new Intent(LoginActivity.this, RecuperacionActivity.class);
+                startActivity(intent);
+            }
+        };
+        spans.setSpan(clickSpan, 0, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     @Override

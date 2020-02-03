@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -43,12 +44,17 @@ public class InvestigadorRepositorio {
     private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
 
+    private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
+    //Recuperacion Cuenta
+    private SingleLiveEvent<String> responseMsgRecuperacion = new SingleLiveEvent<>();
+
     //PROGRESS DIALOG
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
     private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
     private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
+    private SingleLiveEvent<String> responseMsgErrorRecuperacion = new SingleLiveEvent<>();
 
 
     private InvestigadorRepositorio(Application application) {
@@ -90,6 +96,14 @@ public class InvestigadorRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgErrorActualizacion() {
         return responseMsgErrorActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgRecuperacion() {
+        return responseMsgRecuperacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorRecuperacion() {
+        return responseMsgErrorRecuperacion;
     }
 
     public MutableLiveData<Boolean> getIsLoading() {
@@ -587,5 +601,118 @@ public class InvestigadorRepositorio {
 
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_ACTUALIZACION);
+    }
+
+    public void recuperarCuenta(Investigador investigador) {
+        sendGetRecuperar(investigador);
+    }
+
+    private void sendGetRecuperar(Investigador investigador) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                //Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonRecovery = jsonObject.getJSONObject(application.getString(R.string.JSON_RECOVERY));
+
+                    String status = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_STATUS));
+                    String dybamicLink = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_DL));
+
+                    if (status.equals(application.getString(R.string.RECOVERY_MSG_VM))) {
+
+                        isLoading.postValue(false);
+
+                        responseMsgRecuperacion.postValue(application.getString(R.string.RECOVERY_MSG_VM_RESPONSE));
+
+                        Log.d("DYNAMIC_LINK", dybamicLink);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorRecuperacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorRecuperacion.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si response
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorRecuperacion.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.SERVER_ERROR) + errorObject);
+
+                        try {
+                            assert errorObject != null;
+                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
+                                responseMsgErrorRecuperacion.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
+                            } else {
+                                responseMsgErrorRecuperacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+        };
+
+        String url = String.format(application.getString(R.string.URL_GET_RECUPERAR_INVESTIGADOR), application.getString(R.string.HEROKU_DOMAIN), investigador.getEmail());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RECUPERACION);
+
+
     }
 }

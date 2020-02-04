@@ -22,10 +22,11 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.RecuperacionViewModel;
 
-public class RecuperacionActivity extends AppCompatActivity {
+public class RecuperacionActivity extends AppCompatActivity implements SnackbarInterface {
 
     private TextInputLayout ilEmail;
     private TextInputEditText etEmail;
@@ -93,7 +94,7 @@ public class RecuperacionActivity extends AppCompatActivity {
                 assert msg_recovery != null;
                 if (msg_recovery.equals(getString(R.string.RECOVERY_MSG_VM_RESPONSE))) {
 
-                    showSnackbar(findViewById(R.id.recuperar_investigador), Snackbar.LENGTH_LONG, msg_recovery);
+                    showSnackbar(findViewById(R.id.recuperar_investigador), Snackbar.LENGTH_LONG, msg_recovery, null);
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
                     String sharedEmail = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
@@ -118,7 +119,7 @@ public class RecuperacionActivity extends AppCompatActivity {
 
                 Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
-                showSnackbar(findViewById(R.id.recuperar_investigador), Snackbar.LENGTH_INDEFINITE, s);
+                showSnackbar(findViewById(R.id.recuperar_investigador), Snackbar.LENGTH_INDEFINITE, s, null);
             }
         });
     }
@@ -160,14 +161,8 @@ public class RecuperacionActivity extends AppCompatActivity {
         return contador_errores == 0;
     }
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     */
-    private void showSnackbar(View v, int duration, String titulo) {
-
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
         Snackbar snackbar = Snackbar.make(v, titulo, duration);
         snackbar.show();
     }

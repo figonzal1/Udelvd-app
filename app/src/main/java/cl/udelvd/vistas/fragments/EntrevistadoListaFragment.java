@@ -30,13 +30,14 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.EntrevistadoAdapter;
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.viewmodel.EntrevistadoListaViewModel;
 import cl.udelvd.vistas.activities.NuevoEntrevistadoActivity;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class EntrevistadoListaFragment extends Fragment {
+public class EntrevistadoListaFragment extends Fragment implements SnackbarInterface {
 
     private static final int REQUEST_CODE_NUEVA_ENTREVISTADO = 200;
     private RecyclerView rv;
@@ -47,6 +48,7 @@ public class EntrevistadoListaFragment extends Fragment {
     private List<Entrevistado> entrevistadoList;
     private View v;
     private static final int REQUEST_CODE_EDITAR_ENTREVISTADO = 300;
+    private boolean isSnackBarShow = false;
 
     public EntrevistadoListaFragment() {
         // Required empty public constructor
@@ -214,10 +216,9 @@ public class EntrevistadoListaFragment extends Fragment {
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, getString(R.string.SNACKBAR_REINTENTAR));
-                } else {
-                    showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, null);
+                if (!isSnackBarShow) {
+                    showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
 
             }
@@ -228,7 +229,7 @@ public class EntrevistadoListaFragment extends Fragment {
             public void onChanged(String s) {
 
                 if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
-                    showSnackbar(v.findViewById(R.id.entrevistados_lista), s, Snackbar.LENGTH_LONG, null);
+                    showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, s, null);
                     entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
             }
@@ -241,40 +242,12 @@ public class EntrevistadoListaFragment extends Fragment {
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, getString(R.string.SNACKBAR_REINTENTAR));
-                } else {
-                    showSnackbar(v, s, Snackbar.LENGTH_INDEFINITE, null);
+                if (!isSnackBarShow) {
+                    showSnackbar(v, Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
             }
         });
-    }
-
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     * @param accion Boton de accion del snackbar
-     */
-    private void showSnackbar(View v, String titulo, int snackbar_largo, String accion) {
-
-        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, snackbar_largo);
-
-        if (accion != null) {
-            snackbar.setAction(accion, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    //Refresh listado de usuarios
-                    entrevistadoListaViewModel.refreshListaEntrevistados();
-
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-
-        snackbar.show();
     }
 
     @Override
@@ -308,7 +281,7 @@ public class EntrevistadoListaFragment extends Fragment {
                 String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
 
                 if (msg_registro != null) {
-                    showSnackbar(v.findViewById(R.id.entrevistados_lista), msg_registro, Snackbar.LENGTH_LONG, null);
+                    showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, msg_registro, null);
                     entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
             }
@@ -322,10 +295,31 @@ public class EntrevistadoListaFragment extends Fragment {
                 String msg_actualizacion = bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
 
                 if (msg_actualizacion != null) {
-                    showSnackbar(v.findViewById(R.id.entrevistados_lista), msg_actualizacion, Snackbar.LENGTH_LONG, null);
+                    showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
                     entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
             }
         }
+    }
+
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
+        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, duration);
+
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //Refresh listado de usuarios
+                    entrevistadoListaViewModel.refreshListaEntrevistados();
+
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
+        snackbar.show();
+        isSnackBarShow = false;
     }
 }

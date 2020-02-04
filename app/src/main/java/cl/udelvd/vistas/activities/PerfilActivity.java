@@ -19,9 +19,10 @@ import com.google.android.material.snackbar.Snackbar;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 
-public class PerfilActivity extends AppCompatActivity {
+public class PerfilActivity extends AppCompatActivity implements SnackbarInterface {
 
     private TextView tv_nombre;
     private TextView tv_activado;
@@ -140,7 +141,7 @@ public class PerfilActivity extends AppCompatActivity {
 
                 assert bundle != null;
 
-                showSnackbar(findViewById(R.id.perfil_investigador), bundle.getString("msg_update"));
+                showSnackbar(findViewById(R.id.perfil_investigador), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION)), null);
 
                 cargarDatosInvestigador();
 
@@ -160,15 +161,9 @@ public class PerfilActivity extends AppCompatActivity {
         finish();
     }
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     */
-    private void showSnackbar(View v, String titulo) {
-
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_LONG);
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
+        Snackbar snackbar = Snackbar.make(v, titulo, duration);
         snackbar.show();
     }
 }

@@ -245,7 +245,6 @@
     <string name="TAG_TAB_SELECTED">TAB_SELECTED</string>
     <string name="TAG_TOKEN_LOGOUT">LOGOUT</string>
     <string name="TOKEN_LOGOUT_MSG">BORRANDO TOKEN:</string>
-    <string name="SNACKBAR_REINTENTAR">Reintentar</string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTADO">VM_LISTA_ENTREVISTADO</string>
     <string name="VIEW_MODEL_LISTA_ENTREVISTADO_MSG">Listado cargado</string>
     <string name="TAG_VIEW_MODEL_ESTADO_CIVIL">VM_ESTADO_CIVIL</string>
@@ -340,6 +339,11 @@
     <string name="MENU_ENTREVISTA_EDITAR">Editar entrevista</string>
     <string name="MENU_ENTREVISTA_ELIMINAR">Eliminar entrevista</string>
     <string name="MENU_PERFIL_EDITAR">Editar perfil</string>
+
+    <!-- SNACLBAR -->
+    <string name="SNACKBAR_REINTENTAR">Reintentar</string>
+    <string name="SNACKBAR_SOLICITAR_RECUPERACION">Solicitar nuevo</string>
+    <string name="SNACKBAR_INICIAR_SESION">Iniciar sesión</string>
 
 
 </resources>

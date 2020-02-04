@@ -35,10 +35,11 @@ import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.repositorios.EventoRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.NuevoEventoViewModel;
 
-public class NuevoEventoActivity extends AppCompatActivity {
+public class NuevoEventoActivity extends AppCompatActivity implements SnackbarInterface {
 
     private TextInputLayout ilAcciones;
     private TextInputLayout ilHoraEvento;
@@ -211,13 +212,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.formulario_nuevo_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -284,13 +280,8 @@ public class NuevoEventoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.formulario_nuevo_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -397,29 +388,19 @@ public class NuevoEventoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_evento), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.formulario_nuevo_evento), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     * @param accion Boton de accion del snackbar
-     */
-    private void showSnackbar(View v, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
+
+        Snackbar snackbar = Snackbar.make(v, titulo, duration);
 
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {

@@ -35,10 +35,11 @@ import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.repositorios.EventoRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EditarEventoViewModel;
 
-public class EditarEventoActivity extends AppCompatActivity {
+public class EditarEventoActivity extends AppCompatActivity implements SnackbarInterface {
 
     private static final int SPEECH_REQUEST_CODE = 200;
     private TextInputLayout ilAcciones;
@@ -220,13 +221,8 @@ public class EditarEventoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -299,13 +295,8 @@ public class EditarEventoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -412,13 +403,8 @@ public class EditarEventoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -451,13 +437,8 @@ public class EditarEventoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -482,16 +463,9 @@ public class EditarEventoActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     * @param accion Boton de accion del snackbar
-     */
-    private void showSnackbar(View v, String titulo, String accion) {
-
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
+        Snackbar snackbar = Snackbar.make(v, titulo, duration);
 
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {

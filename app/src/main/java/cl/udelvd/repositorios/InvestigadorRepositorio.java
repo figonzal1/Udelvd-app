@@ -45,8 +45,10 @@ public class InvestigadorRepositorio {
     private final SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
 
     private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
+    private static final String TAG_INVESTIGADOR_RESET = "ResetearPassword";
     //Recuperacion Cuenta
-    private SingleLiveEvent<String> responseMsgRecuperacion = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorRecuperacion = new SingleLiveEvent<>();
+    private SingleLiveEvent<Map<String, String>> responseMsgRecuperacion = new SingleLiveEvent<>();
 
     //PROGRESS DIALOG
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
@@ -54,7 +56,9 @@ public class InvestigadorRepositorio {
     private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
     private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
     private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
-    private SingleLiveEvent<String> responseMsgErrorRecuperacion = new SingleLiveEvent<>();
+    //Resetear password
+    private SingleLiveEvent<String> responseMsgReset = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorReset = new SingleLiveEvent<>();
 
 
     private InvestigadorRepositorio(Application application) {
@@ -72,42 +76,6 @@ public class InvestigadorRepositorio {
             instancia = new InvestigadorRepositorio(application);
         }
         return instancia;
-    }
-
-    public SingleLiveEvent<Map<String, Object>> getResponseMsgLogin() {
-        return responseMsgLogin;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgErrorLogin() {
-        return responseMsgErrorLogin;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgRegistro() {
-        return responseMsgRegistro;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgErrorRegistro() {
-        return responseMsgErrorRegistro;
-    }
-
-    public SingleLiveEvent<Map<String, Object>> getResponseMsgActualizacion() {
-        return responseMsgActualizacion;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgErrorActualizacion() {
-        return responseMsgErrorActualizacion;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgRecuperacion() {
-        return responseMsgRecuperacion;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgErrorRecuperacion() {
-        return responseMsgErrorRecuperacion;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
     }
 
     /**
@@ -604,10 +572,10 @@ public class InvestigadorRepositorio {
     }
 
     public void recuperarCuenta(Investigador investigador) {
-        sendGetRecuperar(investigador);
+        sendPostRecuperar(investigador);
     }
 
-    private void sendGetRecuperar(Investigador investigador) {
+    private void sendPostRecuperar(Investigador investigador) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -618,6 +586,10 @@ public class InvestigadorRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                    String email = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES)).getString(application.getString(R.string.KEY_INVES_EMAIL));
+
                     JSONObject jsonRecovery = jsonObject.getJSONObject(application.getString(R.string.JSON_RECOVERY));
 
                     String status = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_STATUS));
@@ -627,9 +599,13 @@ public class InvestigadorRepositorio {
 
                         isLoading.postValue(false);
 
-                        responseMsgRecuperacion.postValue(application.getString(R.string.RECOVERY_MSG_VM_RESPONSE));
+                        Map<String, String> map = new HashMap<>();
 
-                        Log.d("DYNAMIC_LINK", dybamicLink);
+                        map.put(application.getString(R.string.KEY_INVES_EMAIL), email);
+                        map.put(application.getString(R.string.MSG_RECOVERY), application.getString(R.string.RECOVERY_MSG_VM_RESPONSE));
+                        responseMsgRecuperacion.postValue(map);
+
+                        Log.d(application.getString(R.string.TAG_DYNAMIC_LINK_JSON), dybamicLink);
                     }
 
 
@@ -714,5 +690,155 @@ public class InvestigadorRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RECUPERACION);
 
 
+    }
+
+    public void resetearPassword(String email, String password) {
+        sendPostResetPass(email, password);
+    }
+
+    private void sendPostResetPass(final String email, final String password) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonReset = jsonObject.getJSONObject(application.getString(R.string.JSON_RESET));
+
+                    String status = jsonReset.getString(application.getString(R.string.JSON_RESET_STATUS));
+
+                    if (status.equals(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM))) {
+
+                        isLoading.postValue(false);
+
+                        responseMsgReset.postValue(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM_RESULT));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorReset.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorReset.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si response
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorReset.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.SERVER_ERROR) + errorObject);
+                        responseMsgErrorReset.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(application.getString(R.string.URL_PUT_RESETEAR_PASSWORD), application.getString(R.string.HEROKU_DOMAIN));
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.KEY_INVES_PASSWORD), password);
+                params.put(application.getString(R.string.KEY_INVES_EMAIL), email);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RESET);
+    }
+
+
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<Map<String, Object>> getResponseMsgLogin() {
+        return responseMsgLogin;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorLogin() {
+        return responseMsgErrorLogin;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgRegistro() {
+        return responseMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorRegistro() {
+        return responseMsgErrorRegistro;
+    }
+
+    public SingleLiveEvent<Map<String, Object>> getResponseMsgActualizacion() {
+        return responseMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorActualizacion() {
+        return responseMsgErrorActualizacion;
+    }
+
+    public SingleLiveEvent<Map<String, String>> getResponseMsgRecuperacion() {
+        return responseMsgRecuperacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorRecuperacion() {
+        return responseMsgErrorRecuperacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgReset() {
+        return responseMsgReset;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorReset() {
+        return responseMsgErrorReset;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

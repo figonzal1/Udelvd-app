@@ -3,6 +3,7 @@ package cl.udelvd.vistas.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -20,9 +21,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import java.util.Map;
 import java.util.Objects;
@@ -57,6 +62,43 @@ public class LoginActivity extends AppCompatActivity {
         configurarlinkRegistro();
 
         configurarlinkRecuperar();
+
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        // Get deep link from result (may be null if no link is found)
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+
+                            Log.d(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), String.valueOf(deepLink));
+
+
+                            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+
+                            boolean isReset = sharedPreferences.getBoolean(getString(R.string.SHARED_PREF_RESET_PASS), false);
+
+                            if (!isReset) {
+
+                                Intent intent = new Intent(LoginActivity.this, ResetearPassActivity.class);
+                                startActivity(intent);
+
+                                finish();
+                            } else {
+                                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_INDEFINITE, getString(R.string.DYNAMIC_LINK_INVALIDO), "Solicitar nuevo");
+                            }
+                        }
+
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), "getDynamicLink:onFailure", e);
+                    }
+                });
     }
 
     /**
@@ -171,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
                         //Toast.makeText(getApplicationContext(), msg_login, Toast.LENGTH_LONG).show();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("msg_login", msg_login);
+                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_LOGIN), msg_login);
                         startActivity(intent);
                         finish();
                     }
@@ -191,11 +233,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (!isSnackBarShow) {
 
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.login_investigador), s);
-                    } else {
-                        showSnackbar(findViewById(R.id.login_investigador), s);
-                    }
+                    showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_LONG, s, null);
                 }
             }
         });
@@ -296,7 +334,7 @@ public class LoginActivity extends AppCompatActivity {
                 Bundle bundle = data.getExtras();
 
                 assert bundle != null;
-                showSnackbar(findViewById(R.id.login_investigador), bundle.getString("msg_registro"));
+                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO)), null);
             }
         }
 
@@ -305,13 +343,21 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
      */
-    private void showSnackbar(View v, String titulo) {
+    private void showSnackbar(View v, int largo_snackbar, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(v, titulo, largo_snackbar);
+
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(LoginActivity.this, RecuperacionActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
         snackbar.show();
         isSnackBarShow = false;
     }

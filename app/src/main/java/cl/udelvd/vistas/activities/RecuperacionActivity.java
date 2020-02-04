@@ -1,5 +1,7 @@
 package cl.udelvd.vistas.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -76,15 +79,33 @@ public class RecuperacionActivity extends AppCompatActivity {
             }
         });
 
-        recuperacionViewModel.mostrarMsgRecuperacon().observe(this, new Observer<String>() {
+        recuperacionViewModel.mostrarMsgRecuperacion().observe(this, new Observer<Map<String, String>>() {
             @Override
-            public void onChanged(String s) {
-                Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            public void onChanged(Map<String, String> stringStringMap) {
+
+                String email = stringStringMap.get(getString(R.string.KEY_INVES_EMAIL));
+                String msg_recovery = stringStringMap.get(getString(R.string.MSG_RECOVERY));
+
+                Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), stringStringMap.toString()));
 
                 progressBar.setVisibility(View.GONE);
 
-                if (s.equals(getString(R.string.RECOVERY_MSG_VM_RESPONSE))) {
-                    showSnackbar(findViewById(R.id.recuperar_investigador), Snackbar.LENGTH_LONG, s);
+                assert msg_recovery != null;
+                if (msg_recovery.equals(getString(R.string.RECOVERY_MSG_VM_RESPONSE))) {
+
+                    showSnackbar(findViewById(R.id.recuperar_investigador), Snackbar.LENGTH_LONG, msg_recovery);
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+                    String sharedEmail = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
+
+                    if (!sharedEmail.equals(email) || sharedEmail.isEmpty()) {
+
+                        sharedPreferences.edit().putString(getString(R.string.SHARED_PREF_INVES_EMAIL), email).apply();
+
+                        Log.d("SHARED_EMAIL", "guardando email desde recuperacion en shared pref");
+                    }
+
+                    sharedPreferences.edit().putBoolean(getString(R.string.SHARED_PREF_RESET_PASS), false).apply();
                 }
             }
         });

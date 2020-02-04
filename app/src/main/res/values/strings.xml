@@ -7,6 +7,7 @@
     <string name="URL_GET_INVESTIGADORES">%sinvestigadores</string>
     <string name="URL_LOGIN_INVESTIGADORES">%sinvestigadores/login</string>
     <string name="URL_GET_RECUPERAR_INVESTIGADOR">%sinvestigadores/recuperar/%s</string>
+    <string name="URL_PUT_RESETEAR_PASSWORD">%sinvestigadores/resetear</string>
     <string name="URL_PUT_INVESTIGADORES">%sinvestigadores/%d</string>
     <string name="URL_POST_ENTREVISTADOS">%sentrevistados</string>
     <string name="URL_GET_ENTREVISTADOS">%sentrevistados/pagina/%d</string>
@@ -58,6 +59,7 @@
     <string name="SHARED_PREF_INVES_CREATE_TIME">create_time_investigador</string>
     <string name="SHARED_PREF_INVES_PASSWORD">password_investigador</string>
     <string name="SHARED_PREF_TOKEN_LOGIN">TOKEN_LOGIN</string>
+    <string name="SHARED_PREF_RESET_PASS">reset_password</string>
 
     <!-- Formatos -->
     <string name="FORMATO_FECHA">yyyy-mm-dd</string>
@@ -169,6 +171,8 @@
     <string name="JSON_RECOVERY">recovery</string>
     <string name="JSON_RECOVERY_STATUS">status</string>
     <string name="JSON_RECOVERY_DL">dynamicLink</string>
+    <string name="JSON_RESET">reset</string>
+    <string name="JSON_RESET_STATUS">status</string>
 
     <!-- JWT -->
     <string name="JWT_AUDIENCE_ANDROID">android</string>
@@ -200,6 +204,7 @@
     <string name="SERVER_ERROR_REGISTRO_MSG_2">Email does not exist</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE">VOLLEY_ERR_INV_UPDATE</string>
+    <string name="TAG_VOLLEY_ERR_INV_RESET">VOLLEY_ERR_INV_RESET</string>
     <string name="TAG_VOLLEY_ERR_INV_RECUPERAR">VOLLEY_ERR_INV_RECUPERAR</string>
     <string name="TAG_VOLLEY_ERR_ENTREVISTADO">VOLLEY_ERR_ENTREVISTADO</string>
     <string name="TAG_VOLLEY_ERR_ACCION">VOLLEY_ERR_ACCION</string>
@@ -295,6 +300,12 @@
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO">VM_ELIMINAR_ENTREVISTADO</string>
     <string name="RECOVERY_MSG_VM">email sended</string>
     <string name="RECOVERY_MSG_VM_RESPONSE">Email de recuperación enviado</string>
+    <string name="MSG_RECOVERY">msg_recovery</string>
+    <string name="MSG_PASSWORD_RESETEADA_VM">password reseted</string>
+    <string name="MSG_PASSWORD_RESETEADA_VM_RESULT">¡Contraseña actualizada!</string>
+    <string name="TAG_DYNAMIC_LINK_FIREBASE">DYNAMIC_LINK_FIREBASE</string>
+    <string name="TAG_DYNAMIC_LINK_JSON">DYNAMIC_LINK_JSON</string>
+    <string name="DYNAMIC_LINK_INVALIDO">Link de recuperacion ya no es válido</string>
 
     <!-- INTENT KEY -->
     <string name="INTENT_KEY_MSG_LOGIN">msg_login</string>

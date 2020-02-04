@@ -6,16 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import java.util.Map;
-
 import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utilidades.SingleLiveEvent;
 
-public class RecuperacionViewModel extends AndroidViewModel {
+public class ResetearPassViewModel extends AndroidViewModel {
 
     private InvestigadorRepositorio investigadorRepositorio;
 
-    public RecuperacionViewModel(@NonNull Application application) {
+    public ResetearPassViewModel(@NonNull Application application) {
         super(application);
     }
 
@@ -24,14 +22,14 @@ public class RecuperacionViewModel extends AndroidViewModel {
         return investigadorRepositorio.getIsLoading();
     }
 
-    public SingleLiveEvent<String> mostrarMsgErrorRecuperacion() {
+    public SingleLiveEvent<String> mostrarMsgErrorReseteo() {
         investigadorRepositorio = InvestigadorRepositorio.getInstance(getApplication());
-        return investigadorRepositorio.getResponseMsgErrorRecuperacion();
+        return investigadorRepositorio.getResponseMsgErrorReset();
 
     }
 
-    public SingleLiveEvent<Map<String, String>> mostrarMsgRecuperacion() {
+    public SingleLiveEvent<String> mostrarMsgReseteo() {
         investigadorRepositorio = InvestigadorRepositorio.getInstance(getApplication());
-        return investigadorRepositorio.getResponseMsgRecuperacion();
+        return investigadorRepositorio.getResponseMsgReset();
     }
 }

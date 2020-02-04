@@ -30,10 +30,11 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EditarPerfilViewModel;
 
-public class EditarPerfilActivity extends AppCompatActivity {
+public class EditarPerfilActivity extends AppCompatActivity implements SnackbarInterface {
 
     private static final int EDIT_PROFILE_CODE = 201;
 
@@ -158,7 +159,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                             //Cerrar formulario
                             //Setear codigo OK
                             Intent intent = getIntent();
-                            intent.putExtra("msg_update", msg_update);
+                            intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), msg_update);
                             setResult(RESULT_OK, intent);
                             finish();
                         }
@@ -175,12 +176,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-
-                    if (s.equals(getString(R.string.NETWORK_ERROR_MSG_VM)) || s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.editar_perfil), Snackbar.LENGTH_INDEFINITE, s);
-                    } else {
-                        showSnackbar(findViewById(R.id.editar_perfil), Snackbar.LENGTH_LONG, s);
-                    }
+                    showSnackbar(findViewById(R.id.editar_perfil), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -227,15 +224,10 @@ public class EditarPerfilActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     */
-    private void showSnackbar(View v, int tipo_snackbar, String titulo) {
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, tipo_snackbar);
+        Snackbar snackbar = Snackbar.make(v, titulo, duration);
         snackbar.show();
     }
 

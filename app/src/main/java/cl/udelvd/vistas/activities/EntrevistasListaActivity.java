@@ -34,11 +34,12 @@ import cl.udelvd.adaptadores.EntrevistaAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.repositorios.EntrevistaRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EntrevistasListaViewModel;
 import cl.udelvd.vistas.fragments.DeleteDialogListener;
 
-public class EntrevistasListaActivity extends AppCompatActivity implements DeleteDialogListener {
+public class EntrevistasListaActivity extends AppCompatActivity implements DeleteDialogListener, SnackbarInterface {
 
     private static final int REQUEST_CODE_CREAR_ENTREVISTA = 300;
     private static final int REQUEST_CODE_EDITAR_ENTREVISTA = 301;
@@ -102,8 +103,6 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             entrevistado.setId(id_entrevistado);
             entrevistado.setNombre(nombre_entrevistado);
             entrevistado.setApellido(apellido_entrevistado);
-        } else {
-            Log.d("BUNDLE_STATUS", "bundle vacio");
         }
     }
 
@@ -200,13 +199,8 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -233,13 +227,8 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -285,14 +274,8 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
         return map;
     }
 
-    /**
-     * Funcion para mostrar el snackbar en la actividad
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     * @param accion Boton de accion del snackbar
-     */
-    private void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
+    @Override
+    public void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
 
         Snackbar snackbar = Snackbar.make(v, titulo, tipo_snackbar);
         if (accion != null) {
@@ -314,6 +297,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             });
         }
         snackbar.show();
+        isSnackBarShow = false;
     }
 
     @Override

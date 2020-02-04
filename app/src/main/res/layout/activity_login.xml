@@ -63,7 +63,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <ProgressBar
                     android:id="@+id/progress_horizontal_login"

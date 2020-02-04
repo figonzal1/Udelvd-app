@@ -43,10 +43,11 @@ import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.repositorios.EntrevistadoRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.NuevoEntrevistadoViewModel;
 
-public class NuevoEntrevistadoActivity extends AppCompatActivity {
+public class NuevoEntrevistadoActivity extends AppCompatActivity implements SnackbarInterface {
 
     private TextInputLayout ilNombre;
     private TextInputLayout ilApellido;
@@ -233,14 +234,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -296,13 +291,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
 
                 if (!isSnackBarShow) {
 
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -355,13 +345,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             public void onChanged(String s) {
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
-                        isSnackBarShow = true;
-                    }
+
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -411,13 +397,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             public void onChanged(String s) {
 
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
-                        isSnackBarShow = true;
-                    }
+
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -468,13 +450,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
-                        isSnackBarShow = true;
-                    }
+
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -523,13 +501,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
                 if (!isSnackBarShow) {
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, getString(R.string.SNACKBAR_REINTENTAR));
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), s, null);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -699,16 +672,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity {
         return contador_errores == 0;
     }
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     * @param accion Boton de accion del snackbar
-     */
-    private void showSnackbar(View v, String titulo, String accion) {
-
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
+        Snackbar snackbar = Snackbar.make(v, titulo, duration);
 
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {

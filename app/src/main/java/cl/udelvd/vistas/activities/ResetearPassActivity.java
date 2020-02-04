@@ -22,9 +22,10 @@ import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.viewmodel.ResetearPassViewModel;
 
-public class ResetearPassActivity extends AppCompatActivity {
+public class ResetearPassActivity extends AppCompatActivity implements SnackbarInterface {
 
     private TextInputLayout ilPassword;
     private TextInputLayout ilConfirmarPass;
@@ -50,8 +51,6 @@ public class ResetearPassActivity extends AppCompatActivity {
         iniciarViewModels();
 
         btnResetPass();
-
-
     }
 
     private void btnResetPass() {
@@ -141,7 +140,7 @@ public class ResetearPassActivity extends AppCompatActivity {
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
                     sharedPreferences.edit().putBoolean(getString(R.string.SHARED_PREF_RESET_PASS), true).apply();
-                    showSnackbar(findViewById(R.id.resetear_pass), s, "Iniciar sesión");
+                    showSnackbar(findViewById(R.id.resetear_pass), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_INICIAR_SESION));
                 }
             }
         });
@@ -153,33 +152,10 @@ public class ResetearPassActivity extends AppCompatActivity {
 
                 Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
-                showSnackbar(findViewById(R.id.resetear_pass), s, null);
+                showSnackbar(findViewById(R.id.resetear_pass), Snackbar.LENGTH_LONG, s, null);
             }
         });
 
-    }
-
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     */
-    private void showSnackbar(View v, String titulo, String accion) {
-
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_INDEFINITE);
-
-        if (accion != null) {
-            snackbar.setAction(accion, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ResetearPassActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        }
-        snackbar.show();
     }
 
     private void instanciarRecursosInterfaz() {
@@ -195,5 +171,22 @@ public class ResetearPassActivity extends AppCompatActivity {
         btn_resetear_pass = findViewById(R.id.btn_resetear_pass);
 
         resetearPassViewModel = ViewModelProviders.of(this).get(ResetearPassViewModel.class);
+    }
+
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
+        Snackbar snackbar = Snackbar.make(v, titulo, duration);
+
+        if (accion != null) {
+            snackbar.setAction(accion, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ResetearPassActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+        snackbar.show();
     }
 }

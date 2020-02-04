@@ -35,10 +35,11 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.LoginViewModel;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements SnackbarInterface {
 
     private static final int REGISTRAR_INVESTIGADOR_CODE = 200;
     private TextInputLayout ilEmail;
@@ -87,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 finish();
                             } else {
-                                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_INDEFINITE, getString(R.string.DYNAMIC_LINK_INVALIDO), "Solicitar nuevo");
+                                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_INDEFINITE, getString(R.string.DYNAMIC_LINK_INVALIDO), getString(R.string.SNACKBAR_SOLICITAR_RECUPERACION));
                             }
                         }
 
@@ -234,6 +235,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (!isSnackBarShow) {
 
                     showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
             }
         });
@@ -341,10 +343,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     */
-    private void showSnackbar(View v, int largo_snackbar, String titulo, String accion) {
+    @Override
+    public void showSnackbar(View v, int largo_snackbar, String titulo, String accion) {
 
         Snackbar snackbar = Snackbar.make(v, titulo, largo_snackbar);
 

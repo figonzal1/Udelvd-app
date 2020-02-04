@@ -28,10 +28,11 @@ import cl.udelvd.adaptadores.TipoEntrevistaAdapter;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.TipoEntrevista;
 import cl.udelvd.repositorios.EntrevistaRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.NuevaEntrevistaViewModel;
 
-public class NuevaEntrevistaActivity extends AppCompatActivity {
+public class NuevaEntrevistaActivity extends AppCompatActivity implements SnackbarInterface {
 
 
     private ProgressBar progressBar;
@@ -48,6 +49,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
     private TipoEntrevistaAdapter tipoEntrevistaAdapter;
 
     private NuevaEntrevistaViewModel nuevaEntrevistaViewModel;
+    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,8 +148,9 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.GONE);
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                if (!isSnackBarShow) {
                     showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -208,10 +211,9 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.GONE);
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else {
+                if (!isSnackBarShow) {
                     showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -262,14 +264,8 @@ public class NuevaEntrevistaActivity extends AppCompatActivity {
         return contador_errores == 0;
     }
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     * @param accion Boton de accion del snackbar
-     */
-    private void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
+    @Override
+    public void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
 
         Snackbar snackbar = Snackbar.make(v, titulo, tipo_snackbar);
         if (accion != null) {

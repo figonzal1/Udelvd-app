@@ -685,8 +685,10 @@ public class InvestigadorRepositorio {
         };
 
         isLoading.postValue(true);
-
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RECUPERACION);
 
 

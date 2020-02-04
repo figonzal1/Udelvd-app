@@ -33,13 +33,14 @@ import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.repositorios.EventoRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EventosListaViewModel;
 import cl.udelvd.vistas.fragments.DeleteDialogListener;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
-public class EventosActivity extends AppCompatActivity implements DeleteDialogListener {
+public class EventosActivity extends AppCompatActivity implements DeleteDialogListener, SnackbarInterface {
 
 
     private String n_normales;
@@ -65,6 +66,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
     private TabLayout tabLayout;
     private static final int REQUEST_CODE_NUEVO_EVENTO = 200;
     private static final int REQUEST_CODE_EDITAR_EVENTO = 300;
+    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,10 +201,9 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
                 progressBar.setVisibility(View.GONE);
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
+                if (!isSnackBarShow) {
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else {
-                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, null);
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
@@ -228,10 +229,9 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
                 progressBar.setVisibility(View.GONE);
 
-                if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                } else {
-                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, null);
+                if (!isSnackBarShow) {
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -283,14 +283,8 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Funcion para mostrar el snackbar en la actividad
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     * @param accion Boton de accion del snackbar
-     */
-    private void showSnackbar(View v, int snack_length, String titulo, String accion) {
+    @Override
+    public void showSnackbar(View v, int snack_length, String titulo, String accion) {
 
         Snackbar snackbar = Snackbar.make(v, titulo, snack_length);
 
@@ -308,6 +302,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             });
         }
         snackbar.show();
+        isSnackBarShow = false;
     }
 
     @Override

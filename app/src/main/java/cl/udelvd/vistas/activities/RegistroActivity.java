@@ -21,10 +21,11 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
+import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.RegistroViewModel;
 
-public class RegistroActivity extends AppCompatActivity {
+public class RegistroActivity extends AppCompatActivity implements SnackbarInterface {
 
     private TextInputLayout ilNombre;
     private TextInputLayout ilApellido;
@@ -183,14 +184,8 @@ public class RegistroActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-
-                    if (s.equals(getString(R.string.TIMEOUT_ERROR_MSG_VM)) || s.equals(getString(R.string.NETWORK_ERROR_MSG_VM))) {
-                        showSnackbar(findViewById(R.id.registro_investigador), s);
-                        isSnackBarShow = true;
-                    } else {
-                        showSnackbar(findViewById(R.id.registro_investigador), s);
-                        isSnackBarShow = true;
-                    }
+                    showSnackbar(findViewById(R.id.registro_investigador), Snackbar.LENGTH_LONG, s, null);
+                    isSnackBarShow = true;
                 }
 
                 Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -282,14 +277,9 @@ public class RegistroActivity extends AppCompatActivity {
         return contador_errores == 0;
     }
 
-    /**
-     * Funcion para mostrar el snackbar en fragment
-     *
-     * @param v      View donde se mostrara el snackbar
-     * @param titulo Titulo del snackbar
-     */
-    private void showSnackbar(View v, String titulo) {
-        Snackbar snackbar = Snackbar.make(v, titulo, Snackbar.LENGTH_LONG);
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
+        Snackbar snackbar = Snackbar.make(v, titulo, duration);
         snackbar.show();
         isSnackBarShow = false;
     }

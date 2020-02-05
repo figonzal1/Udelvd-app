@@ -33,13 +33,13 @@ import cl.udelvd.utilidades.SingleLiveEvent;
 public class ProfesionRepositorio {
 
     private static ProfesionRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private List<Profesion> profesionsList = new ArrayList<>();
-    private MutableLiveData<List<Profesion>> profesionMutableLiveData = new MutableLiveData<>();    //Instanciar aqui permite refresh
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final List<Profesion> profesionsList = new ArrayList<>();
+    private final MutableLiveData<List<Profesion>> profesionMutableLiveData = new MutableLiveData<>();    //Instanciar aqui permite refresh
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_PROFESION = "ListadoProfesion";
 

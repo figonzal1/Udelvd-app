@@ -47,30 +47,30 @@ public class EventoRepositorio {
     private static final String TAG_ELIMINAR_EVENTO = "EliminarEvento";
 
     private static EventoRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private List<Evento> eventosList = new ArrayList<>();
+    private final List<Evento> eventosList = new ArrayList<>();
 
     //LISTADO
-    private MutableLiveData<List<Evento>> eventosMutableLiveData = new MutableLiveData<>();
-    private SingleLiveEvent<String> responseErrorMsgListado = new SingleLiveEvent<>();
+    private final MutableLiveData<List<Evento>> eventosMutableLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<String> responseErrorMsgListado = new SingleLiveEvent<>();
 
     //REGISTRO
-    private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseErrorMsgRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseErrorMsgRegistro = new SingleLiveEvent<>();
 
     //GET EVENTO & ACTUALIZACION
-    private SingleLiveEvent<Evento> eventoMutableLiveData = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseErrorMsgEvento = new SingleLiveEvent<>(); //Al cargar evento
-    private SingleLiveEvent<String> responseErrorMsgActualizacion = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Evento> eventoMutableLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseErrorMsgEvento = new SingleLiveEvent<>(); //Al cargar evento
+    private final SingleLiveEvent<String> responseErrorMsgActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
 
     //Eliminar Evento
-    private SingleLiveEvent<String> responseErrorMsgEliminar = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseErrorMsgEliminar = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
 
     //PROGRESS DIALOG
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private EventoRepositorio(Application application) {
         this.application = application;

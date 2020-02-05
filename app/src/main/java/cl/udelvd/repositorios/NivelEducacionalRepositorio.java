@@ -33,13 +33,13 @@ import cl.udelvd.utilidades.SingleLiveEvent;
 public class NivelEducacionalRepositorio {
 
     private static NivelEducacionalRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private List<NivelEducacional> nivelEducacionalList = new ArrayList<>();
-    private MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData = new MutableLiveData<>();
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final List<NivelEducacional> nivelEducacionalList = new ArrayList<>();
+    private final MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_NIVEL_EDUCACIONAL = "ListadoNivelEducacional";
 

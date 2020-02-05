@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
-    private LiveData<T> liveDataToObserver;
+    private final LiveData<T> liveDataToObserver;
     private final AtomicBoolean status = new AtomicBoolean(false);
 
     public SingleLiveEvent() {

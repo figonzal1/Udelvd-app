@@ -36,8 +36,6 @@ import cl.udelvd.viewmodel.EditarPerfilViewModel;
 
 public class EditarPerfilActivity extends AppCompatActivity implements SnackbarInterface {
 
-    private static final int EDIT_PROFILE_CODE = 201;
-
     private TextInputLayout ilNombre;
     private TextInputLayout ilApellido;
     private TextInputLayout ilEmail;

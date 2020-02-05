@@ -47,11 +47,11 @@ public class EntrevistadoRepositorio {
     /*
     LISTADO
      */
-    private List<Entrevistado> entrevistadosList = new ArrayList<>();
-    private List<Entrevistado> entrevistadosSgtPagina = new ArrayList<>();
-    private SingleLiveEvent<List<Entrevistado>> entrevistadosPrimeraPaginaLiveData = new SingleLiveEvent<>();
-    private SingleLiveEvent<List<Entrevistado>> entrevistadosSgtPaginaLiveData = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final List<Entrevistado> entrevistadosList = new ArrayList<>();
+    private final List<Entrevistado> entrevistadosSgtPagina = new ArrayList<>();
+    private final SingleLiveEvent<List<Entrevistado>> entrevistadosPrimeraPaginaLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<List<Entrevistado>> entrevistadosSgtPaginaLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     /*
     REGISTRO
@@ -62,24 +62,24 @@ public class EntrevistadoRepositorio {
     /*
     ACTUALIZACION
      */
-    private SingleLiveEvent<Entrevistado> entrevistadoMutableLiveData = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorEntrevistado = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Entrevistado> entrevistadoMutableLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorEntrevistado = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
 
     private static final String TAG_ENTREVISTADO_ELIMINAR = "EliminarEntrevistado";
     /*
     ELIMINAR
      */
-    private SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
 
     private static final String TAG_ENTREVISTADOS_LISTA = "ListaEntrevistados";
     private static final String TAG_ENTREVISTADO_REGISTRO = "RegistroEntrevistado";
     private static final String TAG_ENTREVISTADO = "ObtenerEntrevistado";
     private static final String TAG_ENTREVISTADO_ACTUALIZADO = "ActualizarEntrevistado";
-    private SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
 
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
 
     private EntrevistadoRepositorio(Application application) {

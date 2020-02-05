@@ -36,11 +36,11 @@ public class CiudadRepositorio {
     private static CiudadRepositorio instancia;
     private final Application application;
 
-    private List<Ciudad> ciudadList = new ArrayList<>();
+    private final List<Ciudad> ciudadList = new ArrayList<>();
 
-    private MutableLiveData<List<Ciudad>> ciudadesMutableLiveData = new MutableLiveData<>();
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<List<Ciudad>> ciudadesMutableLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_GET_CIUDADES = "ListaCiudades";
 

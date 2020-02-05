@@ -33,15 +33,15 @@ import cl.udelvd.utilidades.SingleLiveEvent;
 public class TipoEntrevistaRepositorio {
 
     private static TipoEntrevistaRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private List<TipoEntrevista> tipoEntrevistaList = new ArrayList<>();
+    private final List<TipoEntrevista> tipoEntrevistaList = new ArrayList<>();
 
-    private MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutable = new MutableLiveData<>();
+    private final MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutable = new MutableLiveData<>();
 
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_TIPO_ENTREVISTA = "TiposEntrevistas";
 

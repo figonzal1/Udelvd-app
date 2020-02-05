@@ -20,7 +20,7 @@ import cl.udelvd.modelo.Entrevista;
 
 public class DeleteEntrevistaDialogFragment extends DialogFragment {
 
-    private Entrevista entrevista;
+    private final Entrevista entrevista;
     private DeleteDialogListener listener;
 
     public DeleteEntrevistaDialogFragment(Entrevista entrevista) {

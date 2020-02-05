@@ -269,7 +269,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
         String fecha = Utils.dateToString(getApplicationContext(), false, entrevistaIntent.getFecha_entrevista());
         etFechaEntrevista.setText(fecha);
 
-        String nombre = buscarTipoEntrevistaPorId(entrevistaIntent.getTipoEntrevista().getId()).getNombre();
+        String nombre = Objects.requireNonNull(buscarTipoEntrevistaPorId(entrevistaIntent.getTipoEntrevista().getId())).getNombre();
         acTipoEntrevista.setText(nombre, false);
     }
 
@@ -396,7 +396,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
      * @param id Id del tipo entrevista
      * @return Objeto tipoEntrevista
      */
-    public TipoEntrevista buscarTipoEntrevistaPorId(int id) {
+    private TipoEntrevista buscarTipoEntrevistaPorId(int id) {
 
         for (int i = 0; i < tipoEntrevistasList.size(); i++) {
             if (tipoEntrevistasList.get(i).getId() == id) {
@@ -412,7 +412,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
      * @param nombre Nombre del tipo entrevista
      * @return Objeto tipoEntrevista
      */
-    public TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
+    private TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
 
         for (int i = 0; i < tipoEntrevistasList.size(); i++) {
             if (tipoEntrevistasList.get(i).getNombre().equals(nombre)) {

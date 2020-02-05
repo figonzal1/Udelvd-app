@@ -1,5 +1,7 @@
 package cl.udelvd.modelo;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -181,6 +183,7 @@ public class Entrevistado {
         return Objects.hash(getNombre(), getApellido(), getSexo(), getFechaNacimiento(), isJubiladoLegal(), isCaidas(), nConvivientes3Meses, getIdInvestigador(), getCiudad(), getEstadoCivil());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Entrevistado{" +

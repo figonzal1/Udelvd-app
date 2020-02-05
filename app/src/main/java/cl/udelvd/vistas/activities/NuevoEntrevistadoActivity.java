@@ -99,7 +99,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
 
     private ProgressBar progressBar;
 
-    boolean isSnackBarShow = false;
+    private boolean isSnackBarShow = false;
 
     public NuevoEntrevistadoActivity() {
     }

@@ -1,5 +1,7 @@
 package cl.udelvd.modelo;
 
+import androidx.annotation.NonNull;
+
 public class TipoEntrevista {
 
     private int id;
@@ -24,6 +26,7 @@ public class TipoEntrevista {
         this.nombre = nombre;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return nombre;

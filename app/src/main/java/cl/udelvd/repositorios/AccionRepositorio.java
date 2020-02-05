@@ -34,14 +34,14 @@ public class AccionRepositorio {
 
     private static final String TAG_GET_ACCIONES = "ListaAcciones";
     private static AccionRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private List<Accion> accionList = new ArrayList<>();
-    private MutableLiveData<List<Accion>> accionMutableLiveData = new MutableLiveData<>();
+    private final List<Accion> accionList = new ArrayList<>();
+    private final MutableLiveData<List<Accion>> accionMutableLiveData = new MutableLiveData<>();
 
-    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private AccionRepositorio(Application application) {
         this.application = application;

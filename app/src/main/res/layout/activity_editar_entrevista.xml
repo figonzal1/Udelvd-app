@@ -45,27 +45,12 @@
             android:focusableInTouchMode="true"
             app:layout_constraintVertical_bias="0.0">
 
-            <TextView
-                android:id="@+id/tv_entrevista_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:text="Ingrese datos"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
 
             <ImageView
                 android:id="@+id/iv_icono_fecha_entrevista"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:contentDescription="Icono fecha entrevista"
+                android:contentDescription="@string/ICONO_FECHA_ENTREVISTA"
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_fecha_entrevista"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
@@ -79,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:hint="Fecha entrevista"
+                android:hint="@string/FECHA_ENTREVISTA"
                 app:endIconDrawable="@drawable/ic_date_black_24dp"
                 app:endIconMode="custom"
                 app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
@@ -103,7 +88,7 @@
                 android:id="@+id/iv_tipo_entrevista"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:contentDescription="Icono tipo entrevista"
+                android:contentDescription="@string/ICONO_TIPO_ENTREVISTA"
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_tipo_entrevista"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
@@ -118,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:hint="Tipo entrevista"
+                android:hint="@string/TIPO_ENTREVISTA"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_tipo_entrevista"
                 app:layout_constraintTop_toTopOf="parent">

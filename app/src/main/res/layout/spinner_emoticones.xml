@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:contentDescription="Emoticon dentro de spinner"
+        android:contentDescription="@string/EMOTICON_SPINNER"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_descripcion_emoticon"
         app:layout_constraintHorizontal_bias="0.5"

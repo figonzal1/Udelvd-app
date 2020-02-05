@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_person_white_24dp"
-        android:contentDescription="Imagen entrevistado" />
+        android:contentDescription="@string/ICONO_PERFIL_INVESTIGADOR" />
 
     <TextView
         android:id="@+id/tv_header_nombre_apellido_usuario"

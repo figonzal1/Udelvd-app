@@ -18,8 +18,8 @@ import cl.udelvd.vistas.fragments.EntrevistadoListaFragment;
 public class FragmentPageAdapter extends FragmentPagerAdapter {
 
     private final String[] mTabs = new String[2];
-    private String msg_login;
-    private Context context;
+    private final String msg_login;
+    private final Context context;
 
     public FragmentPageAdapter(@NonNull FragmentManager fm, Context context, String msg_login) {
         super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);

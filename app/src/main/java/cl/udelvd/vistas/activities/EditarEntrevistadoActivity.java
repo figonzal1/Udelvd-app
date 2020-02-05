@@ -100,7 +100,6 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
 
     //Boleanos de seguridad
     private boolean isSnackBarShow = false;
-    private boolean isSpinnerSexoReady = false;
     private boolean isAutoCompleteCiudadReady = false;
     private boolean isAutoCompleteEstadoCivilReady = false;
     private boolean isAutoCompleteProfesionReady = false;
@@ -204,7 +203,6 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
         ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, opcionesSexo);
         acSexo.setAdapter(adapterSexo);
 
-        isSpinnerSexoReady = true;
     }
 
     /**

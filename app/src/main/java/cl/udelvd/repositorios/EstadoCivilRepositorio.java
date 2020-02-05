@@ -33,13 +33,13 @@ import cl.udelvd.utilidades.SingleLiveEvent;
 public class EstadoCivilRepositorio {
 
     private static EstadoCivilRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private List<EstadoCivil> estadoCivilList = new ArrayList<>();
-    private MutableLiveData<List<EstadoCivil>> estadosCivilesMutable = new MutableLiveData<>();
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final List<EstadoCivil> estadoCivilList = new ArrayList<>();
+    private final MutableLiveData<List<EstadoCivil>> estadosCivilesMutable = new MutableLiveData<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_GET_ESTADOS_CIVILES = "ListaEstadosCiviles";
 

@@ -34,31 +34,31 @@ public class InvestigadorRepositorio {
 
     //LOGIN
     private final SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorLogin = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorLogin = new SingleLiveEvent<>();
 
     //REGISTRO
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
 
     //Actualizacion
-    private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
 
     private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
     private static final String TAG_INVESTIGADOR_RESET = "ResetearPassword";
     //Recuperacion Cuenta
-    private SingleLiveEvent<String> responseMsgErrorRecuperacion = new SingleLiveEvent<>();
-    private SingleLiveEvent<Map<String, String>> responseMsgRecuperacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorRecuperacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Map<String, String>> responseMsgRecuperacion = new SingleLiveEvent<>();
 
     //PROGRESS DIALOG
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
     private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
     private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
     //Resetear password
-    private SingleLiveEvent<String> responseMsgReset = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorReset = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgReset = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorReset = new SingleLiveEvent<>();
 
 
     private InvestigadorRepositorio(Application application) {

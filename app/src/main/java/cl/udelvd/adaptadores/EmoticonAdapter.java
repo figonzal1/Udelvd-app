@@ -23,8 +23,8 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 public class EmoticonAdapter extends ArrayAdapter<Emoticon> {
 
-    private List<Emoticon> emoticonList;
-    private Context context;
+    private final List<Emoticon> emoticonList;
+    private final Context context;
 
     public EmoticonAdapter(@NonNull Context context, List<Emoticon> emoticons) {
         super(context, R.layout.spinner_emoticones, emoticons);

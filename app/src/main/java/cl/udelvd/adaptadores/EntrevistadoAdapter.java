@@ -37,12 +37,12 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int PROGRESS_PAGINACION = 1;
 
     private final List<Entrevistado> entrevistadoList;
-    private Context context;
+    private final Context context;
 
-    private EntrevistadoListaFragment entrevistadoListaFragment;
-    private FragmentManager fragmentManager;
+    private final EntrevistadoListaFragment entrevistadoListaFragment;
+    private final FragmentManager fragmentManager;
 
-    private EntrevistadoListaViewModel entrevistadoListaViewModel;
+    private final EntrevistadoListaViewModel entrevistadoListaViewModel;
 
     private int pagina = 1;
 
@@ -226,7 +226,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     static class LoadingViewHolder extends RecyclerView.ViewHolder {
 
-        Button btn_cargar_mas;
+        final Button btn_cargar_mas;
 
         LoadingViewHolder(View itemView) {
             super(itemView);

@@ -29,6 +29,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                     @Override
                     public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
                         // Get deep link from result (may be null if no link is found)
-                        Uri deepLink = null;
+                        Uri deepLink;
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.getLink();
 
@@ -302,11 +303,21 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 startActivityForResult(intent, REGISTRAR_INVESTIGADOR_CODE);
             }
         };
-        spans.setSpan(clickSpan, 19, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+        if (Locale.getDefault().getLanguage().equals(getString(R.string.LANGUAJE_EN))) {
+            String registro = tv_registro.getText().toString();
+            int index = registro.indexOf("Sign up");
+            spans.setSpan(clickSpan, index, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else if (Locale.getDefault().getLanguage().equals(getString(R.string.LANGUAJE_ES))) {
+            String registro = tv_registro.getText().toString();
+            int index = registro.indexOf("Regístrate");
+            spans.setSpan(clickSpan, index, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
     }
 
     /**
-     * Funcion encargada de manejar la logica del link azul "Registro"
+     * Funcion encargada de manejar la logica del link azul "Olvidar cuenta"
      */
     private void configurarlinkRecuperar() {
         //Logica de textview de registro

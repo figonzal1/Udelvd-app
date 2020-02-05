@@ -15,11 +15,11 @@ import cl.udelvd.vistas.fragments.EventsSwipeFragment;
 
 public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
 
-    private List<Evento> eventoList;
-    private String fecha_entrevista;
-    private Activity activity;
-    private FragmentManager fragmentManager;
-    private DeleteDialogListener listener;
+    private final List<Evento> eventoList;
+    private final String fecha_entrevista;
+    private final Activity activity;
+    private final FragmentManager fragmentManager;
+    private final DeleteDialogListener listener;
 
     public FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior, List<Evento> eventoList, String fecha_entrevista, Activity activity, DeleteDialogListener listener) {
         super(fm, behavior);

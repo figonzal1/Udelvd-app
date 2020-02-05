@@ -48,26 +48,26 @@ public class EntrevistaRepositorio {
     private static final String TAG_DELETE_ENTREVISTA = "EliminarEntrevista";
 
     //LISTADO
-    private List<Entrevista> entrevistaList = new ArrayList<>();
-    private MutableLiveData<List<Entrevista>> entrevistasMutableLiveData = new MutableLiveData<>();
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final List<Entrevista> entrevistaList = new ArrayList<>();
+    private final MutableLiveData<List<Entrevista>> entrevistasMutableLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     //Registro
-    private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
 
     //Actualizacion
-    private SingleLiveEvent<String> responseMsgErrorEntrevista = new SingleLiveEvent<>();
-    private SingleLiveEvent<Entrevista> entrevistaMutableLiveData = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorEntrevista = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Entrevista> entrevistaMutableLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
 
     //Eliminar
-    private SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
 
     //PROGRESS DIALOG
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private EntrevistaRepositorio(Application application) {
         this.application = application;

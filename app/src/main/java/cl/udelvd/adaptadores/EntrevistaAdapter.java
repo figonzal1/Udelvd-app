@@ -32,11 +32,11 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
     private static final String TAG_DELETE_DIALOG_NAME = "DeleteEntrevistaDialogFragment";
     private final List<Entrevista> entrevistaList;
-    private FragmentManager fragmentManager;
-    private Entrevistado entrevistado;
-    private Map<String, Integer> params;
+    private final FragmentManager fragmentManager;
+    private final Entrevistado entrevistado;
+    private final Map<String, Integer> params;
     private final int REQUEST_CODE_EDITAR_ENTREVISTA;
-    private Activity activity;
+    private final Activity activity;
 
     public EntrevistaAdapter(List<Entrevista> entrevistaList, Activity activity, FragmentManager fragmentManager, Entrevistado entrevistado, Map<String, Integer> params, int requestCodeEditarEntrevista) {
         this.entrevistaList = entrevistaList;

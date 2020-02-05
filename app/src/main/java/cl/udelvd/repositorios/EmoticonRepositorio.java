@@ -34,14 +34,14 @@ public class EmoticonRepositorio {
 
     private static final String TAG_GET_EMOTICONES = "ListaEmoticones";
     private static EmoticonRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private List<Emoticon> emoticonList = new ArrayList<>();
-    private MutableLiveData<List<Emoticon>> emoticonMutableLiveData = new MutableLiveData<>();
+    private final List<Emoticon> emoticonList = new ArrayList<>();
+    private final MutableLiveData<List<Emoticon>> emoticonMutableLiveData = new MutableLiveData<>();
 
-    private SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
 
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private EmoticonRepositorio(Application application) {
         this.application = application;

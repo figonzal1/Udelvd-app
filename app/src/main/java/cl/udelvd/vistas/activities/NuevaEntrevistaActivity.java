@@ -312,7 +312,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity implements Snackb
                 entrevista.setId_entrevistado(id_entrevistado);
 
                 TipoEntrevista tipoEntrevista = new TipoEntrevista();
-                int id = buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString()).getId();
+                int id = Objects.requireNonNull(buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString())).getId();
                 tipoEntrevista.setId(id);
                 entrevista.setTipoEntrevista(tipoEntrevista);
 
@@ -329,7 +329,7 @@ public class NuevaEntrevistaActivity extends AppCompatActivity implements Snackb
      * @param nombre Nombre del tipo entrevista
      * @return Objeto tipoEntrevista
      */
-    public TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
+    private TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
 
         for (int i = 0; i < tipoEntrevistaList.size(); i++) {
             if (tipoEntrevistaList.get(i).getNombre().equals(nombre)) {

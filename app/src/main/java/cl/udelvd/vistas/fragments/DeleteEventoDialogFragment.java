@@ -20,10 +20,10 @@ import cl.udelvd.modelo.Evento;
 
 public class DeleteEventoDialogFragment extends DialogFragment {
 
-    private Evento evento;
+    private final Evento evento;
     private DeleteDialogListener listener;
 
-    public DeleteEventoDialogFragment(DeleteDialogListener listener, Evento evento) {
+    DeleteEventoDialogFragment(DeleteDialogListener listener, Evento evento) {
         this.evento = evento;
         this.listener = listener;
     }

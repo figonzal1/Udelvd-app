@@ -2,27 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/group_ayuda"
         android:checkableBehavior="none"
         android:orderInCategory="3">
 
         <item
-            android:id="@+id/menu_configuracion"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/MENU_CONFIGURACION" />
 
         <item
-            android:id="@+id/menu_condiciones"
             android:icon="@drawable/ic_description_black_24dp"
-            android:title="Condiciones y privacidad" />
+            android:title="@string/MENU_CONDICIONES" />
         <item
-            android:id="@+id/menu_contacto"
             android:icon="@drawable/ic_help_outline_black_24dp"
-            android:title="Contáctenos" />
+            android:title="@string/MENU_CONTACTENOS" />
     </group>
 
     <group
-        android:id="@+id/group_otros"
         android:checkableBehavior="none"
         android:orderInCategory="4">
 
@@ -36,7 +31,7 @@
     <item
         android:id="@+id/group_admin"
         android:orderInCategory="2"
-        android:title="Administración">
+        android:title="@string/MENU_ADMIN">
         <menu>
             <group>
 
@@ -44,13 +39,13 @@
                     android:id="@+id/menu_acciones"
                     android:checkable="true"
                     android:icon="@drawable/ic_directions_run_black_24dp"
-                    android:title="Acciones" />
+                    android:title="@string/MENU_ACCIONES" />
 
                 <item
                     android:id="@+id/menu_emoticones"
                     android:checkable="true"
                     android:icon="@drawable/ic_tag_faces_black_24dp"
-                    android:title="Emoticones" />
+                    android:title="@string/MENU_EMOTICONES" />
 
             </group>
         </menu>
@@ -58,7 +53,6 @@
     </item>
 
     <item
-        android:id="@+id/group_general"
         android:orderInCategory="1"
         android:title="@string/MENU_GENERAL">
         <menu>

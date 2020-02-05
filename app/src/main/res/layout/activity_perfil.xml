@@ -22,7 +22,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_view_profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -70,7 +69,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="Email"
+                    android:text="@string/EMAIL"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +83,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="Estado cuenta"
+                    android:text="@string/ESTADO_CUENTA"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +97,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="Registro cuenta"
+                    android:text="@string/REGISTRO_CUENTA"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +109,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="16dp"
-                    android:contentDescription="Icono email investigador"
+                    android:contentDescription="@string/ICONO_EMAIL_INVESTIGADOR"
                     android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_email_investigador"
                     app:layout_constraintStart_toStartOf="parent"
@@ -122,7 +121,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="16dp"
-                    android:contentDescription="Icono cuenta activada"
+                    android:contentDescription="@string/ICONO_CUENTA_ACTIVADA"
                     android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_activado"
                     app:layout_constraintStart_toStartOf="parent"
@@ -133,44 +132,44 @@
                     android:id="@+id/tv_activado"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Activada"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@+id/tv_activado_title"
                     app:layout_constraintStart_toStartOf="@+id/tv_activado_title"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_activado_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_activado_title"
+                    tools:text="@string/ACTIVADA" />
 
                 <TextView
                     android:id="@+id/tv_registro"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:text="2019/07/07"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/tv_registro_title"
                     app:layout_constraintStart_toStartOf="@+id/tv_registro_title"
                     app:layout_constraintTop_toBottomOf="@+id/tv_registro_title"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:text="2019/07/07" />
 
                 <TextView
                     android:id="@+id/tv_email_investigador"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="tatafel_8@hotmail.com"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@+id/tv_email_title"
                     app:layout_constraintStart_toStartOf="@+id/tv_email_title"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_email_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_email_title"
+                    tools:text="tatafel_8@hotmail.com" />
 
                 <ImageView
                     android:id="@+id/iv_registro"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="16dp"
-                    android:contentDescription="Icono fecha de registro"
+                    android:contentDescription="@string/ICONO_FECHA_REGISTRO"
                     android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_registro"
                     app:layout_constraintStart_toStartOf="parent"
@@ -186,7 +185,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="16dp"
-            android:contentDescription="Imagen perfil investigador"
+            android:contentDescription="@string/ICONO_PERFIL_INVESTIGADOR"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -199,20 +198,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto"
-            android:text="Felipe González"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.47"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_profile"
+            tools:text="Nombre Apellido" />
 
         <ImageView
-            android:id="@+id/iv_dot_live"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:contentDescription="Icono investigador en línea"
+            android:contentDescription="@string/ICONO_INVESTIGADOR_ONLINE"
             app:layout_constraintBottom_toBottomOf="@+id/tv_nombre_investigador"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

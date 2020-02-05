@@ -33,7 +33,6 @@
             app:layout_constraintTop_toBottomOf="@+id/include" />
 
         <ScrollView
-            android:id="@+id/scroll_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="true"
@@ -53,7 +52,7 @@
                     android:id="@+id/iv_hora_evento"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:contentDescription="Icono hora evento"
+                    android:contentDescription="@string/ICONO_HORA_EVENTO"
                     android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_hora_evento"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
@@ -67,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:hint="Hora evento"
+                    android:hint="@string/HORA_EVENTO"
                     app:endIconDrawable="@drawable/ic_date_black_24dp"
                     app:endIconMode="custom"
                     app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
@@ -91,7 +90,7 @@
                     android:id="@+id/iv_accion_evento"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:contentDescription="Icono accion evento"
+                    android:contentDescription="@string/ICONO_ACCION_EVENTO"
                     android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_accion_evento"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
@@ -109,7 +108,7 @@
                     android:layout_marginTop="4dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:hint="Acción"
+                    android:hint="@string/ACCION"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toEndOf="@+id/iv_accion_evento"
                     app:layout_constraintTop_toBottomOf="@+id/il_hora_evento">
@@ -134,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
-                    android:text="Seleccionar emoticón"
+                    android:text="@string/SELECCIONAR_EMOTICON"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toBottomOf="@+id/il_accion_evento" />
@@ -143,7 +142,7 @@
                     android:id="@+id/iv_emoticon_evento"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:contentDescription="Icono emoticon evento"
+                    android:contentDescription="@string/ICONO_EMOTICON_EVENTO"
                     android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/spinner_emoticon"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
@@ -170,7 +169,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="16dp"
-                    android:hint="Justificación"
+                    android:hint="@string/JUSTIFICACION"
                     app:endIconDrawable="@drawable/ic_mic_black_24dp"
                     app:endIconMode="custom"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -208,52 +207,12 @@
                     android:id="@+id/iv_justificacion_evento"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:contentDescription="Icono justificacion evento"
+                    android:contentDescription="@string/ICONO_JUSTIFICACION_EVENTO"
                     android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_justificacion_evento"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_justificacion_evento"
                     app:srcCompat="@drawable/ic_question_answer_black_24dp" />
-
-
-                <!--<RadioGroup
-                    android:id="@+id/radio_group_emoticones"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radio_button_smiley"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:background="@drawable/smiley"
-                        android:checked="true"
-                        android:gravity="center_horizontal" />
-
-                    <RadioButton
-                        android:id="@+id/radio_button_angry"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:background="@drawable/angry"
-                        android:gravity="center_horizontal" />
-
-                    <RadioButton
-                        android:id="@+id/radio_button_afraid"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:background="@drawable/afraid"
-                        android:gravity="center_horizontal" />
-
-                    <RadioButton
-                        android:id="@+id/radio_button_sad"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:background="@drawable/sad"
-                        android:gravity="center_horizontal" />
-                </RadioGroup>-->
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

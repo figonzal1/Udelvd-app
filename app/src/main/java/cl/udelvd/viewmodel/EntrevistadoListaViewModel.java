@@ -25,6 +25,9 @@ public class EntrevistadoListaViewModel extends AndroidViewModel {
         return entrevistadoRepositorio.getIsLoading();
     }
 
+    /*
+    LISTADO
+     */
     public SingleLiveEvent<List<Entrevistado>> mostrarPrimeraPagina(int page) {
         entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
         return entrevistadoRepositorio.obtenerEntrevistados(page);
@@ -50,6 +53,14 @@ public class EntrevistadoListaViewModel extends AndroidViewModel {
         return entrevistadoRepositorio.getResponseMsgErrorListado();
     }
 
+    public MutableLiveData<Integer> mostrarNEntrevistados() {
+        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        return entrevistadoRepositorio.getNEntrevistados();
+    }
+
+    /*
+    ELIMINAR
+     */
     public SingleLiveEvent<String> mostrarMsgErrorEliminar() {
         entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
         return entrevistadoRepositorio.getResponseMsgErrorEliminar();

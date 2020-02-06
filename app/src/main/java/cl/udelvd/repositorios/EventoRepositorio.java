@@ -659,7 +659,7 @@ public class EventoRepositorio {
         Response.Listener<String> resposeListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSe", response);
+                //Log.d("RESPONSe", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);

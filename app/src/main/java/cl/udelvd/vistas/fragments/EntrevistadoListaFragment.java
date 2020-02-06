@@ -25,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -45,8 +46,10 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
     private EntrevistadoAdapter entrevistadoAdapter;
     private ProgressBar progressBar;
     private TextView tv_entrevistados_vacios;
+    private TextView tv_n_entrevistados;
     private List<Entrevistado> entrevistadoList;
     private View v;
+    private int entrevistados_totales;
     private static final int REQUEST_CODE_EDITAR_ENTREVISTADO = 300;
     private boolean isSnackBarShow = false;
 
@@ -117,7 +120,18 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
 
         tv_entrevistados_vacios = v.findViewById(R.id.tv_entrevistados_vacios);
 
+        tv_n_entrevistados = v.findViewById(R.id.tv_n_entrevistados);
+        tv_n_entrevistados.setVisibility(View.INVISIBLE);
+
         entrevistadoListaViewModel = ViewModelProviders.of(this).get(EntrevistadoListaViewModel.class);
+
+        entrevistadoAdapter = new EntrevistadoAdapter(
+                entrevistadoList,
+                getContext(),
+                EntrevistadoListaFragment.this,
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+                entrevistadoListaViewModel
+        );
     }
 
     /**
@@ -160,20 +174,20 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
             }
         });
 
+        entrevistadoListaViewModel.mostrarNEntrevistados().observe(EntrevistadoListaFragment.this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                entrevistados_totales = integer;
+            }
+        });
+
+
         entrevistadoListaViewModel.mostrarPrimeraPagina(1).observe(this, new Observer<List<Entrevistado>>() {
             @Override
             public void onChanged(List<Entrevistado> listado) {
 
                 entrevistadoList = listado;
-                entrevistadoAdapter = new EntrevistadoAdapter(
-                        entrevistadoList,
-                        getContext(),
-                        EntrevistadoListaFragment.this,
-                        Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
-                        entrevistadoListaViewModel
-                );
-
-                entrevistadoAdapter.notifyDataSetChanged();
+                entrevistadoAdapter.actualizarLista(entrevistadoList);
                 rv.setAdapter(entrevistadoAdapter);
 
                 progressBar.setVisibility(View.INVISIBLE);
@@ -182,6 +196,9 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 } else {
                     tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
                 }
+
+                tv_n_entrevistados.setVisibility(View.VISIBLE);
+                tv_n_entrevistados.setText(String.format(Locale.getDefault(), "Mostrando %d de %d entrevistados", entrevistadoAdapter.getEntrevistadoList().size(), entrevistados_totales));
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
             }
@@ -193,7 +210,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
 
 
                 entrevistadoAdapter.agregarEntrevistados(entrevistados);
-                entrevistadoAdapter.notifyDataSetChanged();
+                entrevistadoAdapter.ocultarProgress();
 
                 entrevistadoList = entrevistadoAdapter.getEntrevistadoList();
 
@@ -203,6 +220,8 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                     tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
                 }
 
+                tv_n_entrevistados.setVisibility(View.VISIBLE);
+                tv_n_entrevistados.setText(String.format(Locale.getDefault(), "Mostrando %d de %d entrevistados", entrevistadoAdapter.getEntrevistadoList().size(), entrevistados_totales));
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG) + "PAGINA");
             }
         });
@@ -213,6 +232,11 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.INVISIBLE);
+
+                if (entrevistadoAdapter != null) {
+                    entrevistadoAdapter.ocultarProgress();
+                    entrevistadoAdapter.resetPages();
+                }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
@@ -315,6 +339,8 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                     entrevistadoListaViewModel.refreshListaEntrevistados();
 
                     progressBar.setVisibility(View.VISIBLE);
+
+                    isSnackBarShow = false;
                 }
             });
         }

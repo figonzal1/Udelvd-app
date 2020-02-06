@@ -179,17 +179,12 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
         eventosListaViewModel.cargarEventos(entrevista).observe(this, new Observer<List<Evento>>() {
             @Override
             public void onChanged(List<Evento> eventos) {
+
                 if (eventos != null) {
                     eventoList = eventos;
-
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
-
                     fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this, EventosActivity.this);
-
-                    fragmentStatePageAdapter.notifyDataSetChanged();
-
                     viewPager.setAdapter(fragmentStatePageAdapter);
-                    Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
                 }
             }
         });
@@ -277,6 +272,9 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             viewPager.setVisibility(View.INVISIBLE);
 
             eventosListaViewModel.refreshEventos(entrevista);
+
+            Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
+
             return true;
         }
 
@@ -320,6 +318,8 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 if (msg_registro != null) {
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, msg_registro, null);
                     eventosListaViewModel.refreshEventos(entrevista);
+
+                    fragmentStatePageAdapter.notifyDataSetChanged();
                 }
             }
         } else if (requestCode == REQUEST_CODE_EDITAR_EVENTO) {
@@ -334,6 +334,8 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 if (msg_actualizacion != null) {
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
                     eventosListaViewModel.refreshEventos(entrevista);
+
+                    fragmentStatePageAdapter.notifyDataSetChanged();
                 }
             }
         }

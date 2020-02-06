@@ -52,6 +52,7 @@ public class EntrevistadoRepositorio {
     private final SingleLiveEvent<List<Entrevistado>> entrevistadosPrimeraPaginaLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<List<Entrevistado>> entrevistadosSgtPaginaLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final MutableLiveData<Integer> mutableNEntrevistados = new MutableLiveData<>();
 
     /*
     REGISTRO
@@ -126,6 +127,10 @@ public class EntrevistadoRepositorio {
         return responseMsgErrorEliminar;
     }
 
+    public MutableLiveData<Integer> getNEntrevistados() {
+        return mutableNEntrevistados;
+    }
+
     public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
     }
@@ -167,6 +172,17 @@ public class EntrevistadoRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
+                    /*
+                    N ENTREVISTADOS
+                     */
+                    JSONObject jsonEntrevistado = jsonObject.getJSONObject("entrevistados").getJSONObject("data");
+
+                    int n_entrevistados = jsonEntrevistado.getInt("n_entrevistados");
+                    mutableNEntrevistados.postValue(n_entrevistados);
+
+                    /*
+                    LISTADO DE ENTREVISTADOS
+                     */
                     JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
                     for (int i = 0; i < jsonData.length(); i++) {

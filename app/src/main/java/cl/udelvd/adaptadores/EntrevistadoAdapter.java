@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 import java.util.Locale;
@@ -36,17 +39,18 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int ENTREVISTADO = 0;
     private static final int PROGRESS_PAGINACION = 1;
 
-    private final List<Entrevistado> entrevistadoList;
+    private List<Entrevistado> entrevistadoList;
     private final Context context;
 
     private final EntrevistadoListaFragment entrevistadoListaFragment;
     private final FragmentManager fragmentManager;
 
-    private final EntrevistadoListaViewModel entrevistadoListaViewModel;
+    private EntrevistadoListaViewModel entrevistadoListaViewModel;
 
     private int pagina = 1;
 
     private Button btn_cargar_mas;
+    private ProgressBar progressBar;
 
     public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment, FragmentManager fragmentManager, EntrevistadoListaViewModel entrevistadoListaViewModel) {
         this.entrevistadoList = entrevistadoList;
@@ -160,11 +164,24 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             final LoadingViewHolder holder = (LoadingViewHolder) viewHolder;
 
             btn_cargar_mas = holder.btn_cargar_mas;
+            progressBar = holder.progressBar;
+
+            if (entrevistadoList.size() == 0) {
+                btn_cargar_mas.setVisibility(View.GONE);
+                pagina = 1;
+            }
             btn_cargar_mas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     pagina += 1;
-                    entrevistadoListaViewModel.cargarSiguientePagina(pagina);
+
+                    if (entrevistadoListaViewModel != null) {
+                        entrevistadoListaViewModel.cargarSiguientePagina(pagina);
+                    }
+
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    btn_cargar_mas.setVisibility(View.GONE);
                 }
             });
         }
@@ -183,18 +200,36 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return (position == entrevistadoList.size()) ? PROGRESS_PAGINACION : ENTREVISTADO;
     }
 
-    public void agregarEntrevistados(List<Entrevistado> entrevistados) {
-        if (entrevistados.size() == 0) {
-            btn_cargar_mas.setVisibility(View.GONE);
-        } else {
-            btn_cargar_mas.setVisibility(View.VISIBLE);
+    public void agregarEntrevistados(List<Entrevistado> entrevSgt) {
+
+        if (btn_cargar_mas != null) {
+            if (entrevSgt.size() == 0) {
+                btn_cargar_mas.setVisibility(View.GONE);
+            } else {
+                btn_cargar_mas.setVisibility(View.VISIBLE);
+            }
         }
-        entrevistadoList.addAll(entrevistados);
+        entrevistadoList.addAll(entrevSgt);
         notifyDataSetChanged();
     }
 
     public List<Entrevistado> getEntrevistadoList() {
         return entrevistadoList;
+    }
+
+    public void ocultarProgress() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    public void actualizarLista(List<Entrevistado> entrevistadoList) {
+        this.entrevistadoList = entrevistadoList;
+        notifyDataSetChanged();
+    }
+
+    public void resetPages() {
+        pagina = 1;
     }
 
     static class EntrevistadoViewHolder extends RecyclerView.ViewHolder {
@@ -226,12 +261,14 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     static class LoadingViewHolder extends RecyclerView.ViewHolder {
 
-        final Button btn_cargar_mas;
+        final MaterialButton btn_cargar_mas;
+        final ProgressBar progressBar;
 
         LoadingViewHolder(View itemView) {
             super(itemView);
 
             btn_cargar_mas = itemView.findViewById(R.id.btn_cargar_mas);
+            progressBar = itemView.findViewById(R.id.progress_bar_paginacion);
         }
 
     }

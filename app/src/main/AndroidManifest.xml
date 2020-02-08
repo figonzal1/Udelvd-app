@@ -14,12 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".WebViewActivity"></activity>
         <activity
             android:name=".vistas.activities.ResetearPassActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".vistas.activities.RecuperacionActivity" />
-        <!-- Main -->
+        <activity android:name=".vistas.activities.RecuperacionActivity" /> <!-- Main -->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

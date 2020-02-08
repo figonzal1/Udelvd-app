@@ -33,6 +33,8 @@
     <string name="URL_DELETE_EVENTO" translatable="false">%sentrevistas/%d/eventos/%d</string>
     <string name="URL_DELETE_ENTREVISTADO" translatable="false">%sentrevistados/%d</string>
 
+    <string name="LANGUAJE_EN" translatable="false">en</string>
+    <string name="LANGUAJE_ES" translatable="false">es</string>
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
@@ -423,8 +425,6 @@
     <string name="GUION" translatable="false">-</string>
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
-    <string name="LANGUAJE_EN">en</string>
-    <string name="LANGUAJE_ES">es</string>
 
 
 </resources>

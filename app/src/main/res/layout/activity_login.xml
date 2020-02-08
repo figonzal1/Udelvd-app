@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:background="@color/colorSurface"
@@ -57,8 +57,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guia_der"
             app:layout_constraintStart_toStartOf="@+id/guia_izq"
-            app:layout_constraintTop_toBottomOf="@+id/iv_logo_login"
-            app:layout_constraintVertical_bias="0.30">
+            app:layout_constraintTop_toBottomOf="@+id/tv_name_app"
+            app:layout_constraintVertical_bias="0.30"
+            app:layout_goneMarginTop="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -188,16 +189,29 @@
 
         <ImageView
             android:id="@+id/iv_logo_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="@string/LOGO_APLICACION"
-            android:src="@drawable/home_circle"
+            android:src="@mipmap/ic_launcher_round"
             app:layout_constraintBottom_toTopOf="@+id/guia_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/guia_der"
             app:layout_constraintStart_toStartOf="@+id/guia_izq"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <TextView
+            android:id="@+id/tv_name_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorOnPrimary"
+            app:layout_constraintEnd_toStartOf="@+id/guia_der"
+            app:layout_constraintStart_toStartOf="@+id/guia_izq"
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo_login" />
 
         <TextView
             android:id="@+id/tv_registro"

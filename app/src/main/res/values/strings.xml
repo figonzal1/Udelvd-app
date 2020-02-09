@@ -425,6 +425,7 @@
     <string name="GUION" translatable="false">-</string>
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
+    <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
 
 
 </resources>

@@ -198,7 +198,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 }
 
                 tv_n_entrevistados.setVisibility(View.VISIBLE);
-                tv_n_entrevistados.setText(String.format(Locale.getDefault(), "Mostrando %d de %d entrevistados", entrevistadoAdapter.getEntrevistadoList().size(), entrevistados_totales));
+                tv_n_entrevistados.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), entrevistadoAdapter.getEntrevistadoList().size(), entrevistados_totales));
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
             }
@@ -221,7 +221,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 }
 
                 tv_n_entrevistados.setVisibility(View.VISIBLE);
-                tv_n_entrevistados.setText(String.format(Locale.getDefault(), "Mostrando %d de %d entrevistados", entrevistadoAdapter.getEntrevistadoList().size(), entrevistados_totales));
+                tv_n_entrevistados.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), entrevistadoAdapter.getEntrevistadoList().size(), entrevistados_totales));
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG) + "PAGINA");
             }
         });

@@ -698,6 +698,14 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
             }
 
             progressBar.setVisibility(View.GONE);
+
+            isSnackBarShow = false;
+            isAutoCompleteCiudadReady = false;
+            isAutoCompleteEstadoCivilReady = false;
+            isAutoCompleteProfesionReady = false;
+            isAutoCompleteTipoConvivenciaReady = false;
+            isAutoCompleteNivelEducacionalReady = false;
+            isEntrevistadoReady = false;
         }
     }
 
@@ -799,6 +807,14 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 @Override
                 public void onClick(View v) {
 
+                    isSnackBarShow = false;
+                    isAutoCompleteCiudadReady = false;
+                    isAutoCompleteEstadoCivilReady = false;
+                    isAutoCompleteProfesionReady = false;
+                    isAutoCompleteTipoConvivenciaReady = false;
+                    isAutoCompleteNivelEducacionalReady = false;
+                    isEntrevistadoReady = false;
+
                     //Refresh info necesaria
                     editarEntrevistadoViewModel.refreshEstadosCiviles();
                     editarEntrevistadoViewModel.refreshCiudades();
@@ -810,8 +826,6 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                     editarEntrevistadoViewModel.refreshEntrevistado(entrevistadoIntent);
 
                     progressBar.setVisibility(View.VISIBLE);
-
-                    isSnackBarShow = false;
                 }
             });
         }

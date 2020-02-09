@@ -154,4 +154,5 @@
     <string name="MENU_CONDICIONES">Conditions and privacy</string>
     <string name="MENU_CONTACTENOS">Contact us</string>
     <string name="MENU_EMOTICONES">Emoticons</string>
+    <string name="MOSTRAR_ENTREVISTADOS">Displaying %d of %d interviewees</string>
 </resources>

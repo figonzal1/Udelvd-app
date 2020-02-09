@@ -166,4 +166,10 @@ public class RecuperacionActivity extends AppCompatActivity implements SnackbarI
         Snackbar snackbar = Snackbar.make(v, titulo, duration);
         snackbar.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

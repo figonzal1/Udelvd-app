@@ -241,8 +241,8 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (!isSnackBarShow) {
-                    showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
 
             }
@@ -253,6 +253,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
             public void onChanged(String s) {
 
                 if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
+                    isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, s, null);
                     entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
@@ -267,8 +268,8 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (!isSnackBarShow) {
-                    showSnackbar(v, Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(v, Snackbar.LENGTH_LONG, s, null);
                 }
             }
         });
@@ -305,6 +306,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
 
                 if (msg_registro != null) {
+                    isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, msg_registro, null);
                     entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
@@ -319,6 +321,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 String msg_actualizacion = bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
 
                 if (msg_actualizacion != null) {
+                    isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
                     entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
@@ -344,7 +347,6 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 }
             });
         }
-
         snackbar.show();
         isSnackBarShow = false;
     }

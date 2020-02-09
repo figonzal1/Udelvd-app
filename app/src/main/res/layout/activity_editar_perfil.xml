@@ -4,17 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/editar_perfil"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".vistas.activities.EditarPerfilActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".vistas.activities.EditarPerfilActivity">
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progress_horizontal_editar_perfil"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
 
         <include
             android:id="@+id/include"
             layout="@layout/toolbar_layout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +40,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include">
+            app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_editar_perfil">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -150,19 +162,6 @@
                     app:layout_constraintTop_toTopOf="@+id/il_email_investigador"
                     app:srcCompat="@drawable/ic_email_black_24dp" />
 
-                <ProgressBar
-                    android:id="@+id/progress_horizontal_editar_perfil"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible" />
-
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_password_on"
                     android:layout_width="wrap_content"
@@ -179,14 +178,15 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_optional_password"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toBottomOf="@+id/switch_password_on"
+                    app:layout_constraintVertical_bias="0.0"
                     tools:visibility="visible">
 
                     <ImageView
@@ -207,6 +207,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
                         android:hint="@string/NUEVA_CONTRASEÑA"
                         app:endIconCheckable="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -229,7 +230,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_marginBottom="8dp"
                         android:hint="@string/CONFIRMAR_NUEVA_PASS"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

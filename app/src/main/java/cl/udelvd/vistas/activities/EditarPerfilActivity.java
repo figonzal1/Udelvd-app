@@ -110,8 +110,32 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
+
+                    ilNombre.setEnabled(false);
+                    etNombre.setEnabled(false);
+
+                    etApellido.setEnabled(false);
+                    ilApellido.setEnabled(false);
+
+                    ilPassword.setEnabled(false);
+                    etPassword.setEnabled(false);
+
+                    ilConfirmacionPassword.setEnabled(false);
+                    etConfirmacionPassword.setEnabled(false);
                 } else {
                     progressBar.setVisibility(View.GONE);
+
+                    ilNombre.setEnabled(true);
+                    etNombre.setEnabled(true);
+
+                    etApellido.setEnabled(true);
+                    ilApellido.setEnabled(true);
+
+                    ilPassword.setEnabled(true);
+                    etPassword.setEnabled(true);
+
+                    ilConfirmacionPassword.setEnabled(true);
+                    etConfirmacionPassword.setEnabled(true);
                 }
             }
         });

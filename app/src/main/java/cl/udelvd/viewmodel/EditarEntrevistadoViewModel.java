@@ -32,18 +32,28 @@ public class EditarEntrevistadoViewModel extends AndroidViewModel {
 
     private EntrevistadoRepositorio entrevistadoRepositorio;
 
+    private MutableLiveData<List<Ciudad>> ciudadMutableList;
+    private MutableLiveData<List<EstadoCivil>> estadoCivilMutableList;
+    private MutableLiveData<List<NivelEducacional>> nivelEducacionalMutableList;
+    private MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableList;
+    private MutableLiveData<List<Profesion>> profesionMutableList;
+    private MutableLiveData<Entrevistado> entrevistadoMutableList;
 
     public EditarEntrevistadoViewModel(@NonNull Application application) {
         super(application);
     }
 
-
     /*
     ENTREVISTADO
      */
-    public SingleLiveEvent<Entrevistado> cargarEntrevistado(Entrevistado entrevistado) {
-        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
-        return entrevistadoRepositorio.obtenerEntrevistado(entrevistado);
+    public MutableLiveData<Entrevistado> cargarEntrevistado(Entrevistado entrevistado) {
+
+        if (entrevistadoMutableList == null) {
+            entrevistadoMutableList = new MutableLiveData<>();
+            entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+            entrevistadoMutableList = entrevistadoRepositorio.obtenerEntrevistado(entrevistado);
+        }
+        return entrevistadoMutableList;
     }
 
     public SingleLiveEvent<String> mostrarMsgErrorEntrevistado() {
@@ -75,8 +85,13 @@ public class EditarEntrevistadoViewModel extends AndroidViewModel {
     CIUDADEs
      */
     public MutableLiveData<List<Ciudad>> cargarCiudades() {
-        ciudadRepositorio = CiudadRepositorio.getInstancia(getApplication());
-        return ciudadRepositorio.obtenerCiudades();
+
+        if (ciudadMutableList == null) {
+            ciudadMutableList = new MutableLiveData<>();
+            ciudadRepositorio = CiudadRepositorio.getInstancia(getApplication());
+            ciudadMutableList = ciudadRepositorio.obtenerCiudades();
+        }
+        return ciudadMutableList;
     }
 
     public SingleLiveEvent<String> mostrarMsgErrorListadoCiudades() {
@@ -98,8 +113,14 @@ public class EditarEntrevistadoViewModel extends AndroidViewModel {
     ESTADO CIVIL
      */
     public MutableLiveData<List<EstadoCivil>> cargarEstadosCiviles() {
-        estadoCivilRepositorio = EstadoCivilRepositorio.getInstance(getApplication());
-        return estadoCivilRepositorio.obtenerEstadosCiviles();
+
+        if (estadoCivilMutableList == null) {
+            estadoCivilMutableList = new MutableLiveData<>();
+            estadoCivilRepositorio = EstadoCivilRepositorio.getInstance(getApplication());
+            estadoCivilMutableList = estadoCivilRepositorio.obtenerEstadosCiviles();
+        }
+
+        return estadoCivilMutableList;
     }
 
     public MutableLiveData<Boolean> isLoadingEstadosCiviles() {
@@ -122,8 +143,14 @@ public class EditarEntrevistadoViewModel extends AndroidViewModel {
      */
 
     public MutableLiveData<List<NivelEducacional>> cargarNivelesEducacionales() {
-        nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
-        return nivelEducacionalRepositorio.obtenerNivelesEducacionales();
+
+        if (nivelEducacionalMutableList == null) {
+            nivelEducacionalMutableList = new MutableLiveData<>();
+            nivelEducacionalRepositorio = NivelEducacionalRepositorio.getInstancia(getApplication());
+            nivelEducacionalMutableList = nivelEducacionalRepositorio.obtenerNivelesEducacionales();
+        }
+
+        return nivelEducacionalMutableList;
     }
 
     public MutableLiveData<Boolean> isLoadingNivelesEducacionales() {
@@ -146,8 +173,14 @@ public class EditarEntrevistadoViewModel extends AndroidViewModel {
      */
 
     public MutableLiveData<List<TipoConvivencia>> cargarTiposConvivencia() {
-        tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
-        return tipoConvivenciaRepositorio.obtenerTiposConvivencias();
+
+        if (tipoConvivenciaMutableList == null) {
+            tipoConvivenciaMutableList = new MutableLiveData<>();
+            tipoConvivenciaRepositorio = TipoConvivenciaRepositorio.getInstancia(getApplication());
+            tipoConvivenciaMutableList = tipoConvivenciaRepositorio.obtenerTiposConvivencias();
+        }
+
+        return tipoConvivenciaMutableList;
     }
 
     public MutableLiveData<Boolean> isLoadingTiposConvivencias() {
@@ -170,8 +203,14 @@ public class EditarEntrevistadoViewModel extends AndroidViewModel {
      */
 
     public MutableLiveData<List<Profesion>> cargarProfesiones() {
-        profesionRepositorio = ProfesionRepositorio.getInstancia(getApplication());
-        return profesionRepositorio.obtenerNivelesEducacionales();
+
+        if (profesionMutableList == null) {
+
+            profesionMutableList = new MutableLiveData<>();
+            profesionRepositorio = ProfesionRepositorio.getInstancia(getApplication());
+            profesionMutableList = profesionRepositorio.obtenerNivelesEducacionales();
+        }
+        return profesionMutableList;
     }
 
     public MutableLiveData<Boolean> isLoadingProfesiones() {

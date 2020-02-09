@@ -286,6 +286,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
 
         if (item.getItemId() == R.id.menu_actualizar) {
             progressBar.setVisibility(View.VISIBLE);
+            isSnackBarShow = false;
             entrevistadoListaViewModel.refreshListaEntrevistados();
             return true;
         }

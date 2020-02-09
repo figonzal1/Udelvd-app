@@ -234,8 +234,8 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_LONG, s, null);
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -290,9 +290,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-
-                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -345,9 +345,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
             public void onChanged(String s) {
 
                 if (!isSnackBarShow) {
-
-                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -397,9 +397,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
             public void onChanged(String s) {
 
                 if (!isSnackBarShow) {
-
-                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -450,9 +450,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
             @Override
             public void onChanged(String s) {
                 if (!isSnackBarShow) {
-
-                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -501,8 +501,9 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
             @Override
             public void onChanged(String s) {
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nuevo_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 

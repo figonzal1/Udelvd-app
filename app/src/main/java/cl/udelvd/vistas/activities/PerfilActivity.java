@@ -74,11 +74,11 @@ public class PerfilActivity extends AppCompatActivity implements SnackbarInterfa
 
         tv_nombre.setText(String.format("%s %s", investigador.getNombre(), investigador.getApellido()));
         tv_email.setText(investigador.getEmail());
-        if (investigador.isActivado()) {
+        /*if (investigador.isActivado()) {
             tv_activado.setText(R.string.PERFIL_ACTIVADO);
         } else {
             tv_activado.setText(R.string.PERFIL_NO_ACTIVADO);
-        }
+        }*/
         tv_registro_cuenta.setText(Utils.dateToString(getApplicationContext(), false, Utils.stringToDate(getApplicationContext(), false, investigador.getCreateTime())));
     }
 

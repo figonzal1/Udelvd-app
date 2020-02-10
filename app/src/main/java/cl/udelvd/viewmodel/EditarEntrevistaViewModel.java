@@ -20,6 +20,7 @@ public class EditarEntrevistaViewModel extends AndroidViewModel {
     private TipoEntrevistaRepositorio tipoEntrevistaRepositorio;
 
     private MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutableLiveData;
+    private MutableLiveData<Entrevista> entrevistaMutableLiveData;
 
     public EditarEntrevistaViewModel(@NonNull Application application) {
         super(application);
@@ -55,9 +56,14 @@ public class EditarEntrevistaViewModel extends AndroidViewModel {
     /*
     ENTREVISTA
      */
-    public SingleLiveEvent<Entrevista> cargarEntrevista(Entrevista entrevista) {
-        entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
-        return entrevistaRepositorio.obtenerEntrevistaPersonal(entrevista);
+    public MutableLiveData<Entrevista> cargarEntrevista(Entrevista entrevista) {
+
+        if (entrevistaMutableLiveData == null) {
+            entrevistaMutableLiveData = new MutableLiveData<>();
+            entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
+            entrevistaMutableLiveData = entrevistaRepositorio.obtenerEntrevistaPersonal(entrevista);
+        }
+        return entrevistaMutableLiveData;
     }
 
     public MutableLiveData<Boolean> isLoadingEntrevista() {

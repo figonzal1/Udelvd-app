@@ -189,7 +189,7 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
             @Override
             public void onChanged(List<Accion> list) {
 
-                if (list != null) {
+                if (list != null && list.size() > 0) {
                     progressBar.setVisibility(View.GONE);
 
                     accionList = list;
@@ -259,7 +259,7 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
         nuevoEventoViewModel.cargarEmoticones().observe(this, new Observer<List<Emoticon>>() {
             @Override
             public void onChanged(List<Emoticon> emoticons) {
-                if (emoticons != null) {
+                if (emoticons != null && emoticons.size() > 0) {
 
                     progressBar.setVisibility(View.GONE);
 
@@ -388,8 +388,8 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_nuevo_evento), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nuevo_evento), Snackbar.LENGTH_LONG, s, null);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -418,6 +418,7 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
             });
         }
         snackbar.show();
+        isSnackBarShow = false;
     }
 
     @Override

@@ -72,10 +72,12 @@
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
         <activity
             android:name=".vistas.activities.NuevoEventoActivity"
-            android:parentActivityName=".vistas.activities.EventosActivity" />
+            android:parentActivityName=".vistas.activities.EventosActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".vistas.activities.EditarEventoActivity"
-            android:parentActivityName=".vistas.activities.EventosActivity" />
+            android:parentActivityName=".vistas.activities.EventosActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"

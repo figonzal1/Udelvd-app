@@ -58,7 +58,7 @@ public class EntrevistaRepositorio {
 
     //Actualizacion
     private final SingleLiveEvent<String> responseMsgErrorEntrevista = new SingleLiveEvent<>();
-    private final MutableLiveData<Entrevista> entrevistaMutableLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<Entrevista> entrevistaMutableLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
 
@@ -385,7 +385,7 @@ public class EntrevistaRepositorio {
      * @param entrevista Datos de la entrevista
      * @return Objeto mutable de la entrevista solicitada
      */
-    public MutableLiveData<Entrevista> obtenerEntrevistaPersonal(Entrevista entrevista) {
+    public SingleLiveEvent<Entrevista> obtenerEntrevistaPersonal(Entrevista entrevista) {
         enviarGetEntrevistaPersonal(entrevista);
         return entrevistaMutableLiveData;
     }

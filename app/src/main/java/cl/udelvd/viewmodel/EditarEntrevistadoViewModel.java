@@ -37,7 +37,6 @@ public class EditarEntrevistadoViewModel extends AndroidViewModel {
     private MutableLiveData<List<NivelEducacional>> nivelEducacionalMutableList;
     private MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableList;
     private MutableLiveData<List<Profesion>> profesionMutableList;
-    private MutableLiveData<Entrevistado> entrevistadoMutableList;
 
     public EditarEntrevistadoViewModel(@NonNull Application application) {
         super(application);
@@ -46,14 +45,9 @@ public class EditarEntrevistadoViewModel extends AndroidViewModel {
     /*
     ENTREVISTADO
      */
-    public MutableLiveData<Entrevistado> cargarEntrevistado(Entrevistado entrevistado) {
-
-        if (entrevistadoMutableList == null) {
-            entrevistadoMutableList = new MutableLiveData<>();
-            entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
-            entrevistadoMutableList = entrevistadoRepositorio.obtenerEntrevistado(entrevistado);
-        }
-        return entrevistadoMutableList;
+    public SingleLiveEvent<Entrevistado> cargarEntrevistado(Entrevistado entrevistado) {
+        entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
+        return entrevistadoRepositorio.obtenerEntrevistado(entrevistado);
     }
 
     public SingleLiveEvent<String> mostrarMsgErrorEntrevistado() {

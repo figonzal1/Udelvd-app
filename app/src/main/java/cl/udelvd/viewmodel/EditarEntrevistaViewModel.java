@@ -56,14 +56,9 @@ public class EditarEntrevistaViewModel extends AndroidViewModel {
     /*
     ENTREVISTA
      */
-    public MutableLiveData<Entrevista> cargarEntrevista(Entrevista entrevista) {
-
-        if (entrevistaMutableLiveData == null) {
-            entrevistaMutableLiveData = new MutableLiveData<>();
-            entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
-            entrevistaMutableLiveData = entrevistaRepositorio.obtenerEntrevistaPersonal(entrevista);
-        }
-        return entrevistaMutableLiveData;
+    public SingleLiveEvent<Entrevista> cargarEntrevista(Entrevista entrevista) {
+        entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return entrevistaRepositorio.obtenerEntrevistaPersonal(entrevista);
     }
 
     public MutableLiveData<Boolean> isLoadingEntrevista() {

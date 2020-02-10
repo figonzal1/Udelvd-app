@@ -199,8 +199,8 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -227,8 +227,8 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));

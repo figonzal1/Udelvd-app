@@ -128,7 +128,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
                         //EDITAR ENTREVISTA
                         else if (item.getItemId() == R.id.menu_editar_entrevista) {
 
-                            Intent intent = new Intent(activity.getApplicationContext(), EditarEntrevistaActivity.class);
+                            Intent intent = new Intent(activity, EditarEntrevistaActivity.class);
 
                             Bundle bundle = new Bundle();
                             bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_LARGO), entrevista.getId());

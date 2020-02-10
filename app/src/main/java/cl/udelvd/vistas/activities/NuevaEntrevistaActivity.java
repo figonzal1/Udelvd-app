@@ -125,7 +125,8 @@ public class NuevaEntrevistaActivity extends AppCompatActivity implements Snackb
         nuevaEntrevistaViewModel.cargarTiposEntrevistas().observe(this, new Observer<List<TipoEntrevista>>() {
             @Override
             public void onChanged(List<TipoEntrevista> tipoEntrevistas) {
-                if (tipoEntrevistas != null) {
+
+                if (tipoEntrevistas != null && tipoEntrevistas.size() > 0) {
 
                     progressBar.setVisibility(View.GONE);
 
@@ -149,8 +150,8 @@ public class NuevaEntrevistaActivity extends AppCompatActivity implements Snackb
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -212,8 +213,8 @@ public class NuevaEntrevistaActivity extends AppCompatActivity implements Snackb
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_nueva_entrevista), Snackbar.LENGTH_LONG, s, null);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -277,10 +278,13 @@ public class NuevaEntrevistaActivity extends AppCompatActivity implements Snackb
                     nuevaEntrevistaViewModel.refreshTipoEntrevistas();
 
                     progressBar.setVisibility(View.VISIBLE);
+
+                    isSnackBarShow = false;
                 }
             });
         }
 
+        isSnackBarShow = false;
         snackbar.show();
     }
 

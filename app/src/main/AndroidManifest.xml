@@ -40,10 +40,12 @@
             android:screenOrientation="portrait" /> <!-- Entrevistado -->
         <activity
             android:name=".vistas.activities.NuevoEntrevistadoActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
+            android:parentActivityName=".vistas.activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".vistas.activities.EditarEntrevistadoActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" /> <!-- Investigador -->
+            android:parentActivityName=".vistas.activities.MainActivity"
+            android:screenOrientation="portrait" /> <!-- Investigador -->
         <activity
             android:name=".vistas.activities.PerfilActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />

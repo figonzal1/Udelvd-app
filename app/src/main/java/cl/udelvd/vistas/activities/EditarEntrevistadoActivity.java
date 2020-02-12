@@ -251,8 +251,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
             @Override
             public void onChanged(List<Ciudad> ciudads) {
 
-
-                if (ciudads != null) {
+                if (ciudads != null && ciudads.size() > 0) {
 
                     ciudadList = ciudads;
                     ciudadAdapter = new CiudadAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ciudadList);
@@ -280,8 +279,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -310,7 +309,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
             @Override
             public void onChanged(List<EstadoCivil> estadoCivils) {
 
-                if (estadoCivils != null) {
+                if (estadoCivils != null && estadoCivils.size() > 0) {
                     estadoCivilList = estadoCivils;
                     estadoCivilAdapter = new EstadoCivilAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, estadoCivilList);
                     acEstadoCivil.setAdapter(estadoCivilAdapter);
@@ -336,8 +335,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -367,7 +366,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
             @Override
             public void onChanged(List<NivelEducacional> nivelEducacionals) {
 
-                if (nivelEducacionals != null) {
+                if (nivelEducacionals != null && nivelEducacionals.size() > 0) {
                     nivelEducacionalList = nivelEducacionals;
                     nivelEducacionalAdapter = new NivelEducacionalAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, nivelEducacionalList);
                     acNivelEducacional.setAdapter(nivelEducacionalAdapter);
@@ -393,8 +392,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -425,7 +424,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
         editarEntrevistadoViewModel.cargarProfesiones().observe(this, new Observer<List<Profesion>>() {
             @Override
             public void onChanged(List<Profesion> profesions) {
-                if (profesions != null) {
+                if (profesions != null && profesions.size() > 0) {
                     profesionList = profesions;
                     profesionAdapter = new ProfesionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, profesionList);
                     acProfesion.setAdapter(profesionAdapter);
@@ -451,8 +450,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -483,7 +482,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
             @Override
             public void onChanged(List<TipoConvivencia> list) {
 
-                if (list != null) {
+                if (list != null && list.size() > 0) {
                     tipoConvivenciaList = list;
                     tipoConvivenciaAdapter = new TipoConvivenciaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoConvivenciaList);
                     acTipoConvivencia.setAdapter(tipoConvivenciaAdapter);
@@ -510,8 +509,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -593,8 +592,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -625,8 +624,8 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevistado), Snackbar.LENGTH_LONG, s, null);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -698,6 +697,14 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
             }
 
             progressBar.setVisibility(View.GONE);
+
+            isSnackBarShow = false;
+            isAutoCompleteCiudadReady = false;
+            isAutoCompleteEstadoCivilReady = false;
+            isAutoCompleteProfesionReady = false;
+            isAutoCompleteTipoConvivenciaReady = false;
+            isAutoCompleteNivelEducacionalReady = false;
+            isEntrevistadoReady = false;
         }
     }
 
@@ -799,6 +806,14 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 @Override
                 public void onClick(View v) {
 
+                    isSnackBarShow = false;
+                    isAutoCompleteCiudadReady = false;
+                    isAutoCompleteEstadoCivilReady = false;
+                    isAutoCompleteProfesionReady = false;
+                    isAutoCompleteTipoConvivenciaReady = false;
+                    isAutoCompleteNivelEducacionalReady = false;
+                    isEntrevistadoReady = false;
+
                     //Refresh info necesaria
                     editarEntrevistadoViewModel.refreshEstadosCiviles();
                     editarEntrevistadoViewModel.refreshCiudades();
@@ -810,13 +825,11 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                     editarEntrevistadoViewModel.refreshEntrevistado(entrevistadoIntent);
 
                     progressBar.setVisibility(View.VISIBLE);
-
-                    isSnackBarShow = false;
                 }
             });
         }
-        isSnackBarShow = false;
         snackbar.show();
+        isSnackBarShow = false;
     }
 
     private boolean validarCampos() {

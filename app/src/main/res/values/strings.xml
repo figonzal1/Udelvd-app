@@ -1,9 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Un Dia En La Vida De</string>
+    <string name="app_name">Un día en la vida de ...</string>
 
     <!-- URLS-->
-    <!--<string name="HEROKU_DOMAIN">https://udelvd-dev.herokuapp.com/</string>-->
-    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>
+    <string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>
+    <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>-->
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores</string>
     <string name="URL_LOGIN_INVESTIGADORES" translatable="false">%sinvestigadores/login</string>
     <string name="URL_GET_RECUPERAR_INVESTIGADOR" translatable="false">%sinvestigadores/recuperar/%s</string>
@@ -64,10 +64,12 @@
     <string name="SHARED_PREF_RESET_PASS" translatable="false">reset_password</string>
 
     <!-- Formatos -->
-    <string name="FORMATO_FECHA">yyyy-mm-dd</string>
+    <string name="FORMATO_FECHA" translatable="false">yyyy-MM-dd</string>
     <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
     <string name="FORMATO_HORA" translatable="false">HH:mm</string>
     <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
+    <string name="FORMATO_N_ENTREVISTAS">%d entrevista</string>
+    <string name="FORMATO_FECHA_NAC">%s - %d años</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT" translatable="false">investigador</string>
@@ -425,6 +427,7 @@
     <string name="GUION" translatable="false">-</string>
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
+    <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
 
 
 </resources>

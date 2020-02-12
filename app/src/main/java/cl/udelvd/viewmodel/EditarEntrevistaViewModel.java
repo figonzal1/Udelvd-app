@@ -20,6 +20,7 @@ public class EditarEntrevistaViewModel extends AndroidViewModel {
     private TipoEntrevistaRepositorio tipoEntrevistaRepositorio;
 
     private MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutableLiveData;
+    private MutableLiveData<Entrevista> entrevistaMutableLiveData;
 
     public EditarEntrevistaViewModel(@NonNull Application application) {
         super(application);

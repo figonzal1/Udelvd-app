@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
     private ProgressBar progressBar;
 
     private LoginViewModel loginViewModel;
-    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,11 +242,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
                 Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
-                if (!isSnackBarShow) {
-
-                    showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_LONG, s, null);
-                    isSnackBarShow = true;
-                }
+                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_LONG, s, null);
             }
         });
     }
@@ -375,11 +370,10 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 public void onClick(View v) {
                     Intent intent = new Intent(LoginActivity.this, RecuperacionActivity.class);
                     startActivity(intent);
-                    finish();
                 }
             });
         }
         snackbar.show();
-        isSnackBarShow = false;
+
     }
 }

@@ -174,7 +174,7 @@ public class Utils {
         if (is_hora) {
             mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_HORA), Locale.US);
         } else {
-            mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.US);
+            mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.getDefault());
         }
 
         return mFormat.format(dFecha);
@@ -194,7 +194,7 @@ public class Utils {
         if (is_hora) {
             mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_HORA), Locale.US);
         } else {
-            mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.US);
+            mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.getDefault());
         }
         Date mDFecha = null;
 

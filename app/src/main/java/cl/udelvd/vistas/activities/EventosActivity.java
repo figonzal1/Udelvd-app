@@ -146,6 +146,9 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
         }
 
         eventosListaViewModel = ViewModelProviders.of(this).get(EventosListaViewModel.class);
+
+        fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this, EventosActivity.this);
+        viewPager.setAdapter(fragmentStatePageAdapter);
     }
 
     /**
@@ -180,7 +183,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             @Override
             public void onChanged(List<Evento> eventos) {
 
-                if (eventos != null) {
+                if (eventos != null && eventos.size() > 0) {
                     eventoList = eventos;
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
                     fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this, EventosActivity.this);
@@ -197,8 +200,8 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
@@ -211,6 +214,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             public void onChanged(String s) {
 
                 if (s.equals(getString(R.string.MSG_DELETE_EVENTO))) {
+                    isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
                     EventoRepositorio.getInstancia(getApplication()).obtenerEventosEntrevista(entrevista);
                 }
@@ -225,8 +229,8 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -291,6 +295,8 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 @Override
                 public void onClick(View v) {
 
+                    isSnackBarShow = false;
+
                     //Refresh listado de usuarios
                     eventosListaViewModel.refreshEventos(entrevista);
 
@@ -316,6 +322,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
 
                 if (msg_registro != null) {
+                    isSnackBarShow = false;
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, msg_registro, null);
                     eventosListaViewModel.refreshEventos(entrevista);
 
@@ -332,6 +339,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 String msg_actualizacion = bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
 
                 if (msg_actualizacion != null) {
+                    isSnackBarShow = false;
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
                     eventosListaViewModel.refreshEventos(entrevista);
 

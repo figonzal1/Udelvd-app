@@ -194,7 +194,7 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
             @Override
             public void onChanged(List<Accion> list) {
 
-                if (list != null) {
+                if (list != null && list.size() > 0) {
                     progressBar.setVisibility(View.GONE);
 
                     accionList = list;
@@ -221,8 +221,8 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -270,7 +270,7 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
         editarEventoViewModel.cargarEmoticones().observe(this, new Observer<List<Emoticon>>() {
             @Override
             public void onChanged(List<Emoticon> emoticons) {
-                if (emoticons != null) {
+                if (emoticons != null && emoticons.size() > 0) {
 
                     progressBar.setVisibility(View.GONE);
 
@@ -295,8 +295,8 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -403,8 +403,8 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -437,8 +437,8 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(getWindow().getDecorView().findViewById(R.id.formulario_editar_evento), Snackbar.LENGTH_LONG, s, null);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -459,6 +459,10 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
 
             String nombreAccion = Objects.requireNonNull(buscarAccionPorId(eventoIntent.getAccion().getId())).getNombre();
             acAcciones.setText(nombreAccion, false);
+
+            isAutoCompleteAcciones = false;
+            isSpinnerEmoticones = false;
+            isGetEvento = false;
         }
     }
 
@@ -471,6 +475,10 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
             snackbar.setAction(accion, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    isAutoCompleteAcciones = false;
+                    isSpinnerEmoticones = false;
+                    isGetEvento = false;
 
                     //Refresh listado de informacion necesaria
                     editarEventoViewModel.refreshAcciones();

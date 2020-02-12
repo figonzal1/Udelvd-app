@@ -42,7 +42,6 @@ public class RegistroActivity extends AppCompatActivity implements SnackbarInter
     private ProgressBar progressBar;
 
     private RegistroViewModel registroViewModel;
-    private boolean isSnackBarShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,11 +181,7 @@ public class RegistroActivity extends AppCompatActivity implements SnackbarInter
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.GONE);
-
-                if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.registro_investigador), Snackbar.LENGTH_LONG, s, null);
-                    isSnackBarShow = true;
-                }
+                showSnackbar(findViewById(R.id.registro_investigador), Snackbar.LENGTH_LONG, s, null);
 
                 Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
@@ -281,6 +276,5 @@ public class RegistroActivity extends AppCompatActivity implements SnackbarInter
     public void showSnackbar(View v, int duration, String titulo, String accion) {
         Snackbar snackbar = Snackbar.make(v, titulo, duration);
         snackbar.show();
-        isSnackBarShow = false;
     }
 }

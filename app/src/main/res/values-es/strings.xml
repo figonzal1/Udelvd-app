@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Un Día En La Vida De</string>
+    <string name="app_name">Un día en la vida de ...</string>
     <string name="ACCION">Acción</string>
     <string name="ACTIVADA">Activada</string>
     <string name="APELLIDO">Apellido</string>
@@ -32,7 +32,6 @@
     <string name="FECHA_NACIMIENTO">Fecha nacimiento</string>
     <string name="FECHA_REGISTRO_ENTREVISTA">Fecha registro:</string>
     <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
-    <string name="FORMATO_FECHA">yyyy-mm-dd</string>
     <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
     <string name="HORA_EVENTO">Hora evento</string>
     <string name="ICONO_ACCION_EVENTO">Icono acción evento</string>
@@ -154,4 +153,7 @@
     <string name="MENU_CONTACTENOS">Contáctenos</string>
     <string name="MENU_EMOTICONES">Emoticones</string>
     <string name="MENU_CONDICIONES">Condiciones y privacidad</string>
+    <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
+    <string name="FORMATO_N_ENTREVISTAS">%d entrevista</string>
+    <string name="FORMATO_FECHA_NAC">%s - %d años</string>
 </resources>

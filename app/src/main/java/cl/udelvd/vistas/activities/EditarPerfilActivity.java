@@ -84,6 +84,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
         ilNombre = findViewById(R.id.il_nombre_investigador);
         ilApellido = findViewById(R.id.il_apellido_investigador);
         ilEmail = findViewById(R.id.il_email_investigador);
+        ilEmail.setEnabled(false);
         ilPassword = findViewById(R.id.il_password_investigador);
         ilConfirmacionPassword = findViewById(R.id.il_confirm_password_investigador);
 
@@ -91,6 +92,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
         etNombre = findViewById(R.id.et_nombre_investigador);
         etApellido = findViewById(R.id.et_apellido_investigador);
         etEmail = findViewById(R.id.et_email_investigador);
+        etEmail.setEnabled(false);
         etPassword = findViewById(R.id.et_password_investigador);
         etConfirmacionPassword = findViewById(R.id.et_confirm_password_investigador);
 
@@ -108,8 +110,32 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
+
+                    ilNombre.setEnabled(false);
+                    etNombre.setEnabled(false);
+
+                    etApellido.setEnabled(false);
+                    ilApellido.setEnabled(false);
+
+                    ilPassword.setEnabled(false);
+                    etPassword.setEnabled(false);
+
+                    ilConfirmacionPassword.setEnabled(false);
+                    etConfirmacionPassword.setEnabled(false);
                 } else {
                     progressBar.setVisibility(View.GONE);
+
+                    ilNombre.setEnabled(true);
+                    etNombre.setEnabled(true);
+
+                    etApellido.setEnabled(true);
+                    ilApellido.setEnabled(true);
+
+                    ilPassword.setEnabled(true);
+                    etPassword.setEnabled(true);
+
+                    ilConfirmacionPassword.setEnabled(true);
+                    etConfirmacionPassword.setEnabled(true);
                 }
             }
         });
@@ -174,8 +200,8 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.editar_perfil), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.editar_perfil), Snackbar.LENGTH_LONG, s, null);
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -227,6 +253,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
 
         Snackbar snackbar = Snackbar.make(v, titulo, duration);
         snackbar.show();
+        isSnackBarShow = false;
     }
 
     /**

@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.R;
-import cl.udelvd.WebViewActivity;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utilidades.SnackbarInterface;
@@ -56,15 +55,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        Button button = findViewById(R.id.btn_webview);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, WebViewActivity.class);
-                startActivity(intent);
-            }
-        });
 
         instanciarRecursosInterfaz();
 

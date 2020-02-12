@@ -14,7 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <!--<activity android:name=".WebViewActivity"></activity>-->
         <activity
             android:name=".vistas.activities.ResetearPassActivity"
             android:launchMode="singleTask" />
@@ -78,6 +77,9 @@
             android:name=".vistas.activities.EditarEventoActivity"
             android:parentActivityName=".vistas.activities.EventosActivity"
             android:screenOrientation="portrait" />
+
+        <!-- Estadisticas -->
+        <activity android:name=".WebViewActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

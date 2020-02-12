@@ -287,7 +287,9 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         if (item.getItemId() == R.id.menu_actualizar) {
             progressBar.setVisibility(View.VISIBLE);
             isSnackBarShow = false;
+            entrevistadoAdapter.resetPages();
             entrevistadoListaViewModel.refreshListaEntrevistados();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -309,7 +311,9 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 if (msg_registro != null) {
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, msg_registro, null);
+                    entrevistadoAdapter.resetPages();
                     entrevistadoListaViewModel.refreshListaEntrevistados();
+
                 }
             }
         } else if (requestCode == REQUEST_CODE_EDITAR_ENTREVISTADO) {
@@ -324,6 +328,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 if (msg_actualizacion != null) {
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
+                    entrevistadoAdapter.resetPages();
                     entrevistadoListaViewModel.refreshListaEntrevistados();
                 }
             }

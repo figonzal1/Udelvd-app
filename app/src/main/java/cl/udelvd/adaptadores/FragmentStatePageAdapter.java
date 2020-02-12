@@ -15,7 +15,7 @@ import cl.udelvd.vistas.fragments.EventsSwipeFragment;
 
 public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
 
-    private final List<Evento> eventoList;
+    private List<Evento> eventoList;
     private final String fecha_entrevista;
     private final Activity activity;
     private final FragmentManager fragmentManager;
@@ -51,5 +51,9 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return eventoList.size();
+    }
+
+    public void actualizarLista(List<Evento> eventoList) {
+        this.eventoList = eventoList;
     }
 }

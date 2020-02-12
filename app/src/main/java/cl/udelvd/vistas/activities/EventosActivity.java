@@ -167,12 +167,13 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                     tv_eventos_vacios.setVisibility(View.INVISIBLE);
                 } else {
                     progressBar.setVisibility(View.GONE);
-                    viewPager.setVisibility(View.VISIBLE);
 
                     if (eventoList.size() == 0) {
+                        viewPager.setVisibility(View.GONE);
                         tv_eventos_vacios.setVisibility(View.VISIBLE);
                     } else {
                         tv_eventos_vacios.setVisibility(View.INVISIBLE);
+                        viewPager.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -184,11 +185,14 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             public void onChanged(List<Evento> eventos) {
 
                 if (eventos != null && eventos.size() > 0) {
+                    viewPager.setVisibility(View.GONE);
                     eventoList = eventos;
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
-                    fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this, EventosActivity.this);
+                    fragmentStatePageAdapter.actualizarLista(eventoList);
+                    fragmentStatePageAdapter.notifyDataSetChanged();
                     viewPager.setAdapter(fragmentStatePageAdapter);
                 }
+
             }
         });
 
@@ -217,6 +221,8 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
                     EventoRepositorio.getInstancia(getApplication()).obtenerEventosEntrevista(entrevista);
+
+                    fragmentStatePageAdapter.notifyDataSetChanged();
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }

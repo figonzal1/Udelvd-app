@@ -99,8 +99,8 @@ public class EventsSwipeFragment extends Fragment {
      * Configurar informacion del evento en cada cardview dentro del Swipe
      */
     private void setearInformacionEvento() {
-        tv_fecha_entrevista.setText(String.format("Entrevista día %s", fecha_entrevista));
-        tv_evento.setText(String.format(Locale.US, "Evento %d", position + 1));
+        tv_fecha_entrevista.setText(String.format(getString(R.string.FORMATO_ENTREVISTA_FECHA), fecha_entrevista));
+        tv_evento.setText(String.format(Locale.US, getString(R.string.FORMATO_EVENTO_N), position + 1));
 
         tv_accion.setText(String.valueOf(evento.getAccion().getNombre()));
 

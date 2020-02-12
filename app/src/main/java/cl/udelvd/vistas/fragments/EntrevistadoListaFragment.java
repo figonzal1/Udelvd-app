@@ -356,4 +356,10 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         snackbar.show();
         isSnackBarShow = false;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        entrevistadoListaViewModel.refreshListaEntrevistados();
+    }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Un Dia En La Vida De</string>
+    <string name="app_name">One day in the life of ...</string>
     <string name="ACCION">Action</string>
     <string name="ACTIVADA">Activated</string>
     <string name="APELLIDO">Last name</string>
@@ -31,7 +31,6 @@
     <string name="FECHA_NACIMIENTO">Birthdate</string>
     <string name="FECHA_REGISTRO_ENTREVISTA">Registry date</string>
     <string name="FORMATO_ENTREVISTA_N">Interview %d</string>
-    <string name="FORMATO_FECHA">yyyy-dd-mm</string>
     <string name="FORMATO_FECHA_HORA">yyyy-dd-MM HH:mm:ss</string>
     <string name="HORA_EVENTO">Event hour</string>
     <string name="ICONO_ACCION_EVENTO">Event action icon</string>
@@ -154,4 +153,7 @@
     <string name="MENU_CONDICIONES">Conditions and privacy</string>
     <string name="MENU_CONTACTENOS">Contact us</string>
     <string name="MENU_EMOTICONES">Emoticons</string>
+    <string name="MOSTRAR_ENTREVISTADOS">Displaying %d of %d interviewees</string>
+    <string name="FORMATO_N_ENTREVISTAS">%d interviews</string>
+    <string name="FORMATO_FECHA_NAC">%s - %d years</string>
 </resources>

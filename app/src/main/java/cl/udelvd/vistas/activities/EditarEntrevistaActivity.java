@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -50,6 +51,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
     private TipoEntrevistaAdapter tipoEntrevistasAdapter;
 
     private boolean isAutoCompleteTipoEntrevistaReady = false;
+    private boolean isGetEntrevista = false;
     private boolean isSnackBarShow = false;
 
 
@@ -67,10 +69,13 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
         setAutoCompleteTipoEntrevista();
 
         setPickerFechaNacimiento();
+
+        iniciarViewModelEntrevista();
     }
 
     private void instanciarRecursosInterfaz() {
 
+        tipoEntrevistasList = new ArrayList<>();
         progressBar = findViewById(R.id.progress_horizontal_editar_entrevista);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -129,11 +134,12 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
             @Override
             public void onChanged(List<TipoEntrevista> tipoEntrevistas) {
 
-                if (tipoEntrevistas != null) {
+                if (tipoEntrevistas != null && tipoEntrevistas.size() > 0) {
 
                     tipoEntrevistasList = tipoEntrevistas;
                     tipoEntrevistasAdapter = new TipoEntrevistaAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, tipoEntrevistasList);
                     acTipoEntrevista.setAdapter(tipoEntrevistasAdapter);
+                    tipoEntrevistasAdapter.notifyDataSetChanged();
 
                     isAutoCompleteTipoEntrevistaReady = true;
 
@@ -141,10 +147,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    if (isAutoCompleteTipoEntrevistaReady) {
-                        iniciarViewModelEntrevista();
-                    }
-                    tipoEntrevistasAdapter.notifyDataSetChanged();
+                    setearInfoEntrevista();
                 }
             }
         });
@@ -157,8 +160,8 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -197,15 +200,18 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
         editarEntrevistaViewModel.cargarEntrevista(entrevistaIntent).observe(this, new Observer<Entrevista>() {
             @Override
             public void onChanged(Entrevista entrevistaInternet) {
-                entrevistaIntent = entrevistaInternet;
 
-                if (isAutoCompleteTipoEntrevistaReady) {
+                if (entrevistaInternet != null) {
+                    entrevistaIntent = entrevistaInternet;
+
+                    isGetEntrevista = true;
+
                     progressBar.setVisibility(View.GONE);
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), entrevistaIntent.toString()));
 
                     setearInfoEntrevista();
                 }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), entrevistaInternet.toString()));
             }
         });
 
@@ -235,11 +241,11 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
 
                 progressBar.setVisibility(View.GONE);
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_LONG, s, null);
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_LONG, s, null);
                 }
             }
         });
@@ -251,11 +257,11 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
 
                 progressBar.setVisibility(View.GONE);
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
-                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_entrevista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
             }
         });
@@ -266,11 +272,16 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
      */
     private void setearInfoEntrevista() {
 
-        String fecha = Utils.dateToString(getApplicationContext(), false, entrevistaIntent.getFecha_entrevista());
-        etFechaEntrevista.setText(fecha);
+        if (isAutoCompleteTipoEntrevistaReady && isGetEntrevista) {
+            String fecha = Utils.dateToString(getApplicationContext(), false, entrevistaIntent.getFecha_entrevista());
+            etFechaEntrevista.setText(fecha);
 
-        String nombre = Objects.requireNonNull(buscarTipoEntrevistaPorId(entrevistaIntent.getTipoEntrevista().getId())).getNombre();
-        acTipoEntrevista.setText(nombre, false);
+            String nombre = Objects.requireNonNull(buscarTipoEntrevistaPorId(entrevistaIntent.getTipoEntrevista().getId())).getNombre();
+            acTipoEntrevista.setText(nombre, false);
+
+            isAutoCompleteTipoEntrevistaReady = false;
+            isGetEntrevista = false;
+        }
     }
 
     /**
@@ -323,7 +334,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
                 Date fechaEntrevista = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etFechaEntrevista.getText()).toString());
                 entrevistaActualizada.setFecha_entrevista(fechaEntrevista);
 
-                int id_tipo_entrevista = buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString()).getId();
+                int id_tipo_entrevista = Objects.requireNonNull(buscarTipoEntrevistaPorNombre(acTipoEntrevista.getText().toString())).getId();
 
                 TipoEntrevista tipoEntrevista = new TipoEntrevista();
                 tipoEntrevista.setId(id_tipo_entrevista);
@@ -376,18 +387,19 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
 
                     //Refresh listado de informacion necesaria
                     isAutoCompleteTipoEntrevistaReady = false;
+                    isGetEntrevista = false;
+                    isSnackBarShow = false;
 
                     editarEntrevistaViewModel.refreshTipoEntrevistas();
 
                     editarEntrevistaViewModel.refreshEntrevista(entrevistaIntent);
 
                     progressBar.setVisibility(View.VISIBLE);
-
-                    isSnackBarShow = false;
                 }
             });
         }
         snackbar.show();
+        isSnackBarShow = false;
     }
 
     /**

@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Un día en la vida de ...</string>
+    <string name="app_name">Un día en la vida de &#8230;</string>
 
     <!-- URLS-->
     <string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>
@@ -69,6 +69,8 @@
     <string name="FORMATO_HORA" translatable="false">HH:mm</string>
     <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
     <string name="FORMATO_N_ENTREVISTAS">%d entrevista</string>
+    <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
+    <string name="FORMATO_EVENTO_N">Evento %d</string>
     <string name="FORMATO_FECHA_NAC">%s - %d años</string>
 
     <!-- Keys for intent -->

@@ -22,8 +22,7 @@ public class WebViewActivity extends AppCompatActivity {
         web_view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         web_view.getSettings().setJavaScriptEnabled(true);
         web_view.getSettings().setBuiltInZoomControls(true);
-        //web_view.loadUrl("https://public.tableau.com/views/Libro1_15810427188200/Dashboard1?:display_count=y&publish=yes&:origin=viz_share_link");
-        web_view.loadUrl("http://192.168.0.22/test");
+        web_view.loadUrl("https://public.tableau.com/views/Libro1_15810427188200/Dashboard1?:display_count=y&:origin=viz_share_link");
         web_view.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(android.webkit.WebView view, String url) {

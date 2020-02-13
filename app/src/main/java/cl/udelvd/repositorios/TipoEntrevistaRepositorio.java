@@ -153,7 +153,7 @@ public class TipoEntrevistaRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }

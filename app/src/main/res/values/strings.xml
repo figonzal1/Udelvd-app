@@ -109,6 +109,8 @@
     <string name="KEY_ENTREVISTADO_ID_CIUDAD" translatable="false">id_ciudad</string>
     <string name="KEY_ENTREVISTADO_ID_PROFESION" translatable="false">id_profesion</string>
     <string name="KEY_ENTREVISTADO_N_ENTREVISTAS" translatable="false">n_entrevistas</string>
+    <string name="KEY_ENTREVISTADO_N_ENTREVISTADOS" translatable="false">n_entrevistados</string>
+    <string name="KEY_ENTREVISTADOS" translatable="false">entrevistados</string>
 
     <string name="KEY_ENTREVISTA_OBJECT" translatable="false">entrevistas</string>
     <string name="KEY_ENTREVISTA_ID_ENTREVISTADO" translatable="false">id_entrevistado</string>

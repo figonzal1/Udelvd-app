@@ -151,7 +151,7 @@ public class AccionRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgError.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }

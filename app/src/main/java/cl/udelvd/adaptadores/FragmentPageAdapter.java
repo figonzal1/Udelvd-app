@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import cl.udelvd.EstadisticasFragment;
 import cl.udelvd.R;
 import cl.udelvd.vistas.fragments.EntrevistadoListaFragment;
+import cl.udelvd.vistas.fragments.EstadisticasFragment;
 
 /**
  * Page Adapter usado cuando la paginacion es fija

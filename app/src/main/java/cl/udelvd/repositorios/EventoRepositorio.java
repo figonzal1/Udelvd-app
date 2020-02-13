@@ -236,7 +236,7 @@ public class EventoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseErrorMsgListado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -359,7 +359,7 @@ public class EventoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseErrorMsgRegistro.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -500,7 +500,7 @@ public class EventoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgEvento.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseErrorMsgEvento.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -605,7 +605,7 @@ public class EventoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseErrorMsgActualizacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -716,7 +716,7 @@ public class EventoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseErrorMsgEliminar.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }

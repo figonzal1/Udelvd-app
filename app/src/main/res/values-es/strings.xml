@@ -156,4 +156,6 @@
     <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
     <string name="FORMATO_N_ENTREVISTAS">%d entrevista</string>
     <string name="FORMATO_FECHA_NAC">%s - %d años</string>
+    <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
+    <string name="FORMATO_EVENTO_N">Evento %d</string>
 </resources>

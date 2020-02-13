@@ -175,9 +175,9 @@ public class EntrevistadoRepositorio {
                     /*
                     N ENTREVISTADOS
                      */
-                    JSONObject jsonEntrevistado = jsonObject.getJSONObject("entrevistados").getJSONObject("data");
+                    JSONObject jsonEntrevistado = jsonObject.getJSONObject(application.getString(R.string.KEY_ENTREVISTADOS)).getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    int n_entrevistados = jsonEntrevistado.getInt("n_entrevistados");
+                    int n_entrevistados = jsonEntrevistado.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTADOS));
                     mutableNEntrevistados.postValue(n_entrevistados);
 
                     /*
@@ -310,7 +310,7 @@ public class EntrevistadoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -453,7 +453,7 @@ public class EntrevistadoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorRegistro.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -668,7 +668,7 @@ public class EntrevistadoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorEntrevistado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorEntrevistado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -810,7 +810,7 @@ public class EntrevistadoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorActualizacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -953,7 +953,7 @@ public class EntrevistadoRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorEliminar.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }

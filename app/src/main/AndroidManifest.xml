@@ -79,7 +79,7 @@
             android:screenOrientation="portrait" />
 
         <!-- Estadisticas -->
-        <activity android:name=".WebViewActivity" />
+        <activity android:name=".vistas.activities.WebViewActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

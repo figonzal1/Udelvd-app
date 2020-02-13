@@ -190,7 +190,7 @@ public class InvestigadorRepositorio {
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG))) {
                                 responseMsgErrorRegistro.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
                             } else {
-                                responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                                responseMsgErrorRegistro.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -376,7 +376,7 @@ public class InvestigadorRepositorio {
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
                                 responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
                             } else {
-                                responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -528,7 +528,7 @@ public class InvestigadorRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.SERVER_ERROR) + errorObject);
-                        responseMsgErrorActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        responseMsgErrorActualizacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }

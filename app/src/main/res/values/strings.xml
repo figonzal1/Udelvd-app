@@ -212,6 +212,7 @@
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE" translatable="false">VOLLEY_ERR_INV_UPDATE</string>
     <string name="TAG_VOLLEY_ERR_INV_RESET" translatable="false">VOLLEY_ERR_INV_RESET</string>
+    <string name="TAG_VOLLEY_ERR_INV_LISTA" translatable="false">VOLLEY_ERR_INV_LISTA</string>
     <string name="TAG_VOLLEY_ERR_INV_RECUPERAR" translatable="false">VOLLEY_ERR_INV_RECUPERAR</string>
     <string name="TAG_VOLLEY_ERR_ENTREVISTADO" translatable="false">VOLLEY_ERR_ENTREVISTADO</string>
     <string name="TAG_VOLLEY_ERR_ACCION" translatable="false">VOLLEY_ERR_ACCION</string>
@@ -252,6 +253,7 @@
     <string name="TAG_TOKEN_LOGOUT" translatable="false">LOGOUT</string>
     <string name="TOKEN_LOGOUT_MSG" translatable="false">BORRANDO TOKEN:</string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTADO" translatable="false">VM_LISTA_ENTREVISTADO</string>
+    <string name="TAG_VIEW_MODEL_LISTA_INVESTIGADORES" translatable="false">VM_LISTA_INVESTIGADORES</string>
     <string name="VIEW_MODEL_LISTA_ENTREVISTADO_MSG" translatable="false">Listado cargado</string>
     <string name="TAG_VIEW_MODEL_ESTADO_CIVIL" translatable="false">VM_ESTADO_CIVIL</string>
     <string name="VIEW_MODEL_LISTADO_CARGADO" translatable="false">Listado cargado</string>
@@ -298,6 +300,7 @@
     <string name="TAG_VIEW_MODEL_EDITAR_EVENTO" translatable="false">VM_MODEL_EDITAR_EVENTO</string>
     <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA" translatable="false">VM_ELIMINAR_ENTREVISTA</string>
+    <string name="TAG_VIEW_MODEL_LISTADO_INVESTIGADORES" translatable="false">VM_LISTADO_INVESTIGADORES</string>
     <string name="MSG_UPDATE_EVENTO">¡Evento actualizado!</string>
     <string name="MSG_DELETE_EVENTO">¡Evento eliminado!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_EVENTO" translatable="false">VM_ELIMINAR_EVENTO</string>
@@ -354,6 +357,8 @@
     <string name="SNACKBAR_REINTENTAR">Reintentar</string>
     <string name="SNACKBAR_SOLICITAR_RECUPERACION">Solicitar nuevo</string>
     <string name="SNACKBAR_INICIAR_SESION">Iniciar sesión</string>
+    <string name="SNACKBAR_ACTIVACION">, ahora debes esperar la activacion de tu cuenta</string>
+    <string name="SNACKBAR_CUENTA_WAIT">Cuenta en espera de activación</string>
 
     <!-- XML -->
     <string name="ICONO_FECHA_ENTREVISTA">Icono fecha entrevista</string>
@@ -432,6 +437,9 @@
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
     <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

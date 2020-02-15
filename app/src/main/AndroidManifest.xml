@@ -17,15 +17,18 @@
         <activity
             android:name=".vistas.activities.ResetearPassActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".vistas.activities.RecuperacionActivity" />
-        <!-- Main -->
+        <activity android:name=".vistas.activities.RecuperacionActivity" /> <!-- Main -->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Entrevistas -->
+        </activity>
+        <activity
+            android:name=".vistas.activities.InvestigadorListActivity"
+            android:parentActivityName=".vistas.activities.MainActivity" />
+        <!-- Entrevistas -->
         <activity
             android:name=".vistas.activities.EntrevistasListaActivity"
             android:parentActivityName=".vistas.activities.MainActivity" />
@@ -76,9 +79,7 @@
         <activity
             android:name=".vistas.activities.EditarEventoActivity"
             android:parentActivityName=".vistas.activities.EventosActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- Estadisticas -->
+            android:screenOrientation="portrait" /> <!-- Estadisticas -->
         <activity android:name=".vistas.activities.WebViewActivity" />
 
         <meta-data

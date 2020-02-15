@@ -168,7 +168,7 @@ public class RegistroActivity extends AppCompatActivity implements SnackbarInter
                 //Si el registro fue correcto cerrar la actividad
                 if (s.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
                     Intent intent = getIntent();
-                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
+                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s + getString(R.string.SNACKBAR_ACTIVACION));
                     setResult(RESULT_OK, intent);
                     finish();
                 }

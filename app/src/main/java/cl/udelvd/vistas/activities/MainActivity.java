@@ -170,6 +170,10 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                     return true;
                 } else if (menuItem.getItemId() == R.id.menu_emoticones) {
                     return true;
+                } else if (menuItem.getItemId() == R.id.menu_investigadores) {
+                    Intent intent = new Intent(MainActivity.this, InvestigadorListActivity.class);
+                    startActivity(intent);
+                    return true;
                 }
 
                 //LOGOUT

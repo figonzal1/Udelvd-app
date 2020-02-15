@@ -102,6 +102,8 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
 
         entrevistadoList = new ArrayList<>();
 
+        entrevistadoListaViewModel = ViewModelProviders.of(this).get(EntrevistadoListaViewModel.class);
+
         progressBar = v.findViewById(R.id.progress_bar_entrevistados);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -110,28 +112,19 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
-        rv.setAdapter(new EntrevistadoAdapter(
-                new ArrayList<Entrevistado>(),
-                getContext(),
-                EntrevistadoListaFragment.this,
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
-                entrevistadoListaViewModel)
-        );
 
         tv_entrevistados_vacios = v.findViewById(R.id.tv_entrevistados_vacios);
 
         tv_n_entrevistados = v.findViewById(R.id.tv_n_entrevistados);
         tv_n_entrevistados.setVisibility(View.INVISIBLE);
 
-        entrevistadoListaViewModel = ViewModelProviders.of(this).get(EntrevistadoListaViewModel.class);
-
         entrevistadoAdapter = new EntrevistadoAdapter(
-                entrevistadoList,
+                new ArrayList<Entrevistado>(),
                 getContext(),
                 EntrevistadoListaFragment.this,
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
-                entrevistadoListaViewModel
-        );
+                entrevistadoListaViewModel);
+        rv.setAdapter(entrevistadoAdapter);
     }
 
     /**

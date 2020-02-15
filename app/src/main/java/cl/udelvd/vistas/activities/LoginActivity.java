@@ -342,7 +342,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 Bundle bundle = data.getExtras();
 
                 assert bundle != null;
-                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO)), null);
+                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_INDEFINITE, bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO)), null);
             }
         }
 

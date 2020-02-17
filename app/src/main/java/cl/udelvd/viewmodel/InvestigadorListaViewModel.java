@@ -26,11 +26,11 @@ public class InvestigadorListaViewModel extends AndroidViewModel {
         return repositorio.getIsLoading();
     }
 
-    public MutableLiveData<List<Investigador>> cargarInvestigadores() {
+    public MutableLiveData<List<Investigador>> cargarInvestigadores(Investigador investigador) {
         if (mutableLiveData == null) {
             mutableLiveData = new MutableLiveData<>();
             repositorio = InvestigadorRepositorio.getInstance(getApplication());
-            mutableLiveData = repositorio.obtenerInvestigadores();
+            mutableLiveData = repositorio.obtenerInvestigadores(investigador);
         }
 
         return mutableLiveData;

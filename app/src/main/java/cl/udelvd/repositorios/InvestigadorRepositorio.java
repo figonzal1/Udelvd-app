@@ -35,7 +35,6 @@ public class InvestigadorRepositorio {
     private static InvestigadorRepositorio instancia;
     private final Application application;
 
-    private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
     //Listados
     private List<Investigador> investigadorList = new ArrayList<>();
     private MutableLiveData<List<Investigador>> investigadorMutableLiveData = new MutableLiveData<>();
@@ -61,6 +60,7 @@ public class InvestigadorRepositorio {
     //PROGRESS DIALOG
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
+    private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
     private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
     private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
     private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
@@ -87,12 +87,12 @@ public class InvestigadorRepositorio {
         return instancia;
     }
 
-    public MutableLiveData<List<Investigador>> obtenerInvestigadores() {
-        sendGetListado();
+    public MutableLiveData<List<Investigador>> obtenerInvestigadores(Investigador investigador) {
+        sendGetListado(investigador);
         return investigadorMutableLiveData;
     }
 
-    private void sendGetListado() {
+    private void sendGetListado(Investigador investigador) {
 
         investigadorList = new ArrayList<>();
 
@@ -185,7 +185,7 @@ public class InvestigadorRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN));
+        String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN), investigador.getId());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {
@@ -330,7 +330,7 @@ public class InvestigadorRepositorio {
         };
 
 
-        String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN));
+        String url = String.format(application.getString(R.string.URL_POST_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN));
 
         //Hacer peticion post
         StringRequest request = new StringRequest(Request.Method.POST, url,

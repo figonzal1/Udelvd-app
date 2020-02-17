@@ -1,12 +1,16 @@
 package cl.udelvd.vistas.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
@@ -37,6 +41,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
     private ProgressBar progressBar;
     private boolean isSnackBarShow = false;
     private TextView tv_investigadores_vacios;
+    private Investigador investigador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,30 +50,14 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
 
         Utils.configurarToolbar(this, getApplicationContext(), 0, "Listado Investigadores");
 
-        investigadorList = new ArrayList<>();
+        instanciarRecursosInterfaz();
 
-        progressBar = findViewById(R.id.progress_bar_investigadores);
-        progressBar.setVisibility(View.VISIBLE);
+        obtenerDatosAdmin();
 
-        tv_investigadores_vacios = findViewById(R.id.tv_investigadores_vacios);
+        iniciarViewModelListado();
+    }
 
-        rv = findViewById(R.id.rv_lista_investigadores);
-
-        LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
-        rv.setLayoutManager(ly);
-
-        investigadorListaViewModel = ViewModelProviders.of(this).get(InvestigadorListaViewModel.class);
-
-        investigadorAdapter = new InvestigadorAdapter(
-                investigadorList,
-                getApplicationContext(),
-                InvestigadorListActivity.this,
-                getSupportFragmentManager()
-        );
-
-        rv.setAdapter(investigadorAdapter);
-
-
+    private void iniciarViewModelListado() {
         investigadorListaViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
@@ -84,7 +73,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             }
         });
 
-        investigadorListaViewModel.cargarInvestigadores().observe(this, new Observer<List<Investigador>>() {
+        investigadorListaViewModel.cargarInvestigadores(investigador).observe(this, new Observer<List<Investigador>>() {
             @Override
             public void onChanged(List<Investigador> investigadors) {
 
@@ -123,6 +112,38 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         });
     }
 
+    private void obtenerDatosAdmin() {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+        investigador = new Investigador();
+        investigador.setId(sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0));
+    }
+
+    private void instanciarRecursosInterfaz() {
+
+        investigadorList = new ArrayList<>();
+
+        progressBar = findViewById(R.id.progress_bar_investigadores);
+        progressBar.setVisibility(View.VISIBLE);
+
+        tv_investigadores_vacios = findViewById(R.id.tv_investigadores_vacios);
+
+        rv = findViewById(R.id.rv_lista_investigadores);
+
+        LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(ly);
+
+        investigadorListaViewModel = ViewModelProviders.of(this).get(InvestigadorListaViewModel.class);
+
+        investigadorAdapter = new InvestigadorAdapter(
+                investigadorList,
+                getApplicationContext(),
+                InvestigadorListActivity.this,
+                getSupportFragmentManager()
+        );
+
+        rv.setAdapter(investigadorAdapter);
+    }
+
     @Override
     public void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
 
@@ -146,11 +167,21 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             });
         }
         snackbar.show();
-        //isSnackBarShow = false;
+        isSnackBarShow = false;
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, Object object) {
         Toast.makeText(getApplicationContext(), "Activar Inves", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

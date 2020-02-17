@@ -4,7 +4,8 @@
     <!-- URLS-->
     <string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>
     <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>-->
-    <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores</string>
+    <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/id_admin/%d</string>
+    <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
     <string name="URL_LOGIN_INVESTIGADORES" translatable="false">%sinvestigadores/login</string>
     <string name="URL_GET_RECUPERAR_INVESTIGADOR" translatable="false">%sinvestigadores/recuperar/%s</string>
     <string name="URL_PUT_RESETEAR_PASSWORD" translatable="false">%sinvestigadores/resetear</string>

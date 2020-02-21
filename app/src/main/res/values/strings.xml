@@ -330,6 +330,9 @@
     <string name="TAG_FIREBASE_CHANNEL" translatable="false">FIREBASE_CHANNEL</string>
     <string name="FIREBASE_CHANNEL_CREATED" translatable="false">Channel created</string>
     <string name="TAG_TOKEN_FIREBASE" translatable="false">TOKEN_FIREBASE</string>
+    <string name="TAG_GOOGLE_PLAY" translatable="false">GOOGLE_PLAY</string>
+    <string name="GOOGLE_PLAY_NO_SOPORTADO" translatable="false">Google play no soportado</string>
+    <string name="GOOGLE_PLAY_ACTUALIZADO" translatable="false">Google play actualizado</string>
 
     <!-- INTENT KEY -->
     <string name="INTENT_KEY_MSG_LOGIN" translatable="false">msg_login</string>
@@ -337,6 +340,7 @@
     <string name="INTENT_KEY_MSG_REGISTRO" translatable="false">msg_registro</string>
     <string name="INTENT_KEY_NORMALES" translatable="false">normales</string>
     <string name="INTENT_KEY_EXTRAORDINARIAS" translatable="false">extraordinarias</string>
+    <string name="INTENT_KEY_INVES_ACTIVADO" translatable="false">inv_activado</string>
 
     <!--Dialog -->
     <string name="DIALOG_MESSAGE_ENTREVISTA">¿Está seguro que quiere eliminar esta entrevista?</string>
@@ -458,9 +462,6 @@
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
     <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
-    <string name="TAG_GOOGLE_PLAY">GOOGLE_PLAY</string>
-    <string name="GOOGLE_PLAY_NO_SOPORTADO">Google play no soportado</string>
-    <string name="GOOGLE_PLAY_ACTUALIZADO">Google play actualizado</string>
 
 
 </resources>

@@ -3,6 +3,7 @@ package cl.udelvd.vistas.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import cl.udelvd.adaptadores.FragmentPageAdapter;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.EntrevistadoRepositorio;
+import cl.udelvd.servicios.MyFirebaseMessagingService;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.fragments.DeleteDialogListener;
 
@@ -54,7 +56,23 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
         sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
-        Utils.checkJWT(sharedPreferences, MainActivity.this);
+        Utils.checkPlayServices(MainActivity.this);
+
+        Utils.checkFirebaseServices(MainActivity.this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            MyFirebaseMessagingService.createChannel(this);
+        }
+
+        String rol = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), getString(R.string.ROL_INVESTIGADOR));
+        //Si el rol es de admin las notificaciones llegan
+        if (rol.equals(getString(R.string.ROL_ADMINITRADOR))) {
+            MyFirebaseMessagingService.suscribirTema(this);
+        } else {
+            MyFirebaseMessagingService.eliminarSuscripcionTema(this);
+        }
+
+        Utils.handleJWT(sharedPreferences, MainActivity.this);
 
         Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_menu_white_24dp, null);
 
@@ -64,6 +82,20 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
         setearViewPagerTabsDrawer();
 
+        obtenerDesvioNotificacion();
+    }
+
+    private void obtenerDesvioNotificacion() {
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle != null && bundle.containsKey(getString(R.string.NOTIFICACION_INTENT_ACTIVADO))) {
+
+            if (bundle.getBoolean(getString(R.string.NOTIFICACION_INTENT_ACTIVADO))) {
+
+                Intent intent = new Intent(MainActivity.this, InvestigadorListActivity.class);
+                startActivity(intent);
+            }
+        }
     }
 
     private void instanciarRecursosInterfaz() {

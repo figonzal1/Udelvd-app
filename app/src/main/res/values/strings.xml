@@ -1,9 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Un día en la vida de &#8230;</string>
 
+    <!-- NOTIFICACION -->
+    <string name="TEMA_NOTIFICACION_REGISTRO" translatable="false">RegistroInvestigador</string>
+    <string name="CANAL_NOMBRE">Alertas de activaciones</string>
+    <string name="CANAL_DESCRIPCION">Alertas de registro de nuevos investigadores</string>
+
     <!-- URLS-->
-    <string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>
-    <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>-->
+    <!--<string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>-->
+    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
     <string name="URL_LOGIN_INVESTIGADORES" translatable="false">%sinvestigadores/login</string>
@@ -271,8 +276,8 @@
     <string name="REGEX_HORA" translatable="false">:</string>
     <string name="SI" translatable="false">Si</string>
     <string name="NO" translatable="false">No</string>
-    <string name="ROL_INVESTIGADOR">Investigador</string>
-    <string name="ROL_ADMINITRADOR">Administrador</string>
+    <string name="ROL_INVESTIGADOR" translatable="false">Investigador</string>
+    <string name="ROL_ADMINITRADOR" translatable="false">Administrador</string>
     <string name="NULL" translatable="false">null</string>
     <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
     <string name="TAB_NAME_ENTREVISTADOS">Entrevistados</string>
@@ -315,6 +320,16 @@
     <string name="TAG_DYNAMIC_LINK_FIREBASE" translatable="false">DYNAMIC_LINK_FIREBASE</string>
     <string name="TAG_DYNAMIC_LINK_JSON" translatable="false">DYNAMIC_LINK_JSON</string>
     <string name="DYNAMIC_LINK_INVALIDO">Link de recuperacion ya no es válido</string>
+    <string name="TAG_FIREBASE_TOKEN" translatable="false">FIREBASE_TOKEN</string>
+    <string name="FIREBASE_MESSAGE" translatable="false">FIREBASE_MESSAGE</string>
+    <string name="FIREBASE_MESSAGE_DATA" translatable="false">FIREBASE_MESSAGE_DATA</string>
+    <string name="TAG_FIREBASE_SUSCRIPCION" translatable="false">FIREBASE_SUSCRIPCION</string>
+    <string name="SUSCRIPCION_OK" translatable="false">Suscripcion ok</string>
+    <string name="SUSCRIPCION_ELIMINADA" translatable="false">Suscripcion eliminada</string>
+    <string name="SUSCRIPCION_ERRONEA" translatable="false">Suscripcion erronea</string>
+    <string name="TAG_FIREBASE_CHANNEL" translatable="false">FIREBASE_CHANNEL</string>
+    <string name="FIREBASE_CHANNEL_CREATED" translatable="false">Channel created</string>
+    <string name="TAG_TOKEN_FIREBASE" translatable="false">TOKEN_FIREBASE</string>
 
     <!-- INTENT KEY -->
     <string name="INTENT_KEY_MSG_LOGIN" translatable="false">msg_login</string>
@@ -329,6 +344,11 @@
     <string name="DIALOG_NEGATIVE_BTN">Cancelar</string>
     <string name="DIALOG_MESSAGE_ENTREVISTADO">¿Está seguro que quiere eliminar este entrevistado?</string>
     <string name="DIALOG_MESSAGE_EVENTO">¿Está seguro que quiere eliminar este evento?</string>
+
+    <!-- NOTIFICACIONES-->
+    <string name="NOTIFICACION_TITULO" translatable="false">titulo</string>
+    <string name="NOTIFICACION_DESCRIPCION" translatable="false">descripcion</string>
+    <string name="NOTIFICACION_INTENT_ACTIVADO" translatable="false">notificacionActivaciones</string>
 
 
     <!-- Menu -->
@@ -354,11 +374,11 @@
     <string name="MENU_ACCIONES">Acciones</string>
     <string name="MENU_EMOTICONES">Emoticones</string>
 
-    <!-- SNACLBAR -->
+    <!-- SNACKLBAR -->
     <string name="SNACKBAR_REINTENTAR">Reintentar</string>
     <string name="SNACKBAR_SOLICITAR_RECUPERACION">Solicitar nuevo</string>
     <string name="SNACKBAR_INICIAR_SESION">Iniciar sesión</string>
-    <string name="SNACKBAR_ACTIVACION">, ahora debes esperar la activacion de tu cuenta</string>
+    <string name="SNACKBAR_ACTIVACION">, tu cuenta está en espera de activación</string>
     <string name="SNACKBAR_CUENTA_WAIT">Cuenta en espera de activación</string>
 
     <!-- XML -->
@@ -438,9 +458,9 @@
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
     <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="TAG_GOOGLE_PLAY">GOOGLE_PLAY</string>
+    <string name="GOOGLE_PLAY_NO_SOPORTADO">Google play no soportado</string>
+    <string name="GOOGLE_PLAY_ACTUALIZADO">Google play actualizado</string>
 
 
 </resources>

@@ -50,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
     private ProgressBar progressBar;
 
     private LoginViewModel loginViewModel;
+    private Bundle bundle;
+    private boolean isNotification = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,42 +66,9 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
         configurarlinkRecuperar();
 
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        // Get deep link from result (may be null if no link is found)
-                        Uri deepLink;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
+        dynamicLinkRecuperacio();
 
-                            Log.d(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), String.valueOf(deepLink));
-
-
-                            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
-
-                            boolean isReset = sharedPreferences.getBoolean(getString(R.string.SHARED_PREF_RESET_PASS), false);
-
-                            if (!isReset) {
-
-                                Intent intent = new Intent(LoginActivity.this, ResetearPassActivity.class);
-                                startActivity(intent);
-
-                                finish();
-                            } else {
-                                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_INDEFINITE, getString(R.string.DYNAMIC_LINK_INVALIDO), getString(R.string.SNACKBAR_SOLICITAR_RECUPERACION));
-                            }
-                        }
-
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), "getDynamicLink:onFailure", e);
-                    }
-                });
+        obtenerDesvioNotificacion();
     }
 
     /**
@@ -210,11 +179,9 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                     assert msg_login != null;
                     if (msg_login.equals(getString(R.string.MSG_INVEST_LOGIN))) {
 
-                        //Mostrar mensaje en pantalla
-                        //Toast.makeText(getApplicationContext(), msg_login, Toast.LENGTH_LONG).show();
-
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra(getString(R.string.INTENT_KEY_MSG_LOGIN), msg_login);
+                        intent.putExtra(getString(R.string.NOTIFICACION_INTENT_ACTIVADO), isNotification);
                         startActivity(intent);
                         finish();
                     }
@@ -235,50 +202,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_LONG, s, null);
             }
         });
-    }
-
-    /**
-     * Validacion de campos para formulario Login
-     *
-     * @return True|False dependiendo de los errores
-     */
-    private boolean validarCampos() {
-
-        int contador_errores = 0;
-
-        //Comprobar email vacio
-        if (TextUtils.isEmpty(etEmail.getText())) {
-            ilEmail.setErrorEnabled(true);
-            ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
-            contador_errores++;
-        } else {
-
-            //Comprobar mail válido
-            if (Utils.isInValidEmail(etEmail.getText())) {
-                ilEmail.setErrorEnabled(true);
-                ilEmail.setError(getString(R.string.VALIDACION_EMAIL));
-                contador_errores++;
-            } else {
-                ilEmail.setErrorEnabled(false);
-            }
-        }
-
-        //Comprobar contraseña vacia
-        if (TextUtils.isEmpty(etPassword.getText())) {
-            ilPassword.setErrorEnabled(true);
-            ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
-            contador_errores++;
-        } //Comprobar contraseña menor que 8
-        else if (etPassword.getText().length() < 8) {
-            ilPassword.setErrorEnabled(true);
-            ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
-            contador_errores++;
-        } else {
-            ilPassword.setErrorEnabled(false);
-        }
-
-        //Si no hay errores, pasa a registro
-        return contador_errores == 0;
     }
 
     /**
@@ -331,6 +254,60 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         spans.setSpan(clickSpan, 0, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
+    /**
+     * Funcion que recibe y procesa el dynamic link desde el servidor
+     */
+    private void dynamicLinkRecuperacio() {
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        // Get deep link from result (may be null if no link is found)
+                        Uri deepLink;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+
+                            Log.d(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), String.valueOf(deepLink));
+
+
+                            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+
+                            boolean isReset = sharedPreferences.getBoolean(getString(R.string.SHARED_PREF_RESET_PASS), false);
+
+                            if (!isReset) {
+
+                                Intent intent = new Intent(LoginActivity.this, ResetearPassActivity.class);
+                                startActivity(intent);
+
+                                finish();
+                            } else {
+                                showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_INDEFINITE, getString(R.string.DYNAMIC_LINK_INVALIDO), getString(R.string.SNACKBAR_SOLICITAR_RECUPERACION));
+                            }
+                        }
+
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), "getDynamicLink:onFailure", e);
+                    }
+                });
+    }
+
+    /**
+     * Determinar si intent es desde notificacion
+     */
+    private void obtenerDesvioNotificacion() {
+        bundle = getIntent().getExtras();
+
+        if (bundle != null && bundle.containsKey(getString(R.string.NOTIFICACION_INTENT_ACTIVADO))) {
+            isNotification = bundle.getBoolean(getString(R.string.NOTIFICACION_INTENT_ACTIVADO));
+        }
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -365,5 +342,49 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         }
         snackbar.show();
 
+    }
+
+    /**
+     * Validacion de campos para formulario Login
+     *
+     * @return True|False dependiendo de los errores
+     */
+    private boolean validarCampos() {
+
+        int contador_errores = 0;
+
+        //Comprobar email vacio
+        if (TextUtils.isEmpty(etEmail.getText())) {
+            ilEmail.setErrorEnabled(true);
+            ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } else {
+
+            //Comprobar mail válido
+            if (Utils.isInValidEmail(etEmail.getText())) {
+                ilEmail.setErrorEnabled(true);
+                ilEmail.setError(getString(R.string.VALIDACION_EMAIL));
+                contador_errores++;
+            } else {
+                ilEmail.setErrorEnabled(false);
+            }
+        }
+
+        //Comprobar contraseña vacia
+        if (TextUtils.isEmpty(etPassword.getText())) {
+            ilPassword.setErrorEnabled(true);
+            ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            contador_errores++;
+        } //Comprobar contraseña menor que 8
+        else if (etPassword.getText().length() < 8) {
+            ilPassword.setErrorEnabled(true);
+            ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
+            contador_errores++;
+        } else {
+            ilPassword.setErrorEnabled(false);
+        }
+
+        //Si no hay errores, pasa a registro
+        return contador_errores == 0;
     }
 }

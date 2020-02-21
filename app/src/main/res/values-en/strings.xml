@@ -113,8 +113,6 @@
     <string name="RECUPERAR_CUENTA">Recover account</string>
     <string name="REGISTRAR">Register</string>
     <string name="REGISTRO_CUENTA">Register account</string>
-    <string name="ROL_ADMINITRADOR">Admin</string>
-    <string name="ROL_INVESTIGADOR">Investigator</string>
     <string name="SELECCIONAR_EMOTICON">Select emoticon</string>
     <string name="SERVER_ERROR_AUTH_MSG_VM">Log in failed, check yout credentials</string>
     <string name="SERVER_ERROR_MSG_VM">Ups! A problem has occurred</string>
@@ -158,4 +156,8 @@
     <string name="FORMATO_FECHA_NAC">%s - %d years</string>
     <string name="FORMATO_ENTREVISTA_FECHA">Interview day %s</string>
     <string name="FORMATO_EVENTO_N">Event %d</string>
+    <string name="CANAL_NOMBRE">Activations alert</string>
+    <string name="CANAL_DESCRIPCION">Registration alerts for new researchers</string>
+    <string name="SNACKBAR_CUENTA_WAIT">Account Waiting for Activation</string>
+    <string name="SNACKBAR_ACTIVACION">, your account is waiting for activation</string>
 </resources>

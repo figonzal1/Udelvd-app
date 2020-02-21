@@ -2,6 +2,7 @@ package cl.udelvd.utilidades;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +37,62 @@ import cl.udelvd.R;
 import cl.udelvd.vistas.activities.LoginActivity;
 
 public class Utils {
+
+    /**
+     * Funcion encargada de realizar la iniciacion de los servicios de FIREBASE
+     */
+    public static void checkFirebaseServices(final Activity activity) {
+
+        //FIREBASE SECTION
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity,
+                new OnSuccessListener<InstanceIdResult>() {
+                    @Override
+                    public void onSuccess(InstanceIdResult instanceIdResult) {
+                        String token = instanceIdResult.getToken();
+                        Log.d(activity.getString(R.string.TAG_TOKEN_FIREBASE), token);
+
+                        //CRASH ANALYTICS LOG
+                        //Crashlytics.log(Log.DEBUG, getString(R.string.TAG_FIREBASE_TOKEN), token);
+                        //Crashlytics.setUserIdentifier(token);
+                    }
+                });
+    }
+
+    /**
+     * Funcion que verifica si el dispositivo cuenta con GooglePlayServices actualizado
+     */
+    public static void checkPlayServices(Activity activity) {
+
+        int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+        GoogleApiAvailability mGoogleApiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = mGoogleApiAvailability.isGooglePlayServicesAvailable(activity);
+
+        //Si existe algun problema con google play
+        if (resultCode != ConnectionResult.SUCCESS) {
+
+            //Si el error puede ser resuelto por el usuario
+            if (mGoogleApiAvailability.isUserResolvableError(resultCode)) {
+
+                Dialog dialog = mGoogleApiAvailability.getErrorDialog(activity, resultCode,
+                        PLAY_SERVICES_RESOLUTION_REQUEST);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+            } else {
+
+                //El error no puede ser resuelto por el usuario y la app se cierra
+                Log.d(activity.getString(R.string.TAG_GOOGLE_PLAY), activity.getString(R.string.GOOGLE_PLAY_NO_SOPORTADO));
+                //Crashlytics.log(Log.DEBUG, activity.getString(R.string.TAG_GOOGLE_PLAY),activity.getString(R.string.GOOGLE_PLAY_NOSOPORTADO));
+                activity.finish();
+            }
+        }
+        //La app puede ser utilizada, google play esta actualizado
+        else {
+
+            Log.d(activity.getString(R.string.TAG_GOOGLE_PLAY), activity.getString(R.string.GOOGLE_PLAY_ACTUALIZADO));
+            //Crashlytics.log(Log.DEBUG, activity.getString(R.string.TAG_GOOGLE_PLAY),activity.getString(R.string.GOOGLE_PLAY_ACTUALIZADO));
+        }
+    }
 
     /**
      * Funcion que verifica validez de Email
@@ -51,7 +114,7 @@ public class Utils {
      * @param sharedPreferences Usado para buscar JWT guardado
      * @return True | False segun sea el caso
      */
-    private static boolean isJWTExpired(Context context, SharedPreferences sharedPreferences) {
+    public static boolean jwtStatus(Context context, SharedPreferences sharedPreferences) {
 
         //Obtener token shared pref
         String json = sharedPreferences.getString(context.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
@@ -107,15 +170,15 @@ public class Utils {
      * Funcion encargada de desviar la actividad actual hacia login activity
      *
      * @param sharedPreferences Necesario para buscar TOKEN en datos del celular
-     * @param activity          Activity que debe ser cerrada
+     * @param context          Activity que debe ser cerrada
      */
-    public static void checkJWT(SharedPreferences sharedPreferences, Activity activity) {
+    public static void handleJWT(SharedPreferences sharedPreferences, Context context) {
 
-        boolean expired = Utils.isJWTExpired(activity.getApplicationContext(), sharedPreferences);
+        boolean expired = Utils.jwtStatus(context.getApplicationContext(), sharedPreferences);
         if (expired) {
-            Intent intent = new Intent(activity.getApplication(), LoginActivity.class);
-            activity.startActivity(intent);
-            activity.finish();
+            Intent intent = new Intent(context, LoginActivity.class);
+            context.startActivity(intent);
+            ((Activity) context).finish();
         }
     }
 

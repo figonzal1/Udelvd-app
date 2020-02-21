@@ -38,6 +38,7 @@ public class InvestigadorRepositorio {
     //Listados
     private List<Investigador> investigadorList = new ArrayList<>();
     private MutableLiveData<List<Investigador>> investigadorMutableLiveData = new MutableLiveData<>();
+    private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
 
     //LOGIN
     private final SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
@@ -51,23 +52,22 @@ public class InvestigadorRepositorio {
     private final SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
 
-    private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
-    private static final String TAG_INVESTIGADOR_RESET = "ResetearPassword";
     //Recuperacion Cuenta
     private final SingleLiveEvent<String> responseMsgErrorRecuperacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<Map<String, String>> responseMsgRecuperacion = new SingleLiveEvent<>();
 
     //PROGRESS DIALOG
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private static final String TAG_INVESTIGADOR_RESET = "ResetearPassword";
+    //Resetear password
+    private final SingleLiveEvent<String> responseMsgReset = new SingleLiveEvent<>();
 
     private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
     private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
     private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
     private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
-    //Resetear password
-    private final SingleLiveEvent<String> responseMsgReset = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgErrorReset = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
 
     private InvestigadorRepositorio(Application application) {
@@ -102,28 +102,28 @@ public class InvestigadorRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonInve = jsonArray.getJSONObject(i);
-                        JSONObject jsonAttributes = jsonInve.getJSONObject("attributes");
+                        JSONObject jsonAttributes = jsonInve.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                         Investigador inv = new Investigador();
-                        inv.setId(jsonInve.getInt("id"));
-                        inv.setNombre(jsonAttributes.getString("nombre"));
-                        inv.setApellido(jsonAttributes.getString("apellido"));
-                        inv.setEmail(jsonAttributes.getString("email"));
-                        inv.setIdRol(jsonAttributes.getInt("id_rol"));
+                        inv.setId(jsonInve.getInt(application.getString(R.string.KEY_INVES_ID)));
+                        inv.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                        inv.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                        inv.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                        inv.setIdRol(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
 
-                        if (jsonAttributes.getInt("activado") == 0) {
+                        if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
                             inv.setActivado(false);
                         } else {
                             inv.setActivado(true);
                         }
 
-                        JSONObject jsonRelationshipsData = jsonInve.getJSONObject("relationships")
-                                .getJSONObject("rol")
-                                .getJSONObject("data");
+                        JSONObject jsonRelationshipsData = jsonInve.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                                .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                                .getJSONObject(application.getString(R.string.JSON_DATA));
                         inv.setIdRol(jsonRelationshipsData.getInt("id"));
                         inv.setNombreRol(jsonRelationshipsData.getString("nombre"));
 
@@ -415,7 +415,10 @@ public class InvestigadorRepositorio {
                             .getJSONObject(application.getString(R.string.JSON_DATA));
                     invResponse.setNombreRol(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
 
-                    if (status.equals(application.getString(R.string.JSON_LOGIN_STATUS_RESPONSE))) { //&& invResponse.isActivado()) {
+                    /*
+                    CHECKEO DE ACTIVACION
+                     */
+                    if (status.equals(application.getString(R.string.JSON_LOGIN_STATUS_RESPONSE)) && invResponse.isActivado()) {
 
                         String token = jsonLogin.getString(application.getString(R.string.JSON_TOKEN));
                         Log.d(application.getString(R.string.TAG_TOKEN_LOGIN), token);
@@ -704,10 +707,20 @@ public class InvestigadorRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_ACTUALIZACION);
     }
 
+    /**
+     * Funcion encargada de recuperar la cuenta de in investigadort
+     *
+     * @param investigador Objeto de investigador
+     */
     public void recuperarCuenta(Investigador investigador) {
         sendPostRecuperar(investigador);
     }
 
+    /**
+     * Peticion POST para recuperacion de cuenta
+     *
+     * @param investigador Objeto investigador con datos necesarios
+     */
     private void sendPostRecuperar(Investigador investigador) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -827,10 +840,22 @@ public class InvestigadorRepositorio {
 
     }
 
+    /**
+     * Funcion encargada de resetear contraseña
+     *
+     * @param email    Email del solicitante
+     * @param password Nueva pass
+     */
     public void resetearPassword(String email, String password) {
         sendPostResetPass(email, password);
     }
 
+    /**
+     * Peticion post para resetar la contraseña
+     *
+     * @param email    Email del solicitante
+     * @param password Nueva pass
+     */
     private void sendPostResetPass(final String email, final String password) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {

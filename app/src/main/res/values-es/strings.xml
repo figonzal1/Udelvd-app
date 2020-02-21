@@ -113,8 +113,6 @@
     <string name="RECUPERAR_CUENTA">Recuperar Cuenta</string>
     <string name="REGISTRAR">Registrar</string>
     <string name="REGISTRO_CUENTA">Registro cuenta</string>
-    <string name="ROL_ADMINITRADOR">Administrador</string>
-    <string name="ROL_INVESTIGADOR">Investigador</string>
     <string name="SELECCIONAR_EMOTICON">Seleccionar emoticón</string>
     <string name="SERVER_ERROR_AUTH_MSG_VM">Login fallido, revisa tus datos</string>
     <string name="SERVER_ERROR_MSG_VM">¡Ups! Ha ocurrido un problema</string>
@@ -158,4 +156,8 @@
     <string name="FORMATO_FECHA_NAC">%s - %d años</string>
     <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
     <string name="FORMATO_EVENTO_N">Evento %d</string>
+    <string name="CANAL_NOMBRE">Alertas de activaciones</string>
+    <string name="CANAL_DESCRIPCION">Alertas de registro de nuevos investigadores</string>
+    <string name="SNACKBAR_CUENTA_WAIT">Cuenta en espera de activación</string>
+    <string name="SNACKBAR_ACTIVACION">, tu cuenta está en espera de activación</string>
 </resources>

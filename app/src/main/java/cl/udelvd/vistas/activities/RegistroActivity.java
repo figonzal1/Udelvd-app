@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -157,24 +158,34 @@ public class RegistroActivity extends AppCompatActivity implements SnackbarInter
         });
 
         //Observador mensaje positivo
-        registroViewModel.mostrarMsgRegistro().observe(this, new Observer<String>() {
+        registroViewModel.mostrarMsgRegistro().observe(this, new Observer<Map<String, String>>() {
             @Override
-            public void onChanged(String s) {
+            public void onChanged(Map<String, String> stringStringMap) {
 
-                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                String msg_registro = stringStringMap.get(getString(R.string.INTENT_KEY_MSG_REGISTRO));
+                String activado = stringStringMap.get(getString(R.string.INTENT_KEY_INVES_ACTIVADO));
+
+                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), msg_registro));
 
                 progressBar.setVisibility(View.GONE);
 
                 //Si el registro fue correcto cerrar la actividad
-                if (s.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
+                assert msg_registro != null;
+                assert activado != null;
+
+                if (msg_registro.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
                     Intent intent = getIntent();
-                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s + getString(R.string.SNACKBAR_ACTIVACION));
+
+                    if (activado.equals("0")) {
+                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro + getString(R.string.SNACKBAR_ACTIVACION));
+                    } else if (activado.equals("1")) {
+                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro);
+                    }
                     setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
-
         //Observador mensaje error
         registroViewModel.mostrarMsgErrorRegistro().observe(this, new Observer<String>() {
             @Override

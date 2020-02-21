@@ -45,7 +45,7 @@ public class InvestigadorRepositorio {
     private final SingleLiveEvent<String> responseMsgErrorLogin = new SingleLiveEvent<>();
 
     //REGISTRO
-    private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Map<String, String>> responseMsgRegistro = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
 
     //Actualizacion
@@ -258,7 +258,10 @@ public class InvestigadorRepositorio {
                     Log.d("INTERNET", invResponse.toString());
 
                     if (investigador.equals(invResponse)) {
-                        responseMsgRegistro.postValue(application.getString(R.string.MSG_INVEST_REGISTRADO));
+                        Map<String, String> map = new HashMap<>();
+                        map.put(application.getString(R.string.INTENT_KEY_MSG_REGISTRO), application.getString(R.string.MSG_INVEST_REGISTRADO));
+                        map.put(application.getString(R.string.INTENT_KEY_INVES_ACTIVADO), String.valueOf(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO))));
+                        responseMsgRegistro.postValue(map);
                         isLoading.postValue(false);
                     }
 
@@ -966,7 +969,7 @@ public class InvestigadorRepositorio {
         return responseMsgErrorLogin;
     }
 
-    public SingleLiveEvent<String> getResponseMsgRegistro() {
+    public SingleLiveEvent<Map<String, String>> getResponseMsgRegistro() {
         return responseMsgRegistro;
     }
 

@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +25,7 @@ import java.util.List;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.InvestigadorAdapter;
 import cl.udelvd.modelo.Investigador;
+import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.InvestigadorListaViewModel;
@@ -77,39 +77,78 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             @Override
             public void onChanged(List<Investigador> investigadors) {
 
-                investigadorList = investigadors;
-                investigadorAdapter = new InvestigadorAdapter(
-                        investigadorList,
-                        getApplicationContext(),
-                        InvestigadorListActivity.this,
-                        getSupportFragmentManager()
-                );
-                investigadorAdapter.notifyDataSetChanged();
-                rv.setAdapter(investigadorAdapter);
+                if (investigadors != null && investigadors.size() > 0) {
+                    investigadorList = investigadors;
+                    investigadorAdapter = new InvestigadorAdapter(
+                            investigadorList,
+                            getApplicationContext(),
+                            InvestigadorListActivity.this,
+                            getSupportFragmentManager()
+                    );
+                    investigadorAdapter.notifyDataSetChanged();
+                    rv.setAdapter(investigadorAdapter);
 
-                if (investigadorList.size() == 0) {
-                    tv_investigadores_vacios.setVisibility(View.VISIBLE);
-                } else {
-                    tv_investigadores_vacios.setVisibility(View.INVISIBLE);
+                    if (investigadorList.size() == 0) {
+                        tv_investigadores_vacios.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_investigadores_vacios.setVisibility(View.INVISIBLE);
+                    }
+
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                 }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
             }
         });
 
-        investigadorListaViewModel.mostrarMsgErrorListado().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                progressBar.setVisibility(View.INVISIBLE);
+        investigadorListaViewModel.mostrarMsgErrorListado().
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_LONG, s, null);
-                }
+                observe(this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        progressBar.setVisibility(View.INVISIBLE);
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
-        });
+                        if (!isSnackBarShow) {
+                            isSnackBarShow = true;
+                            showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                        }
+
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                    }
+                });
+
+
+        investigadorListaViewModel.mostrarMsgActivacion().
+
+                observe(this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                        if (s.equals(getString(R.string.MSG_INVEST_CUENTA_ACTIVADA)) || s.equals(getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA))) {
+
+                            //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                            showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_LONG, s, null);
+                        }
+
+                    }
+                });
+
+        investigadorListaViewModel.mostrarMsgErrorActivacion().
+
+                observe(this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        if (!isSnackBarShow) {
+                            isSnackBarShow = true;
+                            showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                        }
+
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                    }
+                });
     }
 
     private void obtenerDatosAdmin() {
@@ -153,14 +192,12 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                 @Override
                 public void onClick(View v) {
 
-                    //Refresh listado de usuarios
-                    //entrevistasListaViewModel.refreshEntrevistas(entrevistado);
+                    //Refresh listado de investigadores
+                    investigadorListaViewModel.refreshInvestigadores(investigador);
 
-                    //cv_lista_entrevistas.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
 
-                    //progressBar.setVisibility(View.VISIBLE);
-
-                    //isSnackBarShow = false;
+                    isSnackBarShow = false;
 
 
                 }
@@ -172,7 +209,8 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, Object object) {
-        Toast.makeText(getApplicationContext(), "Activar Inves", Toast.LENGTH_LONG).show();
+        Investigador invAdapter = (Investigador) object;
+        InvestigadorRepositorio.getInstance(getApplication()).activarCuenta(invAdapter);
     }
 
     @Override

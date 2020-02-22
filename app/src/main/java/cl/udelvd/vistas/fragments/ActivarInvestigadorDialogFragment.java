@@ -4,12 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
@@ -36,17 +32,23 @@ public class ActivarInvestigadorDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
         if (activar) {
-            builder.setMessage("La activación de cuenta concederá al investigador acceso al sistema , ¿Está seguro?");
-            builder.setPositiveButton("Activar", new DialogInterface.OnClickListener() {
+            builder.setMessage(getString(R.string.DIALOG_ACTIVACION_MENSAJE));
+            builder.setPositiveButton(getString(R.string.DIALOG_ACTIVAR), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    investigador.setActivado(activar);
                     listener.onDialogPositiveClick(ActivarInvestigadorDialogFragment.this, investigador);
+
+                    dialog.dismiss();
                 }
             });
         } else {
-            builder.setMessage("La desactivación de cuenta prohibirá al investigador acceso al sistema , ¿Está seguro?");
-            builder.setPositiveButton("Desactivar", new DialogInterface.OnClickListener() {
+            builder.setMessage(getString(R.string.DIALOG_DESACTIVACION_MENSAJE));
+            builder.setPositiveButton(getString(R.string.DIALOG_DESACTIVAR), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    investigador.setActivado(activar);
                     listener.onDialogPositiveClick(ActivarInvestigadorDialogFragment.this, investigador);
+
+                    dialog.dismiss();
                 }
             });
         }
@@ -59,15 +61,16 @@ public class ActivarInvestigadorDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         listener = (DeleteDialogListener) context;
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (getDialog() != null && getRetainInstance())
+            getDialog().setDismissMessage(null);
+        super.onDestroyView();
     }
 }

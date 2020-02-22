@@ -40,4 +40,19 @@ public class InvestigadorListaViewModel extends AndroidViewModel {
         repositorio = InvestigadorRepositorio.getInstance(getApplication());
         return repositorio.getResponseMsgErrorListado();
     }
+
+    public SingleLiveEvent<String> mostrarMsgActivacion() {
+        repositorio = InvestigadorRepositorio.getInstance(getApplication());
+        return repositorio.getResponseMsgActivacion();
+    }
+
+    public SingleLiveEvent<String> mostrarMsgErrorActivacion() {
+        repositorio = InvestigadorRepositorio.getInstance(getApplication());
+        return repositorio.getResponseMsgErrorActivacion();
+    }
+
+    public void refreshInvestigadores(Investigador admin) {
+        repositorio = InvestigadorRepositorio.getInstance(getApplication());
+        repositorio.obtenerInvestigadores(admin);
+    }
 }

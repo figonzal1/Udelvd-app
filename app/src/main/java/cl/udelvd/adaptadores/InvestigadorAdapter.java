@@ -18,6 +18,7 @@ import java.util.List;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
+import cl.udelvd.utilidades.Utils;
 import cl.udelvd.vistas.fragments.ActivarInvestigadorDialogFragment;
 
 public class InvestigadorAdapter extends RecyclerView.Adapter<InvestigadorAdapter.InvestigadorViewHolder> {
@@ -49,13 +50,14 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<InvestigadorAdapte
 
         holder.tv_email.setText(investigador.getEmail());
         holder.tv_nombre.setText(String.format("%s %s", investigador.getNombre(), investigador.getApellido()));
+        holder.tv_fecha_registro.setText(Utils.dateToString(context, false, Utils.stringToDate(context, false, investigador.getCreateTime())));
 
         if (investigador.isActivado()) {
             holder.switch_activate.setChecked(true);
-            holder.switch_activate.setText("Activado");
+            holder.switch_activate.setText(context.getString(R.string.PERFIL_ACTIVADO));
         } else {
             holder.switch_activate.setChecked(false);
-            holder.switch_activate.setText("Desactivado");
+            holder.switch_activate.setText(context.getString(R.string.PERFIL_NO_ACTIVADO));
         }
 
 
@@ -64,14 +66,14 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<InvestigadorAdapte
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     holder.switch_activate.setChecked(true);
-                    holder.switch_activate.setText("Activado");
+                    holder.switch_activate.setText(context.getString(R.string.PERFIL_ACTIVADO));
 
                     ActivarInvestigadorDialogFragment dialogFragment = new ActivarInvestigadorDialogFragment(investigador, true);
                     dialogFragment.setCancelable(false);
                     dialogFragment.show(fragmentManager, TAG_ACTIVAR_INVESTIGADOR);
                 } else {
                     holder.switch_activate.setChecked(false);
-                    holder.switch_activate.setText("Desactivado");
+                    holder.switch_activate.setText(context.getString(R.string.PERFIL_NO_ACTIVADO));
 
                     ActivarInvestigadorDialogFragment dialogFragment = new ActivarInvestigadorDialogFragment(investigador, false);
                     dialogFragment.setCancelable(false);
@@ -95,6 +97,7 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<InvestigadorAdapte
 
         private TextView tv_nombre;
         private TextView tv_email;
+        private TextView tv_fecha_registro;
         private SwitchMaterial switch_activate;
 
         public InvestigadorViewHolder(@NonNull View itemView) {
@@ -102,6 +105,7 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<InvestigadorAdapte
 
             tv_nombre = itemView.findViewById(R.id.cv_tv_nombre);
             tv_email = itemView.findViewById(R.id.cv_tv_email);
+            tv_fecha_registro = itemView.findViewById(R.id.cv_tv_fecha_registro);
             switch_activate = itemView.findViewById(R.id.cv_switch_activate);
         }
     }

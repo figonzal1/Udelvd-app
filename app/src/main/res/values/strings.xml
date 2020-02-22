@@ -11,6 +11,7 @@
     <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
+    <string name="URL_PATCH_INVESTIGADORES_ACTIVAR" translatable="false">%sinvestigadores/%d/activar</string>
     <string name="URL_LOGIN_INVESTIGADORES" translatable="false">%sinvestigadores/login</string>
     <string name="URL_GET_RECUPERAR_INVESTIGADOR" translatable="false">%sinvestigadores/recuperar/%s</string>
     <string name="URL_PUT_RESETEAR_PASSWORD" translatable="false">%sinvestigadores/resetear</string>
@@ -92,6 +93,7 @@
     <string name="KEY_INVES_ACTIVADO" translatable="false">activado</string>
 
     <string name="KEY_ROL_OBJECT" translatable="false">rol</string>
+    <string name="KEY_ROL_ID" translatable="false">id</string>
     <string name="KEY_ROL_NOMBRE" translatable="false">nombre</string>
 
     <string name="KEY_ENTREVISTADO_ID_ESTADO_CIVIL" translatable="false">id_estado_civil</string>
@@ -218,6 +220,7 @@
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE" translatable="false">VOLLEY_ERR_INV_UPDATE</string>
     <string name="TAG_VOLLEY_ERR_INV_RESET" translatable="false">VOLLEY_ERR_INV_RESET</string>
+    <string name="TAG_VOLLEY_ERR_INV_ACTIVAR" translatable="false">VOLLEY_ERR_INV_ACTIVAR</string>
     <string name="TAG_VOLLEY_ERR_INV_LISTA" translatable="false">VOLLEY_ERR_INV_LISTA</string>
     <string name="TAG_VOLLEY_ERR_INV_RECUPERAR" translatable="false">VOLLEY_ERR_INV_RECUPERAR</string>
     <string name="TAG_VOLLEY_ERR_ENTREVISTADO" translatable="false">VOLLEY_ERR_ENTREVISTADO</string>
@@ -307,6 +310,7 @@
     <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA" translatable="false">VM_ELIMINAR_ENTREVISTA</string>
     <string name="TAG_VIEW_MODEL_LISTADO_INVESTIGADORES" translatable="false">VM_LISTADO_INVESTIGADORES</string>
+    <string name="TAG_VIEW_MODEL_ACTIVACION_INVES" translatable="false">VM_ACTIVACION_INVESTIGACION</string>
     <string name="MSG_UPDATE_EVENTO">¡Evento actualizado!</string>
     <string name="MSG_DELETE_EVENTO">¡Evento eliminado!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_EVENTO" translatable="false">VM_ELIMINAR_EVENTO</string>
@@ -348,6 +352,10 @@
     <string name="DIALOG_NEGATIVE_BTN">Cancelar</string>
     <string name="DIALOG_MESSAGE_ENTREVISTADO">¿Está seguro que quiere eliminar este entrevistado?</string>
     <string name="DIALOG_MESSAGE_EVENTO">¿Está seguro que quiere eliminar este evento?</string>
+    <string name="DIALOG_ACTIVACION_MENSAJE">La activación de cuenta concederá al investigador acceso al sistema , ¿Está seguro?</string>
+    <string name="DIALOG_ACTIVAR">Activar</string>
+    <string name="DIALOG_DESACTIVACION_MENSAJE">La desactivación de cuenta prohibirá al investigador acceso al sistema , ¿Está seguro?</string>
+    <string name="DIALOG_DESACTIVAR">Desactivar</string>
 
     <!-- NOTIFICACIONES-->
     <string name="NOTIFICACION_TITULO" translatable="false">titulo</string>
@@ -462,6 +470,8 @@
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
     <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
+    <string name="MSG_INVEST_CUENTA_ACTIVADA">¡Cuenta activada!</string>
+    <string name="MSG_INVEST_CUENTA_DESACTIVADA">¡Cuenta desactivada!</string>
 
 
 </resources>

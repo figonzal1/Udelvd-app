@@ -166,7 +166,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onNewToken(String s) {
+    public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
         Log.d(getString(R.string.TAG_FIREBASE_TOKEN), "Refreshed Token:" + s);
         //Crashlytics.setUserIdentifier(s);

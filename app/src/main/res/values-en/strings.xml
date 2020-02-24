@@ -160,4 +160,12 @@
     <string name="CANAL_DESCRIPCION">Registration alerts for new researchers</string>
     <string name="SNACKBAR_CUENTA_WAIT">Account Waiting for Activation</string>
     <string name="SNACKBAR_ACTIVACION">, your account is waiting for activation</string>
+    <string name="DIALOG_ACTIVAR">Activate</string>
+    <string name="DIALOG_DESACTIVAR">Deactivate</string>
+    <string name="DIALOG_DESACTIVACION_MENSAJE">Account deactivation will prohibit the researcher from accessing the system, are you sure?</string>
+    <string name="DIALOG_ACTIVACION_MENSAJE">Account activation will grant the researcher access to the system, are you sure?</string>
+    <string name="MENU_INVESTIGADORES">Researchers</string>
+    <string name="MSG_INVEST_CUENTA_ACTIVADA">Account activated!</string>
+    <string name="MSG_INVEST_CUENTA_DESACTIVADA">Account deactivated!</string>
+    <string name="MSG_LISTADO_INVESTIGADORES_VACIO">There are no registered researchers</string>
 </resources>

@@ -983,13 +983,13 @@ public class InvestigadorRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
-                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                     Investigador invResponse = new Investigador();
-                    invResponse.setEmail(jsonAttributes.getString("email"));
+                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
 
-                    if (jsonAttributes.getInt("activado") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
                         invResponse.setActivado(false);
                     } else {
                         invResponse.setActivado(true);

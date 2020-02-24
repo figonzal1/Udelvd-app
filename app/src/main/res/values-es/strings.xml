@@ -160,4 +160,12 @@
     <string name="CANAL_DESCRIPCION">Alertas de registro de nuevos investigadores</string>
     <string name="SNACKBAR_CUENTA_WAIT">Cuenta en espera de activación</string>
     <string name="SNACKBAR_ACTIVACION">, tu cuenta está en espera de activación</string>
+    <string name="DIALOG_ACTIVAR">Activar</string>
+    <string name="DIALOG_DESACTIVAR">Desactivar</string>
+    <string name="DIALOG_DESACTIVACION_MENSAJE">La desactivación de cuenta prohibirá al investigador acceso al sistema , ¿Está seguro?</string>
+    <string name="DIALOG_ACTIVACION_MENSAJE">La activación de cuenta concederá al investigador acceso al sistema , ¿Está seguro?</string>
+    <string name="MENU_INVESTIGADORES">Investigadores</string>
+    <string name="MSG_INVEST_CUENTA_ACTIVADA">¡Cuenta activada!</string>
+    <string name="MSG_INVEST_CUENTA_DESACTIVADA">¡Cuenta desactivada!</string>
+    <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
 </resources>

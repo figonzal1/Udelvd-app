@@ -51,7 +51,7 @@
                     android:id="@+id/menu_investigadores"
                     android:checked="true"
                     android:icon="@drawable/ic_lista_investigadores_24dp"
-                    android:title="Investigadores" />
+                    android:title="@string/MENU_INVESTIGADORES" />
             </group>
         </menu>
 

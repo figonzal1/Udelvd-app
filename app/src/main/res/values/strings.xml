@@ -268,6 +268,8 @@
     <string name="VIEW_MODEL_LISTADO_CARGADO" translatable="false">Listado cargado</string>
     <string name="TAG_VIEW_MODEL_CIUDAD" translatable="false">VM_CIUDAD</string>
     <string name="TAG_VIEW_MODEL_NIVEL_EDUCACION" translatable="false">VM_NIVEL_EDUC</string>
+    <string name="MSG_INVEST_CUENTA_ACTIVADA">¡Cuenta activada!</string>
+    <string name="MSG_INVEST_CUENTA_DESACTIVADA">¡Cuenta desactivada!</string>
     <string name="TAG_VIEW_MODEL_TIPO_CONVIVENCIA" translatable="false">VM_TIPO_CONVIVENCIA</string>
     <string name="TAG_VIEW_MODEL_PROFESIONES" translatable="false">VM_PROFESIONES</string>
     <string name="TAG_VIEW_MODEL_NUEVO_ENTREVISTADO" translatable="false">VM_NEW_ENTREVISTADO</string>
@@ -385,6 +387,7 @@
     <string name="MENU_ADMIN">Administración</string>
     <string name="MENU_ACCIONES">Acciones</string>
     <string name="MENU_EMOTICONES">Emoticones</string>
+    <string name="MENU_INVESTIGADORES">Investigadores</string>
 
     <!-- SNACKLBAR -->
     <string name="SNACKBAR_REINTENTAR">Reintentar</string>
@@ -470,8 +473,7 @@
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
     <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
-    <string name="MSG_INVEST_CUENTA_ACTIVADA">¡Cuenta activada!</string>
-    <string name="MSG_INVEST_CUENTA_DESACTIVADA">¡Cuenta desactivada!</string>
+    <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
 
 
 </resources>

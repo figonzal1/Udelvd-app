@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
         String rol = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), getString(R.string.ROL_INVESTIGADOR));
         //Si el rol es de admin las notificaciones llegan
-        if (rol.equals(getString(R.string.ROL_ADMINITRADOR))) {
+        if (rol.equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
             MyFirebaseMessagingService.suscribirTema(this);
         } else {
             MyFirebaseMessagingService.eliminarSuscripcionTema(this);
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
         cargarDatosInvestigador();
 
         //Si el usuario no es admin, ocultar panel
-        if (!investigador.getNombreRol().equals(getString(R.string.ROL_ADMINITRADOR))) {
+        if (!investigador.getNombreRol().equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
             navigationView.getMenu().findItem(R.id.group_admin).setVisible(false);
         }
         navigationListener();
@@ -167,7 +167,13 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
         //Setear datos en pantalla
         tv_nombre_apellido_investigador.setText(String.format("%s %s", investigador.getNombre(), investigador.getApellido()));
         tv_email_investigador.setText(investigador.getEmail());
-        tv_nombre_rol_investigador.setText(investigador.getNombreRol());
+
+        if (investigador.getNombreRol().equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
+            tv_nombre_rol_investigador.setText(getString(R.string.ROL_ADMINITRADOR));
+        } else {
+            tv_nombre_rol_investigador.setText(getString(R.string.ROL_INVESTIGADOR));
+        }
+
     }
 
     /**

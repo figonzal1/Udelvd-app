@@ -29,6 +29,7 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.EstadoCivil;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
+import cl.udelvd.utilidades.Utils;
 
 public class EstadoCivilRepositorio {
 
@@ -173,7 +174,7 @@ public class EstadoCivilRepositorio {
         };
 
 
-        String url = String.format(application.getString(R.string.URL_GET_ESTADOS_CIVILES), application.getString(R.string.HEROKU_DOMAIN));
+        String url = String.format(application.getString(R.string.URL_GET_ESTADOS_CIVILES), application.getString(R.string.HEROKU_DOMAIN), Utils.obtenerIdioma(application));
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

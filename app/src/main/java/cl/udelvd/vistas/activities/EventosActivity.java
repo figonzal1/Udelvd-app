@@ -140,9 +140,9 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
         //Contar cantidad de entrevistas
         if (n_entrevistas == 1) {
-            tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", n_entrevistas));
+            tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), n_entrevistas));
         } else {
-            tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", n_entrevistas));
+            tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), n_entrevistas));
         }
 
         eventosListaViewModel = ViewModelProviders.of(this).get(EventosListaViewModel.class);

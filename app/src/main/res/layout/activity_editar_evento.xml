@@ -152,9 +152,10 @@
                 <Spinner
                     android:id="@+id/spinner_emoticon"
                     style="@android:style/Widget.Material.Spinner"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintHorizontal_bias="0.0"

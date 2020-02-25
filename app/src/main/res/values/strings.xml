@@ -1,11 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Un día en la vida de &#8230;</string>
 
-    <!-- NOTIFICACION -->
-    <string name="TEMA_NOTIFICACION_REGISTRO" translatable="false">RegistroInvestigador</string>
-    <string name="CANAL_NOMBRE">Alertas de activaciones</string>
-    <string name="CANAL_DESCRIPCION">Alertas de registro de nuevos investigadores</string>
-
     <!-- URLS-->
     <!--<string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>-->
     <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>
@@ -20,20 +15,20 @@
     <string name="URL_GET_ENTREVISTADOS" translatable="false">%sentrevistados/pagina/%d</string>
     <string name="URL_GET_ENTREVISTADO" translatable="false">%sentrevistados/%d</string>
     <string name="URL_PUT_ENTREVISTADOS" translatable="false">%sentrevistados/%d</string>
-    <string name="URL_GET_ACCIONES" translatable="false">%sacciones</string>
+    <string name="URL_GET_ACCIONES" translatable="false">%sacciones/%s</string>
     <string name="URL_GET_CIUDADES" translatable="false">%sciudades</string>
-    <string name="URL_GET_EMOTICONES" translatable="false">%semoticones</string>
-    <string name="URL_GET_ESTADOS_CIVILES" translatable="false">%sestadosCiviles</string>
-    <string name="URL_GET_NIVELES_EDUCACIONALES" translatable="false">%snivelesEducacionales</string>
+    <string name="URL_GET_EMOTICONES" translatable="false">%semoticones/idioma/%s</string>
+    <string name="URL_GET_ESTADOS_CIVILES" translatable="false">%sestadosCiviles/%s</string>
+    <string name="URL_GET_NIVELES_EDUCACIONALES" translatable="false">%snivelesEducacionales/%s</string>
     <string name="URL_GET_PROFESIONES" translatable="false">%sprofesiones</string>
-    <string name="URL_GET_TIPOS_CONVIVENCIAS" translatable="false">%stiposConvivencias</string>
-    <string name="URL_GET_TIPOS_ENTREVISTAS" translatable="false">%stiposEntrevistas</string>
-    <string name="URL_GET_ENTREVISTAS" translatable="false">%sentrevistados/%d/entrevistas</string>
+    <string name="URL_GET_TIPOS_CONVIVENCIAS" translatable="false">%stiposConvivencias/%s</string>
+    <string name="URL_GET_TIPOS_ENTREVISTAS" translatable="false">%stiposEntrevistas/%s</string>
+    <string name="URL_GET_ENTREVISTAS" translatable="false">%sentrevistados/%d/entrevistas/idioma/%s</string>
     <string name="URL_POST_ENTREVISTAS" translatable="false">%sentrevistados/%d/entrevistas</string>
     <string name="URL_GET_ENTREVISTA_ESPECIFICA" translatable="false">%sentrevistados/%d/entrevistas/%d</string>
     <string name="URL_PUT_ENTREVISTA_ESPECIFICA" translatable="false">%sentrevistados/%d/entrevistas/%d</string>
     <string name="URL_DELETE_ENTREVISTA_ESPECIFICA" translatable="false">%sentrevistados/%d/entrevistas/%d</string>
-    <string name="URL_GET_EVENTO" translatable="false">%sentrevistas/%d/eventos</string>
+    <string name="URL_GET_EVENTO" translatable="false">%sentrevistas/%d/eventos/idioma/%s</string>
     <string name="URL_POST_EVENTO" translatable="false">%sentrevistas/%d/eventos</string>
     <string name="URL_GET_EVENTO_ESPECIFICO" translatable="false">%sentrevistas/%d/eventos/%d</string>
     <string name="URL_PUT_EVENTO" translatable="false">%sentrevistas/%d/eventos/%d</string>
@@ -42,6 +37,24 @@
 
     <string name="LANGUAJE_EN" translatable="false">en</string>
     <string name="LANGUAJE_ES" translatable="false">es</string>
+
+    <!-- SEXO-->
+    <string name="SEXO_MASCULINO">Masculino</string>
+    <string name="SEXO_FEMENINO">Femenino</string>
+    <string name="SEXO_OTRO">Otro</string>
+    <string name="SEXO_MASCULINO_MASTER_KEY" translatable="false">Masculino</string>
+    <string name="SEXO_FEMENINO_MASTER_KEY" translatable="false">Femenino</string>
+    <string name="SEXO_OTRO_MASTER_KEY" translatable="false">Otro</string>
+
+    <!-- ROLES -->
+    <string name="ROL_INVESTIGADOR">Investigador</string>
+    <string name="ROL_ADMINITRADOR">Administrador</string>
+    <string name="ROL_ADMIN_KEY_MASTER" translatable="false">Administrador</string> <!-- NO BORRAR -->
+
+    <!-- NOTIFICACION -->
+    <string name="TEMA_NOTIFICACION_REGISTRO" translatable="false">RegistroInvestigador</string>
+    <string name="CANAL_NOMBRE">Alertas de activaciones</string>
+    <string name="CANAL_DESCRIPCION">Alertas de registro de nuevos investigadores</string>
 
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
@@ -53,8 +66,9 @@
     <string name="TITULO_TOOLBAR_CREAR_EVENTO">Crear evento</string>
     <string name="TITULO_TOOLBAR_EVENTOS">Eventos</string>
     <string name="TITULO_TOOLBAR_LISTA_ENTREVISTAS">Listado entrevistas</string>
-    <string name="TITUTLO_TOOLBAR_EDITAR_PERFIL">Editar perfil</string>
+    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Editar perfil</string>
     <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Editar evento</string>
+    <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY" translatable="false">udelvd</string>
@@ -75,7 +89,8 @@
     <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
     <string name="FORMATO_HORA" translatable="false">HH:mm</string>
     <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
-    <string name="FORMATO_N_ENTREVISTAS">%d entrevista</string>
+    <string name="FORMATO_N_ENTREVISTA">%d entrevista</string>
+    <string name="FORMATO_N_ENTREVISTAS">%d entrevistas</string>
     <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
     <string name="FORMATO_EVENTO_N">Evento %d</string>
     <string name="FORMATO_FECHA_NAC">%s - %d años</string>
@@ -274,15 +289,10 @@
     <string name="TAG_VIEW_MODEL_PROFESIONES" translatable="false">VM_PROFESIONES</string>
     <string name="TAG_VIEW_MODEL_NUEVO_ENTREVISTADO" translatable="false">VM_NEW_ENTREVISTADO</string>
     <string name="MSG_REGISTRO_ENTREVISTADO">¡Entrevistado registrado!</string>
-    <string name="SEXO_MASCULINO">Masculino</string>
-    <string name="SEXO_FEMENINO">Femenino</string>
-    <string name="SEXO_OTRO">Otro</string>
     <string name="REGEX_FECHA" translatable="false">-</string>
     <string name="REGEX_HORA" translatable="false">:</string>
     <string name="SI" translatable="false">Si</string>
     <string name="NO" translatable="false">No</string>
-    <string name="ROL_INVESTIGADOR" translatable="false">Investigador</string>
-    <string name="ROL_ADMINITRADOR" translatable="false">Administrador</string>
     <string name="NULL" translatable="false">null</string>
     <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
     <string name="TAB_NAME_ENTREVISTADOS">Entrevistados</string>
@@ -474,6 +484,7 @@
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
     <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
+    <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
 
 
 </resources>

@@ -643,7 +643,14 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
             etNombre.setText(entrevistadoIntent.getNombre());
             etApellido.setText(entrevistadoIntent.getApellido());
 
-            acSexo.setText(entrevistadoIntent.getSexo(), false);
+            if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_MASCULINO))) {
+                acSexo.setText(getString(R.string.SEXO_MASCULINO), false);
+            } else if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_FEMENINO))) {
+                acSexo.setText(getString(R.string.SEXO_FEMENINO), false);
+            } else if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_OTRO))) {
+                acSexo.setText(getString(R.string.SEXO_OTRO), false);
+            }
+
 
             //Cargar fecha de nacimiento
             String fecha_nacimiento = Utils.dateToString(getApplicationContext(), false, entrevistadoIntent.getFechaNacimiento());

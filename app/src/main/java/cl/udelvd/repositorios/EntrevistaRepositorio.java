@@ -173,7 +173,7 @@ public class EntrevistaRepositorio {
                 else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
-
+                    Log.d("JSON", json);
                     JSONObject errorObject = null;
 
                     //Obtener json error
@@ -200,7 +200,7 @@ public class EntrevistaRepositorio {
         };
 
 
-        String url = String.format(Locale.US, application.getString(R.string.URL_GET_ENTREVISTAS), application.getString(R.string.HEROKU_DOMAIN), entrevistado.getId());
+        String url = String.format(Locale.US, application.getString(R.string.URL_GET_ENTREVISTAS), application.getString(R.string.HEROKU_DOMAIN), entrevistado.getId(), Utils.obtenerIdioma(application));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

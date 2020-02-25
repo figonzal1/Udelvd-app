@@ -62,7 +62,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
-        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITUTLO_TOOLBAR_EDITAR_PERFIL));
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_EDITAR_PERFIL));
 
         instanciarRecursosInterfaz();
 

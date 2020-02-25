@@ -29,6 +29,7 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
+import cl.udelvd.utilidades.Utils;
 
 public class NivelEducacionalRepositorio {
 
@@ -161,7 +162,7 @@ public class NivelEducacionalRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_NIVELES_EDUCACIONALES), application.getString(R.string.HEROKU_DOMAIN));
+        String url = String.format(application.getString(R.string.URL_GET_NIVELES_EDUCACIONALES), application.getString(R.string.HEROKU_DOMAIN), Utils.obtenerIdioma(application));
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 

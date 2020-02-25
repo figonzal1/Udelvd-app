@@ -242,7 +242,7 @@ public class EventoRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_EVENTO), application.getString(R.string.HEROKU_DOMAIN), entrevista.getId());
+        String url = String.format(application.getString(R.string.URL_GET_EVENTO), application.getString(R.string.HEROKU_DOMAIN), entrevista.getId(), Utils.obtenerIdioma(application));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
@@ -506,7 +506,12 @@ public class EventoRepositorio {
             }
         };
 
-        String url = String.format(Locale.US, application.getString(R.string.URL_GET_EVENTO_ESPECIFICO), application.getString(R.string.HEROKU_DOMAIN), eventoIntent.getEntrevista().getId(), eventoIntent.getId());
+        String url = String.format(
+                Locale.US,
+                application.getString(R.string.URL_GET_EVENTO_ESPECIFICO),
+                application.getString(R.string.HEROKU_DOMAIN),
+                eventoIntent.getEntrevista().getId(),
+                eventoIntent.getId());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
             @Override

@@ -167,9 +167,9 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                     entrevistasList = entrevistas;
                     //Contar cantidad de entrevistas
                     if (entrevistas.size() == 1) {
-                        tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", entrevistas.size()));
+                        tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), entrevistas.size()));
                     } else {
-                        tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", entrevistas.size()));
+                        tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), entrevistas.size()));
                     }
 
                     //Contar tipos de entrevistas

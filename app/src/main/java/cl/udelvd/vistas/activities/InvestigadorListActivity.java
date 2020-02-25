@@ -48,7 +48,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_investigadores_list);
 
-        Utils.configurarToolbar(this, getApplicationContext(), 0, "Listado Investigadores");
+        Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_LISTADO_INVESTIGADORES));
 
         instanciarRecursosInterfaz();
 

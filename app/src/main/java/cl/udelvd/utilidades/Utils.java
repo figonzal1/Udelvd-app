@@ -170,7 +170,7 @@ public class Utils {
      * Funcion encargada de desviar la actividad actual hacia login activity
      *
      * @param sharedPreferences Necesario para buscar TOKEN en datos del celular
-     * @param context          Activity que debe ser cerrada
+     * @param context           Activity que debe ser cerrada
      */
     public static void handleJWT(SharedPreferences sharedPreferences, Context context) {
 
@@ -329,5 +329,21 @@ public class Utils {
         }, hour, minute, true);
 
         timePickerDialog.show();
+    }
+
+    /**
+     * Obtener Idioma del dispositivo
+     *
+     * @param context Contexto de la aplicacion
+     * @return String con el simbolo del idioma
+     */
+    public static String obtenerIdioma(Context context) {
+
+        String idioma = Locale.getDefault().getLanguage();
+        if (idioma.equals(context.getString(R.string.LANGUAJE_ES)) || idioma.equals(context.getString(R.string.LANGUAJE_EN))) {
+            return idioma;
+        } else {
+            return context.getString(R.string.LANGUAJE_EN);
+        }
     }
 }

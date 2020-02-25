@@ -91,12 +91,12 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             holder.tv_nombre_apellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
 
             int annos = Utils.calculateYearsOld(entrevistado.getFechaNacimiento());
-            holder.tv_fecha_nacimiento.setText(String.format("%s - %s años", Utils.dateToString(context.getApplicationContext(), false, entrevistado.getFechaNacimiento()), annos));
+            holder.tv_fecha_nacimiento.setText(String.format(context.getString(R.string.FORMATO_FECHA_NAC), Utils.dateToString(context.getApplicationContext(), false, entrevistado.getFechaNacimiento()), annos));
 
             if (entrevistado.getN_entrevistas() == 1) {
-                holder.tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevista", entrevistado.getN_entrevistas()));
+                holder.tv_n_entrevistas.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTA), entrevistado.getN_entrevistas()));
             } else {
-                holder.tv_n_entrevistas.setText(String.format(Locale.US, "%d entrevistas", entrevistado.getN_entrevistas()));
+                holder.tv_n_entrevistas.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTAS), entrevistado.getN_entrevistas()));
             }
 
             holder.card_view_entrevistado.setOnClickListener(new View.OnClickListener() {

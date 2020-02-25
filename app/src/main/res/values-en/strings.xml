@@ -36,7 +36,7 @@
     <string name="ICONO_ACCION_EVENTO">Event action icon</string>
     <string name="ICONO_CIUDAD_ENTREVISTADO">Interviewee city icon</string>
     <string name="ICONO_CUENTA_ACTIVADA">Activated account icon</string>
-    <string name="ICONO_EMAIL_INVESTIGADOR">Interviewee email icon</string>
+    <string name="ICONO_EMAIL_INVESTIGADOR">Researcher email icon</string>
     <string name="ICONO_EMOTICON_EVENTO">Evento emoticon icon</string>
     <string name="ICONO_ESTADO_CIVIL_ENTREVISTADO">Interviewee marital status icon</string>
     <string name="ICONO_FECHA_ENTREVISTA">Interview date icon</string>
@@ -44,7 +44,7 @@
     <string name="ICONO_FECHA_REGISTRO">Registry date icon</string>
     <string name="ICONO_GENERO_ENTREVISTADO">Interviewee genre</string>
     <string name="ICONO_HORA_EVENTO">Event hour icon</string>
-    <string name="ICONO_INVESTIGADOR_ONLINE">Online interviewee icon</string>
+    <string name="ICONO_INVESTIGADOR_ONLINE">Online researcher icon</string>
     <string name="ICONO_JUSTIFICACION_EVENTO">Event justification icon</string>
     <string name="ICONO_MENU_CONTEXTUAL">Contextual menu icon</string>
     <string name="ICONO_NIVEL_EDUCACIONAL_ENTREVISTADO">Interviewee educational degree icon</string>
@@ -140,7 +140,7 @@
     <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">New interviewee</string>
     <string name="TITULO_TOOLBAR_PERFIL">Profile</string>
     <string name="TITULO_TOOLBAR_REGISTRO">Register</string>
-    <string name="TITUTLO_TOOLBAR_EDITAR_PERFIL">Edit profile</string>
+    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Edit profile</string>
     <string name="VALIDACION_CAMPO_REQUERIDO">Required field</string>
     <string name="VALIDACION_EMAIL">Invalid email</string>
     <string name="VALIDACION_EMOTICON">Choose an emoticon</string>
@@ -152,7 +152,7 @@
     <string name="MENU_CONTACTENOS">Contact us</string>
     <string name="MENU_EMOTICONES">Emoticons</string>
     <string name="MOSTRAR_ENTREVISTADOS">Displaying %d of %d interviewees</string>
-    <string name="FORMATO_N_ENTREVISTAS">%d interviews</string>
+    <string name="FORMATO_N_ENTREVISTA">%d interview</string>
     <string name="FORMATO_FECHA_NAC">%s - %d years</string>
     <string name="FORMATO_ENTREVISTA_FECHA">Interview day %s</string>
     <string name="FORMATO_EVENTO_N">Event %d</string>
@@ -168,4 +168,9 @@
     <string name="MSG_INVEST_CUENTA_ACTIVADA">Account activated!</string>
     <string name="MSG_INVEST_CUENTA_DESACTIVADA">Account deactivated!</string>
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">There are no registered researchers</string>
+    <string name="ROL_ADMINITRADOR">Administrator</string>
+    <string name="ROL_INVESTIGADOR">Researcher</string>
+    <string name="FORMATO_N_ENTREVISTAS">%d interviews</string>
+    <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Researchers list</string>
+    <string name="ULTIMOS_3_MESES">Last 3 months</string>
 </resources>

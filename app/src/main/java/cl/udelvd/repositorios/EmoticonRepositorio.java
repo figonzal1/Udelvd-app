@@ -29,6 +29,7 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
+import cl.udelvd.utilidades.Utils;
 
 public class EmoticonRepositorio {
 
@@ -157,7 +158,10 @@ public class EmoticonRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_EMOTICONES), application.getString(R.string.HEROKU_DOMAIN));
+        String url = String.format(
+                application.getString(R.string.URL_GET_EMOTICONES),
+                application.getString(R.string.HEROKU_DOMAIN),
+                Utils.obtenerIdioma(application));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override

@@ -140,7 +140,7 @@
     <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">Crear entrevistado</string>
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
     <string name="TITULO_TOOLBAR_REGISTRO">Registro</string>
-    <string name="TITUTLO_TOOLBAR_EDITAR_PERFIL">Editar perfil</string>
+    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Editar perfil</string>
     <string name="VALIDACION_CAMPO_REQUERIDO">Campo requerido</string>
     <string name="VALIDACION_EMAIL">Email inválido</string>
     <string name="VALIDACION_EMOTICON">Elige un emoticón</string>
@@ -152,7 +152,7 @@
     <string name="MENU_EMOTICONES">Emoticones</string>
     <string name="MENU_CONDICIONES">Condiciones y privacidad</string>
     <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
-    <string name="FORMATO_N_ENTREVISTAS">%d entrevista</string>
+    <string name="FORMATO_N_ENTREVISTA">%d entrevista</string>
     <string name="FORMATO_FECHA_NAC">%s - %d años</string>
     <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
     <string name="FORMATO_EVENTO_N">Evento %d</string>
@@ -168,4 +168,9 @@
     <string name="MSG_INVEST_CUENTA_ACTIVADA">¡Cuenta activada!</string>
     <string name="MSG_INVEST_CUENTA_DESACTIVADA">¡Cuenta desactivada!</string>
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
+    <string name="ROL_ADMINITRADOR">Administrador</string>
+    <string name="ROL_INVESTIGADOR">Investigador</string>
+    <string name="FORMATO_N_ENTREVISTAS">%d entrevistas</string>
+    <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
+    <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
 </resources>

@@ -353,6 +353,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
     @Override
     public void onResume() {
         super.onResume();
+        entrevistadoAdapter.resetPages();
         entrevistadoListaViewModel.refreshListaEntrevistados();
     }
 }

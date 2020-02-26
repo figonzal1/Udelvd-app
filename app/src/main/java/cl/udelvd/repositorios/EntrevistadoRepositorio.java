@@ -31,6 +31,7 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.EstadoCivil;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.modelo.TipoConvivencia;
@@ -140,8 +141,8 @@ public class EntrevistadoRepositorio {
      *
      * @return MutableLiveData con listado de usuarios
      */
-    public SingleLiveEvent<List<Entrevistado>> obtenerEntrevistados(int page) {
-        sendGetEntrevistados(page);
+    public SingleLiveEvent<List<Entrevistado>> obtenerEntrevistados(int page, Investigador investigador) {
+        sendGetEntrevistados(page, investigador);
         if (page == 1) {
             return entrevistadosPrimeraPaginaLiveData;
         } else {
@@ -156,7 +157,7 @@ public class EntrevistadoRepositorio {
     /**
      * Funcion que realizar solicitud GET para obtener listado de usuarios
      */
-    private void sendGetEntrevistados(final int page) {
+    private void sendGetEntrevistados(final int page, Investigador investigador) {
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -316,7 +317,7 @@ public class EntrevistadoRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN), page);
+        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN), page, investigador.getId());
 
         //Hacer request
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener,

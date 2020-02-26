@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.repositorios.EntrevistadoRepositorio;
 import cl.udelvd.utilidades.SingleLiveEvent;
 
@@ -28,14 +29,14 @@ public class EntrevistadoListaViewModel extends AndroidViewModel {
     /*
     LISTADO
      */
-    public SingleLiveEvent<List<Entrevistado>> mostrarPrimeraPagina(int page) {
+    public SingleLiveEvent<List<Entrevistado>> mostrarPrimeraPagina(int page, Investigador investigador) {
         entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
-        return entrevistadoRepositorio.obtenerEntrevistados(page);
+        return entrevistadoRepositorio.obtenerEntrevistados(page, investigador);
     }
 
-    public void cargarSiguientePagina(int page) {
+    public void cargarSiguientePagina(int page, Investigador investigador) {
         entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
-        entrevistadoRepositorio.obtenerEntrevistados(page);
+        entrevistadoRepositorio.obtenerEntrevistados(page, investigador);
     }
 
     public SingleLiveEvent<List<Entrevistado>> mostrarSiguientePagina() {
@@ -43,9 +44,9 @@ public class EntrevistadoListaViewModel extends AndroidViewModel {
         return entrevistadoRepositorio.obtenerSiguientePagina();
     }
 
-    public void refreshListaEntrevistados() {
+    public void refreshListaEntrevistados(Investigador investigador) {
         entrevistadoRepositorio = EntrevistadoRepositorio.getInstance(getApplication());
-        entrevistadoRepositorio.obtenerEntrevistados(1);
+        entrevistadoRepositorio.obtenerEntrevistados(1, investigador);
     }
 
     public SingleLiveEvent<String> mostrarMsgErrorListado() {

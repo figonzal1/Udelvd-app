@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.EntrevistadoListaViewModel;
 import cl.udelvd.vistas.activities.EditarEntrevistadoActivity;
@@ -51,13 +52,15 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private Button btn_cargar_mas;
     private ProgressBar progressBar;
+    private Investigador investigador;
 
-    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment, FragmentManager fragmentManager, EntrevistadoListaViewModel entrevistadoListaViewModel) {
+    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment, FragmentManager fragmentManager, EntrevistadoListaViewModel entrevistadoListaViewModel, Investigador investigador) {
         this.entrevistadoList = entrevistadoList;
         this.context = context;
         this.entrevistadoListaFragment = entrevistadoListaFragment;
         this.fragmentManager = fragmentManager;
         this.entrevistadoListaViewModel = entrevistadoListaViewModel;
+        this.investigador = investigador;
         setHasStableIds(true);
     }
 
@@ -176,7 +179,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     pagina += 1;
 
                     if (entrevistadoListaViewModel != null) {
-                        entrevistadoListaViewModel.cargarSiguientePagina(pagina);
+                        entrevistadoListaViewModel.cargarSiguientePagina(pagina, investigador);
                     }
 
                     progressBar.setVisibility(View.VISIBLE);

@@ -1,6 +1,8 @@
 package cl.udelvd.vistas.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.EntrevistadoAdapter;
 import cl.udelvd.modelo.Entrevistado;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.viewmodel.EntrevistadoListaViewModel;
 import cl.udelvd.vistas.activities.NuevoEntrevistadoActivity;
@@ -50,6 +53,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
     private List<Entrevistado> entrevistadoList;
     private View v;
     private int entrevistados_totales;
+    private Investigador investigador;
     private static final int REQUEST_CODE_EDITAR_ENTREVISTADO = 300;
     private boolean isSnackBarShow = false;
 
@@ -74,6 +78,12 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_lista_entrevistados, container, false);
+
+        //Obtener id investigador logeado
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+        int id_investigador = sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0);
+        investigador = new Investigador();
+        investigador.setId(id_investigador);
 
         instanciarRecursosInterfaz(v);
 
@@ -123,7 +133,8 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 getContext(),
                 EntrevistadoListaFragment.this,
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
-                entrevistadoListaViewModel);
+                entrevistadoListaViewModel,
+                investigador);
         rv.setAdapter(entrevistadoAdapter);
     }
 
@@ -175,7 +186,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         });
 
 
-        entrevistadoListaViewModel.mostrarPrimeraPagina(1).observe(this, new Observer<List<Entrevistado>>() {
+        entrevistadoListaViewModel.mostrarPrimeraPagina(1, investigador).observe(this, new Observer<List<Entrevistado>>() {
             @Override
             public void onChanged(List<Entrevistado> listado) {
 
@@ -248,7 +259,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, s, null);
-                    entrevistadoListaViewModel.refreshListaEntrevistados();
+                    entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
                 }
             }
         });
@@ -281,7 +292,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
             progressBar.setVisibility(View.VISIBLE);
             isSnackBarShow = false;
             entrevistadoAdapter.resetPages();
-            entrevistadoListaViewModel.refreshListaEntrevistados();
+            entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
 
             return true;
         }
@@ -305,7 +316,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, msg_registro, null);
                     entrevistadoAdapter.resetPages();
-                    entrevistadoListaViewModel.refreshListaEntrevistados();
+                    entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
 
                 }
             }
@@ -322,7 +333,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
                     entrevistadoAdapter.resetPages();
-                    entrevistadoListaViewModel.refreshListaEntrevistados();
+                    entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
                 }
             }
         }
@@ -338,7 +349,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 public void onClick(View v) {
 
                     //Refresh listado de usuarios
-                    entrevistadoListaViewModel.refreshListaEntrevistados();
+                    entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
 
                     progressBar.setVisibility(View.VISIBLE);
 
@@ -354,6 +365,6 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
     public void onResume() {
         super.onResume();
         entrevistadoAdapter.resetPages();
-        entrevistadoListaViewModel.refreshListaEntrevistados();
+        entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
     }
 }

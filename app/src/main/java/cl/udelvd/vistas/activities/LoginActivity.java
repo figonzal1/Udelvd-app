@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
         configurarlinkRecuperar();
 
-        dynamicLinkRecuperacio();
+        dynamicLinkRecuperacion();
 
         obtenerDesvioNotificacion();
     }
@@ -257,7 +257,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
     /**
      * Funcion que recibe y procesa el dynamic link desde el servidor
      */
-    private void dynamicLinkRecuperacio() {
+    private void dynamicLinkRecuperacion() {
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
                 .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
@@ -279,7 +279,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
                                 Intent intent = new Intent(LoginActivity.this, ResetearPassActivity.class);
                                 startActivity(intent);
-
                                 finish();
                             } else {
                                 showSnackbar(findViewById(R.id.login_investigador), Snackbar.LENGTH_INDEFINITE, getString(R.string.DYNAMIC_LINK_INVALIDO), getString(R.string.SNACKBAR_SOLICITAR_RECUPERACION));

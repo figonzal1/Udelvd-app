@@ -187,8 +187,6 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
                 //Menu general
                 if (menuItem.getItemId() == R.id.menu_perfil) {
-                    drawerLayout.closeDrawer(GravityCompat.START, true);
-
                     Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
                     startActivityForResult(intent, PROFILE_ACTIVITY_CODE);
 

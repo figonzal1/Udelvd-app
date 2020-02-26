@@ -182,6 +182,7 @@ public class ResetearPassActivity extends AppCompatActivity implements SnackbarI
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ResetearPassActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 }

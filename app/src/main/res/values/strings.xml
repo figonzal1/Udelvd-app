@@ -15,14 +15,14 @@
     <string name="URL_GET_ENTREVISTADOS" translatable="false">%sentrevistados/pagina/%d</string>
     <string name="URL_GET_ENTREVISTADO" translatable="false">%sentrevistados/%d</string>
     <string name="URL_PUT_ENTREVISTADOS" translatable="false">%sentrevistados/%d</string>
-    <string name="URL_GET_ACCIONES" translatable="false">%sacciones/%s</string>
+    <string name="URL_GET_ACCIONES" translatable="false">%sacciones/idioma/%s</string>
     <string name="URL_GET_CIUDADES" translatable="false">%sciudades</string>
     <string name="URL_GET_EMOTICONES" translatable="false">%semoticones/idioma/%s</string>
-    <string name="URL_GET_ESTADOS_CIVILES" translatable="false">%sestadosCiviles/%s</string>
-    <string name="URL_GET_NIVELES_EDUCACIONALES" translatable="false">%snivelesEducacionales/%s</string>
+    <string name="URL_GET_ESTADOS_CIVILES" translatable="false">%sestadosCiviles/idioma/%s</string>
+    <string name="URL_GET_NIVELES_EDUCACIONALES" translatable="false">%snivelesEducacionales/idioma/%s</string>
     <string name="URL_GET_PROFESIONES" translatable="false">%sprofesiones</string>
-    <string name="URL_GET_TIPOS_CONVIVENCIAS" translatable="false">%stiposConvivencias/%s</string>
-    <string name="URL_GET_TIPOS_ENTREVISTAS" translatable="false">%stiposEntrevistas/%s</string>
+    <string name="URL_GET_TIPOS_CONVIVENCIAS" translatable="false">%stiposConvivencias/idioma/%s</string>
+    <string name="URL_GET_TIPOS_ENTREVISTAS" translatable="false">%stiposEntrevistas/idioma/%s</string>
     <string name="URL_GET_ENTREVISTAS" translatable="false">%sentrevistados/%d/entrevistas/idioma/%s</string>
     <string name="URL_POST_ENTREVISTAS" translatable="false">%sentrevistados/%d/entrevistas</string>
     <string name="URL_GET_ENTREVISTA_ESPECIFICA" translatable="false">%sentrevistados/%d/entrevistas/%d</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">One day in the life of ...</string>
+    <string name="app_name">A day in the life of ...</string>
     <string name="ACCION">Action</string>
     <string name="ACTIVADA">Activated</string>
     <string name="APELLIDO">Last name</string>

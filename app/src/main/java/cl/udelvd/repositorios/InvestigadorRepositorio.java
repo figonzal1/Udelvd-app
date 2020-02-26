@@ -31,6 +31,7 @@ import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
+import cl.udelvd.utilidades.Utils;
 
 public class InvestigadorRepositorio {
 
@@ -834,7 +835,7 @@ public class InvestigadorRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_RECUPERAR_INVESTIGADOR), application.getString(R.string.HEROKU_DOMAIN), investigador.getEmail());
+        String url = String.format(application.getString(R.string.URL_GET_RECUPERAR_INVESTIGADOR), application.getString(R.string.HEROKU_DOMAIN), investigador.getEmail(), Utils.obtenerIdioma(application));
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {

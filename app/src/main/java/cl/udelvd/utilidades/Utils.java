@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.ActionBar;
@@ -34,6 +35,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
+import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.vistas.activities.LoginActivity;
 
 public class Utils {
@@ -344,6 +346,29 @@ public class Utils {
             return idioma;
         } else {
             return context.getString(R.string.LANGUAJE_EN);
+        }
+    }
+
+    public static void configurarIconoEntrevistado(Entrevistado entrevistado, int annos, ImageView iv_persona, Context context) {
+        if (entrevistado.getSexo().equals(context.getString(R.string.SEXO_FEMENINO)) ||
+                entrevistado.getSexo().equals(context.getString(R.string.SEXO_FEMENINO_MASTER_KEY))) {
+
+            if (annos < 18) {
+                iv_persona.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_chica, context.getTheme()));
+            } else if (annos < 65) {
+                iv_persona.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mujer_adulta, context.getTheme()));
+            } else {
+                iv_persona.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_abuela, context.getTheme()));
+            }
+        } else if (entrevistado.getSexo().equals(context.getString(R.string.SEXO_MASCULINO)) ||
+                entrevistado.getSexo().equals(context.getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
+            if (annos < 18) {
+                iv_persona.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_chico, context.getTheme()));
+            } else if (annos < 65) {
+                iv_persona.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_hombre_adulto, context.getTheme()));
+            } else {
+                iv_persona.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_abuelo, context.getTheme()));
+            }
         }
     }
 }

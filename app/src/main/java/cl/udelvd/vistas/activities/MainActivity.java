@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
     private TextView tv_nombre_rol_investigador;
     private ViewPager viewPager;
     private String msg_login;
+    private String rol_investigador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,9 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
             MyFirebaseMessagingService.createChannel(this);
         }
 
-        String rol = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), getString(R.string.ROL_INVESTIGADOR));
+        rol_investigador = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), getString(R.string.ROL_INVESTIGADOR));
         //Si el rol es de admin las notificaciones llegan
-        if (rol.equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
+        if (rol_investigador.equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
             MyFirebaseMessagingService.suscribirTema(this);
         } else {
             MyFirebaseMessagingService.eliminarSuscripcionTema(this);
@@ -220,6 +221,10 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                     if (!token.isEmpty()) {
                         Log.d(getString(R.string.TAG_TOKEN_LOGOUT), String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
                         sharedPreferences.edit().remove(getString(R.string.SHARED_PREF_TOKEN_LOGIN)).apply();
+
+                        if (rol_investigador.equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
+                            MyFirebaseMessagingService.eliminarSuscripcionTema(getApplicationContext());
+                        }
 
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);

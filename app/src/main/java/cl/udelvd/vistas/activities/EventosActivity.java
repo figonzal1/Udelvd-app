@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,12 +48,14 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
     private String n_extraordnarias;
     private int n_entrevistas;
     private String fecha_entrevista;
+    private int annos;
 
     private TextView tv_normales;
     private TextView tv_extraodrinarias;
     private TextView tv_nombreApellido;
     private TextView tv_n_entrevistas;
     private TextView tv_eventos_vacios;
+    private ImageView iv_persona;
 
     private Entrevista entrevista;
     private Entrevistado entrevistado;
@@ -75,9 +78,9 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
         Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_EVENTOS));
 
-        obtenerDatosBundle();
-
         setearRecursosInterfaz();
+
+        obtenerDatosBundle();
 
         floatingButtonCrearEvento();
 
@@ -102,11 +105,25 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             entrevistado = new Entrevistado();
             entrevistado.setNombre(bundle.getString(getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO)));
             entrevistado.setApellido(bundle.getString(getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO)));
+            entrevistado.setSexo(bundle.getString(getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO)));
+            annos = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ANNOS));
 
             n_entrevistas = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS));
             n_normales = bundle.getString(getString(R.string.KEY_ENTREVISTA_N_NORMALES));
             n_extraordnarias = bundle.getString(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS));
 
+            tv_nombreApellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
+            tv_normales.setText(n_normales);
+            tv_extraodrinarias.setText(n_extraordnarias);
+
+            //Contar cantidad de entrevistas
+            if (n_entrevistas == 1) {
+                tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), n_entrevistas));
+            } else {
+                tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), n_entrevistas));
+            }
+
+            Utils.configurarIconoEntrevistado(entrevistado, annos, iv_persona, getApplicationContext());
         }
     }
 
@@ -129,21 +146,11 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
         tabLayout = findViewById(R.id.tab_dots);
         tabLayout.setupWithViewPager(viewPager, true);
 
+        iv_persona = findViewById(R.id.cv_iv_persona);
         tv_nombreApellido = findViewById(R.id.tv_entrevistado_nombre);
         tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
         tv_normales = findViewById(R.id.tv_normales_value);
         tv_extraodrinarias = findViewById(R.id.tv_extraordinarias_value);
-
-        tv_nombreApellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
-        tv_normales.setText(n_normales);
-        tv_extraodrinarias.setText(n_extraordnarias);
-
-        //Contar cantidad de entrevistas
-        if (n_entrevistas == 1) {
-            tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), n_entrevistas));
-        } else {
-            tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), n_entrevistas));
-        }
 
         eventosListaViewModel = ViewModelProviders.of(this).get(EventosListaViewModel.class);
 

@@ -259,6 +259,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, s, null);
+                    entrevistadoAdapter.resetPages();
                     entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
                 }
             }

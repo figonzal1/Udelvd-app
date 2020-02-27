@@ -2,8 +2,8 @@
     <string name="app_name">Un día en la vida de &#8230;</string>
 
     <!-- URLS-->
-    <!--<string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>-->
-    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>
+    <string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>
+    <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>-->
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
     <string name="URL_PATCH_INVESTIGADORES_ACTIVAR" translatable="false">%sinvestigadores/%d/activar</string>
@@ -122,6 +122,8 @@
     <string name="KEY_ENTREVISTADO_APELLIDO" translatable="false">apellido</string>
     <string name="KEY_ENTREVISTADO_APELLIDO_LARGO" translatable="false">apellido_entrevistado</string>
     <string name="KEY_ENTREVISTADO_SEXO" translatable="false">sexo</string>
+    <string name="KEY_ENTREVISTADO_SEXO_LARGO" translatable="false">sexo_entrevistado</string>
+    <string name="KEY_ENTREVISTADO_ANNOS" translatable="false">annos_entrevistado</string>
     <string name="KEY_ENTREVISTADO_JUBILADO_LEGAL" translatable="false">jubilado_legal</string>
     <string name="KEY_ENTREVISTADO_CAIDAS" translatable="false">caidas</string>
     <string name="KEY_ENTREVISTADO_FECHA_NAC" translatable="false">fecha_nacimiento</string>

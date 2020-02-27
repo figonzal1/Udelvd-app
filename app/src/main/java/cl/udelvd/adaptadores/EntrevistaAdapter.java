@@ -67,6 +67,8 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
         holder.tv_fecha_registro.setText(fechaEntrevista);
 
+        final int annos = Utils.calculateYearsOld(entrevistado.getFechaNacimiento());
+
         //Click de cardview
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +83,8 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
                 bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), entrevistado.getNombre());
                 bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
+                bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), entrevistado.getSexo());
+                bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
 
                 bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
                 bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
@@ -115,6 +119,8 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
                             bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), entrevistado.getNombre());
                             bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
+                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), entrevistado.getSexo());
+                            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
 
                             bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
                             bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));

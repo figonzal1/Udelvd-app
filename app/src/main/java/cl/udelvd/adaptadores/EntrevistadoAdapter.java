@@ -93,7 +93,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             holder.tv_nombre_apellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
 
-            int annos = Utils.calculateYearsOld(entrevistado.getFechaNacimiento());
+            final int annos = Utils.calculateYearsOld(entrevistado.getFechaNacimiento());
             holder.tv_fecha_nacimiento.setText(String.format(context.getString(R.string.FORMATO_FECHA_NAC), Utils.dateToString(context.getApplicationContext(), false, entrevistado.getFechaNacimiento()), annos));
 
             if (entrevistado.getN_entrevistas() == 1) {
@@ -101,6 +101,8 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             } else {
                 holder.tv_n_entrevistas.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTAS), entrevistado.getN_entrevistas()));
             }
+
+            Utils.configurarIconoEntrevistado(entrevistado, annos, holder.iv_persona, context);
 
             holder.card_view_entrevistado.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -111,6 +113,9 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), entrevistado.getId());
                     bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), entrevistado.getNombre());
                     bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), entrevistado.getApellido());
+                    bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), Utils.dateToString(context, false, entrevistado.getFechaNacimiento()));
+                    bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), entrevistado.getSexo());
+                    bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
                     intent.putExtras(bundle);
                     context.startActivity(intent, bundle);
                 }
@@ -241,6 +246,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private final TextView tv_fecha_nacimiento;
         private final TextView tv_n_entrevistas;
         private final ImageView iv_menu_entrevistado;
+        private final ImageView iv_persona;
 
         private final View card_view_entrevistado;
 
@@ -252,6 +258,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tv_fecha_nacimiento = itemView.findViewById(R.id.cv_tv_fecha_nac);
             tv_n_entrevistas = itemView.findViewById(R.id.tv_n_entrevistas);
             iv_menu_entrevistado = itemView.findViewById(R.id.iv_menu_entrevistado);
+            iv_persona = itemView.findViewById(R.id.cv_iv_persona);
 
             card_view_entrevistado = itemView.findViewById(R.id.card_view_entrevistado);
         }

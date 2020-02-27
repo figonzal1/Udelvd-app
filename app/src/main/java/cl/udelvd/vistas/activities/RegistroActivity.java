@@ -77,7 +77,7 @@ public class RegistroActivity extends AppCompatActivity implements SnackbarInter
 
                     investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
-                    investigador.setNombreRol(getString(R.string.ROL_INVESTIGADOR));
+                    investigador.setNombreRol(getString(R.string.ROL_INVESTIG_KEY_MASTER));
                     investigador.setActivado(false);
 
                     InvestigadorRepositorio.getInstance(getApplication()).registrarInvestigador(investigador);

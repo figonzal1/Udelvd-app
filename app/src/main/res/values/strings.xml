@@ -49,6 +49,7 @@
     <!-- ROLES -->
     <string name="ROL_INVESTIGADOR">Investigador</string>
     <string name="ROL_ADMINITRADOR">Administrador</string>
+    <string name="ROL_INVESTIG_KEY_MASTER" translatable="false">Investigador</string> <!-- NO BORRAR -->
     <string name="ROL_ADMIN_KEY_MASTER" translatable="false">Administrador</string> <!-- NO BORRAR -->
 
     <!-- NOTIFICACION -->

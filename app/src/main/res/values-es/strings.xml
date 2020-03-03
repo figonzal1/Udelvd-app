@@ -27,7 +27,7 @@
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
     <string name="ESTADO_CIVIL">Estado civil</string>
     <string name="ESTADO_CUENTA">Estado cuenta</string>
-    <string name="EXTRAORDINARIAS">Extraordinarias</string>
+    <string name="TV_EXTRAORDINARIAS">Extraordinarias</string>
     <string name="FECHA_ENTREVISTA">Fecha entrevista</string>
     <string name="FECHA_NACIMIENTO">Fecha nacimiento</string>
     <string name="FECHA_REGISTRO_ENTREVISTA">Fecha registro:</string>
@@ -101,7 +101,7 @@
     <string name="NIVEL_EDUCACIONAL">Nivel educacional</string>
     <string name="NOMBRE">Nombre</string>
     <string name="NOMBRE_PERSONA">Nombre Persona</string>
-    <string name="NORMALES">Normales</string>
+    <string name="TV_NORMALES">Normales</string>
     <string name="NO_TIENES_CUENTA">¿No tienes cuenta? Regístrate</string>
     <string name="NUEVA_PASS_INTRUCCIONES">Por favor, ingrese una nueva contraseña</string>
     <string name="OLVIDAR_CONTRASEÑA">¿Olvidaste tu contraseña?</string>
@@ -174,4 +174,6 @@
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
     <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
     <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>
+    <string name="NORMAL">Normal</string>
+    <string name="EXTRAORDINARIA">Extraordinaria</string>
 </resources>

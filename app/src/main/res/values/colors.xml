@@ -5,6 +5,8 @@
     <color name="colorAccent">#D81B60</color>
     <color name="white">#ffffff</color>-->
 
+    <color name="red">#F75555</color>
+
     <color name="colorPrimary">#fb8c00</color>
     <color name="colorPrimaryVariant">#c25e00</color>
     <color name="colorOnPrimary">#A1000000</color>

@@ -8,87 +8,78 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.google.android.material.snackbar.Snackbar;
 
 import cl.udelvd.R;
+import cl.udelvd.modelo.Investigador;
+import cl.udelvd.utilidades.SnackbarInterface;
+import cl.udelvd.utilidades.Utils;
 
-public class PerfilActivity extends AppCompatActivity {
+public class PerfilActivity extends AppCompatActivity implements SnackbarInterface {
 
-    private String nombre;
-    private String apellido;
-    private String email;
-    private String password;
+    private TextView tv_nombre;
+    private TextView tv_activado;
+    private TextView tv_email;
+    private TextView tv_registro_cuenta;
 
-    private int id_rol;
-    private int id;
+    private Investigador investigador;
+
     private static final int PROFILE_ACTIVITY_CODE = 200;
     private static final int EDIT_PROFILE_CODE = 201;
-    private String nombreRol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
-        Log.d("PROFILE_ACTIVITY", "LLAMADO DE ACTIVIDAD");
+        Utils.configurarToolbar(this, getApplicationContext(), R.drawable.ic_arrow_back_black_24dp, getString(R.string.TITULO_TOOLBAR_PERFIL));
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
-        setSupportActionBar(toolbar);
+        instanciarRecursosInterfaz();
 
-        //Setear toolbar
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
-        actionBar.setTitle("Perfil");
+        cargarDatosInvestigador();
+    }
 
-        TextView tv_nombre = findViewById(R.id.tv_nombre_investigador);
-        TextView tv_activado = findViewById(R.id.tv_activado);
-        TextView tv_email = findViewById(R.id.tv_email_investigador);
-        TextView tv_registro_cuenta = findViewById(R.id.tv_registro);
+
+    private void instanciarRecursosInterfaz() {
+        tv_nombre = findViewById(R.id.tv_nombre_investigador);
+        tv_activado = findViewById(R.id.tv_activado);
+        tv_email = findViewById(R.id.tv_email_investigador);
+        tv_registro_cuenta = findViewById(R.id.tv_registro);
+    }
+
+    private void cargarDatosInvestigador() {
 
         //Lectura de datos del investigador
-        SharedPreferences sharedPreferences = getSharedPreferences("udelvd", Context.MODE_PRIVATE);
-        id = sharedPreferences.getInt("id_investigador", 0);
-        id_rol = sharedPreferences.getInt("id_rol_investigador", 0);
-        nombreRol = sharedPreferences.getString("nombre_rol_investigador", "");
-        nombre = sharedPreferences.getString("nombre_investigador", "");
-        apellido = sharedPreferences.getString("apellido_investigador", "");
-        email = sharedPreferences.getString("email_investigador", "");
-        boolean activado = sharedPreferences.getBoolean("activado_investigador", false);
-        String create_time = sharedPreferences.getString("create_time_investigador", "");
-        password = sharedPreferences.getString("password_investigador", "");
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
+        investigador = new Investigador();
+        investigador.setId(sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0));
+        investigador.setNombre(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE), ""));
+        investigador.setApellido(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_APELLIDO), ""));
+        investigador.setEmail(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), ""));
+        investigador.setActivado(sharedPreferences.getBoolean(getString(R.string.SHARED_PREF_INVES_ACTIVADO), false));
+        investigador.setCreateTime(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_CREATE_TIME), ""));
+        investigador.setPassword(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_PASSWORD), ""));
 
-        try {
-            Date registro = simpleDateFormat.parse(create_time);
-            assert registro != null;
-            create_time = simpleDateFormat.format(registro);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //Rol investigador
+        investigador.setIdRol(sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID_ROL), 0));
+        investigador.setNombreRol(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), ""));
 
-        tv_nombre.setText(nombre + " " + apellido);
-        tv_email.setText(email);
-        if (activado) {
-            tv_activado.setText("Activado");
+        tv_nombre.setText(String.format("%s %s", investigador.getNombre(), investigador.getApellido()));
+        tv_email.setText(investigador.getEmail());
+        if (investigador.isActivado()) {
+            tv_activado.setText(R.string.PERFIL_ACTIVADO);
         } else {
-            tv_activado.setText("No activada");
+            tv_activado.setText(R.string.PERFIL_NO_ACTIVADO);
         }
-        tv_registro_cuenta.setText(create_time);
+        tv_registro_cuenta.setText(Utils.dateToString(getApplicationContext(), false, Utils.stringToDate(getApplicationContext(), false, investigador.getCreateTime())));
     }
 
     @Override
@@ -121,13 +112,15 @@ public class PerfilActivity extends AppCompatActivity {
             Intent intent = new Intent(PerfilActivity.this, EditarPerfilActivity.class);
 
             //Enviar datos de investigador hacia formulario de edicion
-            intent.putExtra("id", id);
-            intent.putExtra("nombre", nombre);
-            intent.putExtra("apellido", apellido);
-            intent.putExtra("email", email);
-            intent.putExtra("id_rol", id_rol);
-            intent.putExtra("password", password);
-            intent.putExtra("nombre_rol", nombreRol);
+            intent.putExtra(getString(R.string.KEY_INVES_ID), investigador.getId());
+            intent.putExtra(getString(R.string.KEY_INVES_NOMBRE), investigador.getNombre());
+            intent.putExtra(getString(R.string.KEY_INVES_APELLIDO), investigador.getApellido());
+            intent.putExtra(getString(R.string.KEY_INVES_EMAIL), investigador.getEmail());
+            intent.putExtra(getString(R.string.KEY_INVES_PASSWORD), investigador.getPassword());
+
+            intent.putExtra(getString(R.string.KEY_INVES_ID_ROL), investigador.getIdRol());
+            intent.putExtra(getString(R.string.KEY_INVES_NOMBRE_ROL), investigador.getNombreRol());
+
             startActivityForResult(intent, EDIT_PROFILE_CODE);
 
             return true;
@@ -140,20 +133,37 @@ public class PerfilActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == EDIT_PROFILE_CODE) {
-            Log.d("FINISH_EDIT_PROFILE_ACT", "Cerrando formulario de edicion");
-            recreate();
+        if (requestCode == EDIT_PROFILE_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                assert data != null;
+                Bundle bundle = data.getExtras();
+
+                assert bundle != null;
+
+                showSnackbar(findViewById(R.id.perfil_investigador), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION)), null);
+
+                cargarDatosInvestigador();
+
+                Log.d(getString(R.string.TAG_EDIT_PROFILE_RESULT), getString(R.string.EDIT_PROFILE_RESULT_MSG));
+
+            }
         }
     }
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
 
-        //Enviar codigo OK a mainActivity
+        //Enviar codigo OK a mainActivity para fijar navigationDrawer
         Intent intent = getIntent();
         setResult(PROFILE_ACTIVITY_CODE, intent);
         finish();
+    }
 
-        super.onBackPressed();
+    @Override
+    public void showSnackbar(View v, int duration, String titulo, String accion) {
+        Snackbar snackbar = Snackbar.make(v, titulo, duration);
+        snackbar.show();
     }
 }

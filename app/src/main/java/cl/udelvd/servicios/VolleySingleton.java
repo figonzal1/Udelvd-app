@@ -53,6 +53,7 @@ public class VolleySingleton {
         getRequestQueue().add(req);
     }
 
+    @SuppressWarnings("unused")
     public void cancelPendingRequests(Object tag) {
         if (requestQueue != null) {
             requestQueue.cancelAll(tag);

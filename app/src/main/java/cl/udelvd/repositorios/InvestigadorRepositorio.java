@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -14,29 +17,65 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
+import cl.udelvd.utilidades.Utils;
 
 public class InvestigadorRepositorio {
+
     private static InvestigadorRepositorio instancia;
     private final Application application;
 
+    //Listados
+    private List<Investigador> investigadorList = new ArrayList<>();
+    private final MutableLiveData<List<Investigador>> investigadorMutableLiveData = new MutableLiveData<>();
+    //TAGS
+    private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
+
+    //LOGIN
     private final SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
-    private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorLogin = new SingleLiveEvent<>();
+
+    //REGISTRO
+    private final SingleLiveEvent<Map<String, String>> responseMsgRegistro = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
+
+    //Actualizacion
+    private final SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
 
-    private final SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
+    //Recuperacion Cuenta
+    private final SingleLiveEvent<String> responseMsgErrorRecuperacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Map<String, String>> responseMsgRecuperacion = new SingleLiveEvent<>();
 
+    //PROGRESS DIALOG
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private static final String TAG_INVESTIGADOR_RESET = "ResetearPassword";
+
+    //Resetear password
+    private final SingleLiveEvent<String> responseMsgReset = new SingleLiveEvent<>();
+    private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
+    private static final Object TAG_INVESTIGADOR_ACTIVACION = "ActivacionInvestigador";
+    private final SingleLiveEvent<String> responseMsgErrorReset = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
     private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
     private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
     private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
+    //ACTIVACION
+    private final SingleLiveEvent<String> responseMsgErrorActivacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgActivacion = new SingleLiveEvent<>();
 
     private InvestigadorRepositorio(Application application) {
         this.application = application;
@@ -55,20 +94,124 @@ public class InvestigadorRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getErrorMsg() {
-        return errorMsg;
+    public MutableLiveData<List<Investigador>> obtenerInvestigadores(Investigador investigador) {
+        sendGetListado(investigador);
+        return investigadorMutableLiveData;
     }
 
-    public SingleLiveEvent<Map<String, Object>> getResponseMsgLogin() {
-        return responseMsgLogin;
-    }
+    private void sendGetListado(Investigador investigador) {
 
-    public SingleLiveEvent<String> getResponseMsgRegistro() {
-        return responseMsgRegistro;
-    }
+        investigadorList = new ArrayList<>();
 
-    public SingleLiveEvent<Map<String, Object>> getResponseMsgActualizacion() {
-        return responseMsgActualizacion;
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonInve = jsonArray.getJSONObject(i);
+                        JSONObject jsonAttributes = jsonInve.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                        Investigador inv = new Investigador();
+                        inv.setId(jsonInve.getInt(application.getString(R.string.KEY_INVES_ID)));
+                        inv.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                        inv.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                        inv.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                        inv.setIdRol(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
+                        inv.setCreateTime(jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME)));
+
+                        if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+                            inv.setActivado(false);
+                        } else {
+                            inv.setActivado(true);
+                        }
+
+                        JSONObject jsonRelationshipsData = jsonInve.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                                .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                                .getJSONObject(application.getString(R.string.JSON_DATA));
+                        inv.setIdRol(jsonRelationshipsData.getInt(application.getString(R.string.KEY_ROL_ID)));
+                        inv.setNombreRol(jsonRelationshipsData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
+
+                        investigadorList.add(inv);
+
+                    }
+                    investigadorMutableLiveData.postValue(investigadorList);
+
+                    isLoading.postValue(false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorListado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN), investigador.getId());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_LISTADO);
     }
 
     /**
@@ -96,26 +239,26 @@ public class InvestigadorRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
-                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                     //Obtener json desde respuesta
                     Investigador invResponse = new Investigador();
-                    invResponse.setNombre(jsonAttributes.getString("nombre"));
-                    invResponse.setApellido(jsonAttributes.getString("apellido"));
-                    invResponse.setEmail(jsonAttributes.getString("email"));
+                    invResponse.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                    invResponse.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
 
                     //Obtener relacion Rol de investigador
                     JSONObject jsonObjectRolData = jsonData
-                            .getJSONObject("relationships")
-                            .getJSONObject("rol")
-                            .getJSONObject("data");
+                            .getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                            .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                            .getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    invResponse.setNombreRol(jsonObjectRolData.getString("nombre"));
+                    invResponse.setNombreRol(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
 
-                    if (jsonAttributes.getInt("activado") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
                         invResponse.setActivado(false);
-                    } else if (jsonAttributes.getInt("activado") == 1) {
+                    } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
                         invResponse.setActivado(true);
                     }
 
@@ -123,7 +266,15 @@ public class InvestigadorRepositorio {
                     Log.d("INTERNET", invResponse.toString());
 
                     if (investigador.equals(invResponse)) {
-                        responseMsgRegistro.postValue("¡Estas registrado!");
+
+                        Map<String, String> map = new HashMap<>();
+
+                        map.put(application.getString(R.string.INTENT_KEY_MSG_REGISTRO), application.getString(R.string.MSG_INVEST_REGISTRADO));
+                        map.put(application.getString(R.string.INTENT_KEY_INVES_ACTIVADO), String.valueOf(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO))));
+
+                        responseMsgRegistro.postValue(map);
+
+                        isLoading.postValue(false);
                     }
 
                 } catch (JSONException e) {
@@ -137,15 +288,17 @@ public class InvestigadorRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERR_REGIS_INVEST", "TIMEOUT_ERROR");
-                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERR_REGIS_INVEST", "NETWORK_ERROR");
-                    errorMsg.postValue("No tienes conexión a Internet");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorRegistro.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuandoel servidor si response
@@ -158,29 +311,29 @@ public class InvestigadorRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERR_REGIS_INVEST", "AUTHENTICATION_ERROR: " + errorObject);
-                        errorMsg.postValue("Acceso no autorizado");
+                        Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorRegistro.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERR_REGIS_INVEST", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.SERVER_ERROR) + errorObject);
 
                         try {
 
                             assert errorObject != null;
                             //Si el error es de mail repetido, postear error msg
-                            if (errorObject.get("detail").equals("Email already exists")) {
-                                errorMsg.postValue("Email ya registrado");
+                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG))) {
+                                responseMsgErrorRegistro.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
                             } else {
-                                errorMsg.postValue("Servidor no responde, intente más tarde");
+                                responseMsgErrorRegistro.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -192,8 +345,7 @@ public class InvestigadorRepositorio {
         };
 
 
-        //String url = "https://udelvd-dev.herokuapp.com/investigadores";
-        String url = "http://192.168.0.14/investigadores";
+        String url = String.format(application.getString(R.string.URL_POST_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN));
 
         //Hacer peticion post
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -203,11 +355,11 @@ public class InvestigadorRepositorio {
 
                 Map<String, String> params = new HashMap<>();
 
-                params.put("nombre", investigador.getNombre());
-                params.put("apellido", investigador.getApellido());
-                params.put("email", investigador.getEmail());
-                params.put("password", investigador.getPassword());
-                params.put("nombre_rol", investigador.getNombreRol());
+                params.put(application.getString(R.string.KEY_INVES_NOMBRE), investigador.getNombre());
+                params.put(application.getString(R.string.KEY_INVES_APELLIDO), investigador.getApellido());
+                params.put(application.getString(R.string.KEY_INVES_EMAIL), investigador.getEmail());
+                params.put(application.getString(R.string.KEY_INVES_PASSWORD), investigador.getPassword());
+                params.put(application.getString(R.string.KEY_INVES_NOMBRE_ROL), investigador.getNombreRol());
 
                 return params;
             }
@@ -215,11 +367,12 @@ public class InvestigadorRepositorio {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 return params;
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_REGISTRO);
     }
 
@@ -248,55 +401,65 @@ public class InvestigadorRepositorio {
 
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
-                    JSONObject jsonLogin = jsonObject.getJSONObject("login");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                    JSONObject jsonLogin = jsonObject.getJSONObject(application.getString(R.string.JSON_LOGIN));
 
-                    String status = jsonLogin.getString("status");
+                    String status = jsonLogin.getString(application.getString(R.string.JSON_LOGIN_STATUS));
 
-                    if (status.equals("Correct")) {
+                    //Obtener datos investigador post login
+                    Investigador invResponse = new Investigador();
+                    invResponse.setId(jsonData.getInt(application.getString(R.string.KEY_INVES_ID)));
 
-                        String token = jsonLogin.getString("token");
-                        Log.d("TOKEN_LOGIN", token);
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                    invResponse.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                    invResponse.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                    invResponse.setCreateTime(jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME)));
+
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+                        invResponse.setActivado(false);
+                    } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
+                        invResponse.setActivado(true);
+                    }
+
+                    invResponse.setIdRol(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
+
+                    //Buscar en JSON nombre del rol
+                    JSONObject jsonObjectRolData = jsonData.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                            .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                            .getJSONObject(application.getString(R.string.JSON_DATA));
+                    invResponse.setNombreRol(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
+
+                    /*
+                    CHECKEO DE ACTIVACION
+                     */
+                    if (status.equals(application.getString(R.string.JSON_LOGIN_STATUS_RESPONSE)) && invResponse.isActivado()) {
+
+                        String token = jsonLogin.getString(application.getString(R.string.JSON_TOKEN));
+                        Log.d(application.getString(R.string.TAG_TOKEN_LOGIN), token);
 
                         //Guardar token
                         SharedPreferences sharedPreferences = application.getSharedPreferences(
-                                "udelvd", Context.MODE_PRIVATE);
+                                application.getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
                         //Guardar token en shared pref
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("TOKEN_LOGIN", token);
+                        editor.putString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), token);
                         editor.apply();
 
-                        //Obtener datos investigador post login
-                        Investigador invResponse = new Investigador();
-                        invResponse.setId(jsonData.getInt("id"));
-
-                        JSONObject jsonAttributes = jsonData.getJSONObject(
-                                "attributes");
-                        invResponse.setEmail(jsonAttributes.getString("email"));
-                        invResponse.setNombre(jsonAttributes.getString("nombre"));
-                        invResponse.setApellido(jsonAttributes.getString("apellido"));
-                        invResponse.setCreateTime(jsonAttributes.getString("create_time"));
-
-                        if (jsonAttributes.getInt("activado") == 0) {
-                            invResponse.setActivado(false);
-                        } else if (jsonAttributes.getInt("activado") == 1) {
-                            invResponse.setActivado(true);
-                        }
-
-                        invResponse.setIdRol(jsonAttributes.getInt("id_rol"));
-
-                        //Buscar en JSON nombre del rol
-                        JSONObject jsonObjectRolData = jsonData.getJSONObject(
-                                "relationships").getJSONObject("rol").getJSONObject("data");
-                        invResponse.setNombreRol(jsonObjectRolData.getString("nombre"));
 
                         //Enviar investigador y mensaje para toast
                         Map<String, Object> result = new HashMap<>();
-                        result.put("investigador", invResponse);
-                        result.put("mensaje_login", "¡Bienvenido!");
+                        result.put(application.getString(R.string.KEY_INVES_OBJECT), invResponse);
+                        result.put(application.getString(R.string.LOGIN_MSG_VM), application.getString(R.string.LOGIN_MSG_VM_WELCOME));
 
                         responseMsgLogin.postValue(result);
+
+                        isLoading.postValue(false);
+                    } else {
+                        responseMsgErrorLogin.postValue(application.getString(R.string.SNACKBAR_CUENTA_WAIT));
+
+                        isLoading.postValue(false);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -308,15 +471,16 @@ public class InvestigadorRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                isLoading.postValue(false);
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERROR_LOGIN", "TIMEOUT_ERROR");
-                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERROR_LOGIN", "NETWORK_ERROR");
-                    errorMsg.postValue("No tienes conexión a Internet");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorLogin.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -329,7 +493,7 @@ public class InvestigadorRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -337,15 +501,15 @@ public class InvestigadorRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERROR_LOGIN", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
 
                         try {
                             assert errorObject != null;
 
-                            if (errorObject.get("detail").equals("Please check your credentials")) {
-                                errorMsg.postValue("Login fallido, revisa tus datos");
+                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_AUTH_MSG))) {
+                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_AUTH_MSG_VM));
                             } else {
-                                errorMsg.postValue("Acceso no autorizado");
+                                responseMsgErrorLogin.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -354,16 +518,16 @@ public class InvestigadorRepositorio {
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERROR_LOGIN", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.SERVER_ERROR) + errorObject);
 
                         try {
                             assert errorObject != null;
 
                             //Si el error es de email no existente
-                            if (errorObject.get("detail").equals("Email does not exist")) {
-                                errorMsg.postValue("Email no registrado");
+                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
+                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
                             } else {
-                                errorMsg.postValue("Servidor no responde, intente más tarde");
+                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -375,29 +539,28 @@ public class InvestigadorRepositorio {
             }
         };
 
-        //String url = "https://udelvd-dev.herokuapp.com/investigadores/login";
-        String url = "http://192.168.0.14/investigadores/login";
+        String url = String.format(application.getString(R.string.URL_LOGIN_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener,
                 errorListener) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", investigadorForm.getEmail());
-                params.put("password", investigadorForm.getPassword());
+                params.put(application.getString(R.string.KEY_INVES_EMAIL), investigadorForm.getEmail());
+                params.put(application.getString(R.string.KEY_INVES_PASSWORD), investigadorForm.getPassword());
                 return params;
             }
 
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 return params;
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_LOGIN);
-
     }
 
     /**
@@ -424,32 +587,33 @@ public class InvestigadorRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
 
 
                     //Investigador actualizado
                     Investigador invResponse = new Investigador();
-                    invResponse.setId(jsonData.getInt("id"));
+                    invResponse.setId(jsonData.getInt(application.getString(R.string.KEY_INVES_ID)));
 
-                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                    invResponse.setEmail(jsonAttributes.getString("email"));
-                    invResponse.setNombre(jsonAttributes.getString("nombre"));
-                    invResponse.setApellido(jsonAttributes.getString("apellido"));
-                    invResponse.setIdRol(jsonAttributes.getInt("id_rol"));
+                    invResponse.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                    invResponse.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                    invResponse.setIdRol(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
 
-                    if (jsonAttributes.getInt("activado") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
                         invResponse.setActivado(false);
-                    } else if (jsonAttributes.getInt("activado") == 1) {
+                    } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
                         invResponse.setActivado(true);
                     }
 
                     //Buscar en JSON nombre del rol
-                    JSONObject jsonObjectRolData = jsonData.getJSONObject(
-                            "relationships").getJSONObject("rol").getJSONObject("data");
-                    invResponse.setNombreRol(jsonObjectRolData.getString("nombre"));
+                    JSONObject jsonObjectRolData = jsonData.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                            .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                            .getJSONObject(application.getString(R.string.JSON_DATA));
+                    invResponse.setNombreRol(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
 
-                    String update_time = jsonAttributes.getString("update_time");
+                    String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
 
                     Log.d("MEMORIA", investigadorForm.toString());
                     Log.d("INTERNET", invResponse.toString());
@@ -458,12 +622,14 @@ public class InvestigadorRepositorio {
 
                         //Enviar investigador y mensaje para toast
                         Map<String, Object> result = new HashMap<>();
-                        result.put("investigador", invResponse);
-                        result.put("mensaje_update", "¡Datos actualizados!");
+                        result.put(application.getString(R.string.KEY_INVES_OBJECT), invResponse);
+                        result.put(application.getString(R.string.UPDATE_MSG_VM), application.getString(R.string.UPDATE_MSG_VM_SAVE));
 
-                        Log.d("UPDATE_STATUS", update_time);
                         responseMsgActualizacion.postValue(result);
+
+                        isLoading.postValue(false);
                     }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -475,15 +641,18 @@ public class InvestigadorRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERR_INV_UPDATE", "TIMEOUT_ERROR");
-                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERR_INV_UPDATE", "NETWORK_ERROR");
-                    errorMsg.postValue("No tienes conexión a Internet");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorActualizacion.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si response
@@ -496,27 +665,28 @@ public class InvestigadorRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERR_INV_UPDATE", "AUTHENTICATION_ERROR: " + errorObject);
-                        errorMsg.postValue("Acceso no autorizado");
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorActualizacion.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERR_INV_UPDATE", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.SERVER_ERROR) + errorObject);
+                        responseMsgErrorActualizacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
 
-        String url = "http://192.168.0.14/investigadores/" + investigadorForm.getId();
+        String url = String.format(application.getString(R.string.URL_PUT_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN), investigadorForm.getId());
 
         StringRequest request = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
 
@@ -525,11 +695,11 @@ public class InvestigadorRepositorio {
 
                 Map<String, String> params = new HashMap<>();
 
-                params.put("nombre", investigadorForm.getNombre());
-                params.put("apellido", investigadorForm.getApellido());
-                params.put("email", investigadorForm.getEmail());
-                params.put("password", investigadorForm.getPassword());
-                params.put("id_rol", String.valueOf(investigadorForm.getIdRol()));
+                params.put(application.getString(R.string.KEY_INVES_NOMBRE), investigadorForm.getNombre());
+                params.put(application.getString(R.string.KEY_INVES_APELLIDO), investigadorForm.getApellido());
+                params.put(application.getString(R.string.KEY_INVES_EMAIL), investigadorForm.getEmail());
+                params.put(application.getString(R.string.KEY_INVES_PASSWORD), investigadorForm.getPassword());
+                params.put(application.getString(R.string.KEY_INVES_ID_ROL), String.valueOf(investigadorForm.getIdRol()));
 
                 return params;
             }
@@ -537,17 +707,449 @@ public class InvestigadorRepositorio {
             @Override
             public Map<String, String> getHeaders() {
 
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                params.put("Authorization", "Bearer " + token);
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
                 return params;
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_ACTUALIZACION);
+    }
+
+    /**
+     * Funcion encargada de recuperar la cuenta de in investigadort
+     *
+     * @param investigador Objeto de investigador
+     */
+    public void recuperarCuenta(Investigador investigador) {
+        sendPostRecuperar(investigador);
+    }
+
+    /**
+     * Peticion POST para recuperacion de cuenta
+     *
+     * @param investigador Objeto investigador con datos necesarios
+     */
+    private void sendPostRecuperar(Investigador investigador) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                //Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                    String email = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES)).getString(application.getString(R.string.KEY_INVES_EMAIL));
+
+                    JSONObject jsonRecovery = jsonObject.getJSONObject(application.getString(R.string.JSON_RECOVERY));
+
+                    String status = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_STATUS));
+                    String dybamicLink = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_DL));
+
+                    if (status.equals(application.getString(R.string.RECOVERY_MSG_VM))) {
+
+                        isLoading.postValue(false);
+
+                        Map<String, String> map = new HashMap<>();
+
+                        map.put(application.getString(R.string.KEY_INVES_EMAIL), email);
+                        map.put(application.getString(R.string.MSG_RECOVERY), application.getString(R.string.RECOVERY_MSG_VM_RESPONSE));
+                        responseMsgRecuperacion.postValue(map);
+
+                        Log.d(application.getString(R.string.TAG_DYNAMIC_LINK_JSON), dybamicLink);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorRecuperacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorRecuperacion.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si response
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorRecuperacion.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.SERVER_ERROR) + errorObject);
+
+                        try {
+                            assert errorObject != null;
+                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
+                                responseMsgErrorRecuperacion.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
+                            } else {
+                                responseMsgErrorRecuperacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+        };
+
+        String url = String.format(application.getString(R.string.URL_GET_RECUPERAR_INVESTIGADOR), application.getString(R.string.HEROKU_DOMAIN), investigador.getEmail(), Utils.obtenerIdioma(application));
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RECUPERACION);
+
+
+    }
+
+    /**
+     * Funcion encargada de resetear contraseña
+     *
+     * @param email    Email del solicitante
+     * @param password Nueva pass
+     */
+    public void resetearPassword(String email, String password) {
+        sendPostResetPass(email, password);
+    }
+
+    /**
+     * Peticion post para resetar la contraseña
+     *
+     * @param email    Email del solicitante
+     * @param password Nueva pass
+     */
+    private void sendPostResetPass(final String email, final String password) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonReset = jsonObject.getJSONObject(application.getString(R.string.JSON_RESET));
+
+                    String status = jsonReset.getString(application.getString(R.string.JSON_RESET_STATUS));
+
+                    if (status.equals(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM))) {
+
+                        isLoading.postValue(false);
+
+                        responseMsgReset.postValue(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM_RESULT));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorReset.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorReset.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si response
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorReset.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.SERVER_ERROR) + errorObject);
+                        responseMsgErrorReset.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(application.getString(R.string.URL_PUT_RESETEAR_PASSWORD), application.getString(R.string.HEROKU_DOMAIN));
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.KEY_INVES_PASSWORD), password);
+                params.put(application.getString(R.string.KEY_INVES_EMAIL), email);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RESET);
+    }
+
+    public void activarCuenta(Investigador investigador) {
+        sendPatchActivar(investigador);
+    }
+
+    private void sendPatchActivar(final Investigador investigador) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                //Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                    Investigador invResponse = new Investigador();
+                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+                        invResponse.setActivado(false);
+                    } else {
+                        invResponse.setActivado(true);
+                    }
+
+                    if (investigador.getEmail().equals(invResponse.getEmail()) &&
+                            (investigador.isActivado() == invResponse.isActivado())) {
+
+                        if (investigador.isActivado()) {
+                            responseMsgActivacion.postValue(application.getString(R.string.MSG_INVEST_CUENTA_ACTIVADA));
+                        } else {
+                            responseMsgActivacion.postValue(application.getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA));
+                        }
+                    }
+                    isLoading.postValue(false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorActivacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorActivacion.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si response
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+                    //Log.d("JSON", json);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorActivacion.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.SERVER_ERROR) + errorObject);
+                        responseMsgErrorActivacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(Locale.getDefault(), application.getString(R.string.URL_PATCH_INVESTIGADORES_ACTIVAR), application.getString(R.string.HEROKU_DOMAIN), investigador.getId());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PATCH, url, responseListener, errorListener) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                if (investigador.isActivado()) {
+                    params.put(application.getString(R.string.KEY_INVES_ACTIVADO), String.valueOf(1));
+                } else {
+                    params.put(application.getString(R.string.KEY_INVES_ACTIVADO), String.valueOf(0));
+                }
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_ACTIVACION);
+
+    }
+
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<Map<String, Object>> getResponseMsgLogin() {
+        return responseMsgLogin;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorLogin() {
+        return responseMsgErrorLogin;
+    }
+
+    public SingleLiveEvent<Map<String, String>> getResponseMsgRegistro() {
+        return responseMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorRegistro() {
+        return responseMsgErrorRegistro;
+    }
+
+    public SingleLiveEvent<Map<String, Object>> getResponseMsgActualizacion() {
+        return responseMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorActualizacion() {
+        return responseMsgErrorActualizacion;
+    }
+
+    public SingleLiveEvent<Map<String, String>> getResponseMsgRecuperacion() {
+        return responseMsgRecuperacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorRecuperacion() {
+        return responseMsgErrorRecuperacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgReset() {
+        return responseMsgReset;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorReset() {
+        return responseMsgErrorReset;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgActivacion() {
+        return responseMsgActivacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorActivacion() {
+        return responseMsgErrorActivacion;
     }
 }

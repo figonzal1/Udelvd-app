@@ -25,15 +25,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cl.udelvd.R;
 import cl.udelvd.modelo.TipoEntrevista;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SingleLiveEvent;
+import cl.udelvd.utilidades.Utils;
 
 public class TipoEntrevistaRepositorio {
 
     private static TipoEntrevistaRepositorio instancia;
-    private Application application;
+    private final Application application;
 
-    private List<TipoEntrevista> tipoEntrevistaList;
+    private final List<TipoEntrevista> tipoEntrevistaList = new ArrayList<>();
+
+    private final MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutable = new MutableLiveData<>();
+
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+
+    private static final String TAG_TIPO_ENTREVISTA = "TiposEntrevistas";
 
     private TipoEntrevistaRepositorio(Application application) {
         this.application = application;
@@ -46,40 +57,57 @@ public class TipoEntrevistaRepositorio {
         return instancia;
     }
 
-    public MutableLiveData<List<TipoEntrevista>> obtenerTiposEntrevista() {
-        MutableLiveData<List<TipoEntrevista>> mutableLiveData = new MutableLiveData<>();
-        sendGetTiposEntrevista(mutableLiveData);
-        return mutableLiveData;
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
     }
 
-    private void sendGetTiposEntrevista(final MutableLiveData<List<TipoEntrevista>> mutableLiveData) {
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
 
-        tipoEntrevistaList = new ArrayList<>();
+    /**
+     * Funcion encargada de obtener el listado de tipos de entrevista
+     *
+     * @return MutableLiveData de tipos de entrevista
+     */
+    public MutableLiveData<List<TipoEntrevista>> obtenerTiposEntrevista() {
+        sendGetTiposEntrevista();
+        return tipoEntrevistaMutable;
+    }
+
+    /**
+     * Funcion encargada de enviar peticion GET al servidor
+     */
+    private void sendGetTiposEntrevista() {
+
+        tipoEntrevistaList.clear();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                Log.d("RESPONSE_TIPO_ENTRE", response);
+                //Log.d("RESPONSE_TIPO_ENTRE", response);
 
                 try {
                     JSONObject jsonObject;
                     jsonObject = new JSONObject(response);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonTipoEntrevista = jsonArray.getJSONObject(i);
 
-                        JSONObject jsonAttributes = jsonTipoEntrevista.getJSONObject("attributes");
+                        JSONObject jsonAttributes = jsonTipoEntrevista.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                         TipoEntrevista tipoEntrevista = new TipoEntrevista();
-                        tipoEntrevista.setId(jsonTipoEntrevista.getInt("id"));
-                        tipoEntrevista.setNombre(jsonAttributes.getString("nombre"));
+                        tipoEntrevista.setId(jsonTipoEntrevista.getInt(application.getString(R.string.KEY_TIPO_ENTREVISTA_ID)));
+                        tipoEntrevista.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_TIPO_ENTREVISTA_NOMBRE)));
 
                         tipoEntrevistaList.add(tipoEntrevista);
                     }
 
-                    mutableLiveData.postValue(tipoEntrevistaList);
+                    tipoEntrevistaMutable.postValue(tipoEntrevistaList);
+
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -89,13 +117,18 @@ public class TipoEntrevistaRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERR_TIPO_ENTR", "TIMEOUT_ERROR");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERR_TIPO_ENTR", "NETWORK_ERROR");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -108,55 +141,46 @@ public class TipoEntrevistaRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERR_TIPO_ENTR", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERR_TIPO_ENTR", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorListado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = "http://192.168.0.14/tiposEntrevistas";
+        String url = String.format(application.getString(R.string.URL_GET_TIPOS_ENTREVISTAS), application.getString(R.string.HEROKU_DOMAIN), Utils.obtenerIdioma(application));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
-
 
             @Override
             public Map<String, String> getHeaders() {
 
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                params.put("Authorization", "Bearer " + token);
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
                 return params;
             }
         };
-
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, "TiposEntrevistas");
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_TIPO_ENTREVISTA);
     }
 
-    public TipoEntrevista buscarTipoEntrevistaPorNombre(String nombre) {
 
-        for (int i = 0; i < tipoEntrevistaList.size(); i++) {
-            if (tipoEntrevistaList.get(i).getNombre().equals(nombre)) {
-                return tipoEntrevistaList.get(i);
-            }
-        }
-
-        return null;
-    }
 }

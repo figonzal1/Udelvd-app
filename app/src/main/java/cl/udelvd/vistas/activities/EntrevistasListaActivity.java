@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,14 +59,6 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
 
     private Entrevistado entrevistado;
 
-    //Datos Bundle
-    private int id_entrevistado;
-    private String nombre_entrevistado;
-    private String apellido_entrevistado;
-    private String sexo;
-    private String fecha_nac;
-    private int annos;
-
     //Map params para eventos
     private Map<String, Integer> params;
 
@@ -102,12 +93,13 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
 
             entrevistado = new Entrevistado();
 
-            id_entrevistado = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ID_LARGO));
-            nombre_entrevistado = bundle.getString(getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO));
-            apellido_entrevistado = bundle.getString(getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO));
-            sexo = bundle.getString(getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO));
-            annos = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ANNOS));
-            fecha_nac = bundle.getString(getString(R.string.KEY_ENTREVISTADO_FECHA_NAC));
+            //Datos Bundle
+            int id_entrevistado = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ID_LARGO));
+            String nombre_entrevistado = bundle.getString(getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO));
+            String apellido_entrevistado = bundle.getString(getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO));
+            String sexo = bundle.getString(getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO));
+            int annos = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ANNOS));
+            String fecha_nac = bundle.getString(getString(R.string.KEY_ENTREVISTADO_FECHA_NAC));
 
             entrevistado.setId(id_entrevistado);
             entrevistado.setNombre(nombre_entrevistado);
@@ -368,7 +360,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, Object object) {
+    public void onDialogPositiveClick(Object object) {
         EntrevistaRepositorio.getInstancia(getApplication()).eliminarEntrevista((Entrevista) object);
     }
 }

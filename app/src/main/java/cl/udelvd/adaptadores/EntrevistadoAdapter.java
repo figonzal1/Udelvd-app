@@ -21,6 +21,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Entrevistado;
@@ -46,13 +47,13 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final EntrevistadoListaFragment entrevistadoListaFragment;
     private final FragmentManager fragmentManager;
 
-    private EntrevistadoListaViewModel entrevistadoListaViewModel;
+    private final EntrevistadoListaViewModel entrevistadoListaViewModel;
 
     private int pagina = 1;
 
     private Button btn_cargar_mas;
     private ProgressBar progressBar;
-    private Investigador investigador;
+    private final Investigador investigador;
 
     public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment, FragmentManager fragmentManager, EntrevistadoListaViewModel entrevistadoListaViewModel, Investigador investigador) {
         this.entrevistadoList = entrevistadoList;
@@ -79,7 +80,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolder = new LoadingViewHolder(v);
         }
 
-        return viewHolder;
+        return Objects.requireNonNull(viewHolder);
     }
 
     @Override

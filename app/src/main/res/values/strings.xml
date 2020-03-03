@@ -44,7 +44,6 @@
     <string name="SEXO_OTRO">Otro</string>
     <string name="SEXO_MASCULINO_MASTER_KEY" translatable="false">Masculino</string>
     <string name="SEXO_FEMENINO_MASTER_KEY" translatable="false">Femenino</string>
-    <string name="SEXO_OTRO_MASTER_KEY" translatable="false">Otro</string>
 
     <!-- ROLES -->
     <string name="ROL_INVESTIGADOR">Investigador</string>
@@ -90,11 +89,11 @@
     <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
     <string name="FORMATO_HORA" translatable="false">HH:mm</string>
     <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
-    <string name="FORMATO_N_ENTREVISTA">%d entrevista</string>
-    <string name="FORMATO_N_ENTREVISTAS">%d entrevistas</string>
+    <string name="FORMATO_N_ENTREVISTA" tools:ignore="PluralsCandidate">%d entrevista</string>
+    <string name="FORMATO_N_ENTREVISTAS" tools:ignore="PluralsCandidate">%d entrevistas</string>
     <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
     <string name="FORMATO_EVENTO_N">Evento %d</string>
-    <string name="FORMATO_FECHA_NAC">%s - %d años</string>
+    <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d años</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT" translatable="false">investigador</string>
@@ -485,9 +484,10 @@
     <string name="GUION" translatable="false">-</string>
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
-    <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
+    <string name="MOSTRAR_ENTREVISTADOS" tools:ignore="PluralsCandidate">Mostrando %d de %d entrevistados</string>
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
     <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
+    <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>
 
 
 </resources>

@@ -8,6 +8,9 @@
       <w>acciones</w>
       <w>acción</w>
       <w>actif</w>
+      <w>activacion</w>
+      <w>activaciones</w>
+      <w>activación</w>
       <w>activada</w>
       <w>activado</w>
       <w>activar</w>
@@ -26,6 +29,8 @@
       <w>administrador</w>
       <w>adminitrador</w>
       <w>agregar</w>
+      <w>alertas</w>
+      <w>algun</w>
       <w>almacenar</w>
       <w>alnr</w>
       <w>annos</w>
@@ -57,6 +62,7 @@
       <w>booleano</w>
       <w>bopq</w>
       <w>borrando</w>
+      <w>borrar</w>
       <w>boton</w>
       <w>bpww</w>
       <w>bqpkn</w>
@@ -88,6 +94,8 @@
       <w>cerrando</w>
       <w>cerrar</w>
       <w>checkear</w>
+      <w>checkeo</w>
+      <w>cierra</w>
       <w>cierre</w>
       <w>ciudad</w>
       <w>ciudades</w>
@@ -103,6 +111,7 @@
       <w>combinado</w>
       <w>completo</w>
       <w>comprobar</w>
+      <w>concederá</w>
       <w>condiciones</w>
       <w>conexion</w>
       <w>conexión</w>
@@ -138,6 +147,7 @@
       <w>correcto</w>
       <w>correo</w>
       <w>cqydvqqg</w>
+      <w>crashlytics</w>
       <w>creacion</w>
       <w>crear</w>
       <w>csma</w>
@@ -154,9 +164,13 @@
       <w>ddex</w>
       <w>debe</w>
       <w>deberia</w>
+      <w>defecto</w>
       <w>definicion</w>
       <w>dentro</w>
       <w>dependiendo</w>
+      <w>desactivacion</w>
+      <w>desactivación</w>
+      <w>desactivada</w>
       <w>desactivar</w>
       <w>descripcion</w>
       <w>descripción</w>
@@ -164,11 +178,14 @@
       <w>desplegable</w>
       <w>desviando</w>
       <w>desviar</w>
+      <w>desvio</w>
       <w>detalle</w>
       <w>detectar</w>
+      <w>determinar</w>
       <w>devuelve</w>
       <w>directa</w>
       <w>disponibles</w>
+      <w>dispositivo</w>
       <w>donde</w>
       <w>dqebbauaa</w>
       <w>dqebbauamh</w>
@@ -205,6 +222,7 @@
       <w>entradas</w>
       <w>entre</w>
       <w>entregada</w>
+      <w>entrev</w>
       <w>entrevista</w>
       <w>entrevistaco</w>
       <w>entrevistado</w>
@@ -220,6 +238,7 @@
       <w>eowj</w>
       <w>eqma</w>
       <w>eqydvqqi</w>
+      <w>erronea</w>
       <w>erroreas</w>
       <w>errores</w>
       <w>erroresde</w>
@@ -229,6 +248,7 @@
       <w>especifica</w>
       <w>especifico</w>
       <w>específico</w>
+      <w>espera</w>
       <w>estadisticas</w>
       <w>estado</w>
       <w>estados</w>
@@ -299,6 +319,7 @@
       <w>ibaq</w>
       <w>icono</w>
       <w>iconos</w>
+      <w>idioma</w>
       <w>idkyugwf</w>
       <w>iguales</w>
       <w>igxmigum</w>
@@ -311,6 +332,7 @@
       <w>información</w>
       <w>ingresa</w>
       <w>ingrese</w>
+      <w>iniciacion</w>
       <w>inicializar</w>
       <w>iniciar</w>
       <w>insertar</w>
@@ -324,9 +346,14 @@
       <w>intrucciones</w>
       <w>invali</w>
       <w>invalido</w>
+      <w>inve</w>
       <w>inves</w>
+      <w>investig</w>
+      <w>investigacion</w>
       <w>investigador</w>
       <w>investigadores</w>
+      <w>investigadors</w>
+      <w>investigadort</w>
       <w>inválido</w>
       <w>irgq</w>
       <w>isky</w>
@@ -339,6 +366,7 @@
       <w>kfqf</w>
       <w>kkedxi</w>
       <w>kqgdjf</w>
+      <w>languaje</w>
       <w>lectura</w>
       <w>lista</w>
       <w>listado</w>
@@ -346,6 +374,7 @@
       <w>listadp</w>
       <w>livedata</w>
       <w>llamado</w>
+      <w>llegan</w>
       <w>llenar</w>
       <w>logeado</w>
       <w>logica</w>
@@ -373,6 +402,7 @@
       <w>mntw</w>
       <w>mobilesdk</w>
       <w>modificar</w>
+      <w>mostrando</w>
       <w>mostrar</w>
       <w>mostrara</w>
       <w>mvcy</w>
@@ -380,6 +410,7 @@
       <w>nacimiento</w>
       <w>necesaria</w>
       <w>necesario</w>
+      <w>necesarios</w>
       <w>nivel</w>
       <w>niveles</w>
       <w>nmgjmyy</w>
@@ -387,8 +418,12 @@
       <w>nombre</w>
       <w>nomre</w>
       <w>normales</w>
+      <w>nosoportado</w>
+      <w>notificacion</w>
+      <w>notificaciones</w>
       <w>nueva</w>
       <w>nuevo</w>
+      <w>nuevos</w>
       <w>numero</w>
       <w>nvac</w>
       <w>nvbamtb</w>
@@ -441,12 +476,16 @@
       <w>primera</w>
       <w>privacidad</w>
       <w>problema</w>
+      <w>procesa</w>
       <w>profesion</w>
       <w>profesiones</w>
       <w>profesions</w>
       <w>programa</w>
       <w>progreso</w>
+      <w>prohibirá</w>
+      <w>provenientes</w>
       <w>publica</w>
+      <w>puede</w>
       <w>qcaf</w>
       <w>qfmamb</w>
       <w>qiml</w>
@@ -469,6 +508,7 @@
       <w>regis</w>
       <w>registrada</w>
       <w>registrado</w>
+      <w>registrados</w>
       <w>registro</w>
       <w>regístrate</w>
       <w>reiniciar</w>
@@ -478,6 +518,7 @@
       <w>repetido</w>
       <w>repositorio</w>
       <w>requerido</w>
+      <w>resetar</w>
       <w>reseteada</w>
       <w>resetear</w>
       <w>reseted</w>
@@ -488,6 +529,7 @@
       <w>respositorio</w>
       <w>respuesta</w>
       <w>respuestas</w>
+      <w>resuelto</w>
       <w>resultado</w>
       <w>retorna</w>
       <w>reune</w>
@@ -507,6 +549,8 @@
       <w>sended</w>
       <w>sentrevistados</w>
       <w>sentrevistas</w>
+      <w>separador</w>
+      <w>servicios</w>
       <w>servidor</w>
       <w>será</w>
       <w>sesion</w>
@@ -517,21 +561,29 @@
       <w>setn</w>
       <w>sexo</w>
       <w>siguiente</w>
+      <w>simbolo</w>
       <w>sinvestigadores</w>
       <w>sistema</w>
       <w>skmx</w>
       <w>snackbar</w>
+      <w>snacklbar</w>
       <w>snaclbar</w>
       <w>sniveles</w>
       <w>solicitada</w>
+      <w>solicitante</w>
       <w>solicitar</w>
       <w>solicitud</w>
       <w>solicitudes</w>
+      <w>soportado</w>
       <w>spinnr</w>
       <w>sprofesiones</w>
       <w>stipos</w>
+      <w>suscribir</w>
+      <w>suscripcion</w>
+      <w>suscription</w>
       <w>tarde</w>
       <w>tcfi</w>
+      <w>tema</w>
       <w>tener</w>
       <w>texto</w>
       <w>textview</w>
@@ -544,12 +596,14 @@
       <w>titutlo</w>
       <w>toda</w>
       <w>todos</w>
+      <w>totales</w>
       <w>transformar</w>
       <w>uapf</w>
       <w>udelvd</w>
       <w>uecbmkq</w>
       <w>uggm</w>
       <w>uigq</w>
+      <w>ultimos</w>
       <w>usado</w>
       <w>usados</w>
       <w>usao</w>
@@ -558,6 +612,7 @@
       <w>usuario</w>
       <w>usuarios</w>
       <w>ususuarios</w>
+      <w>utilizada</w>
       <w>utilizado</w>
       <w>vacia</w>
       <w>vacias</w>
@@ -571,10 +626,12 @@
       <w>verifica</w>
       <w>verificar</w>
       <w>vert</w>
+      <w>visualizaciones</w>
       <w>vmlldz</w>
       <w>vtem</w>
       <w>vtmr</w>
       <w>válido</w>
+      <w>webview</w>
       <w>wfna</w>
       <w>wsccqdc</w>
       <w>wynw</w>

@@ -18,7 +18,7 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Evento;
 
-public class DeleteEventoDialogFragment extends DialogFragment {
+class DeleteEventoDialogFragment extends DialogFragment {
 
     private final Evento evento;
     private DeleteDialogListener listener;
@@ -36,7 +36,7 @@ public class DeleteEventoDialogFragment extends DialogFragment {
         builder.setMessage(getString(R.string.DIALOG_MESSAGE_EVENTO))
                 .setPositiveButton(getString(R.string.DIALOG_POSITIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogPositiveClick(DeleteEventoDialogFragment.this, evento);
+                        listener.onDialogPositiveClick(evento);
                     }
                 })
                 .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {

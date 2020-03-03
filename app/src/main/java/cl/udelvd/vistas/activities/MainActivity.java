@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
@@ -294,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, Object object) {
+    public void onDialogPositiveClick(Object object) {
         EntrevistadoRepositorio.getInstance(getApplication()).eliminarEntrevistado((Entrevistado) object);
     }
 }

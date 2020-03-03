@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -66,7 +65,6 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
     private FragmentStatePageAdapter fragmentStatePageAdapter;
     private ViewPager viewPager;
     private ProgressBar progressBar;
-    private TabLayout tabLayout;
     private static final int REQUEST_CODE_NUEVO_EVENTO = 200;
     private static final int REQUEST_CODE_EDITAR_EVENTO = 300;
     private boolean isSnackBarShow = false;
@@ -78,9 +76,9 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
         Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_EVENTOS));
 
-        setearRecursosInterfaz();
-
         obtenerDatosBundle();
+
+        setearRecursosInterfaz();
 
         floatingButtonCrearEvento();
 
@@ -111,19 +109,6 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             n_entrevistas = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS));
             n_normales = bundle.getString(getString(R.string.KEY_ENTREVISTA_N_NORMALES));
             n_extraordnarias = bundle.getString(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS));
-
-            tv_nombreApellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
-            tv_normales.setText(n_normales);
-            tv_extraodrinarias.setText(n_extraordnarias);
-
-            //Contar cantidad de entrevistas
-            if (n_entrevistas == 1) {
-                tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), n_entrevistas));
-            } else {
-                tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), n_entrevistas));
-            }
-
-            Utils.configurarIconoEntrevistado(entrevistado, annos, iv_persona, getApplicationContext());
         }
     }
 
@@ -143,7 +128,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
         tv_eventos_vacios = findViewById(R.id.tv_eventos_vacios);
         tv_eventos_vacios.setVisibility(View.INVISIBLE);
 
-        tabLayout = findViewById(R.id.tab_dots);
+        TabLayout tabLayout = findViewById(R.id.tab_dots);
         tabLayout.setupWithViewPager(viewPager, true);
 
         iv_persona = findViewById(R.id.cv_iv_persona);
@@ -156,6 +141,19 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
         fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this, EventosActivity.this);
         viewPager.setAdapter(fragmentStatePageAdapter);
+
+        tv_nombreApellido.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
+        tv_normales.setText(n_normales);
+        tv_extraodrinarias.setText(n_extraordnarias);
+
+        //Contar cantidad de entrevistas
+        if (n_entrevistas == 1) {
+            tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), n_entrevistas));
+        } else {
+            tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), n_entrevistas));
+        }
+
+        Utils.configurarIconoEntrevistado(entrevistado, annos, iv_persona, getApplicationContext());
     }
 
     /**
@@ -365,7 +363,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, Object object) {
+    public void onDialogPositiveClick(Object object) {
         EventoRepositorio.getInstancia(getApplication()).eliminarEvento((Evento) object);
     }
 }

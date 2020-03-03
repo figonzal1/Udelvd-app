@@ -9,7 +9,8 @@
     android:elevation="0dp"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:theme="@style/AppTheme">
+    android:theme="@style/AppTheme"
+    tools:targetApi="m">
 
     <ImageView
         android:id="@+id/cv_iv_persona"

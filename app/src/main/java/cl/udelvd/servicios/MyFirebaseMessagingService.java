@@ -152,7 +152,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(descripcion)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(descripcion))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setSmallIcon(R.drawable.ic_logo_1200)
+                .setSmallIcon(R.drawable.ic_logo_notificacion_1200)
                 .setAutoCancel(true)
                 .setContentIntent(mPendingIntent);
 
@@ -172,6 +172,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Crashlytics.setUserIdentifier(s);
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Override
     public void onDeletedMessages() {
         super.onDeletedMessages();

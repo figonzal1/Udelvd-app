@@ -60,6 +60,7 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
         super.setValue(t);
     }
 
+    @SuppressWarnings("unused")
     public void call() {
         setValue(null);
     }

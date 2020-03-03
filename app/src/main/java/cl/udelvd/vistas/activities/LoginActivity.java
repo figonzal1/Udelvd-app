@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
     private ProgressBar progressBar;
 
     private LoginViewModel loginViewModel;
-    private Bundle bundle;
     private boolean isNotification = false;
 
     @Override
@@ -299,7 +298,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
      * Determinar si intent es desde notificacion
      */
     private void obtenerDesvioNotificacion() {
-        bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
 
         if (bundle != null && bundle.containsKey(getString(R.string.NOTIFICACION_INTENT_ACTIVADO))) {
             isNotification = bundle.getBoolean(getString(R.string.NOTIFICACION_INTENT_ACTIVADO));

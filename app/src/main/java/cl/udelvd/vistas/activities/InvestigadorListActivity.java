@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -90,7 +89,6 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                     investigadorAdapter = new InvestigadorAdapter(
                             investigadorList,
                             getApplicationContext(),
-                            InvestigadorListActivity.this,
                             getSupportFragmentManager()
                     );
                     investigadorAdapter.notifyDataSetChanged();
@@ -131,11 +129,10 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                     @Override
                     public void onChanged(String s) {
                         progressBar.setVisibility(View.INVISIBLE);
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                         if (s.equals(getString(R.string.MSG_INVEST_CUENTA_ACTIVADA)) || s.equals(getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA))) {
 
-                            //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.INVISIBLE);
                             showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_LONG, s, null);
                         }
@@ -155,7 +152,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                             showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                         }
 
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
                     }
                 });
     }
@@ -185,7 +182,6 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         investigadorAdapter = new InvestigadorAdapter(
                 investigadorList,
                 getApplicationContext(),
-                InvestigadorListActivity.this,
                 getSupportFragmentManager()
         );
 
@@ -217,7 +213,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, Object object) {
+    public void onDialogPositiveClick(Object object) {
         Investigador invAdapter = (Investigador) object;
         InvestigadorRepositorio.getInstance(getApplication()).activarCuenta(invAdapter);
     }

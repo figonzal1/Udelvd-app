@@ -26,7 +26,7 @@
     <string name="EMOTICON_SPINNER">Dropdown menu emoticon</string>
     <string name="ESTADO_CIVIL">Marital status</string>
     <string name="ESTADO_CUENTA">Account state</string>
-    <string name="EXTRAORDINARIAS">Extraordinary</string>
+    <string name="TV_EXTRAORDINARIAS">Extraordinary</string>
     <string name="FECHA_ENTREVISTA">Interview date</string>
     <string name="FECHA_NACIMIENTO">Birthdate</string>
     <string name="FECHA_REGISTRO_ENTREVISTA">Registry date</string>
@@ -100,7 +100,7 @@
     <string name="NIVEL_EDUCACIONAL">Educational degree</string>
     <string name="NOMBRE">Name</string>
     <string name="NOMBRE_PERSONA">Person name</string>
-    <string name="NORMALES">Normals</string>
+    <string name="TV_NORMALES">Normals</string>
     <string name="NO_TIENES_CUENTA">You don\'t have account? Sign up</string>
     <string name="NUEVA_CONTRASEÑA">New password</string>
     <string name="NUEVA_PASS_INTRUCCIONES">Please, enter a new password</string>
@@ -174,4 +174,6 @@
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Researchers list</string>
     <string name="ULTIMOS_3_MESES">Last 3 months</string>
     <string name="ABRIR_VISUALIZACIONES">Open Charts</string>
+    <string name="NORMAL">Normal</string>
+    <string name="EXTRAORDINARIA">Extraordinary</string>
 </resources>

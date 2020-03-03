@@ -266,16 +266,16 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
         int normales = 0;
         int extraordinarias = 0;
         for (int i = 0; i < entrevistas.size(); i++) {
-            if (entrevistas.get(i).getTipoEntrevista().getNombre().equals("Normal")) {
+            if (entrevistas.get(i).getTipoEntrevista().getNombre().equals(getString(R.string.NORMAL))) {
                 normales++;
-            } else if (entrevistas.get(i).getTipoEntrevista().getNombre().equals("Extraordinaria")) {
+            } else if (entrevistas.get(i).getTipoEntrevista().getNombre().equals(getString(R.string.EXTRAORDINARIA))) {
                 extraordinarias++;
             }
         }
 
         Map<String, Integer> map = new HashMap<>();
-        map.put("normales", normales);
-        map.put("extraordinarias", extraordinarias);
+        map.put(getString(R.string.INTENT_KEY_NORMALES), normales);
+        map.put(getString(R.string.INTENT_KEY_EXTRAORDINARIAS), extraordinarias);
         return map;
     }
 

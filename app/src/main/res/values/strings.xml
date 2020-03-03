@@ -451,8 +451,8 @@
     <string name="CONFIRMAR_NUEVA_PASS">Confirmar nueva contraseña</string>
     <string name="ICONO_USUARIO">Foto Usuario</string>
     <string name="NOMBRE_PERSONA">Nombre Persona</string>
-    <string name="NORMALES">Normales</string>
-    <string name="EXTRAORDINARIAS">Extraordinarias</string>
+    <string name="TV_NORMALES">Normales</string>
+    <string name="TV_EXTRAORDINARIAS">Extraordinarias</string>
     <string name="ICONO_N_ENTREVISTAS">Icono numero entrevistas</string>
     <string name="MSG_LISTADO_ENTREVISTAS_VACIO">No hay entrevistas para esta persona</string>
     <string name="MSG_LISTADO_EVENTOS_VACIOS">No hay eventos para esta entrevista</string>
@@ -488,6 +488,8 @@
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
     <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
     <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>
+    <string name="NORMAL">Normal</string>
+    <string name="EXTRAORDINARIA">Extraordinaria</string>
 
 
 </resources>

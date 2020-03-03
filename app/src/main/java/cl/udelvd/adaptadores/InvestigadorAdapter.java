@@ -1,6 +1,5 @@
 package cl.udelvd.adaptadores;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,16 +22,14 @@ import cl.udelvd.vistas.fragments.ActivarInvestigadorDialogFragment;
 
 public class InvestigadorAdapter extends RecyclerView.Adapter<InvestigadorAdapter.InvestigadorViewHolder> {
 
-    private List<Investigador> investigadorList;
-    private Context context;
-    private Activity activity;
-    private FragmentManager fragmentManager;
-    private String TAG_ACTIVAR_INVESTIGADOR = "ActivarInvestigador";
+    private final List<Investigador> investigadorList;
+    private final Context context;
+    private final FragmentManager fragmentManager;
+    private final String TAG_ACTIVAR_INVESTIGADOR = "ActivarInvestigador";
 
-    public InvestigadorAdapter(List<Investigador> investigadorList, Context context, Activity activity, FragmentManager fragmentManager) {
+    public InvestigadorAdapter(List<Investigador> investigadorList, Context context, FragmentManager fragmentManager) {
         this.investigadorList = investigadorList;
         this.context = context;
-        this.activity = activity;
         this.fragmentManager = fragmentManager;
     }
 
@@ -88,19 +85,14 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<InvestigadorAdapte
         return investigadorList.size();
     }
 
-    public void actualizarLista(List<Investigador> investigadorList) {
-        this.investigadorList = investigadorList;
-        notifyDataSetChanged();
-    }
+    static class InvestigadorViewHolder extends RecyclerView.ViewHolder {
 
-    public class InvestigadorViewHolder extends RecyclerView.ViewHolder {
+        private final TextView tv_nombre;
+        private final TextView tv_email;
+        private final TextView tv_fecha_registro;
+        private final SwitchMaterial switch_activate;
 
-        private TextView tv_nombre;
-        private TextView tv_email;
-        private TextView tv_fecha_registro;
-        private SwitchMaterial switch_activate;
-
-        public InvestigadorViewHolder(@NonNull View itemView) {
+        InvestigadorViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_nombre = itemView.findViewById(R.id.cv_tv_nombre);

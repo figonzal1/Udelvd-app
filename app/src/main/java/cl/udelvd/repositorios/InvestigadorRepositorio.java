@@ -40,7 +40,7 @@ public class InvestigadorRepositorio {
 
     //Listados
     private List<Investigador> investigadorList = new ArrayList<>();
-    private MutableLiveData<List<Investigador>> investigadorMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Investigador>> investigadorMutableLiveData = new MutableLiveData<>();
     //TAGS
     private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
 
@@ -69,13 +69,13 @@ public class InvestigadorRepositorio {
     private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
     private static final Object TAG_INVESTIGADOR_ACTIVACION = "ActivacionInvestigador";
     private final SingleLiveEvent<String> responseMsgErrorReset = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
     private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
     private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
     private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
     //ACTIVACION
-    private SingleLiveEvent<String> responseMsgErrorActivacion = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgActivacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorActivacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgActivacion = new SingleLiveEvent<>();
 
     private InvestigadorRepositorio(Application application) {
         this.application = application;

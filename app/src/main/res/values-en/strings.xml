@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">A day in the life of ...</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">A day in the life of …</string>
     <string name="ACCION">Action</string>
     <string name="ACTIVADA">Activated</string>
     <string name="APELLIDO">Last name</string>
@@ -151,9 +151,9 @@
     <string name="MENU_CONDICIONES">Conditions and privacy</string>
     <string name="MENU_CONTACTENOS">Contact us</string>
     <string name="MENU_EMOTICONES">Emoticons</string>
-    <string name="MOSTRAR_ENTREVISTADOS">Displaying %d of %d interviewees</string>
-    <string name="FORMATO_N_ENTREVISTA">%d interview</string>
-    <string name="FORMATO_FECHA_NAC">%s - %d years</string>
+    <string name="MOSTRAR_ENTREVISTADOS" tools:ignore="PluralsCandidate">Displaying %d of %d interviewees</string>
+    <string name="FORMATO_N_ENTREVISTA" tools:ignore="PluralsCandidate">%d interview</string>
+    <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d years</string>
     <string name="FORMATO_ENTREVISTA_FECHA">Interview day %s</string>
     <string name="FORMATO_EVENTO_N">Event %d</string>
     <string name="CANAL_NOMBRE">Activations alert</string>
@@ -170,7 +170,8 @@
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">There are no registered researchers</string>
     <string name="ROL_ADMINITRADOR">Administrator</string>
     <string name="ROL_INVESTIGADOR">Researcher</string>
-    <string name="FORMATO_N_ENTREVISTAS">%d interviews</string>
+    <string name="FORMATO_N_ENTREVISTAS" tools:ignore="PluralsCandidate">%d interviews</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Researchers list</string>
     <string name="ULTIMOS_3_MESES">Last 3 months</string>
+    <string name="ABRIR_VISUALIZACIONES">Open Charts</string>
 </resources>

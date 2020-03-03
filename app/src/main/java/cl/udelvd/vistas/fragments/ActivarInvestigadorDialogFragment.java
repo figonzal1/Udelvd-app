@@ -16,9 +16,9 @@ import cl.udelvd.modelo.Investigador;
 
 public class ActivarInvestigadorDialogFragment extends DialogFragment {
 
-    private Investigador investigador;
+    private final Investigador investigador;
     private DeleteDialogListener listener;
-    private boolean activar;
+    private final boolean activar;
 
     public ActivarInvestigadorDialogFragment(Investigador investigador, boolean activar) {
         this.investigador = investigador;
@@ -35,8 +35,8 @@ public class ActivarInvestigadorDialogFragment extends DialogFragment {
             builder.setMessage(getString(R.string.DIALOG_ACTIVACION_MENSAJE));
             builder.setPositiveButton(getString(R.string.DIALOG_ACTIVAR), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    investigador.setActivado(activar);
-                    listener.onDialogPositiveClick(ActivarInvestigadorDialogFragment.this, investigador);
+                    investigador.setActivado(true);
+                    listener.onDialogPositiveClick(investigador);
 
                     dialog.dismiss();
                 }
@@ -45,8 +45,8 @@ public class ActivarInvestigadorDialogFragment extends DialogFragment {
             builder.setMessage(getString(R.string.DIALOG_DESACTIVACION_MENSAJE));
             builder.setPositiveButton(getString(R.string.DIALOG_DESACTIVAR), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    investigador.setActivado(activar);
-                    listener.onDialogPositiveClick(ActivarInvestigadorDialogFragment.this, investigador);
+                    investigador.setActivado(false);
+                    listener.onDialogPositiveClick(investigador);
 
                     dialog.dismiss();
                 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Un día en la vida de ...</string>
+    <string name="app_name">Un día en la vida de …</string>
     <string name="ACCION">Acción</string>
     <string name="ACTIVADA">Activada</string>
     <string name="APELLIDO">Apellido</string>
@@ -173,4 +173,5 @@
     <string name="FORMATO_N_ENTREVISTAS">%d entrevistas</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
     <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
+    <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>
 </resources>

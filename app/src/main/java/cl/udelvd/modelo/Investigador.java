@@ -11,9 +11,11 @@ public class Investigador {
     private String apellido;
     private String email;
     private String password;
+    private boolean activado;
+
     private int idRol;
     private String nombreRol;
-    private boolean activado;
+
     private String createTime;
 
     public Investigador() {
@@ -107,25 +109,12 @@ public class Investigador {
                 '}';
     }
 
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Investigador that = (Investigador) o;
-        return isActivado() == that.isActivado() &&
-                getNombre().equals(that.getNombre()) &&
-                getApellido().equals(that.getApellido()) &&
-                getEmail().equals(that.getEmail()) &&
-                getNombreRol().equals(that.getNombreRol());
-    }*/
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Investigador that = (Investigador) o;
-        return isActivado() == that.isActivado() &&
-                getNombre().equals(that.getNombre()) &&
+        return getNombre().equals(that.getNombre()) &&
                 getApellido().equals(that.getApellido()) &&
                 getEmail().equals(that.getEmail()) &&
                 Objects.equals(getNombreRol(), that.getNombreRol());

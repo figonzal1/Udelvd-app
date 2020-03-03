@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view_entrevistado"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view_entrevistado"
     android:clickable="true"
     android:elevation="0dp"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:theme="@style/AppTheme">
+    android:theme="@style/AppTheme"
+    tools:targetApi="m">
 
     <ImageView
-        android:id="@+id/cv_iv_mag_color"
-        android:layout_width="60dp"
-        android:layout_height="0dp"
+        android:id="@+id/cv_iv_persona"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:contentDescription="Foto Usuario"
+        android:contentDescription="@string/ICONO_USUARIO"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toTopOf="parent"
@@ -30,7 +32,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/roboto"
-        android:text="Nombre Persona"
+        android:text="@string/NOMBRE_PERSONA"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorOnPrimary"
         card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_icono_nombre"
@@ -46,23 +48,23 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/roboto"
-        android:text="XXXX/XX/XX - XX años"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorOnSecondary"
         card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_icono_fecha_nac"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintHorizontal_bias="0.0"
         card_view:layout_constraintStart_toEndOf="@+id/cv_iv_icono_fecha_nac"
-        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_icono_fecha_nac" />
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_icono_fecha_nac"
+        tools:text="XXXX/XX/XX - XX años" />
 
     <ImageView
         android:id="@+id/cv_iv_icono_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_mag_color"
-        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_mag_color"
-        android:contentDescription="Icono nombre entrevistado"
+        android:contentDescription="@string/ICONO_NOMBRE_ENTREVISTADO"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_persona"
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_persona"
         card_view:srcCompat="@drawable/ic_person_black_alpha_24dp" />
 
     <ImageView
@@ -72,10 +74,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:contentDescription="@string/ICONO_FECHA_NAC_ENTREVISTADO"
         card_view:layout_constraintBottom_toTopOf="@+id/cv_iv_entrevistas"
-        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_mag_color"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_persona"
         card_view:layout_constraintTop_toBottomOf="@+id/cv_iv_icono_nombre"
-        android:contentDescription="Icono fecha de nacimiento entrevistado"
         card_view:srcCompat="@drawable/ic_cake_black_alpha_24dp" />
 
     <ImageView
@@ -83,9 +85,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_mag_color"
-        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_mag_color"
-        android:contentDescription="Icono numero de entrevistas de entrevistado"
+        android:contentDescription="@string/ICONO_N_ENTREVISTAS"
+        card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_persona"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_persona"
         card_view:srcCompat="@drawable/ic_interview_black_alpha_24dp" />
 
     <TextView
@@ -95,17 +97,16 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/roboto"
-        android:text="4 entrevistas"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorOnPrimary"
         card_view:layout_constraintBottom_toBottomOf="@+id/cv_iv_entrevistas"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintHorizontal_bias="0.0"
         card_view:layout_constraintStart_toEndOf="@+id/cv_iv_entrevistas"
-        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_entrevistas" />
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_entrevistas"
+        tools:text="X entrevistas" />
 
     <View
-        android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginTop="16dp"
@@ -114,17 +115,19 @@
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="@+id/cv_iv_entrevistas"
-        card_view:layout_constraintTop_toBottomOf="@+id/cv_iv_mag_color" />
+        card_view:layout_constraintTop_toBottomOf="@+id/cv_iv_persona" />
 
     <ImageView
         android:id="@+id/iv_menu_entrevistado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:contentDescription="@string/ICONO_MENU_CONTEXTUAL"
+        card_view:layout_constraintBottom_toBottomOf="@+id/cv_tv_nombre"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="Icono menu contextual"
+        card_view:layout_constraintVertical_bias="0.0"
         card_view:srcCompat="@drawable/ic_more_vert_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

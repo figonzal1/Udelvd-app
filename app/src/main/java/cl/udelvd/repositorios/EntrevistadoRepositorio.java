@@ -20,8 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,32 +27,62 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cl.udelvd.R;
 import cl.udelvd.modelo.Ciudad;
 import cl.udelvd.modelo.Entrevistado;
 import cl.udelvd.modelo.EstadoCivil;
+import cl.udelvd.modelo.Investigador;
 import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.servicios.VolleySingleton;
 import cl.udelvd.utilidades.SingleLiveEvent;
+import cl.udelvd.utilidades.Utils;
 
 public class EntrevistadoRepositorio {
+
 
     private static EntrevistadoRepositorio instancia;
     private final Application application;
 
-    private List<Entrevistado> entrevistadoList;
+    /*
+    LISTADO
+     */
+    private final List<Entrevistado> entrevistadosList = new ArrayList<>();
+    private final List<Entrevistado> entrevistadosSgtPagina = new ArrayList<>();
+    private final SingleLiveEvent<List<Entrevistado>> entrevistadosPrimeraPaginaLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<List<Entrevistado>> entrevistadosSgtPaginaLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+    private final MutableLiveData<Integer> mutableNEntrevistados = new MutableLiveData<>();
 
-    //Mensajeria
+    /*
+    REGISTRO
+     */
     private final SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorMsg = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
 
-    private MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData = new MutableLiveData<>();
+    /*
+    ACTUALIZACION
+     */
+    private final SingleLiveEvent<Entrevistado> entrevistadoMutableLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorEntrevistado = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
+
+    private static final String TAG_ENTREVISTADO_ELIMINAR = "EliminarEntrevistado";
+    /*
+    ELIMINAR
+     */
+    private final SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
 
     private static final String TAG_ENTREVISTADOS_LISTA = "ListaEntrevistados";
     private static final String TAG_ENTREVISTADO_REGISTRO = "RegistroEntrevistado";
-    private static final Object TAG_ENTREVISTADO = "ObtenerEntrevistado";
+    private static final String TAG_ENTREVISTADO = "ObtenerEntrevistado";
+    private static final String TAG_ENTREVISTADO_ACTUALIZADO = "ActualizarEntrevistado";
+    private final SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
+
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+
 
     private EntrevistadoRepositorio(Application application) {
         this.application = application;
@@ -68,16 +96,44 @@ public class EntrevistadoRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getErrorMsg() {
-        return errorMsg;
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
     }
 
     public SingleLiveEvent<String> getResponseMsgRegistro() {
         return responseMsgRegistro;
     }
 
+    public SingleLiveEvent<String> getResponseMsgErrorRegistro() {
+        return responseMsgErrorRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorEntrevistado() {
+        return responseMsgErrorEntrevistado;
+    }
+
     public SingleLiveEvent<String> getResponseMsgActualizacion() {
         return responseMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorActualizacion() {
+        return responseMsgErrorActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgEliminar() {
+        return responseMsgEliminar;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorEliminar() {
+        return responseMsgErrorEliminar;
+    }
+
+    public MutableLiveData<Integer> getNEntrevistados() {
+        return mutableNEntrevistados;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     /**
@@ -85,100 +141,133 @@ public class EntrevistadoRepositorio {
      *
      * @return MutableLiveData con listado de usuarios
      */
-    public MutableLiveData<List<Entrevistado>> obtenerEntrevistados() {
-        entrevistadoList = new ArrayList<>();
-        sendGetEntrevistados(entrevistadosMutableLiveData);
-        return entrevistadosMutableLiveData;
+    public SingleLiveEvent<List<Entrevistado>> obtenerEntrevistados(int page, Investigador investigador) {
+        sendGetEntrevistados(page, investigador);
+        if (page == 1) {
+            return entrevistadosPrimeraPaginaLiveData;
+        } else {
+            return entrevistadosSgtPaginaLiveData;
+        }
+    }
+
+    public SingleLiveEvent<List<Entrevistado>> obtenerSiguientePagina() {
+        return entrevistadosSgtPaginaLiveData;
     }
 
     /**
      * Funcion que realizar solicitud GET para obtener listado de usuarios
-     *
-     * @param entrevistadosMutableLiveData Lista mutable vacia rellenada con lista de entrevistados
      */
-    private void sendGetEntrevistados(final MutableLiveData<List<Entrevistado>> entrevistadosMutableLiveData) {
-
+    private void sendGetEntrevistados(final int page, Investigador investigador) {
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
+                //Reiniciar listado cuando se pregunta por primera pagina
+                if (page == 1) {
+                    entrevistadosList.clear();
+                } else {
+                    entrevistadosSgtPagina.clear();
+                }
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray("data");
+                    /*
+                    N ENTREVISTADOS
+                     */
+                    JSONObject jsonEntrevistado = jsonObject.getJSONObject(application.getString(R.string.KEY_ENTREVISTADOS)).getJSONObject(application.getString(R.string.JSON_DATA));
+
+                    int n_entrevistados = jsonEntrevistado.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTADOS));
+                    mutableNEntrevistados.postValue(n_entrevistados);
+
+                    /*
+                    LISTADO DE ENTREVISTADOS
+                     */
+                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
                     for (int i = 0; i < jsonData.length(); i++) {
 
                         JSONObject jsonUsuario = jsonData.getJSONObject(i);
-                        JSONObject jsonUsuarioAttributes = jsonUsuario.getJSONObject("attributes");
+                        JSONObject jsonUsuarioAttributes = jsonUsuario.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                         Entrevistado entrevistado = new Entrevistado();
-                        entrevistado.setId(jsonUsuario.getInt("id"));
-                        entrevistado.setNombre(jsonUsuarioAttributes.getString("nombre"));
-                        entrevistado.setApellido(jsonUsuarioAttributes.getString("apellido"));
-                        entrevistado.setSexo(jsonUsuarioAttributes.getString("sexo"));
+                        entrevistado.setId(jsonUsuario.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
+                        entrevistado.setNombre(jsonUsuarioAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
+                        entrevistado.setApellido(jsonUsuarioAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
+                        entrevistado.setSexo(jsonUsuarioAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
-                        entrevistado.setFechaNacimiento(simpleDateFormat.parse(jsonUsuarioAttributes.getString("fecha_nacimiento")));
+                        Date fechaNac = Utils.stringToDate(application, false, jsonUsuarioAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                        entrevistado.setFechaNacimiento(fechaNac);
 
                         Ciudad ciudad = new Ciudad();
-                        ciudad.setId(jsonUsuarioAttributes.getInt("id_ciudad"));
+                        ciudad.setId(jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_CIUDAD)));
                         entrevistado.setCiudad(ciudad);
 
                         //Jubilado Legal
-                        if (jsonUsuarioAttributes.getInt("jubilado_legal") == 1) {
+                        if (jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 1) {
                             entrevistado.setJubiladoLegal(true);
                         } else {
                             entrevistado.setJubiladoLegal(false);
                         }
 
                         //Caidas
-                        if (jsonUsuarioAttributes.getInt("caidas") == 1) {
+                        if (jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 1) {
                             entrevistado.setCaidas(true);
-                            entrevistado.setNCaidas(jsonUsuarioAttributes.getInt("n_caidas"));
+                            entrevistado.setNCaidas(jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
                         } else {
                             entrevistado.setCaidas(false);
                         }
 
-                        entrevistado.setnConvivientes3Meses(jsonUsuarioAttributes.getInt("n_convivientes_3_meses"));
+                        entrevistado.setnConvivientes3Meses(jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
 
                         //Foraneas
-                        entrevistado.setIdInvestigador(jsonUsuarioAttributes.getInt("id_investigador"));
+                        entrevistado.setIdInvestigador(jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
+
                         EstadoCivil estadoCivil = new EstadoCivil();
-                        estadoCivil.setId(jsonUsuarioAttributes.getInt("id_estado_civil"));
+                        estadoCivil.setId(jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL)));
                         entrevistado.setEstadoCivil(estadoCivil);
 
                         //Foraneas opcionales
-                        if (jsonUsuarioAttributes.has("id_nivel_educacional") && !jsonUsuarioAttributes.isNull("id_nivel_educacional")) {
+                        if (jsonUsuarioAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL)) && !jsonUsuarioAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL))) {
                             NivelEducacional nivelEducacional = new NivelEducacional();
-                            nivelEducacional.setId(jsonUsuarioAttributes.getInt("id_nivel_educacional"));
+                            nivelEducacional.setId(jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL)));
                             entrevistado.setNivelEducacional(nivelEducacional);
                         }
-                        if (jsonUsuarioAttributes.has("id_tipo_convivencia") && !jsonUsuarioAttributes.isNull("id_tipo_convivencia")) {
+                        if (jsonUsuarioAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)) && !jsonUsuarioAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA))) {
                             TipoConvivencia tipoConvivencia = new TipoConvivencia();
-                            tipoConvivencia.setId(jsonUsuarioAttributes.getInt("id_tipo_convivencia"));
+                            tipoConvivencia.setId(jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)));
                             entrevistado.setTipoConvivencia(tipoConvivencia);
                         }
-                        if (jsonUsuarioAttributes.has("id_profesion") && !jsonUsuarioAttributes.isNull("id_profesion")) {
+                        if (jsonUsuarioAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION)) && !jsonUsuarioAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION))) {
                             Profesion profesion = new Profesion();
-                            profesion.setId(jsonUsuarioAttributes.getInt("id_profesion"));
+                            profesion.setId(jsonUsuarioAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION)));
                             entrevistado.setProfesion(profesion);
                         }
 
-                        JSONObject jsonRelationships = jsonUsuario.getJSONObject("relationships");
+                        JSONObject jsonRelationships = jsonUsuario.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS));
                         entrevistado.setN_entrevistas(
-                                jsonRelationships.getJSONObject("entrevistas").getJSONObject("data").getInt("n_entrevistas")
+                                jsonRelationships.getJSONObject(application.getString(R.string.KEY_ENTREVISTA_OBJECT)).getJSONObject(application.getString(R.string.JSON_DATA)).getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))
                         );
 
-                        entrevistadoList.add(entrevistado);
+                        if (page == 1) {
+                            entrevistadosList.add(entrevistado);
+                        } else {
+                            entrevistadosSgtPagina.add(entrevistado);
+                        }
                     }
 
-                    entrevistadosMutableLiveData.postValue(entrevistadoList);
 
+                    if (page == 1) {
+                        //Log.d("CARGANDO_PAGINA", "1");
+                        entrevistadosPrimeraPaginaLiveData.postValue(entrevistadosList);
+                        isLoading.postValue(false);
+                    } else {
+                        //Log.d("CARGANDO_PAGINA", String.valueOf(page));
+                        entrevistadosSgtPaginaLiveData.postValue(entrevistadosSgtPagina); //Enviar a ViewModel listado paginado
+                    }
 
-                } catch (JSONException | ParseException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -188,12 +277,14 @@ public class EntrevistadoRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ER_ENTREVISTADOS", "TIMEOUT_ERROR");
-                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 } else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ER_ENTREVISTADOS", "NETWORK_ERROR");
-                    errorMsg.postValue("No tienes conexión a Internet");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si response
@@ -206,27 +297,27 @@ public class EntrevistadoRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ER_ENTREVISTADOS", "AUTHENTICATION_ERROR: " + errorObject);
-                        errorMsg.postValue("Acceso no autorizado");
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                        responseMsgErrorListado.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ER_ENTREVISTADOS", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorListado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        //String url = "https://udelvd-dev.herokuapp.com/entrevistados";
-        String url = "http://192.168.0.14/entrevistados";
+        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN), page, investigador.getId());
 
         //Hacer request
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener,
@@ -234,16 +325,20 @@ public class EntrevistadoRepositorio {
 
             @Override
             public Map<String, String> getHeaders() {
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "Bearer " + token);
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
                 return params;
             }
         };
+        //Si es la primera pagina, activar progress dialog
+        if (page == 1) {
+            isLoading.postValue(true);
+        }
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADOS_LISTA);
     }
 
@@ -271,45 +366,47 @@ public class EntrevistadoRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                     //Obtener json desde respuesta
                     Entrevistado entResponse = new Entrevistado();
-                    entResponse.setNombre(jsonAttributes.getString("nombre"));
-                    entResponse.setApellido(jsonAttributes.getString("apellido"));
+                    entResponse.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
+                    entResponse.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
 
-                    entResponse.setSexo(jsonAttributes.getString("sexo"));
+                    entResponse.setSexo(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                    if (jsonAttributes.getInt("jubilado_legal") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
                         entResponse.setJubiladoLegal(false);
                     } else {
                         entResponse.setJubiladoLegal(true);
                     }
 
-                    if (jsonAttributes.getInt("caidas") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
                         entResponse.setCaidas(false);
                     } else {
                         entResponse.setCaidas(true);
                     }
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date fechaNac = simpleDateFormat.parse(jsonAttributes.getString("fecha_nacimiento"));
+
+                    Date fechaNac = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                     entResponse.setFechaNacimiento(fechaNac);
 
-                    entResponse.setnConvivientes3Meses(jsonAttributes.getInt("n_convivientes_3_meses"));
-                    entResponse.setIdInvestigador(jsonAttributes.getInt("id_investigador"));
+                    entResponse.setnConvivientes3Meses(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                    entResponse.setIdInvestigador(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
 
-                    String create_time = jsonAttributes.getString("create_time");
+                    String create_time = jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME));
 
                     Log.d("MEMORIA", entrevistado.toString());
                     Log.d("INTERNET", entResponse.toString());
 
                     if (entrevistado.equals(entResponse) && !create_time.isEmpty()) {
-                        responseMsgRegistro.postValue("¡Entrevistado registrado!");
+                        responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_ENTREVISTADO));
+
+                        isLoading.postValue(false);
                     }
 
-                } catch (JSONException | ParseException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -319,15 +416,18 @@ public class EntrevistadoRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERR_ENTREVISTADO", "TIMEOUT_ERROR");
-                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERR_ENTREVISTADO", "NETWORK_ERROR");
-                    errorMsg.postValue("No tienes conexión a Internet");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorRegistro.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -340,7 +440,7 @@ public class EntrevistadoRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -348,64 +448,64 @@ public class EntrevistadoRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERR_ENTREVISTADO", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERR_ENTREVISTADO", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorRegistro.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = "http://192.168.0.14/entrevistados";
+        String url = String.format(application.getString(R.string.URL_POST_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN));
 
         StringRequest request = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("nombre", entrevistado.getNombre());
-                params.put("apellido", entrevistado.getApellido());
-                params.put("sexo", entrevistado.getSexo());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE), entrevistado.getNombre());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO), entrevistado.getApellido());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_SEXO), entrevistado.getSexo());
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                String fechaNac = simpleDateFormat.format(entrevistado.getFechaNacimiento());
-                params.put("fecha_nacimiento", fechaNac);
-                params.put("nombre_ciudad", entrevistado.getCiudad().getNombre());
+                String fechaNac = Utils.dateToString(application, false, entrevistado.getFechaNacimiento());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), fechaNac);
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE_CIUDAD), entrevistado.getCiudad().getNombre());
 
                 if (entrevistado.isJubiladoLegal()) {
-                    params.put("jubilado_legal", String.valueOf(1));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL), String.valueOf(1));
                 } else {
-                    params.put("jubilado_legal", String.valueOf(0));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL), String.valueOf(0));
                 }
 
                 if (entrevistado.isCaidas()) {
-                    params.put("caidas", String.valueOf(1));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS), String.valueOf(1));
 
-                    params.put("n_caidas", String.valueOf(entrevistado.getNCaidas()));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS), String.valueOf(entrevistado.getNCaidas()));
                 } else {
-                    params.put("caidas", String.valueOf(0));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS), String.valueOf(0));
                 }
 
-                params.put("n_convivientes_3_meses", String.valueOf(entrevistado.getNConvivientes3Meses()));
-                params.put("id_investigador", String.valueOf(entrevistado.getIdInvestigador()));
-                params.put("id_estado_civil", String.valueOf(entrevistado.getEstadoCivil().getId()));
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES), String.valueOf(entrevistado.getNConvivientes3Meses()));
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR), String.valueOf(entrevistado.getIdInvestigador()));
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL), String.valueOf(entrevistado.getEstadoCivil().getId()));
 
                 /*
                     OPCIONALES
                  */
                 if (entrevistado.getNivelEducacional() != null) {
-                    params.put("id_nivel_educacional", String.valueOf(entrevistado.getNivelEducacional().getId()));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL), String.valueOf(entrevistado.getNivelEducacional().getId()));
                 }
 
                 if (entrevistado.getTipoConvivencia() != null) {
-                    params.put("id_tipo_convivencia", String.valueOf(entrevistado.getTipoConvivencia().getId()));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA), String.valueOf(entrevistado.getTipoConvivencia().getId()));
                 }
 
                 if (entrevistado.getProfesion() != null) {
-                    params.put("nombre_profesion", entrevistado.getProfesion().getNombre());
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE_PROFESION), entrevistado.getProfesion().getNombre());
                 }
 
                 return params;
@@ -413,19 +513,20 @@ public class EntrevistadoRepositorio {
 
             @Override
             public Map<String, String> getHeaders() {
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "Bearer " + token);
-                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
 
                 return params;
             }
         };
 
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADO_REGISTRO);
     }
 
@@ -433,22 +534,19 @@ public class EntrevistadoRepositorio {
      * Funcion encargada de obtener la información de un entrevistado en específico
      *
      * @param entrevistado Objeto entrevistado
-     * @return
+     * @return MutableLiveData de entrevistado
      */
-    public MutableLiveData<Entrevistado> obtenerEntrevistado(Entrevistado entrevistado) {
-        MutableLiveData<Entrevistado> entrevistadoMutableLiveData = new MutableLiveData<>();
-        enviarGetEntrevistado(entrevistado, entrevistadoMutableLiveData);
+    public SingleLiveEvent<Entrevistado> obtenerEntrevistado(Entrevistado entrevistado) {
+        enviarGetEntrevistado(entrevistado);
         return entrevistadoMutableLiveData;
     }
 
     /**
      * Funcion encargada de enviar solicitud GET para obtener datos de entrevistado específico
      *
-     * @param entrevistado                Objeto entrevistado
-     * @param entrevistadoMutableLiveData Información de un entrevistado
+     * @param entrevistado Objeto entrevistado
      */
-    private void enviarGetEntrevistado(final Entrevistado entrevistado, final MutableLiveData<Entrevistado> entrevistadoMutableLiveData) {
-
+    private void enviarGetEntrevistado(final Entrevistado entrevistado) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -457,64 +555,63 @@ public class EntrevistadoRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
-                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                    entrevistado.setId(jsonData.getInt("id"));
+                    entrevistado.setId(jsonData.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
 
-                    entrevistado.setNombre(jsonAttributes.getString("nombre"));
-                    entrevistado.setApellido(jsonAttributes.getString("apellido"));
-                    entrevistado.setSexo(jsonAttributes.getString("sexo"));
+                    entrevistado.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
+                    entrevistado.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
+                    entrevistado.setSexo(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date fechaNac = simpleDateFormat.parse(jsonAttributes.getString("fecha_nacimiento"));
+                    Date fechaNac = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                     entrevistado.setFechaNacimiento(fechaNac);
 
-                    if (jsonAttributes.getInt("jubilado_legal") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
                         entrevistado.setJubiladoLegal(false);
                     } else {
                         entrevistado.setJubiladoLegal(true);
                     }
 
-                    if (jsonAttributes.getInt("caidas") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
                         entrevistado.setCaidas(false);
                     } else {
                         entrevistado.setCaidas(true);
 
-                        entrevistado.setNCaidas(jsonAttributes.getInt("n_caidas"));
+                        entrevistado.setNCaidas(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
                     }
 
-                    entrevistado.setnConvivientes3Meses(jsonAttributes.getInt("n_convivientes_3_meses"));
-                    entrevistado.setIdInvestigador(jsonAttributes.getInt("id_investigador"));
+                    entrevistado.setnConvivientes3Meses(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                    entrevistado.setIdInvestigador(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
 
                     Ciudad ciudad = new Ciudad();
-                    ciudad.setId(jsonAttributes.getInt("id_ciudad"));
+                    ciudad.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_CIUDAD)));
                     entrevistado.setCiudad(ciudad);
 
                     EstadoCivil estadoCivil = new EstadoCivil();
-                    estadoCivil.setId(jsonAttributes.getInt("id_estado_civil"));
+                    estadoCivil.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL)));
                     entrevistado.setEstadoCivil(estadoCivil);
 
                     //Opcionales (manejar nulls como strings)
-                    String id_nivel_educacional = jsonAttributes.getString("id_nivel_educacional");
+                    String id_nivel_educacional = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL));
 
-                    if (!id_nivel_educacional.equals("null")) {
+                    if (!id_nivel_educacional.equals(application.getString(R.string.NULL))) {
                         NivelEducacional nivelEducacional = new NivelEducacional();
                         nivelEducacional.setId(Integer.parseInt(id_nivel_educacional));
 
                         entrevistado.setNivelEducacional(nivelEducacional);
                     }
 
-                    String id_tipo_convivencia = jsonAttributes.getString("id_tipo_convivencia");
-                    if (!id_tipo_convivencia.equals("null")) {
+                    String id_tipo_convivencia = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA));
+                    if (!id_tipo_convivencia.equals(application.getString(R.string.NULL))) {
                         TipoConvivencia tipoConvivencia = new TipoConvivencia();
                         tipoConvivencia.setId(Integer.parseInt(id_tipo_convivencia));
 
                         entrevistado.setTipoConvivencia(tipoConvivencia);
                     }
 
-                    String id_profesion = jsonAttributes.getString("id_profesion");
-                    if (!id_profesion.equals("null")) {
+                    String id_profesion = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION));
+                    if (!id_profesion.equals(application.getString(R.string.NULL))) {
                         Profesion profesion = new Profesion();
                         profesion.setId(Integer.parseInt(id_profesion));
 
@@ -523,7 +620,9 @@ public class EntrevistadoRepositorio {
 
                     entrevistadoMutableLiveData.postValue(entrevistado);
 
-                } catch (JSONException | ParseException e) {
+                    isLoading.postValue(false);
+
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -533,13 +632,18 @@ public class EntrevistadoRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ER_ENTREVISTADO", "TIMEOUT_ERROR");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorEntrevistado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ER_ENTREVISTADO", "NETWORK_ERROR");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorEntrevistado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -552,42 +656,44 @@ public class EntrevistadoRepositorio {
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ER_ENTREVISTADO", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ER_ENTREVISTADO", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorEntrevistado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = "http://192.168.0.14/entrevistados/" + entrevistado.getId();
+        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADO), application.getString(R.string.HEROKU_DOMAIN), entrevistado.getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
             @Override
             public Map<String, String> getHeaders() {
 
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                params.put("Authorization", "Bearer " + token);
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
                 return params;
             }
         };
+        isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO);
     }
 
@@ -615,48 +721,49 @@ public class EntrevistadoRepositorio {
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonData = jsonObject.getJSONObject("data");
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    JSONObject jsonAttributes = jsonData.getJSONObject("attributes");
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                     Entrevistado entrevistadoInternet = new Entrevistado();
-                    entrevistadoInternet.setId(jsonData.getInt("id"));
+                    entrevistadoInternet.setId(jsonData.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
 
-                    entrevistadoInternet.setNombre(jsonAttributes.getString("nombre"));
-                    entrevistadoInternet.setApellido(jsonAttributes.getString("apellido"));
-                    entrevistadoInternet.setSexo(jsonAttributes.getString("sexo"));
+                    entrevistadoInternet.setNombre(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
+                    entrevistadoInternet.setApellido(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
+                    entrevistadoInternet.setSexo(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date fechaNac = simpleDateFormat.parse(jsonAttributes.getString("fecha_nacimiento"));
+
+                    Date fechaNac = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                     entrevistadoInternet.setFechaNacimiento(fechaNac);
 
-                    if (jsonAttributes.getInt("jubilado_legal") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
                         entrevistadoInternet.setJubiladoLegal(false);
                     } else {
                         entrevistadoInternet.setJubiladoLegal(true);
                     }
 
-                    if (jsonAttributes.getInt("caidas") == 0) {
+                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
                         entrevistadoInternet.setCaidas(false);
                     } else {
                         entrevistadoInternet.setCaidas(true);
 
-                        entrevistadoInternet.setNCaidas(jsonAttributes.getInt("n_caidas"));
+                        entrevistadoInternet.setNCaidas(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
                     }
 
-                    entrevistadoInternet.setnConvivientes3Meses(jsonAttributes.getInt("n_convivientes_3_meses"));
-                    entrevistadoInternet.setIdInvestigador(jsonAttributes.getInt("id_investigador"));
+                    entrevistadoInternet.setnConvivientes3Meses(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                    entrevistadoInternet.setIdInvestigador(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
 
                     Log.d("MEMORIA", entrevistado.toString());
                     Log.d("INTERNET", entrevistadoInternet.toString());
 
-                    String update_time = jsonAttributes.getString("update_time");
+                    String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
 
                     if (entrevistado.equals(entrevistadoInternet) && !update_time.isEmpty()) {
-                        responseMsgActualizacion.postValue("¡Entrevistado actualizado!");
+                        responseMsgActualizacion.postValue(application.getString(R.string.MSG_UPDATE_ENTREVISTADO));
+                        isLoading.postValue(false);
                     }
 
-                } catch (JSONException | ParseException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -667,29 +774,30 @@ public class EntrevistadoRepositorio {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                isLoading.postValue(false);
+
                 if (error instanceof TimeoutError) {
-                    Log.d("VOLLEY_ERR_ENTREVISTADO", "TIMEOUT_ERROR");
-                    errorMsg.postValue("Servidor no responde, intente más tarde");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d("VOLLEY_ERR_ENTREVISTADO", "NETWORK_ERROR");
-                    errorMsg.postValue("No tienes conexión a Internet");
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorActualizacion.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
                 else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
-                    Log.d("ERROR", json);
                     JSONObject errorObject = null;
 
                     //Obtener json error
                     try {
                         JSONObject jsonObject = new JSONObject(json);
 
-                        errorObject = jsonObject.getJSONObject("error");
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -697,18 +805,19 @@ public class EntrevistadoRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d("VOLLEY_ERR_ENTREVISTADO", "AUTHENTICATION_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d("VOLLEY_ERR_ENTREVISTADO", "SERVER_ERROR: " + errorObject);
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorActualizacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
         };
 
-        String url = "http://192.168.0.14/entrevistados/" + entrevistado.getId();
+        String url = String.format(application.getString(R.string.URL_PUT_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN), entrevistado.getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
 
@@ -717,46 +826,45 @@ public class EntrevistadoRepositorio {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("nombre", entrevistado.getNombre());
-                params.put("apellido", entrevistado.getApellido());
-                params.put("sexo", entrevistado.getSexo());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE), entrevistado.getNombre());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO), entrevistado.getApellido());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_SEXO), entrevistado.getSexo());
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                String fechaNac = simpleDateFormat.format(entrevistado.getFechaNacimiento());
-                params.put("fecha_nacimiento", fechaNac);
-                params.put("nombre_ciudad", entrevistado.getCiudad().getNombre());
+                String fechaNac = Utils.dateToString(application, false, entrevistado.getFechaNacimiento());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), fechaNac);
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE_CIUDAD), entrevistado.getCiudad().getNombre());
 
                 if (entrevistado.isJubiladoLegal()) {
-                    params.put("jubilado_legal", String.valueOf(1));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL), String.valueOf(1));
                 } else {
-                    params.put("jubilado_legal", String.valueOf(0));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL), String.valueOf(0));
                 }
 
                 if (entrevistado.isCaidas()) {
-                    params.put("caidas", String.valueOf(1));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS), String.valueOf(1));
 
-                    params.put("n_caidas", String.valueOf(entrevistado.getNCaidas()));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS), String.valueOf(entrevistado.getNCaidas()));
                 } else {
-                    params.put("caidas", String.valueOf(0));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS), String.valueOf(0));
                 }
 
-                params.put("n_convivientes_3_meses", String.valueOf(entrevistado.getNConvivientes3Meses()));
-                params.put("id_investigador", String.valueOf(entrevistado.getIdInvestigador()));
-                params.put("id_estado_civil", String.valueOf(entrevistado.getEstadoCivil().getId()));
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES), String.valueOf(entrevistado.getNConvivientes3Meses()));
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR), String.valueOf(entrevistado.getIdInvestigador()));
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL), String.valueOf(entrevistado.getEstadoCivil().getId()));
 
                 /*
                     OPCIONALES
                  */
                 if (entrevistado.getNivelEducacional() != null) {
-                    params.put("id_nivel_educacional", String.valueOf(entrevistado.getNivelEducacional().getId()));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL), String.valueOf(entrevistado.getNivelEducacional().getId()));
                 }
 
                 if (entrevistado.getTipoConvivencia() != null) {
-                    params.put("id_tipo_convivencia", String.valueOf(entrevistado.getTipoConvivencia().getId()));
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA), String.valueOf(entrevistado.getTipoConvivencia().getId()));
                 }
 
                 if (entrevistado.getProfesion() != null) {
-                    params.put("nombre_profesion", entrevistado.getProfesion().getNombre());
+                    params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE_PROFESION), entrevistado.getProfesion().getNombre());
                 }
 
                 return params;
@@ -764,19 +872,114 @@ public class EntrevistadoRepositorio {
 
             @Override
             public Map<String, String> getHeaders() {
-                SharedPreferences sharedPreferences = application.getSharedPreferences("udelvd",
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
                         Context.MODE_PRIVATE);
 
-                String token = sharedPreferences.getString("TOKEN_LOGIN", "");
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "Bearer " + token);
-                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
 
                 return params;
             }
         };
 
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, "ActualizarEntrevistado");
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO_ACTUALIZADO);
+    }
+
+    public void eliminarEntrevistado(Entrevistado entrevistado) {
+        sendDeleteEntrevistado(entrevistado);
+    }
+
+    private void sendDeleteEntrevistado(Entrevistado entrevistado) {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+
+                    if (jsonData.length() == 0) {
+                        responseMsgEliminar.postValue(application.getString(R.string.MSG_DELETE_ENTREVISTADO));
+                        isLoading.postValue(false);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorEliminar.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorEliminar.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(Locale.US, application.getString(R.string.URL_DELETE_ENTREVISTADO), application.getString(R.string.HEROKU_DOMAIN), entrevistado.getId());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO_ELIMINAR);
+
     }
 }

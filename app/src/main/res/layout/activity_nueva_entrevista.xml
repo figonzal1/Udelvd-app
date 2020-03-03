@@ -1,154 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/formulario_nueva_entrevista"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
-    <include
-        android:id="@+id/include"
-        layout="@layout/toolbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/progress_horizontal_nueva_entrevista"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/include"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+    tools:context=".vistas.activities.NuevaEntrevistaActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintVertical_bias="0.0">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_entrevista_title"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:text="Ingrese datos"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <ImageView
-            android:id="@+id/iv_icono_fecha_entrevista"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:contentDescription="Icono fecha entrevista"
-            android:tint="@color/colorSecondaryVariant"
-            app:layout_constraintBottom_toBottomOf="@+id/il_fecha_entrevista"
-            app:layout_constraintStart_toStartOf="@+id/guia_izq"
-            app:layout_constraintTop_toTopOf="@+id/il_fecha_entrevista"
-            app:srcCompat="@drawable/ic_date_black_24dp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/il_fecha_entrevista"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        <ProgressBar
+            android:id="@+id/progress_horizontal_nueva_entrevista"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:hint="Fecha entrevista"
-            app:endIconDrawable="@drawable/ic_date_black_24dp"
-            app:endIconMode="custom"
-            app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintEnd_toStartOf="@+id/guia_der"
-            app:layout_constraintStart_toEndOf="@+id/iv_icono_fecha_entrevista"
-            app:layout_constraintTop_toBottomOf="@+id/il_tipo_entrevista">
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_fecha_entrevista"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:fontFamily="@font/roboto"
-                android:inputType="date"
-                android:singleLine="true"
-                android:textSize="16sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/iv_tipo_entrevista"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:contentDescription="Icono tipo entrevista"
-            android:tint="@color/colorSecondaryVariant"
-            app:layout_constraintBottom_toBottomOf="@+id/il_tipo_entrevista"
-            app:layout_constraintStart_toStartOf="@+id/guia_izq"
-            app:layout_constraintTop_toTopOf="@+id/il_tipo_entrevista"
-            app:srcCompat="@drawable/ic_interview_black_24dp" />
-
-        <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/il_tipo_entrevista"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        <ScrollView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:hint="Tipo entrevista"
-            app:layout_constraintEnd_toStartOf="@+id/guia_der"
-            app:layout_constraintStart_toEndOf="@+id/iv_tipo_entrevista"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include">
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/et_tipo_entrevista"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:completionThreshold="1"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:fontFamily="@font/roboto"
-                android:inputType="numberDecimal"
-                android:singleLine="true"
-                android:textSize="16sp"
-                tools:text="Tipo entrevista" />
+                android:layout_height="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include"
+                app:layout_constraintVertical_bias="0.0">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <ImageView
+                    android:id="@+id/iv_icono_fecha_entrevista"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/ICONO_FECHA_ENTREVISTA"
+                    android:tint="@color/colorSecondaryVariant"
+                    app:layout_constraintBottom_toBottomOf="@+id/il_fecha_entrevista"
+                    app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                    app:layout_constraintTop_toTopOf="@+id/il_fecha_entrevista"
+                    app:srcCompat="@drawable/ic_date_black_24dp" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guia_izq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_fecha_entrevista"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:hint="@string/FECHA_ENTREVISTA"
+                    app:endIconDrawable="@drawable/ic_date_black_24dp"
+                    app:endIconMode="custom"
+                    app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icono_fecha_entrevista"
+                    app:layout_constraintTop_toBottomOf="@+id/il_tipo_entrevista">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guia_der"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_fecha_entrevista"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="date"
+                        android:singleLine="true"
+                        android:textSize="16sp" />
 
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/iv_tipo_entrevista"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/ICONO_FECHA_ENTREVISTA"
+                    android:tint="@color/colorSecondaryVariant"
+                    app:layout_constraintBottom_toBottomOf="@+id/il_tipo_entrevista"
+                    app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                    app:layout_constraintTop_toTopOf="@+id/il_tipo_entrevista"
+                    app:srcCompat="@drawable/ic_interview_black_24dp" />
+
+                <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_tipo_entrevista"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/TIPO_ENTREVISTA"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toEndOf="@+id/iv_tipo_entrevista"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        android:id="@+id/et_tipo_entrevista"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:completionThreshold="1"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="numberDecimal"
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        tools:text="Tipo entrevista" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guia_izq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="16dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guia_der"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="16dp" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

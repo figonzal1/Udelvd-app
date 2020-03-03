@@ -1,5 +1,7 @@
 package cl.udelvd.modelo;
 
+import androidx.annotation.NonNull;
+
 public class NivelEducacional {
 
     private int id;
@@ -24,6 +26,7 @@ public class NivelEducacional {
         this.nombre = nombre;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return nombre;

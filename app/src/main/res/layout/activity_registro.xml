@@ -1,253 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registro_investigador"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:fitsSystemWindows="true"
-    tools:context=".vistas.activities.RegistroActivity">
+    android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/progress_horizontal_registro_investigador"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/include"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
-    <include
-        android:id="@+id/include"
-        layout="@layout/toolbar_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:fitsSystemWindows="true"
+        tools:context=".vistas.activities.RegistroActivity">
 
+        <ProgressBar
+            android:id="@+id/progress_horizontal_registro_investigador"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
 
-    <ScrollView
-        android:id="@+id/scroll_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="true"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_registro_investigador">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guia_izq"
-                android:layout_width="wrap_content"
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="true"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_registro_investigador">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/activity_vertical_margin" />
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guia_der"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="42dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintGuide_end="@dimen/activity_vertical_margin" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_nombre_investigador"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:hint="Nombre"
-                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
-                app:endIconMode="clear_text"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
-                app:layout_constraintTop_toBottomOf="@+id/iv_logo_registro">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_nombre_investigador"
-                    android:layout_width="match_parent"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guia_izq"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:fontFamily="@font/roboto"
-                    android:singleLine="true" />
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/activity_vertical_margin" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/iv_logo_registro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:adjustViewBounds="false"
-                android:cropToPadding="false"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintStart_toStartOf="@+id/guia_izq"
-                app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_registro"
-                android:contentDescription="Logo registro investigador"
-                app:srcCompat="@drawable/add_person_circle" />
-
-            <ImageView
-                android:id="@+id/iv_icono_nombre"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:contentDescription="Icono nombre investigador"
-                android:scaleType="centerCrop"
-                android:tint="@color/colorSecondaryVariant"
-                app:layout_constraintBottom_toBottomOf="@+id/il_nombre_investigador"
-                app:layout_constraintStart_toStartOf="@+id/guia_izq"
-                app:layout_constraintTop_toTopOf="@+id/il_nombre_investigador"
-                app:srcCompat="@drawable/ic_person_black_24dp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_apellido_investigador"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:hint="Apellido"
-                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
-                app:endIconMode="clear_text"
-                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
-                app:layout_constraintTop_toBottomOf="@+id/il_nombre_investigador">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_apellido_investigador"
-                    android:layout_width="match_parent"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guia_der"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto"
-                    android:inputType="textCapWords"
-                    android:singleLine="true" />
+                    android:layout_marginEnd="42dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintGuide_end="@dimen/activity_vertical_margin" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_email_investigador"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:hint="Email"
-                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
-                app:endIconMode="clear_text"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintStart_toEndOf="@+id/iv_icono_email"
-                app:layout_constraintTop_toBottomOf="@+id/il_apellido_investigador">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_email_investigador"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_nombre_investigador"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto"
-                    android:inputType="textEmailAddress"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/NOMBRE"
+                    app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_logo_registro">
 
-            <ImageView
-                android:id="@+id/iv_icono_email"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:contentDescription="Icono email investigador"
-                android:scaleType="centerCrop"
-                android:tint="@color/colorSecondaryVariant"
-                app:layout_constraintBottom_toBottomOf="@+id/il_email_investigador"
-                app:layout_constraintStart_toStartOf="@+id/guia_izq"
-                app:layout_constraintTop_toTopOf="@+id/il_email_investigador"
-                app:srcCompat="@drawable/ic_email_black_24dp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_nombre_investigador"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="textCapWords"
+                        android:singleLine="true" />
 
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_password_investigador"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:hint="Contraseña"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintStart_toEndOf="@+id/iv_icono_password"
-                app:layout_constraintTop_toBottomOf="@+id/il_email_investigador"
-                app:endIconCheckable="true"
-                app:passwordToggleContentDescription="Mostrar contraseña"
-                app:passwordToggleEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_password_investigador"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/iv_logo_registro"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="8dp"
+                    android:adjustViewBounds="false"
+                    android:contentDescription="@string/LOGO_REGISTRO"
+                    android:cropToPadding="false"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/add_person_circle" />
 
-            <ImageView
-                android:id="@+id/iv_icono_password"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:contentDescription="Icono password investigador"
-                android:scaleType="centerCrop"
-                android:tint="@color/colorSecondaryVariant"
-                app:layout_constraintBottom_toBottomOf="@+id/il_password_investigador"
-                app:layout_constraintStart_toStartOf="@+id/guia_izq"
-                app:layout_constraintTop_toTopOf="@+id/il_password_investigador"
-                app:srcCompat="@drawable/ic_lock_black_24dp" />
+                <ImageView
+                    android:id="@+id/iv_icono_nombre"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/ICONO_NOMBRE_INVESTIGADOR"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorSecondaryVariant"
+                    app:layout_constraintBottom_toBottomOf="@+id/il_nombre_investigador"
+                    app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                    app:layout_constraintTop_toTopOf="@+id/il_nombre_investigador"
+                    app:srcCompat="@drawable/ic_person_black_24dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_confirm_password_investigador"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:hint="Confirmar contraseña"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintStart_toEndOf="@+id/iv_icono_password"
-                app:layout_constraintTop_toBottomOf="@+id/il_password_investigador"
-                app:passwordToggleContentDescription="Mostrar contraseña"
-                app:passwordToggleEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_confirm_password_investigador"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_apellido_investigador"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:hint="@string/APELLIDO"
+                    app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                    app:endIconMode="clear_text"
+                    app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
+                    app:layout_constraintTop_toBottomOf="@+id/il_nombre_investigador">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_apellido_investigador"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="textCapWords"
+                        android:singleLine="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_email_investigador"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:hint="@string/EMAIL"
+                    app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icono_email"
+                    app:layout_constraintTop_toBottomOf="@+id/il_apellido_investigador">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_email_investigador"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/iv_icono_email"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/ICONO_EMAIL_INVESTIGADOR"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorSecondaryVariant"
+                    app:layout_constraintBottom_toBottomOf="@+id/il_email_investigador"
+                    app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                    app:layout_constraintTop_toTopOf="@+id/il_email_investigador"
+                    app:srcCompat="@drawable/ic_email_black_24dp" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_password_investigador"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:hint="@string/CONTRASEÑA"
+                    app:endIconCheckable="true"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icono_password"
+                    app:layout_constraintTop_toBottomOf="@+id/il_email_investigador"
+                    app:passwordToggleContentDescription="Mostrar contraseña"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_password_investigador"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/iv_icono_password"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/ICONO_PASS_INVESTIGADOR"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorSecondaryVariant"
+                    app:layout_constraintBottom_toBottomOf="@+id/il_password_investigador"
+                    app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                    app:layout_constraintTop_toTopOf="@+id/il_password_investigador"
+                    app:srcCompat="@drawable/ic_lock_black_24dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_confirm_password_investigador"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:hint="@string/CONFIRMAR_NUEVA_PASS"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icono_password"
+                    app:layout_constraintTop_toBottomOf="@+id/il_password_investigador"
+                    app:passwordToggleContentDescription="Mostrar contraseña"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_confirm_password_investigador"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_registrar"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/roboto"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:text="@string/REGISTRAR"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintStart_toStartOf="@+id/guia_izq"
+                    app:layout_constraintTop_toBottomOf="@+id/il_confirm_password_investigador"
+                    app:layout_constraintVertical_bias="0.0" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_registrar"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/roboto"
-                android:text="Registrar"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guia_der"
-                app:layout_constraintStart_toStartOf="@+id/guia_izq"
-                app:layout_constraintTop_toBottomOf="@+id/il_confirm_password_investigador"
-                app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

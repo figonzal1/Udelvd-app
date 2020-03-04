@@ -14,10 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".vistas.activities.ResetearPassActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".vistas.activities.RecuperacionActivity" /> <!-- Main -->
+        <!-- Main -->
         <activity android:name=".vistas.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,11 +24,15 @@
         </activity>
         <activity
             android:name=".vistas.activities.InvestigadorListActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
+            android:parentActivityName=".vistas.activities.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <!-- Entrevistas -->
         <activity
             android:name=".vistas.activities.EntrevistasListaActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
+            android:parentActivityName=".vistas.activities.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".vistas.activities.NuevaEntrevistaActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity"
@@ -41,7 +42,8 @@
             android:name=".vistas.activities.EditarEntrevistaActivity"
             android:parentActivityName=".vistas.activities.EntrevistasListaActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" /> <!-- Entrevistado -->
+            tools:ignore="LockedOrientationActivity" />
+        <!-- Entrevistado -->
         <activity
             android:name=".vistas.activities.NuevoEntrevistadoActivity"
             android:parentActivityName=".vistas.activities.MainActivity"
@@ -51,17 +53,27 @@
             android:name=".vistas.activities.EditarEntrevistadoActivity"
             android:parentActivityName=".vistas.activities.MainActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" /> <!-- Investigador -->
+            tools:ignore="LockedOrientationActivity" />
+        <!-- Investigador -->
         <activity
             android:name=".vistas.activities.PerfilActivity"
-            android:parentActivityName=".vistas.activities.MainActivity" />
+            android:parentActivityName=".vistas.activities.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".vistas.activities.EditarPerfilActivity"
-            android:parentActivityName=".vistas.activities.PerfilActivity" />
+            android:parentActivityName=".vistas.activities.PerfilActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".vistas.activities.RegistroActivity"
-            android:parentActivityName=".vistas.activities.LoginActivity" />
-        <activity android:name=".vistas.activities.LoginActivity">
+            android:parentActivityName=".vistas.activities.LoginActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".vistas.activities.LoginActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -75,7 +87,9 @@
         </activity> <!-- Eventos -->
         <activity
             android:name=".vistas.activities.EventosActivity"
-            android:parentActivityName=".vistas.activities.EntrevistasListaActivity" />
+            android:parentActivityName=".vistas.activities.EntrevistasListaActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".vistas.activities.NuevoEventoActivity"
             android:parentActivityName=".vistas.activities.EventosActivity"
@@ -86,7 +100,20 @@
             android:parentActivityName=".vistas.activities.EventosActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" /> <!-- Estadisticas -->
-        <activity android:name=".vistas.activities.WebViewActivity" />
+        <activity
+            android:name=".vistas.activities.WebViewActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".vistas.activities.ResetearPassActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".vistas.activities.RecuperacionActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

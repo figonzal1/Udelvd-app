@@ -51,9 +51,9 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
 
         Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_LISTADO_INVESTIGADORES));
 
-        instanciarRecursosInterfaz();
-
         obtenerDatosAdmin();
+
+        instanciarRecursosInterfaz();
 
         iniciarViewModelListado();
     }
@@ -80,29 +80,43 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             }
         });
 
-        investigadorListaViewModel.cargarInvestigadores(investigador).observe(this, new Observer<List<Investigador>>() {
+        investigadorListaViewModel.mostrarPrimeraPagina(1, investigador).observe(this, new Observer<List<Investigador>>() {
             @Override
             public void onChanged(List<Investigador> investigadors) {
 
-                if (investigadors != null && investigadors.size() > 0) {
-                    investigadorList = investigadors;
-                    investigadorAdapter = new InvestigadorAdapter(
-                            investigadorList,
-                            getApplicationContext(),
-                            getSupportFragmentManager()
-                    );
-                    investigadorAdapter.notifyDataSetChanged();
-                    rv.setAdapter(investigadorAdapter);
+                investigadorList = investigadors;
+                investigadorAdapter.actualizarLista(investigadorList);
+                rv.setAdapter(investigadorAdapter);
 
-                    progressBar.setVisibility(View.INVISIBLE);
-                    if (investigadorList.size() == 0) {
-                        tv_investigadores_vacios.setVisibility(View.VISIBLE);
-                    } else {
-                        tv_investigadores_vacios.setVisibility(View.INVISIBLE);
-                    }
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                progressBar.setVisibility(View.INVISIBLE);
+                if (investigadorList.size() == 0) {
+                    tv_investigadores_vacios.setVisibility(View.VISIBLE);
+                } else {
+                    tv_investigadores_vacios.setVisibility(View.INVISIBLE);
                 }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+
+            }
+        });
+
+        investigadorListaViewModel.mostrarSiguientePagina().observe(this, new Observer<List<Investigador>>() {
+            @Override
+            public void onChanged(List<Investigador> investigadors) {
+
+
+                investigadorAdapter.agregarEntrevistados(investigadors);
+                investigadorAdapter.ocultarProgress();
+
+                investigadorList = investigadorAdapter.getInvestigadorList();
+
+                if (investigadorList.size() == 0) {
+                    tv_investigadores_vacios.setVisibility(View.VISIBLE);
+                } else {
+                    tv_investigadores_vacios.setVisibility(View.INVISIBLE);
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
             }
         });
 
@@ -182,7 +196,9 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         investigadorAdapter = new InvestigadorAdapter(
                 investigadorList,
                 getApplicationContext(),
-                getSupportFragmentManager()
+                getSupportFragmentManager(),
+                investigadorListaViewModel,
+                investigador
         );
 
         rv.setAdapter(investigadorAdapter);
@@ -198,6 +214,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                 public void onClick(View v) {
 
                     //Refresh listado de investigadores
+                    investigadorAdapter.resetPages();
                     investigadorListaViewModel.refreshInvestigadores(investigador);
 
                     progressBar.setVisibility(View.VISIBLE);
@@ -234,11 +251,19 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         } else if (item.getItemId() == R.id.menu_actualizar) {
 
             progressBar.setVisibility(View.VISIBLE);
-
+            isSnackBarShow = false;
+            investigadorAdapter.resetPages();
             investigadorListaViewModel.refreshInvestigadores(investigador);
 
-            isSnackBarShow = false;
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        investigadorAdapter.resetPages();
+        investigadorListaViewModel.refreshInvestigadores(investigador);
     }
 }

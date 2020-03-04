@@ -40,7 +40,9 @@ public class InvestigadorRepositorio {
 
     //Listados
     private List<Investigador> investigadorList = new ArrayList<>();
-    private final MutableLiveData<List<Investigador>> investigadorMutableLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<List<Investigador>> investigadoresPrimeraPaginaLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<List<Investigador>> investigadoresSgtPaginaLiveData = new SingleLiveEvent<>();
+    private List<Investigador> investigadoresSgtPagina = new ArrayList<>();
     //TAGS
     private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
 
@@ -94,18 +96,31 @@ public class InvestigadorRepositorio {
         return instancia;
     }
 
-    public MutableLiveData<List<Investigador>> obtenerInvestigadores(Investigador investigador) {
-        sendGetListado(investigador);
-        return investigadorMutableLiveData;
+    public SingleLiveEvent<List<Investigador>> obtenerInvestigadores(int pagina, Investigador investigador) {
+        sendGetListado(pagina, investigador);
+        if (pagina == 1) {
+            return investigadoresPrimeraPaginaLiveData;
+        } else {
+            return investigadoresSgtPaginaLiveData;
+        }
     }
 
-    private void sendGetListado(Investigador investigador) {
-
-        investigadorList = new ArrayList<>();
+    private void sendGetListado(final int pagina, final Investigador investigador) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
+                //Log.d("RESPONSE", response);
+
+                //Reiniciar listado cuando se pregunta por primera pagina
+                if (pagina == 1) {
+                    investigadorList.clear();
+                } else {
+                    investigadoresSgtPagina.clear();
+                }
+
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -135,12 +150,23 @@ public class InvestigadorRepositorio {
                         inv.setIdRol(jsonRelationshipsData.getInt(application.getString(R.string.KEY_ROL_ID)));
                         inv.setNombreRol(jsonRelationshipsData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
 
-                        investigadorList.add(inv);
+                        if (pagina == 1) {
+                            investigadorList.add(inv);
+                        } else {
+                            investigadoresSgtPagina.add(inv);
+                        }
 
                     }
-                    investigadorMutableLiveData.postValue(investigadorList);
 
-                    isLoading.postValue(false);
+
+                    if (pagina == 1) {
+                        //Log.d("CARGANDO_PAGINA", "1");
+                        investigadoresPrimeraPaginaLiveData.postValue(investigadorList);
+                        isLoading.postValue(false);
+                    } else {
+                        //Log.d("CARGANDO_PAGINA", String.valueOf(page));
+                        investigadoresSgtPaginaLiveData.postValue(investigadoresSgtPagina); //Enviar a ViewModel listado paginado
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -193,7 +219,7 @@ public class InvestigadorRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN), investigador.getId());
+        String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN), pagina, investigador.getId());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {
@@ -210,7 +236,10 @@ public class InvestigadorRepositorio {
             }
         };
 
-        isLoading.postValue(true);
+        //Si es la primera pagina, activar progress dialog
+        if (pagina == 1) {
+            isLoading.postValue(true);
+        }
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_LISTADO);
     }
 
@@ -373,6 +402,10 @@ public class InvestigadorRepositorio {
         };
 
         isLoading.postValue(true);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_REGISTRO);
     }
 
@@ -395,7 +428,7 @@ public class InvestigadorRepositorio {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d("RESPONSE", response);
+                Log.d("RESPONSE", response);
 
                 try {
 
@@ -1151,5 +1184,9 @@ public class InvestigadorRepositorio {
 
     public SingleLiveEvent<String> getResponseMsgErrorActivacion() {
         return responseMsgErrorActivacion;
+    }
+
+    public SingleLiveEvent<List<Investigador>> obtenerSiguientePagina() {
+        return investigadoresSgtPaginaLiveData;
     }
 }

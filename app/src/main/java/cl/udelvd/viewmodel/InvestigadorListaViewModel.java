@@ -26,14 +26,19 @@ public class InvestigadorListaViewModel extends AndroidViewModel {
         return repositorio.getIsLoading();
     }
 
-    public MutableLiveData<List<Investigador>> cargarInvestigadores(Investigador investigador) {
-        if (mutableLiveData == null) {
-            mutableLiveData = new MutableLiveData<>();
-            repositorio = InvestigadorRepositorio.getInstance(getApplication());
-            mutableLiveData = repositorio.obtenerInvestigadores(investigador);
-        }
+    public SingleLiveEvent<List<Investigador>> mostrarPrimeraPagina(int page, Investigador investigador) {
+        repositorio = InvestigadorRepositorio.getInstance(getApplication());
+        return repositorio.obtenerInvestigadores(page, investigador);
+    }
 
-        return mutableLiveData;
+    public void cargarSiguientePagina(int page, Investigador investigador) {
+        repositorio = InvestigadorRepositorio.getInstance(getApplication());
+        repositorio.obtenerInvestigadores(page, investigador);
+    }
+
+    public SingleLiveEvent<List<Investigador>> mostrarSiguientePagina() {
+        repositorio = InvestigadorRepositorio.getInstance(getApplication());
+        return repositorio.obtenerSiguientePagina();
     }
 
     public SingleLiveEvent<String> mostrarMsgErrorListado() {
@@ -53,6 +58,6 @@ public class InvestigadorListaViewModel extends AndroidViewModel {
 
     public void refreshInvestigadores(Investigador admin) {
         repositorio = InvestigadorRepositorio.getInstance(getApplication());
-        repositorio.obtenerInvestigadores(admin);
+        repositorio.obtenerInvestigadores(1, admin);
     }
 }

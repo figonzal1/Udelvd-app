@@ -43,6 +43,8 @@ public class InvestigadorRepositorio {
     private final SingleLiveEvent<List<Investigador>> investigadoresPrimeraPaginaLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<List<Investigador>> investigadoresSgtPaginaLiveData = new SingleLiveEvent<>();
     private List<Investigador> investigadoresSgtPagina = new ArrayList<>();
+    private MutableLiveData<Integer> mutableNInvestigadores = new MutableLiveData<>();
+
     //TAGS
     private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
 
@@ -123,6 +125,14 @@ public class InvestigadorRepositorio {
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
+
+                    /*
+                    N INVESTIGADORES
+                     */
+                    JSONObject jsonEntrevistado = jsonObject.getJSONObject(application.getString(R.string.KEY_INVES)).getJSONObject(application.getString(R.string.JSON_DATA));
+
+                    int n_entrevistados = jsonEntrevistado.getInt(application.getString(R.string.KEY_INVES_N_INVESTIGADORES));
+                    mutableNInvestigadores.postValue(n_entrevistados);
 
                     JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
@@ -1188,5 +1198,9 @@ public class InvestigadorRepositorio {
 
     public SingleLiveEvent<List<Investigador>> obtenerSiguientePagina() {
         return investigadoresSgtPaginaLiveData;
+    }
+
+    public MutableLiveData<Integer> getNInvestigadores() {
+        return mutableNInvestigadores;
     }
 }

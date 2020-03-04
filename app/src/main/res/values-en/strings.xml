@@ -176,4 +176,5 @@
     <string name="ABRIR_VISUALIZACIONES">Open Charts</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinary</string>
+    <string name="MOSTRAR_INVESTIGADORES">Displaying %d of %d researchers</string>
 </resources>

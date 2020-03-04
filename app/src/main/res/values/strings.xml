@@ -106,6 +106,8 @@
     <string name="KEY_INVES_PASSWORD" translatable="false">password</string>
     <string name="KEY_INVES_NOMBRE_ROL" translatable="false">nombre_rol</string>
     <string name="KEY_INVES_ACTIVADO" translatable="false">activado</string>
+    <string name="KEY_INVES" translatable="false">investigadores</string>
+    <string name="KEY_INVES_N_INVESTIGADORES" translatable="false">n_investigadores</string>
 
     <string name="KEY_ROL_OBJECT" translatable="false">rol</string>
     <string name="KEY_ROL_ID" translatable="false">id</string>
@@ -486,6 +488,7 @@
     <string name="CARGAR_MAS">Cargar más</string>
     <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
     <string name="MOSTRAR_ENTREVISTADOS" tools:ignore="PluralsCandidate">Mostrando %d de %d entrevistados</string>
+    <string name="MOSTRAR_INVESTIGADORES" tools:ignore="PluralsCandidate">Mostrando %d de %d investigadores</string>
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
     <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
     <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>

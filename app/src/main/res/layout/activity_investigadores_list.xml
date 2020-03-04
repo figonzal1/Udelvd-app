@@ -20,6 +20,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_n_investigadores"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include"
+            tools:text="Mostrando X de XX investigadores" />
+
+        <View
+            android:id="@+id/separador"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/dividerHorizontal"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/tv_n_investigadores" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_lista_investigadores"
             android:layout_width="0dp"
@@ -27,7 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include" />
+            app:layout_constraintTop_toBottomOf="@+id/separador" />
 
         <ProgressBar
             android:id="@+id/progress_bar_investigadores"

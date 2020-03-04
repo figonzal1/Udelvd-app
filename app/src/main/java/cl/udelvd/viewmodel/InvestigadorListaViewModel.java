@@ -56,6 +56,11 @@ public class InvestigadorListaViewModel extends AndroidViewModel {
         return repositorio.getResponseMsgErrorActivacion();
     }
 
+    public MutableLiveData<Integer> mostrarNEntrevistados() {
+        repositorio = InvestigadorRepositorio.getInstance(getApplication());
+        return repositorio.getNInvestigadores();
+    }
+
     public void refreshInvestigadores(Investigador admin) {
         repositorio = InvestigadorRepositorio.getInstance(getApplication());
         repositorio.obtenerInvestigadores(1, admin);

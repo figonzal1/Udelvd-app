@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.InvestigadorAdapter;
@@ -43,6 +44,8 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
     private boolean isSnackBarShow = false;
     private TextView tv_investigadores_vacios;
     private Investigador investigador;
+    private int investigadores_totales;
+    private TextView tv_n_ivestigadores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,13 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             }
         });
 
+        investigadorListaViewModel.mostrarNEntrevistados().observe(InvestigadorListActivity.this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                investigadores_totales = integer;
+            }
+        });
+
         investigadorListaViewModel.mostrarPrimeraPagina(1, investigador).observe(this, new Observer<List<Investigador>>() {
             @Override
             public void onChanged(List<Investigador> investigadors) {
@@ -94,6 +104,9 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                 } else {
                     tv_investigadores_vacios.setVisibility(View.INVISIBLE);
                 }
+
+                tv_n_ivestigadores.setVisibility(View.VISIBLE);
+                tv_n_ivestigadores.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), investigadorAdapter.getInvestigadorList().size(), investigadores_totales));
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
@@ -115,6 +128,8 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                 } else {
                     tv_investigadores_vacios.setVisibility(View.INVISIBLE);
                 }
+                tv_n_ivestigadores.setVisibility(View.VISIBLE);
+                tv_n_ivestigadores.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), investigadorAdapter.getInvestigadorList().size(), investigadores_totales));
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
             }
@@ -190,6 +205,9 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
 
         LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
         rv.setLayoutManager(ly);
+
+        tv_n_ivestigadores = findViewById(R.id.tv_n_investigadores);
+        tv_n_ivestigadores.setVisibility(View.INVISIBLE);
 
         investigadorListaViewModel = ViewModelProviders.of(this).get(InvestigadorListaViewModel.class);
 

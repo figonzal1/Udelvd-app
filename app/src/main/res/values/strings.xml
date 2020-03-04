@@ -2,9 +2,9 @@
     <string name="app_name">Un día en la vida de &#8230;</string>
 
     <!-- URLS-->
-    <string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>
-    <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.22/</string>-->
-    <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/id_admin/%d</string>
+    <!--<string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>-->
+    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.19/</string>
+    <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/pagina/%d/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
     <string name="URL_PATCH_INVESTIGADORES_ACTIVAR" translatable="false">%sinvestigadores/%d/activar</string>
     <string name="URL_LOGIN_INVESTIGADORES" translatable="false">%sinvestigadores/login</string>
@@ -281,6 +281,7 @@
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTADO" translatable="false">VM_LISTA_ENTREVISTADO</string>
     <string name="TAG_VIEW_MODEL_LISTA_INVESTIGADORES" translatable="false">VM_LISTA_INVESTIGADORES</string>
     <string name="VIEW_MODEL_LISTA_ENTREVISTADO_MSG" translatable="false">Listado cargado</string>
+    <string name="VIEW_MODEL_LISTA_INVESTIGADORES_MSG" translatable="false">Listado cargado</string>
     <string name="TAG_VIEW_MODEL_ESTADO_CIVIL" translatable="false">VM_ESTADO_CIVIL</string>
     <string name="VIEW_MODEL_LISTADO_CARGADO" translatable="false">Listado cargado</string>
     <string name="TAG_VIEW_MODEL_CIUDAD" translatable="false">VM_CIUDAD</string>

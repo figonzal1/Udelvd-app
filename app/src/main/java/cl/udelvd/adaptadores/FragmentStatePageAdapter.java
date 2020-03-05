@@ -55,5 +55,6 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
 
     public void actualizarLista(List<Evento> eventoList) {
         this.eventoList = eventoList;
+        notifyDataSetChanged();
     }
 }

@@ -28,13 +28,9 @@ public class EventosListaViewModel extends AndroidViewModel {
         return eventoRepositorio.getIsLoading();
     }
 
-    public MutableLiveData<List<Evento>> cargarEventos(Entrevista entrevista) {
-        if (mutableLiveData == null) {
-            mutableLiveData = new MutableLiveData<>();
-            eventoRepositorio = EventoRepositorio.getInstancia(getApplication());
-            mutableLiveData = eventoRepositorio.obtenerEventosEntrevista(entrevista);
-        }
-        return mutableLiveData;
+    public SingleLiveEvent<List<Evento>> cargarEventos(Entrevista entrevista) {
+        eventoRepositorio = EventoRepositorio.getInstancia(getApplication());
+        return eventoRepositorio.obtenerEventosEntrevista(entrevista);
     }
 
     public SingleLiveEvent<String> mostrarMsgErrorListado() {

@@ -169,17 +169,9 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
                     viewPager.setVisibility(View.INVISIBLE);
-                    tv_eventos_vacios.setVisibility(View.INVISIBLE);
                 } else {
-                    progressBar.setVisibility(View.GONE);
-
-                    if (eventoList.size() == 0) {
-                        viewPager.setVisibility(View.GONE);
-                        tv_eventos_vacios.setVisibility(View.VISIBLE);
-                    } else {
-                        tv_eventos_vacios.setVisibility(View.INVISIBLE);
-                        viewPager.setVisibility(View.VISIBLE);
-                    }
+                    progressBar.setVisibility(View.INVISIBLE);
+                    viewPager.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -189,15 +181,19 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             @Override
             public void onChanged(List<Evento> eventos) {
 
-                if (eventos != null && eventos.size() > 0) {
-                    viewPager.setVisibility(View.GONE);
+                if (eventos != null) {
                     eventoList = eventos;
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
-                    fragmentStatePageAdapter.actualizarLista(eventoList);
-                    fragmentStatePageAdapter.notifyDataSetChanged();
-                    viewPager.setAdapter(fragmentStatePageAdapter);
-                }
+                    progressBar.setVisibility(View.INVISIBLE);
 
+                    if (eventoList.size() == 0) {
+                        tv_eventos_vacios.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_eventos_vacios.setVisibility(View.INVISIBLE);
+                        fragmentStatePageAdapter.actualizarLista(eventoList);
+
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
+                    }
+                }
             }
         });
 

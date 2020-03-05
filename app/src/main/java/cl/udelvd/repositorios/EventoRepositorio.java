@@ -52,7 +52,7 @@ public class EventoRepositorio {
     private final List<Evento> eventosList = new ArrayList<>();
 
     //LISTADO
-    private final MutableLiveData<List<Evento>> eventosMutableLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<List<Evento>> eventosMutableLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseErrorMsgListado = new SingleLiveEvent<>();
 
     //REGISTRO
@@ -129,7 +129,7 @@ public class EventoRepositorio {
      * @param entrevista Datos de entrevista para realizar la busqueda
      * @return mutableLiveData Mutable live data con los datos de la entrevista
      */
-    public MutableLiveData<List<Evento>> obtenerEventosEntrevista(Entrevista entrevista) {
+    public SingleLiveEvent<List<Evento>> obtenerEventosEntrevista(Entrevista entrevista) {
         enviarGetEventosEntrevista(entrevista);
         return eventosMutableLiveData;
     }

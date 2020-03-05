@@ -15,7 +15,11 @@
     <string name="URL_GET_ENTREVISTADOS" translatable="false">%sentrevistados/pagina/%d/investigador/%d</string>
     <string name="URL_GET_ENTREVISTADO" translatable="false">%sentrevistados/%d</string>
     <string name="URL_PUT_ENTREVISTADOS" translatable="false">%sentrevistados/%d</string>
-    <string name="URL_GET_ACCIONES" translatable="false">%sacciones/idioma/%s</string>
+    <string name="URL_GET_ACCIONES_IDIOMA" translatable="false">%sacciones/idioma/%s</string>
+    <string name="URL_GET_ACCIONES" translatable="false">%sacciones</string>
+    <string name="URL_POST_ACCIONES" translatable="false">%sacciones</string>
+    <string name="URL_PUT_ACCIONES" translatable="false">%sacciones/%d</string>
+    <string name="URL_DELETE_ACCIONES" translatable="false">%sacciones/%d</string>
     <string name="URL_GET_CIUDADES" translatable="false">%sciudades</string>
     <string name="URL_GET_EMOTICONES" translatable="false">%semoticones/idioma/%s</string>
     <string name="URL_GET_ESTADOS_CIVILES" translatable="false">%sestadosCiviles/idioma/%s</string>
@@ -69,6 +73,7 @@
     <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Editar perfil</string>
     <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Editar evento</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
+    <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Listado Acciones</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY" translatable="false">udelvd</string>
@@ -94,6 +99,7 @@
     <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
     <string name="FORMATO_EVENTO_N">Evento %d</string>
     <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d años</string>
+    <string name="FORMATO_ACCION">Acción %d</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT" translatable="false">investigador</string>
@@ -150,6 +156,8 @@
     <string name="KEY_ACCION_OBJECT" translatable="false">accion</string>
     <string name="KEY_ACCION_ID" translatable="false">id</string>
     <string name="KEY_ACCION_NOMBRE" translatable="false">nombre</string>
+    <string name="KEY_ACCION_NOMBRE_ES" translatable="false">nombre_es</string>
+    <string name="KEY_ACCION_NOMBRE_EN" translatable="false">nombre_en</string>
 
     <string name="KEY_CIUDAD_ID" translatable="false">id</string>
     <string name="KEY_CIUDAD_NOMBRE" translatable="false">nombre</string>
@@ -281,6 +289,7 @@
     <string name="TAG_TOKEN_LOGOUT" translatable="false">LOGOUT</string>
     <string name="TOKEN_LOGOUT_MSG" translatable="false">BORRANDO TOKEN:</string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTADO" translatable="false">VM_LISTA_ENTREVISTADO</string>
+    <string name="TAG_VIEW_MODEL_LISTA_ACCIONES" translatable="false">VM_LISTA_ACCIONES</string>
     <string name="TAG_VIEW_MODEL_LISTA_INVESTIGADORES" translatable="false">VM_LISTA_INVESTIGADORES</string>
     <string name="VIEW_MODEL_LISTA_ENTREVISTADO_MSG" translatable="false">Listado cargado</string>
     <string name="VIEW_MODEL_LISTA_INVESTIGADORES_MSG" translatable="false">Listado cargado</string>
@@ -490,6 +499,7 @@
     <string name="MOSTRAR_ENTREVISTADOS" tools:ignore="PluralsCandidate">Mostrando %d de %d entrevistados</string>
     <string name="MOSTRAR_INVESTIGADORES" tools:ignore="PluralsCandidate">Mostrando %d de %d investigadores</string>
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
+    <string name="MSG_LISTADO_ACCIONES_VACIO">No hay acciones registradas</string>
     <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
     <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>
     <string name="NORMAL">Normal</string>

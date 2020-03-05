@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 import cl.udelvd.R;
-import cl.udelvd.adaptadores.AccionAdapter;
+import cl.udelvd.adaptadores.AccionSelectorAdapter;
 import cl.udelvd.adaptadores.EmoticonAdapter;
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.modelo.Emoticon;
@@ -51,7 +51,7 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
 
     private NuevoEventoViewModel nuevoEventoViewModel;
 
-    private AccionAdapter accionAdapter;
+    private AccionSelectorAdapter accionSelectorAdapter;
     private EmoticonAdapter emoticonAdapter;
 
     private List<Accion> accionList;
@@ -64,6 +64,7 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
     private ProgressBar progressBar;
     private static final int SPEECH_REQUEST_CODE = 100;
     private boolean isSnackBarShow = false;
+    private String idioma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +123,8 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
         spinner = findViewById(R.id.spinner_emoticon);
 
         nuevoEventoViewModel = ViewModelProviders.of(this).get(NuevoEventoViewModel.class);
+
+        idioma = Utils.obtenerIdioma(getApplicationContext());
     }
 
     /**
@@ -185,7 +188,7 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
         });
 
         //Observer de listado de acciones
-        nuevoEventoViewModel.cargarAcciones().observe(this, new Observer<List<Accion>>() {
+        nuevoEventoViewModel.cargarAcciones(idioma).observe(this, new Observer<List<Accion>>() {
             @Override
             public void onChanged(List<Accion> list) {
 
@@ -193,12 +196,12 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
                     progressBar.setVisibility(View.GONE);
 
                     accionList = list;
-                    accionAdapter = new AccionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
-                    acAcciones.setAdapter(accionAdapter);
+                    accionSelectorAdapter = new AccionSelectorAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
+                    acAcciones.setAdapter(accionSelectorAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    accionAdapter.notifyDataSetChanged();
+                    accionSelectorAdapter.notifyDataSetChanged();
                 }
 
             }
@@ -408,7 +411,7 @@ public class NuevoEventoActivity extends AppCompatActivity implements SnackbarIn
                 public void onClick(View v) {
 
                     //Refresh listado de informacion necesaria
-                    nuevoEventoViewModel.refreshAcciones();
+                    nuevoEventoViewModel.refreshAcciones(idioma);
                     nuevoEventoViewModel.refreshEmoticones();
 
                     progressBar.setVisibility(View.VISIBLE);

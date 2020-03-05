@@ -177,4 +177,7 @@
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinaria</string>
     <string name="MOSTRAR_INVESTIGADORES">Mostrando %d de %d investigadores</string>
+    <string name="FORMATO_ACCION">Acción %d</string>
+    <string name="MSG_LISTADO_ACCIONES_VACIO">No hay acciones registradas</string>
+    <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Listado Acciones</string>
 </resources>

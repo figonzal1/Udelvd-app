@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view_entrevistado"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="0dp"
+    android:theme="@style/AppTheme"
+    tools:targetApi="m">
+
+
+    <TextView
+        android:id="@+id/cv_tv_accion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/roboto"
+        android:text="Accion X"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorOnPrimary"
+        card_view:layout_constraintEnd_toStartOf="@+id/iv_menu_accion"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cv_tv_espanol"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/colorOnSecondary"
+        card_view:layout_constraintBottom_toTopOf="@+id/tv_ingles"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_espanol"
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_espanol"
+        card_view:layout_constraintVertical_bias="0.0"
+        tools:text="Descripcion accion en español" />
+
+    <ImageView
+        android:id="@+id/cv_iv_espanol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/ICONO_FECHA_NAC_ENTREVISTADO"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/cv_tv_accion"
+        card_view:srcCompat="@drawable/ic_language_black_alpha_24dp" />
+
+    <ImageView
+        android:id="@+id/cv_iv_ingles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/ICONO_N_ENTREVISTAS"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/cv_iv_espanol"
+        card_view:srcCompat="@drawable/ic_language_black_alpha_24dp" />
+
+    <TextView
+        android:id="@+id/tv_ingles"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/roboto"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/colorOnPrimary"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toEndOf="@+id/cv_iv_ingles"
+        card_view:layout_constraintTop_toTopOf="@+id/cv_iv_ingles"
+        tools:text="Descripción acción en inglés" />
+
+    <View
+        android:id="@+id/separador"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/dividerHorizontal"
+        android:visibility="visible"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/tv_ingles" />
+
+    <ImageView
+        android:id="@+id/iv_menu_accion"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/ICONO_MENU_CONTEXTUAL"
+        card_view:layout_constraintBottom_toBottomOf="@+id/cv_tv_accion"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintVertical_bias="0.0"
+        card_view:srcCompat="@drawable/ic_more_vert_black_24dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

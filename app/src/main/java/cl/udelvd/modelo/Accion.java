@@ -6,6 +6,8 @@ public class Accion {
 
     private int id;
     private String nombre;
+    private String nombreEs;
+    private String nombreEn;
 
     public Accion() {
     }
@@ -16,6 +18,22 @@ public class Accion {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getNombreEs() {
+        return nombreEs;
+    }
+
+    public void setNombreEs(String nombreEs) {
+        this.nombreEs = nombreEs;
+    }
+
+    public String getNombreEn() {
+        return nombreEn;
+    }
+
+    public void setNombreEn(String nombreEn) {
+        this.nombreEn = nombreEn;
     }
 
     public String getNombre() {

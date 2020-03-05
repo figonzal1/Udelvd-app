@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 import cl.udelvd.R;
-import cl.udelvd.adaptadores.AccionAdapter;
+import cl.udelvd.adaptadores.AccionSelectorAdapter;
 import cl.udelvd.adaptadores.EmoticonAdapter;
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.modelo.Emoticon;
@@ -57,7 +57,7 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
     private EditarEventoViewModel editarEventoViewModel;
 
     private List<Accion> accionList;
-    private AccionAdapter accionAdapter;
+    private AccionSelectorAdapter accionSelectorAdapter;
 
     private EmoticonAdapter emoticonAdapter;
     private List<Emoticon> emoticonList;
@@ -66,6 +66,7 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
     private boolean isAutoCompleteAcciones = false;
     private boolean isSpinnerEmoticones = false;
     private boolean isGetEvento = false;
+    private String idioma;
 
 
     @Override
@@ -110,6 +111,8 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
         spinner = findViewById(R.id.spinner_emoticon);
 
         editarEventoViewModel = ViewModelProviders.of(this).get(EditarEventoViewModel.class);
+
+        idioma = Utils.obtenerIdioma(getApplicationContext());
     }
 
     private void obtenerDatosBundle() {
@@ -190,7 +193,7 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
         });
 
         //Observer de listado de acciones
-        editarEventoViewModel.cargarAcciones().observe(this, new Observer<List<Accion>>() {
+        editarEventoViewModel.cargarAcciones(idioma).observe(this, new Observer<List<Accion>>() {
             @Override
             public void onChanged(List<Accion> list) {
 
@@ -198,14 +201,14 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
                     progressBar.setVisibility(View.GONE);
 
                     accionList = list;
-                    accionAdapter = new AccionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
-                    acAcciones.setAdapter(accionAdapter);
+                    accionSelectorAdapter = new AccionSelectorAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, accionList);
+                    acAcciones.setAdapter(accionSelectorAdapter);
 
                     isAutoCompleteAcciones = true;
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    accionAdapter.notifyDataSetChanged();
+                    accionSelectorAdapter.notifyDataSetChanged();
 
                     setearInfoEvento();
                 }
@@ -481,7 +484,7 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
                     isGetEvento = false;
 
                     //Refresh listado de informacion necesaria
-                    editarEventoViewModel.refreshAcciones();
+                    editarEventoViewModel.refreshAcciones(idioma);
                     editarEventoViewModel.refreshEmoticones();
 
                     //editarEventoViewModel.refreshEvento(eventoIntent);

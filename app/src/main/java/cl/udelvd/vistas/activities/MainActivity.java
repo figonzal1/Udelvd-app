@@ -203,6 +203,8 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
                 //Menu admin
                 if (menuItem.getItemId() == R.id.menu_acciones) {
+                    Intent intent = new Intent(MainActivity.this, AccionesListActivity.class);
+                    startActivity(intent);
                     return true;
                 } else if (menuItem.getItemId() == R.id.menu_emoticones) {
                     return true;

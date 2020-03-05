@@ -35,10 +35,8 @@
                 <item
                     android:id="@+id/menu_acciones"
                     android:checkable="true"
-                    android:enabled="false"
                     android:icon="@drawable/ic_directions_run_black_24dp"
-                    android:title="@string/MENU_ACCIONES"
-                    android:visible="false" />
+                    android:title="@string/MENU_ACCIONES" />
 
                 <item
                     android:id="@+id/menu_emoticones"

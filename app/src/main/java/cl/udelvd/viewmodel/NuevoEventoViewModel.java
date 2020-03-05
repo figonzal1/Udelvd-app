@@ -56,14 +56,14 @@ public class NuevoEventoViewModel extends AndroidViewModel {
         return accionRepositorio.getResponseMsgError();
     }
 
-    public MutableLiveData<List<Accion>> cargarAcciones() {
+    public MutableLiveData<List<Accion>> cargarAcciones(String idioma) {
         accionRepositorio = AccionRepositorio.getInstancia(getApplication());
-        return accionRepositorio.obtenerAcciones();
+        return accionRepositorio.obtenerAccionesIdioma(idioma);
     }
 
-    public void refreshAcciones() {
+    public void refreshAcciones(String idioma) {
         accionRepositorio = AccionRepositorio.getInstancia(getApplication());
-        accionRepositorio.obtenerAcciones();
+        accionRepositorio.obtenerAccionesIdioma(idioma);
     }
 
     /*

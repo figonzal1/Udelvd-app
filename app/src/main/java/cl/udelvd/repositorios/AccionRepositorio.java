@@ -316,6 +316,7 @@ public class AccionRepositorio {
     }
 
     private void sendPostAccion(final Accion accionIntent) {
+
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -324,16 +325,16 @@ public class AccionRepositorio {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-                    JSONObject jsonAttributes = jsonObject.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
                     Accion accionInternet = new Accion();
-                    accionInternet.setNombreEn(jsonData.getString(application.getString(R.string.KEY_ACCION_NOMBRE_EN)));
-                    accionInternet.setNombreEs(jsonData.getString(application.getString(R.string.KEY_ACCION_NOMBRE_ES)));
+                    accionInternet.setNombreEn(jsonAttributes.getString(application.getString(R.string.KEY_ACCION_NOMBRE_EN)));
+                    accionInternet.setNombreEs(jsonAttributes.getString(application.getString(R.string.KEY_ACCION_NOMBRE_ES)));
 
                     String create_time = jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME));
 
-                    Log.d("MEMORIA", accionIntent.toString());
-                    Log.d("INTERNET", accionInternet.toString());
+                    Log.d("MEMORIA", accionIntent.getNombreEs() + " - " + accionIntent.getNombreEn());
+                    Log.d("INTERNET", accionInternet.getNombreEs() + " - " + accionInternet.getNombreEn());
 
                     if (accionIntent.equals(accionInternet) && !create_time.isEmpty()) {
 
@@ -396,6 +397,15 @@ public class AccionRepositorio {
         String url = String.format(application.getString(R.string.URL_POST_ACCIONES), application.getString(R.string.HEROKU_DOMAIN));
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
             @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.KEY_ACCION_NOMBRE_EN), accionIntent.getNombreEn());
+                params.put(application.getString(R.string.KEY_ACCION_NOMBRE_ES), accionIntent.getNombreEs());
+                return params;
+            }
+
+            @Override
             public Map<String, String> getHeaders() {
 
                 SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
@@ -406,15 +416,6 @@ public class AccionRepositorio {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
-                return params;
-            }
-
-            @Override
-            protected Map<String, String> getParams() {
-
-                Map<String, String> params = new HashMap<>();
-                params.put(application.getString(R.string.KEY_ACCION_NOMBRE_EN), accionIntent.getNombreEn());
-                params.put(application.getString(R.string.KEY_ACCION_NOMBRE_ES), accionIntent.getNombreEs());
                 return params;
             }
         };

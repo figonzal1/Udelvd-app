@@ -111,7 +111,7 @@ public class NuevaAccionActivity extends AppCompatActivity implements SnackbarIn
 
     private void instanciarRecursosInterfaz() {
 
-        progressBar = findViewById(R.id.progress_horizontal_nueva_entrevista);
+        progressBar = findViewById(R.id.progress_horizontal_nueva_accion);
         progressBar.setVisibility(View.VISIBLE);
 
         ilAccionEspanol = findViewById(R.id.il_accion_espanol);
@@ -145,7 +145,7 @@ public class NuevaAccionActivity extends AppCompatActivity implements SnackbarIn
                 progressBar.setVisibility(View.VISIBLE);
 
                 Accion accion = new Accion();
-                accion.setNombreEn(Objects.requireNonNull(etAccionEspanol.getText()).toString());
+                accion.setNombreEs(Objects.requireNonNull(etAccionEspanol.getText()).toString());
                 accion.setNombreEn(Objects.requireNonNull(etAccionIngles.getText()).toString());
 
                 AccionRepositorio.getInstancia(getApplication()).registrarAccion(accion);

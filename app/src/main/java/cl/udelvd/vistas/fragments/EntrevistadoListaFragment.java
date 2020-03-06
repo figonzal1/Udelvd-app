@@ -124,6 +124,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         rv.setLayoutManager(ly);
 
         tv_entrevistados_vacios = v.findViewById(R.id.tv_entrevistados_vacios);
+        tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
 
         tv_n_entrevistados = v.findViewById(R.id.tv_n_entrevistados);
         tv_n_entrevistados.setVisibility(View.INVISIBLE);

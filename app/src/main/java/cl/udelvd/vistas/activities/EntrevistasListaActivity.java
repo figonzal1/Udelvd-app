@@ -153,12 +153,6 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     cv_lista_entrevistas.setVisibility(View.VISIBLE);
-
-                    if (entrevistasList.size() == 0) {
-                        tv_entrevistas_vacias.setVisibility(View.VISIBLE);
-                    } else {
-                        tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
-                    }
                 }
             }
         });
@@ -175,6 +169,12 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                         tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), entrevistas.size()));
                     } else {
                         tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), entrevistas.size()));
+                    }
+
+                    if (entrevistasList.size() == 0) {
+                        tv_entrevistas_vacias.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
                     }
 
                     //Contar tipos de entrevistas

@@ -49,7 +49,7 @@ public class EntrevistaRepositorio {
 
     //LISTADO
     private final List<Entrevista> entrevistaList = new ArrayList<>();
-    private final MutableLiveData<List<Entrevista>> entrevistasMutableLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<List<Entrevista>> entrevistasMutableLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     //Registro
@@ -93,7 +93,7 @@ public class EntrevistaRepositorio {
      * @param entrevistado Objeto entrevistaco que contiene el Id para buscar entrevistas
      * @return Listado mutable con entrevistas de usuario
      */
-    public MutableLiveData<List<Entrevista>> obtenerEntrevistasPersonales(Entrevistado entrevistado) {
+    public SingleLiveEvent<List<Entrevista>> obtenerEntrevistasPersonales(Entrevistado entrevistado) {
         sendGetEntrevistasPersonales(entrevistado);
         return entrevistasMutableLiveData;
     }

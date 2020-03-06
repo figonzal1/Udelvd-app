@@ -88,6 +88,7 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
+                    tv_acciones_vacios.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.INVISIBLE);
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -102,12 +103,7 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
                 if (accions != null) {
 
                     accionesList = accions;
-                    //accionAdapter.actualizarLista(accionesList);
-                    accionAdapter = new AccionAdapter(
-                            accionesList,
-                            getApplicationContext()
-                    );
-                    rv.setAdapter(accionAdapter);
+                    accionAdapter.actualizarLista(accionesList);
 
                     progressBar.setVisibility(View.INVISIBLE);
                     if (accionesList.size() == 0) {
@@ -129,6 +125,7 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
+                    rv.setVisibility(View.INVISIBLE);
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.acciones_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     accionAdapter.notifyDataSetChanged();
@@ -160,8 +157,6 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
                 @Override
                 public void onClick(View v) {
 
-                    //Refresh listado de investigadores
-                    //accionAdapter.resetPages();
                     accionesListaViewModel.refreshAcciones();
 
                     progressBar.setVisibility(View.VISIBLE);

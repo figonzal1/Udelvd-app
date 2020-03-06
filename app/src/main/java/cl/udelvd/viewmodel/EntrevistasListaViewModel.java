@@ -17,8 +17,6 @@ public class EntrevistasListaViewModel extends AndroidViewModel {
 
     private EntrevistaRepositorio entrevistaRepositorio;
 
-    private MutableLiveData<List<Entrevista>> entrevistaMutableLiveData;
-
     public EntrevistasListaViewModel(@NonNull Application application) {
         super(application);
     }
@@ -29,16 +27,9 @@ public class EntrevistasListaViewModel extends AndroidViewModel {
      * @param entrevistado Objeto entrevistado con datos para busqueda de lista
      * @return MutableLiveData con listado de entrevistas
      */
-    public MutableLiveData<List<Entrevista>> cargarEntrevistas(Entrevistado entrevistado) {
-
-        if (entrevistaMutableLiveData == null) {
-            entrevistaMutableLiveData = new MutableLiveData<>();
-            entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
-            entrevistaMutableLiveData = entrevistaRepositorio.obtenerEntrevistasPersonales(entrevistado);
-        }
-
-        return entrevistaMutableLiveData;
-
+    public SingleLiveEvent<List<Entrevista>> cargarEntrevistas(Entrevistado entrevistado) {
+        entrevistaRepositorio = EntrevistaRepositorio.getInstancia(getApplication());
+        return entrevistaRepositorio.obtenerEntrevistasPersonales(entrevistado);
     }
 
     /**

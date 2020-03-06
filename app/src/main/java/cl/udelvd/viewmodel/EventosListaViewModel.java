@@ -17,8 +17,6 @@ public class EventosListaViewModel extends AndroidViewModel {
 
     private EventoRepositorio eventoRepositorio;
 
-    private MutableLiveData<List<Evento>> mutableLiveData;
-
     public EventosListaViewModel(@NonNull Application application) {
         super(application);
     }

@@ -61,6 +61,37 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         iniciarViewModelListado();
     }
 
+    private void instanciarRecursosInterfaz() {
+
+        investigadorList = new ArrayList<>();
+
+        progressBar = findViewById(R.id.progress_bar_investigadores);
+        progressBar.setVisibility(View.VISIBLE);
+
+        rv = findViewById(R.id.rv_lista_investigadores);
+
+        LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(ly);
+
+        tv_n_ivestigadores = findViewById(R.id.tv_n_investigadores);
+        tv_n_ivestigadores.setVisibility(View.INVISIBLE);
+
+        tv_investigadores_vacios = findViewById(R.id.tv_investigadores_vacios);
+        tv_investigadores_vacios.setVisibility(View.INVISIBLE);
+
+        investigadorListaViewModel = ViewModelProviders.of(this).get(InvestigadorListaViewModel.class);
+
+        investigadorAdapter = new InvestigadorAdapter(
+                investigadorList,
+                getApplicationContext(),
+                getSupportFragmentManager(),
+                investigadorListaViewModel,
+                investigador
+        );
+
+        rv.setAdapter(investigadorAdapter);
+    }
+
     private void iniciarViewModelListado() {
         investigadorListaViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
@@ -69,6 +100,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
                     tv_investigadores_vacios.setVisibility(View.INVISIBLE);
+                    tv_n_ivestigadores.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.INVISIBLE);
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -137,8 +169,10 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                         progressBar.setVisibility(View.INVISIBLE);
 
                         if (!isSnackBarShow) {
+                            rv.setVisibility(View.INVISIBLE);
                             isSnackBarShow = true;
                             showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                            investigadorAdapter.notifyDataSetChanged();
                         }
 
                         Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -184,36 +218,6 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
         investigador = new Investigador();
         investigador.setId(sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0));
-    }
-
-    private void instanciarRecursosInterfaz() {
-
-        investigadorList = new ArrayList<>();
-
-        progressBar = findViewById(R.id.progress_bar_investigadores);
-        progressBar.setVisibility(View.VISIBLE);
-
-        tv_investigadores_vacios = findViewById(R.id.tv_investigadores_vacios);
-
-        rv = findViewById(R.id.rv_lista_investigadores);
-
-        LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
-        rv.setLayoutManager(ly);
-
-        tv_n_ivestigadores = findViewById(R.id.tv_n_investigadores);
-        tv_n_ivestigadores.setVisibility(View.INVISIBLE);
-
-        investigadorListaViewModel = ViewModelProviders.of(this).get(InvestigadorListaViewModel.class);
-
-        investigadorAdapter = new InvestigadorAdapter(
-                investigadorList,
-                getApplicationContext(),
-                getSupportFragmentManager(),
-                investigadorListaViewModel,
-                investigador
-        );
-
-        rv.setAdapter(investigadorAdapter);
     }
 
     @Override
@@ -270,12 +274,5 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        investigadorAdapter.resetPages();
-        investigadorListaViewModel.refreshInvestigadores(investigador);
     }
 }

@@ -1,7 +1,6 @@
 package cl.udelvd.adaptadores;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +75,6 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             holder.tv_email.setText(investigador.getEmail());
             holder.tv_nombre.setText(String.format("%s %s", investigador.getNombre(), investigador.getApellido()));
-            Log.d("INVESTUGAFOR_REGISTRO", investigador.getCreateTime());
             holder.tv_fecha_registro.setText(Utils.dateToString(context, false, Utils.stringToDate(context, false, investigador.getCreateTime())));
 
             if (investigador.isActivado()) {

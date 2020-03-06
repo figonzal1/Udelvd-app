@@ -15,7 +15,6 @@ import cl.udelvd.utilidades.SingleLiveEvent;
 public class InvestigadorListaViewModel extends AndroidViewModel {
 
     private InvestigadorRepositorio repositorio;
-    private MutableLiveData<List<Investigador>> mutableLiveData;
 
     public InvestigadorListaViewModel(@NonNull Application application) {
         super(application);

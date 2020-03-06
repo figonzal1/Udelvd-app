@@ -64,7 +64,7 @@ public class EditarEventoViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> mostrarMsgErrorAcciones() {
         accionRepositorio = AccionRepositorio.getInstancia(getApplication());
-        return accionRepositorio.getResponseMsgError();
+        return accionRepositorio.getResponseMsgErrorListado();
     }
 
     public MutableLiveData<List<Accion>> cargarAcciones(String idioma) {

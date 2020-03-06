@@ -313,9 +313,11 @@
     <string name="TAB_NAME_ESTADISTICAS">Estadísticas</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTADO" translatable="false">VM_EDITAR_ENTREVISTADO</string>
     <string name="TAG_VIEW_MODEL_TIPO_ENTREVISTA" translatable="false">VM_TIPO_ENTREVISTA</string>
+    <string name="TAG_VIEW_MODEL_NUEVA_ACCION" translatable="false">VM_NUEVA_ACCION</string>
     <string name="TAG_VIEW_MODEL_NEW_ENTREVISTA" translatable="false">VM_NEW_ENTREVISTA</string>
     <string name="MSG_REGISTRO_ENTREVISTA">¡Entrevista registrada!</string>
     <string name="MSG_UPDATE_ENTREVISTA">¡Entrevista actualizada!</string>
+    <string name="MSG_REGISTRO_ACCION">¡Acción registrada!</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTA" translatable="false">VM_EDITAR_ENTREVISTA</string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTAS" translatable="false">VM_LISTA_ENTREVISTAS</string>
     <string name="TAG_JWT_STATUS" translatable="false">JWT_STATUS</string>

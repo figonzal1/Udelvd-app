@@ -2,6 +2,8 @@ package cl.udelvd.modelo;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class Accion {
 
     private int id;
@@ -48,5 +50,19 @@ public class Accion {
     @Override
     public String toString() {
         return nombre;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Accion accion = (Accion) o;
+        return getNombreEs().equals(accion.getNombreEs()) &&
+                getNombreEn().equals(accion.getNombreEn());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNombreEs(), getNombreEn());
     }
 }

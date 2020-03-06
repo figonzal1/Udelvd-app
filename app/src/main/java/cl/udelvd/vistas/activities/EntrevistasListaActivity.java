@@ -45,16 +45,15 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
     private static final int REQUEST_CODE_EDITAR_ENTREVISTA = 301;
 
     private RecyclerView rv;
+    private CardView cv_entrevistas;
+    private CardView cv_info;
     private EntrevistaAdapter entrevistaAdapter;
     private EntrevistasListaViewModel entrevistasListaViewModel;
 
-    private TextView tv_nombreCompleto;
     private TextView tv_n_entrevistas;
     private TextView tv_entrevistas_normales;
     private TextView tv_entrevistas_extraordinarias;
-    private ImageView iv_persona;
 
-    private CardView cv_lista_entrevistas;
     private TextView tv_entrevistas_vacias;
 
     private Entrevistado entrevistado;
@@ -65,6 +64,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
     private ProgressBar progressBar;
     private List<Entrevista> entrevistasList;
     private boolean isSnackBarShow = false;
+    private int annos;
 
 
     @Override
@@ -74,9 +74,9 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
 
         Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_LISTA_ENTREVISTAS));
 
-        setearRecursosInterfaz();
-
         obtenerDatosBundle();
+
+        setearRecursosInterfaz();
 
         iniciarViewModelObservers();
 
@@ -98,7 +98,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             String nombre_entrevistado = bundle.getString(getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO));
             String apellido_entrevistado = bundle.getString(getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO));
             String sexo = bundle.getString(getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO));
-            int annos = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ANNOS));
+            annos = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ANNOS));
             String fecha_nac = bundle.getString(getString(R.string.KEY_ENTREVISTADO_FECHA_NAC));
 
             entrevistado.setId(id_entrevistado);
@@ -106,9 +106,6 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             entrevistado.setApellido(apellido_entrevistado);
             entrevistado.setSexo(sexo);
             entrevistado.setFechaNacimiento(Utils.stringToDate(getApplicationContext(), false, fecha_nac));
-
-            Utils.configurarIconoEntrevistado(entrevistado, annos, iv_persona, getApplicationContext());
-            tv_nombreCompleto.setText(String.format("%s %s", nombre_entrevistado, apellido_entrevistado));
         }
     }
 
@@ -126,16 +123,26 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
         tv_entrevistas_vacias = findViewById(R.id.tv_entrevistas_vacios);
         tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
 
-        iv_persona = findViewById(R.id.cv_iv_persona);
-        tv_nombreCompleto = findViewById(R.id.tv_entrevistado_nombre);
+        ImageView iv_persona = findViewById(R.id.cv_iv_persona);
+        cv_entrevistas = findViewById(R.id.card_view_lista_entrevistas);
+        cv_entrevistas.setVisibility(View.INVISIBLE);
+        cv_info = findViewById(R.id.card_view_info_entrevistado);
+        cv_info.setVisibility(View.INVISIBLE);
+
+        TextView tv_nombreCompleto = findViewById(R.id.tv_entrevistado_nombre);
+        tv_nombreCompleto.setText(String.format("%s %s", entrevistado.getNombre(), entrevistado.getApellido()));
+
         tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
+
         tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
         tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
 
-        cv_lista_entrevistas = findViewById(R.id.card_view_lista_entrevistas);
-        cv_lista_entrevistas.setVisibility(View.INVISIBLE);
-
         entrevistasListaViewModel = ViewModelProviders.of(this).get(EntrevistasListaViewModel.class);
+
+        Utils.configurarIconoEntrevistado(entrevistado, annos, iv_persona, getApplicationContext());
+
+        entrevistaAdapter = new EntrevistaAdapter(entrevistasList, EntrevistasListaActivity.this, getSupportFragmentManager(), entrevistado, params, REQUEST_CODE_EDITAR_ENTREVISTA);
+        rv.setAdapter(entrevistaAdapter);
     }
 
     /**
@@ -148,11 +155,12 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
-                    cv_lista_entrevistas.setVisibility(View.INVISIBLE);
                     tv_entrevistas_vacias.setVisibility(View.INVISIBLE);
+                    cv_entrevistas.setVisibility(View.INVISIBLE);
+                    cv_info.setVisibility(View.INVISIBLE);
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
-                    cv_lista_entrevistas.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -164,6 +172,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 if (entrevistas != null) {
 
                     entrevistasList = entrevistas;
+
                     //Contar cantidad de entrevistas
                     if (entrevistas.size() == 1) {
                         tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), entrevistas.size()));
@@ -171,6 +180,9 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                         tv_n_entrevistas.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), entrevistas.size()));
                     }
 
+                    progressBar.setVisibility(View.INVISIBLE);
+                    cv_entrevistas.setVisibility(View.VISIBLE);
+                    cv_info.setVisibility(View.VISIBLE);
                     if (entrevistasList.size() == 0) {
                         tv_entrevistas_vacias.setVisibility(View.VISIBLE);
                     } else {
@@ -187,8 +199,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                     params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), tipos.get(getString(R.string.INTENT_KEY_NORMALES)));
                     params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), tipos.get(getString(R.string.INTENT_KEY_EXTRAORDINARIAS)));
 
-                    entrevistaAdapter = new EntrevistaAdapter(entrevistas, EntrevistasListaActivity.this, getSupportFragmentManager(), entrevistado, params, REQUEST_CODE_EDITAR_ENTREVISTA);
-                    entrevistaAdapter.notifyDataSetChanged();
+                    entrevistaAdapter.actualizarLista(entrevistasList);
                     rv.setAdapter(entrevistaAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), entrevistas.toString()));
@@ -206,6 +217,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    entrevistaAdapter.notifyDataSetChanged();
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -232,8 +244,10 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
+                    rv.setVisibility(View.INVISIBLE);
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                    entrevistaAdapter.notifyDataSetChanged();
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -291,8 +305,6 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                     //Refresh listado de usuarios
                     entrevistasListaViewModel.refreshEntrevistas(entrevistado);
 
-                    cv_lista_entrevistas.setVisibility(View.INVISIBLE);
-
                     progressBar.setVisibility(View.VISIBLE);
 
                     isSnackBarShow = false;
@@ -319,8 +331,6 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             finish();
             return true;
         } else if (item.getItemId() == R.id.menu_actualizar) {
-
-            cv_lista_entrevistas.setVisibility(View.INVISIBLE);
 
             progressBar.setVisibility(View.VISIBLE);
 

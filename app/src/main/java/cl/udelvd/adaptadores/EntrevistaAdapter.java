@@ -31,7 +31,7 @@ import cl.udelvd.vistas.fragments.DeleteEntrevistaDialogFragment;
 public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.EntrevistaViewHolder> {
 
     private static final String TAG_DELETE_DIALOG_NAME = "DeleteEntrevistaDialogFragment";
-    private final List<Entrevista> entrevistaList;
+    private List<Entrevista> entrevistaList;
     private final FragmentManager fragmentManager;
     private final Entrevistado entrevistado;
     private final Map<String, Integer> params;
@@ -166,6 +166,11 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
     @Override
     public int getItemCount() {
         return entrevistaList.size();
+    }
+
+    public void actualizarLista(List<Entrevista> entrevistasList) {
+        this.entrevistaList = entrevistasList;
+        notifyDataSetChanged();
     }
 
     static class EntrevistaViewHolder extends RecyclerView.ViewHolder {

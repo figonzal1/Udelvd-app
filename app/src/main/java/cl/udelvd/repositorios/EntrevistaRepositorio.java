@@ -173,7 +173,6 @@ public class EntrevistaRepositorio {
                 else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
-                    Log.d("JSON", json);
                     JSONObject errorObject = null;
 
                     //Obtener json error

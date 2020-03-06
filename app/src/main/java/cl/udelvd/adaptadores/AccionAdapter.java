@@ -19,7 +19,7 @@ import cl.udelvd.modelo.Accion;
 /**
  * Adaptador para listado de acciones para ADMIN
  */
-public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.EntrevistaViewHolder> {
+public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.AccionViewHolder> {
 
     private List<Accion> accionList;
     private Context context;
@@ -27,17 +27,18 @@ public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.Entrevista
     public AccionAdapter(List<Accion> accionList, Context context) {
         this.accionList = accionList;
         this.context = context;
+        setHasStableIds(true);
     }
 
     @NonNull
     @Override
-    public EntrevistaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AccionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_accion, parent, false);
-        return new EntrevistaViewHolder(v);
+        return new AccionViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EntrevistaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AccionViewHolder holder, int position) {
         Accion accion = accionList.get(position);
 
         holder.tv_accion.setText(String.format(Locale.getDefault(), context.getString(R.string.FORMATO_ACCION), (position + 1)));
@@ -55,6 +56,11 @@ public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.Entrevista
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
     public int getItemCount() {
         return accionList.size();
     }
@@ -64,13 +70,13 @@ public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.Entrevista
         notifyDataSetChanged();
     }
 
-    static class EntrevistaViewHolder extends RecyclerView.ViewHolder {
+    static class AccionViewHolder extends RecyclerView.ViewHolder {
         private final ImageView iv_menu_accion;
         private TextView tv_accion;
         private TextView tv_ingles;
         private TextView tv_espanol;
 
-        EntrevistaViewHolder(@NonNull View itemView) {
+        AccionViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_accion = itemView.findViewById(R.id.cv_tv_accion);

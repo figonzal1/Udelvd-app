@@ -45,6 +45,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
         this.params = params;
         this.activity = activity;
         this.REQUEST_CODE_EDITAR_ENTREVISTA = requestCodeEditarEntrevista;
+        setHasStableIds(true);
     }
 
     @NonNull

@@ -73,12 +73,6 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
-
-                    if (investigadorList.size() == 0) {
-                        tv_investigadores_vacios.setVisibility(View.VISIBLE);
-                    } else {
-                        tv_investigadores_vacios.setVisibility(View.INVISIBLE);
-                    }
                 }
             }
         });

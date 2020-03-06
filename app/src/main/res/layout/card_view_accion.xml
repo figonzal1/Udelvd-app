@@ -50,6 +50,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/ICONO_FECHA_NAC_ENTREVISTADO"
+        android:tint="@color/colorSecondaryVariant"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/cv_tv_accion"
         card_view:srcCompat="@drawable/ic_language_black_alpha_24dp" />
@@ -62,6 +63,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/ICONO_N_ENTREVISTAS"
+        android:tint="@color/colorSecondaryVariant"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/cv_iv_espanol"

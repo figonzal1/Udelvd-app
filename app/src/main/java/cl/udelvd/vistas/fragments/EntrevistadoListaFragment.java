@@ -80,10 +80,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         v = inflater.inflate(R.layout.fragment_lista_entrevistados, container, false);
 
         //Obtener id investigador logeado
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
-        int id_investigador = sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0);
-        investigador = new Investigador();
-        investigador.setId(id_investigador);
+        obtenerDatosInvestigadorLogeado();
 
         instanciarRecursosInterfaz(v);
 
@@ -94,6 +91,13 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         floatingButtonCrearEntrevistado(v);
 
         return v;
+    }
+
+    private void obtenerDatosInvestigadorLogeado() {
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+        int id_investigador = sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0);
+        investigador = new Investigador();
+        investigador.setId(id_investigador);
     }
 
     private void obtenerDatosBundle(View v) {
@@ -118,7 +122,6 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         progressBar.setVisibility(View.VISIBLE);
 
         rv = v.findViewById(R.id.rv_lista_usuarios);
-        rv.setVisibility(View.VISIBLE);
 
         LinearLayoutManager ly = new LinearLayoutManager(getContext());
         rv.setLayoutManager(ly);
@@ -130,7 +133,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         tv_n_entrevistados.setVisibility(View.INVISIBLE);
 
         entrevistadoAdapter = new EntrevistadoAdapter(
-                new ArrayList<Entrevistado>(),
+                entrevistadoList,
                 getContext(),
                 EntrevistadoListaFragment.this,
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
@@ -170,8 +173,8 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
                     tv_entrevistados_vacios.setVisibility(View.INVISIBLE);
+                    tv_n_entrevistados.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.INVISIBLE);
-
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
@@ -243,12 +246,13 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                     entrevistadoAdapter.resetPages();
                 }
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
                 if (!isSnackBarShow) {
+                    rv.setVisibility(View.INVISIBLE);
                     isSnackBarShow = true;
                     showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    entrevistadoAdapter.notifyDataSetChanged();
                 }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -351,6 +355,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                 public void onClick(View v) {
 
                     //Refresh listado de usuarios
+                    entrevistadoAdapter.resetPages();
                     entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
 
                     progressBar.setVisibility(View.VISIBLE);
@@ -361,12 +366,5 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         }
         snackbar.show();
         isSnackBarShow = false;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        entrevistadoAdapter.resetPages();
-        entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
     }
 }

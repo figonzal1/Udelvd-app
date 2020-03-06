@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -49,12 +50,8 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
     private String fecha_entrevista;
     private int annos;
 
-    private TextView tv_normales;
-    private TextView tv_extraodrinarias;
-    private TextView tv_nombreApellido;
-    private TextView tv_n_entrevistas;
     private TextView tv_eventos_vacios;
-    private ImageView iv_persona;
+    private CardView cv_info;
 
     private Entrevista entrevista;
     private Entrevistado entrevistado;
@@ -119,6 +116,11 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
         eventoList = new ArrayList<>();
 
+        eventosListaViewModel = ViewModelProviders.of(this).get(EventosListaViewModel.class);
+
+        cv_info = findViewById(R.id.card_view_info_entrevistado);
+        cv_info.setVisibility(View.INVISIBLE);
+
         progressBar = findViewById(R.id.progress_bar_eventos);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -131,13 +133,11 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
         TabLayout tabLayout = findViewById(R.id.tab_dots);
         tabLayout.setupWithViewPager(viewPager, true);
 
-        iv_persona = findViewById(R.id.cv_iv_persona);
-        tv_nombreApellido = findViewById(R.id.tv_entrevistado_nombre);
-        tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
-        tv_normales = findViewById(R.id.tv_normales_value);
-        tv_extraodrinarias = findViewById(R.id.tv_extraordinarias_value);
-
-        eventosListaViewModel = ViewModelProviders.of(this).get(EventosListaViewModel.class);
+        ImageView iv_persona = findViewById(R.id.cv_iv_persona);
+        TextView tv_nombreApellido = findViewById(R.id.tv_entrevistado_nombre);
+        TextView tv_n_entrevistas = findViewById(R.id.tv_n_entrevistas);
+        TextView tv_normales = findViewById(R.id.tv_normales_value);
+        TextView tv_extraodrinarias = findViewById(R.id.tv_extraordinarias_value);
 
         fragmentStatePageAdapter = new FragmentStatePageAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, eventoList, fecha_entrevista, EventosActivity.this, EventosActivity.this);
         viewPager.setAdapter(fragmentStatePageAdapter);
@@ -169,6 +169,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
                     viewPager.setVisibility(View.INVISIBLE);
+                    cv_info.setVisibility(View.INVISIBLE);
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     viewPager.setVisibility(View.VISIBLE);
@@ -184,12 +185,15 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 if (eventos != null) {
                     eventoList = eventos;
                     progressBar.setVisibility(View.INVISIBLE);
+                    viewPager.setVisibility(View.VISIBLE);
+                    cv_info.setVisibility(View.VISIBLE);
 
                     if (eventoList.size() == 0) {
                         tv_eventos_vacios.setVisibility(View.VISIBLE);
                     } else {
                         tv_eventos_vacios.setVisibility(View.INVISIBLE);
                         fragmentStatePageAdapter.actualizarLista(eventoList);
+                        viewPager.setAdapter(fragmentStatePageAdapter);
 
                         Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventoList.toString()));
                     }
@@ -205,11 +209,16 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
+                    viewPager.setVisibility(View.INVISIBLE);
+                    cv_info.setVisibility(View.INVISIBLE);
+
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    fragmentStatePageAdapter.notifyDataSetChanged();
+
                 }
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -238,6 +247,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
+                    fragmentStatePageAdapter.notifyDataSetChanged();
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));

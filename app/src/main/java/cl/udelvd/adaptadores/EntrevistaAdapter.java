@@ -34,7 +34,7 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
     private List<Entrevista> entrevistaList;
     private final FragmentManager fragmentManager;
     private final Entrevistado entrevistado;
-    private final Map<String, Integer> params;
+    private Map<String, Integer> params;
     private final int REQUEST_CODE_EDITAR_ENTREVISTA;
     private final Activity activity;
 
@@ -170,6 +170,11 @@ public class EntrevistaAdapter extends RecyclerView.Adapter<EntrevistaAdapter.En
 
     public void actualizarLista(List<Entrevista> entrevistasList) {
         this.entrevistaList = entrevistasList;
+        notifyDataSetChanged();
+    }
+
+    public void setParams(Map<String, Integer> params) {
+        this.params = params;
         notifyDataSetChanged();
     }
 

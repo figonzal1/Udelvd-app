@@ -199,6 +199,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                     params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), tipos.get(getString(R.string.INTENT_KEY_NORMALES)));
                     params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), tipos.get(getString(R.string.INTENT_KEY_EXTRAORDINARIAS)));
 
+                    entrevistaAdapter.setParams(params);
                     entrevistaAdapter.actualizarLista(entrevistasList);
                     rv.setAdapter(entrevistaAdapter);
 

@@ -36,6 +36,7 @@ public class NivelEducacionalRepositorio {
     private static NivelEducacionalRepositorio instancia;
     private final Application application;
 
+    //LISTADO
     private final List<NivelEducacional> nivelEducacionalList = new ArrayList<>();
     private final MutableLiveData<List<NivelEducacional>> nivelEducMutableLiveData = new MutableLiveData<>();
     private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
@@ -56,27 +57,14 @@ public class NivelEducacionalRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgErrorListado() {
-        return responseMsgErrorListado;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
-    /**
-     * Funcion encargada de consultar la lista de niveles educacionales
-     *
-     * @return MutableLivedata usado en viewModel
+    /*
+    LISTADO
      */
     public MutableLiveData<List<NivelEducacional>> obtenerNivelesEducacionales() {
         enviarGetNivelesEduc();
         return nivelEducMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de niveles educacionales
-     */
     private void enviarGetNivelesEduc() {
 
         nivelEducacionalList.clear();
@@ -179,8 +167,18 @@ public class NivelEducacionalRepositorio {
                 return params;
             }
         };
-
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_NIVEL_EDUCACIONAL);
+    }
+
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

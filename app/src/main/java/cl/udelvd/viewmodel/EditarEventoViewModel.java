@@ -93,7 +93,7 @@ public class EditarEventoViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> mostrarMsgErrorEmoticones() {
         emoticonRepositorio = EmoticonRepositorio.getInstancia(getApplication());
-        return emoticonRepositorio.getResponseMsgError();
+        return emoticonRepositorio.getResponseMsgErrorListado();
     }
 
     public void refreshEmoticones() {

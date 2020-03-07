@@ -49,9 +49,8 @@ public class EventoRepositorio {
     private static EventoRepositorio instancia;
     private final Application application;
 
-    private final List<Evento> eventosList = new ArrayList<>();
-
     //LISTADO
+    private final List<Evento> eventosList = new ArrayList<>();
     private final SingleLiveEvent<List<Evento>> eventosMutableLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseErrorMsgListado = new SingleLiveEvent<>();
 
@@ -83,62 +82,14 @@ public class EventoRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgRegistro() {
-        return responseMsgRegistro;
-    }
-
-    public SingleLiveEvent<String> getResponseErrorMsgRegistro() {
-        return responseErrorMsgRegistro;
-    }
-
-    public SingleLiveEvent<String> getResponseErrorMsgListado() {
-        return responseErrorMsgListado;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgActualizacion() {
-        return responseMsgActualizacion;
-    }
-
-    public SingleLiveEvent<String> getResponseErrorMsgActualizacion() {
-        return responseErrorMsgActualizacion;
-    }
-
-    public SingleLiveEvent<String> getResponseErrorMsgEvento() {
-        return responseErrorMsgEvento;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgEliminar() {
-        return responseMsgEliminar;
-    }
-
-    public SingleLiveEvent<String> getResponseErrorMsgEliminar() {
-        return responseErrorMsgEliminar;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
     /*
     LISTADO DE EVENTOS
-     */
-
-    /**
-     * Funcion encargada de obtener los eventos de una entrevista dada
-     *
-     * @param entrevista Datos de entrevista para realizar la busqueda
-     * @return mutableLiveData Mutable live data con los datos de la entrevista
      */
     public SingleLiveEvent<List<Evento>> obtenerEventosEntrevista(Entrevista entrevista) {
         enviarGetEventosEntrevista(entrevista);
         return eventosMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar la peticion GET hacia el servidor
-     *
-     * @param entrevista Datos de entrevista para realizar la busqueda
-     */
     private void enviarGetEventosEntrevista(Entrevista entrevista) {
         eventosList.clear();
 
@@ -267,21 +218,10 @@ public class EventoRepositorio {
     /*
     REGISTRO DE EVENTO
      */
-
-    /**
-     * Funcion encargada de registrar evento en el sistema
-     *
-     * @param evento Objeto evento con la informacion
-     */
     public void registrarEvento(Evento evento) {
         sendPostEvento(evento);
     }
 
-    /**
-     * Funcion encargada de enviar mediante POST un evento
-     *
-     * @param evento Objeto evento con la informacion asociada
-     */
     private void sendPostEvento(final Evento evento) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -308,11 +248,9 @@ public class EventoRepositorio {
                     String create_time = jsonAttribute.getString(application.getString(R.string.KEY_CREATE_TIME));
 
                     if (evento.equals(eventoInternet) && !create_time.isEmpty()) {
-
-                        isLoading.postValue(false);
-
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_EVENTO));
                     }
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -403,23 +341,11 @@ public class EventoRepositorio {
     /*
     OBTENER EVENTO ESPECIFICO
      */
-
-    /**
-     * Funcion encargada de obtener un evento específico
-     *
-     * @param eventoIntent Información del evento
-     * @return SingleLiveEvent con la informacion
-     */
     public SingleLiveEvent<Evento> obtenerEvento(Evento eventoIntent) {
         sendGetEvento(eventoIntent);
         return eventoMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar peticion GET para obtener información de un evento especifico
-     *
-     * @param eventoIntent Evento con la informacion asociada
-     */
     private void sendGetEvento(Evento eventoIntent) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -534,7 +460,7 @@ public class EventoRepositorio {
     }
 
     /*
-    ACTUALIZar EVENTO
+    ACTUALIZAR EVENTO
      */
     public void actualizarEvento(Evento evento) {
         sendPutEvento(evento);
@@ -561,9 +487,8 @@ public class EventoRepositorio {
 
                     if (evento.equals(eventoInternet) && !update_time.isEmpty()) {
                         responseMsgActualizacion.postValue(application.getString(R.string.MSG_UPDATE_EVENTO));
-
-                        isLoading.postValue(false);
                     }
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -673,8 +598,8 @@ public class EventoRepositorio {
 
                     if (jsonData.length() == 0) {
                         responseMsgEliminar.postValue(application.getString(R.string.MSG_DELETE_EVENTO));
-                        isLoading.postValue(false);
                     }
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -688,13 +613,13 @@ public class EventoRepositorio {
                 isLoading.postValue(false);
 
                 if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
                     responseErrorMsgEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
                     responseErrorMsgEliminar.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
@@ -715,12 +640,12 @@ public class EventoRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
                         responseErrorMsgEliminar.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
@@ -743,8 +668,46 @@ public class EventoRepositorio {
                 return params;
             }
         };
-
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ELIMINAR_EVENTO);
+    }
+
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<String> getResponseMsgRegistro() {
+        return responseMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgRegistro() {
+        return responseErrorMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgListado() {
+        return responseErrorMsgListado;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgActualizacion() {
+        return responseMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgActualizacion() {
+        return responseErrorMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgEvento() {
+        return responseErrorMsgEvento;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgEliminar() {
+        return responseMsgEliminar;
+    }
+
+    public SingleLiveEvent<String> getResponseErrorMsgEliminar() {
+        return responseErrorMsgEliminar;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

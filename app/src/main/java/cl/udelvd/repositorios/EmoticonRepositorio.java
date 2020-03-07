@@ -34,13 +34,14 @@ import cl.udelvd.utilidades.Utils;
 public class EmoticonRepositorio {
 
     private static final String TAG_GET_EMOTICONES = "ListaEmoticones";
+
     private static EmoticonRepositorio instancia;
     private final Application application;
 
+    //LISTADO
     private final List<Emoticon> emoticonList = new ArrayList<>();
     private final MutableLiveData<List<Emoticon>> emoticonMutableLiveData = new MutableLiveData<>();
-
-    private final SingleLiveEvent<String> responseMsgError = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
@@ -55,27 +56,14 @@ public class EmoticonRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgError() {
-        return responseMsgError;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
-    /**
-     * Funcion encargada de obtener el listado de emoticones del sistema
-     *
-     * @return listaMutable con listado de emoticones
+    /*
+    LISTADO DE EMOTICONES
      */
     public MutableLiveData<List<Emoticon>> obtenerEmoticones() {
         sendGetEmoticones();
         return emoticonMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar peticion GET para obtener emoticones del sistema
-     */
     private void sendGetEmoticones() {
 
         emoticonList.clear();
@@ -120,13 +108,13 @@ public class EmoticonRepositorio {
 
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgError.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                    responseMsgErrorListado.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
                 //Errores cuando el servidor si responde
@@ -152,7 +140,7 @@ public class EmoticonRepositorio {
                     //Error de servidor
                     else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgError.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                        responseMsgErrorListado.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
             }
@@ -181,6 +169,16 @@ public class EmoticonRepositorio {
 
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EMOTICONES);
+    }
 
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

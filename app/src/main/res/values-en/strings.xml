@@ -185,4 +185,6 @@
     <string name="DIALOG_MESSAGE_ACCION">Are you sure you want to delete this action? The events associated with this action could be lost</string>
     <string name="MENU_ACCION_EDITAR">Edit action</string>
     <string name="MENU_ACCION_ELIMINAR">Delete action</string>
+    <string name="MSG_UPDATE_ACCION">Updated action!</string>
+    <string name="TITULO_TOOLBAR_NUEVA_ACCION">New Action</string>
 </resources>

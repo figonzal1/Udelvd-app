@@ -42,7 +42,7 @@ public class NuevaAccionActivity extends AppCompatActivity implements SnackbarIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_accion);
 
-        Utils.configurarToolbar(this, getApplicationContext(), 0, "Nueva acción");
+        Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_NUEVA_ACCION));
 
         instanciarRecursosInterfaz();
 

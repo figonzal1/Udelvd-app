@@ -35,6 +35,7 @@ public class ProfesionRepositorio {
     private static ProfesionRepositorio instancia;
     private final Application application;
 
+    //LISTADO
     private final List<Profesion> profesionsList = new ArrayList<>();
     private final MutableLiveData<List<Profesion>> profesionMutableLiveData = new MutableLiveData<>();    //Instanciar aqui permite refresh
     private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
@@ -42,7 +43,6 @@ public class ProfesionRepositorio {
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_PROFESION = "ListadoProfesion";
-
 
     private ProfesionRepositorio(Application application) {
         this.application = application;
@@ -55,27 +55,14 @@ public class ProfesionRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgErrorListado() {
-        return responseMsgErrorListado;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
-    /**
-     * Funcion encargada de consultar la lista de niveles educacionales
-     *
-     * @return MutableLivedata usado en viewModel
+    /*
+    LISTADO DE PROFESIONES
      */
     public MutableLiveData<List<Profesion>> obtenerNivelesEducacionales() {
         enviarGetProfesion();
         return profesionMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de niveles educacionales
-     */
     private void enviarGetProfesion() {
 
         profesionsList.clear();
@@ -179,8 +166,18 @@ public class ProfesionRepositorio {
                 return params;
             }
         };
-
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_PROFESION);
+    }
+
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

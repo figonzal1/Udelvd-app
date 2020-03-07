@@ -36,6 +36,7 @@ import cl.udelvd.vistas.fragments.DeleteDialogListener;
 public class AccionesListActivity extends AppCompatActivity implements SnackbarInterface, DeleteDialogListener {
 
     private static final int REQUEST_CODE_CREAR_ACCION = 200;
+    private static final int ACCIONES_ACTIVITY_CODE = 200;
     private List<Accion> accionesList;
     private ProgressBar progressBar;
     private TextView tv_acciones_vacios;
@@ -229,6 +230,8 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            Intent intent = getIntent();
+            setResult(ACCIONES_ACTIVITY_CODE, intent);
             finish();
             return true;
         } else if (item.getItemId() == R.id.menu_actualizar) {

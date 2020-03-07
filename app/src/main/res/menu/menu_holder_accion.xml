@@ -9,6 +9,8 @@
 
     <item
         android:id="@+id/menu_eliminar_accion"
+        android:enabled="false"
         android:orderInCategory="2"
-        android:title="@string/MENU_ACCION_ELIMINAR" />
+        android:title="@string/MENU_ACCION_ELIMINAR"
+        android:visible="false" />
 </menu>

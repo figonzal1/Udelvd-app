@@ -180,4 +180,9 @@
     <string name="FORMATO_ACCION">Acción %d</string>
     <string name="MSG_LISTADO_ACCIONES_VACIO">No hay acciones registradas</string>
     <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Listado Acciones</string>
+    <string name="MSG_REGISTRO_ACCION">¡Acción registrada!</string>
+    <string name="MSG_DELETE_ACCION">¡Acción eliminada!</string>
+    <string name="DIALOG_MESSAGE_ACCION">¿Está seguro que quiere eliminar esta acción? Los eventos asociados a esta acción podrían perderse</string>
+    <string name="MENU_ACCION_EDITAR">Editar acción</string>
+    <string name="MENU_ACCION_ELIMINAR">Eliminar acción</string>
 </resources>

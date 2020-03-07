@@ -1,6 +1,7 @@
 package cl.udelvd.vistas.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ import cl.udelvd.vistas.fragments.DeleteDialogListener;
 
 public class InvestigadorListActivity extends AppCompatActivity implements SnackbarInterface, DeleteDialogListener {
 
+    private static final int INVESTIGADORES_ACTIVITY_CODE = 200;
     private RecyclerView rv;
     private List<Investigador> investigadorList;
     private InvestigadorListaViewModel investigadorListaViewModel;
@@ -268,6 +270,8 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            Intent intent = getIntent();
+            setResult(INVESTIGADORES_ACTIVITY_CODE, intent);
             finish();
             return true;
         } else if (item.getItemId() == R.id.menu_actualizar) {

@@ -65,6 +65,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
     private static final int REQUEST_CODE_NUEVO_EVENTO = 200;
     private static final int REQUEST_CODE_EDITAR_EVENTO = 300;
     private boolean isSnackBarShow = false;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,7 +247,12 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
+
+                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+                        showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, null);
+                    } else {
+                        showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, s, null);
+                    }
                     fragmentStatePageAdapter.notifyDataSetChanged();
                 }
 
@@ -292,6 +298,11 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             progressBar.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.INVISIBLE);
 
+            isSnackBarShow = false;
+            if (snackbar != null) {
+                snackbar.dismiss();
+            }
+
             eventosListaViewModel.refreshEventos(entrevista);
 
             Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
@@ -305,20 +316,23 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
     @Override
     public void showSnackbar(View v, int snack_length, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, snack_length);
+        snackbar = Snackbar.make(v, titulo, snack_length);
 
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    progressBar.setVisibility(View.VISIBLE);
+                    viewPager.setVisibility(View.INVISIBLE);
+
                     isSnackBarShow = false;
+                    if (snackbar != null) {
+                        snackbar.dismiss();
+                    }
 
                     //Refresh listado de usuarios
                     eventosListaViewModel.refreshEventos(entrevista);
-
-                    progressBar.setVisibility(View.VISIBLE);
-                    viewPager.setVisibility(View.INVISIBLE);
                 }
             });
         }

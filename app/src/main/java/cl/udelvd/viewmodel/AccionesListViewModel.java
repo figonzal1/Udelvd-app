@@ -44,4 +44,17 @@ public class AccionesListViewModel extends AndroidViewModel {
         repositorio = AccionRepositorio.getInstancia(getApplication());
         repositorio.obtenerAcciones();
     }
+
+    /*
+    ELIMINAR
+     */
+    public SingleLiveEvent<String> mostrarMsgErrorEliminar() {
+        repositorio = AccionRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgErrorEliminar();
+    }
+
+    public SingleLiveEvent<String> mostrarMsgEliminar() {
+        repositorio = AccionRepositorio.getInstancia(getApplication());
+        return repositorio.getResponseMsgEliminar();
+    }
 }

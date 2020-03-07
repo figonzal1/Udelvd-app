@@ -27,11 +27,13 @@ import java.util.List;
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.AccionAdapter;
 import cl.udelvd.modelo.Accion;
+import cl.udelvd.repositorios.AccionRepositorio;
 import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.AccionesListViewModel;
+import cl.udelvd.vistas.fragments.DeleteDialogListener;
 
-public class AccionesListActivity extends AppCompatActivity implements SnackbarInterface {
+public class AccionesListActivity extends AppCompatActivity implements SnackbarInterface, DeleteDialogListener {
 
     private static final int REQUEST_CODE_CREAR_ACCION = 200;
     private List<Accion> accionesList;
@@ -41,6 +43,7 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
     private AccionesListViewModel accionesListaViewModel;
     private AccionAdapter accionAdapter;
     private boolean isSnackBarShow = false;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,8 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
 
         accionAdapter = new AccionAdapter(
                 accionesList,
-                getApplicationContext()
+                getApplicationContext(),
+                getSupportFragmentManager()
         );
 
         rv.setAdapter(accionAdapter);
@@ -132,6 +136,46 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
                 }
             }
         });
+
+        /*
+        ELIMINACION
+         */
+        accionesListaViewModel.mostrarMsgEliminar().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (s.equals(getString(R.string.MSG_DELETE_ACCION))) {
+                    isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.acciones_lista), Snackbar.LENGTH_LONG, s, null);
+                    AccionRepositorio.getInstancia(getApplication()).obtenerAcciones();
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+            }
+        });
+
+        accionesListaViewModel.mostrarMsgErrorEliminar().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (!isSnackBarShow) {
+                    isSnackBarShow = true;
+
+                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+                        rv.setVisibility(View.INVISIBLE);
+                        showSnackbar(findViewById(R.id.acciones_lista), Snackbar.LENGTH_INDEFINITE, s, null);
+                    } else {
+                        showSnackbar(findViewById(R.id.acciones_lista), Snackbar.LENGTH_LONG, s, null);
+                    }
+                    accionAdapter.notifyDataSetChanged();
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            }
+        });
     }
 
     /**
@@ -151,17 +195,20 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
     @Override
     public void showSnackbar(View v, int duration, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, duration);
+        snackbar = Snackbar.make(v, titulo, duration);
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    accionesListaViewModel.refreshAcciones();
-
                     progressBar.setVisibility(View.VISIBLE);
 
                     isSnackBarShow = false;
+                    if (snackbar != null) {
+                        snackbar.dismiss();
+                    }
+
+                    accionesListaViewModel.refreshAcciones();
 
 
                 }
@@ -187,9 +234,12 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
         } else if (item.getItemId() == R.id.menu_actualizar) {
 
             progressBar.setVisibility(View.VISIBLE);
-            isSnackBarShow = false;
-            accionesListaViewModel.refreshAcciones();
 
+            isSnackBarShow = false;
+            if (snackbar != null) {
+                snackbar.dismiss();
+            }
+            accionesListaViewModel.refreshAcciones();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -233,5 +283,10 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
         }*/
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDialogPositiveClick(Object object) {
+        AccionRepositorio.getInstancia(getApplication()).eliminarAccion((Accion) object);
     }
 }

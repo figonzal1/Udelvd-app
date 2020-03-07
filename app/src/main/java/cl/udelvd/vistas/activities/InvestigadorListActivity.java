@@ -46,6 +46,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
     private Investigador investigador;
     private int investigadores_totales;
     private TextView tv_n_ivestigadores;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,57 +162,60 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             }
         });
 
-        investigadorListaViewModel.mostrarMsgErrorListado().
+        investigadorListaViewModel.mostrarMsgErrorListado().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.INVISIBLE);
 
-                observe(this, new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        progressBar.setVisibility(View.INVISIBLE);
+                if (!isSnackBarShow) {
+                    rv.setVisibility(View.INVISIBLE);
+                    isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    investigadorAdapter.notifyDataSetChanged();
+                }
 
-                        if (!isSnackBarShow) {
-                            rv.setVisibility(View.INVISIBLE);
-                            isSnackBarShow = true;
-                            showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                            investigadorAdapter.notifyDataSetChanged();
-                        }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
 
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+        /*
+        ACTIVACIONES
+         */
+        investigadorListaViewModel.mostrarMsgActivacion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (s.equals(getString(R.string.MSG_INVEST_CUENTA_ACTIVADA)) || s.equals(getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA))) {
+                    isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_LONG, s, null);
+                    InvestigadorRepositorio.getInstance(getApplication()).obtenerInvestigadores(1, investigador);
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            }
+        });
+
+        investigadorListaViewModel.mostrarMsgErrorActivacion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (!isSnackBarShow) {
+                    isSnackBarShow = true;
+
+                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+                        rv.setVisibility(View.INVISIBLE);
+                        showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_INDEFINITE, s, null);
+                    } else {
+                        showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_LONG, s, null);
                     }
-                });
 
-
-        investigadorListaViewModel.mostrarMsgActivacion().
-
-                observe(this, new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
-                        if (s.equals(getString(R.string.MSG_INVEST_CUENTA_ACTIVADA)) || s.equals(getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA))) {
-
-                            progressBar.setVisibility(View.INVISIBLE);
-                            showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_LONG, s, null);
-                        }
-
-                    }
-                });
-
-        investigadorListaViewModel.mostrarMsgErrorActivacion().
-
-                observe(this, new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        progressBar.setVisibility(View.INVISIBLE);
-
-                        if (!isSnackBarShow) {
-                            isSnackBarShow = true;
-                            showSnackbar(findViewById(R.id.investigadores_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                        }
-
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                    }
-                });
+                    investigadorAdapter.notifyDataSetChanged();
+                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
     }
 
     private void obtenerDatosAdmin() {
@@ -223,20 +227,22 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
     @Override
     public void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, tipo_snackbar);
+        snackbar = Snackbar.make(v, titulo, tipo_snackbar);
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    //Refresh listado de investigadores
-                    investigadorAdapter.resetPages();
-                    investigadorListaViewModel.refreshInvestigadores(investigador);
-
                     progressBar.setVisibility(View.VISIBLE);
 
                     isSnackBarShow = false;
+                    if (snackbar != null) {
+                        snackbar.dismiss();
+                    }
 
+                    //Refresh listado de investigadores
+                    investigadorAdapter.resetPages();
+                    investigadorListaViewModel.refreshInvestigadores(investigador);
 
                 }
             });
@@ -267,7 +273,12 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         } else if (item.getItemId() == R.id.menu_actualizar) {
 
             progressBar.setVisibility(View.VISIBLE);
+
             isSnackBarShow = false;
+            if (snackbar != null) {
+                snackbar.dismiss();
+            }
+
             investigadorAdapter.resetPages();
             investigadorListaViewModel.refreshInvestigadores(investigador);
 

@@ -35,7 +35,7 @@ import cl.udelvd.vistas.fragments.EntrevistadoListaFragment;
 
 public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG_DELETE_DIALOG_NAME = "EliminarEntrevistado";
+    private static final String TAG_DELETE_DIALOG_ENTREVISTADO = "EliminarEntrevistado";
     private static final int REQUEST_CODE_EDITAR_ENTREVISTADO = 300;
 
     private static final int ENTREVISTADO = 0;
@@ -155,13 +155,10 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 return true;
                             } else if (item.getItemId() == R.id.menu_eliminar_entrevistado) {
                                 DeleteEntrevistadoDialogFragment dialog = new DeleteEntrevistadoDialogFragment(entrevistado);
-                                dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
+                                dialog.show(fragmentManager, TAG_DELETE_DIALOG_ENTREVISTADO);
 
                                 return true;
                             }
-
-                            //TODO: Ver posibilidad de tener perfil de entrevistado
-
                             return false;
                         }
                     });

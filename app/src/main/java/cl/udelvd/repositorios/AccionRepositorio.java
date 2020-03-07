@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cl.udelvd.R;
@@ -33,7 +34,8 @@ import cl.udelvd.utilidades.SingleLiveEvent;
 public class AccionRepositorio {
 
     private static final String TAG_GET_ACCIONES = "ListaAcciones";
-    private static final String TAG_NEW_ACCION = "NuevaAccion";
+    private static final String TAG_NUEVA_ACCION = "NuevaAccion";
+    private static final Object TAG_ELIMINAR_ACCION = "EliminarAccion";
     private static AccionRepositorio instancia;
     private final Application application;
 
@@ -45,6 +47,10 @@ public class AccionRepositorio {
     //REGISTRO
     private SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
+
+    //ELIMINACION
+    private SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
 
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
@@ -420,6 +426,108 @@ public class AccionRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NEW_ACCION);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NUEVA_ACCION);
+    }
+
+
+    public void eliminarAccion(Accion object) {
+        sendDeleteAccion(object);
+    }
+
+    private void sendDeleteAccion(Accion accion) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("RESPONSE", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+
+                    if (jsonData.length() == 0) {
+                        responseMsgEliminar.postValue(application.getString(R.string.MSG_DELETE_ACCION));
+                        isLoading.postValue(false);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorEliminar.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorEliminar.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(Locale.US, application.getString(R.string.URL_DELETE_ACCIONES), application.getString(R.string.HEROKU_DOMAIN), accion.getId());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ELIMINAR_ACCION);
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorEliminar() {
+        return responseMsgErrorEliminar;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgEliminar() {
+        return responseMsgEliminar;
     }
 }

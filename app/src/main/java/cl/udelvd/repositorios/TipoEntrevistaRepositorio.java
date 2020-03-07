@@ -36,10 +36,9 @@ public class TipoEntrevistaRepositorio {
     private static TipoEntrevistaRepositorio instancia;
     private final Application application;
 
+    //LISTADO
     private final List<TipoEntrevista> tipoEntrevistaList = new ArrayList<>();
-
     private final MutableLiveData<List<TipoEntrevista>> tipoEntrevistaMutable = new MutableLiveData<>();
-
     private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
@@ -57,27 +56,14 @@ public class TipoEntrevistaRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgErrorListado() {
-        return responseMsgErrorListado;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
-    /**
-     * Funcion encargada de obtener el listado de tipos de entrevista
-     *
-     * @return MutableLiveData de tipos de entrevista
+    /*
+    LISTADO DE TIPO ENTREVISTA
      */
     public MutableLiveData<List<TipoEntrevista>> obtenerTiposEntrevista() {
         sendGetTiposEntrevista();
         return tipoEntrevistaMutable;
     }
 
-    /**
-     * Funcion encargada de enviar peticion GET al servidor
-     */
     private void sendGetTiposEntrevista() {
 
         tipoEntrevistaList.clear();
@@ -182,5 +168,15 @@ public class TipoEntrevistaRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_TIPO_ENTREVISTA);
     }
 
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
 
 }

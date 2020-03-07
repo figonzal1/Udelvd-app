@@ -36,15 +36,14 @@ public class TipoConvivenciaRepositorio {
     private static TipoConvivenciaRepositorio instancia;
     private final Application application;
 
+    //LISTADO
     private final List<TipoConvivencia> tipoConvivenciaList = new ArrayList<>();
     private final MutableLiveData<List<TipoConvivencia>> tipoConvivenciaMutableLiveData = new MutableLiveData<>();
-
     private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_TIPO_CONVIVENCIA = "ListadoTipoConvivencia";
-
 
     private TipoConvivenciaRepositorio(Application application) {
         this.application = application;
@@ -57,27 +56,14 @@ public class TipoConvivenciaRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgErrorListado() {
-        return responseMsgErrorListado;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
-    /**
-     * Funcion encargada de consultar la lista de tipos de convivencia
-     *
-     * @return MutableLivedata usado en viewModel
+    /*
+    LISTADO DE TIPO CONVIVENCIA
      */
     public MutableLiveData<List<TipoConvivencia>> obtenerTiposConvivencias() {
         enviarGetTipoConvivencia();
         return tipoConvivenciaMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar peticion GET al servidor para obtener listado de tipos de convivencia
-     */
     private void enviarGetTipoConvivencia() {
 
         tipoConvivenciaList.clear();
@@ -186,5 +172,16 @@ public class TipoConvivenciaRepositorio {
 
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_TIPO_CONVIVENCIA);
+    }
+
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

@@ -44,21 +44,10 @@ public class EstadoCivilRepositorio {
 
     private static final String TAG_GET_ESTADOS_CIVILES = "ListaEstadosCiviles";
 
-    /**
-     * Constructor de clase
-     *
-     * @param application , utilizado para instanciar recursos
-     */
     private EstadoCivilRepositorio(Application application) {
         this.application = application;
     }
 
-    /**
-     * Clase singleton para creacion de repositorio
-     *
-     * @param application Contexto de uso
-     * @return Instancia de clase
-     */
     public static EstadoCivilRepositorio getInstance(Application application) {
         if (instancia == null) {
             instancia = new EstadoCivilRepositorio(application);
@@ -66,27 +55,14 @@ public class EstadoCivilRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgErrorListado() {
-        return responseMsgErrorListado;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
-    /**
-     * Funcion encargada de consultar la lista de estados civiles
-     *
-     * @return MutableLivedata usado en viewModel
+    /*
+    LISTADO DE ESTADOS CIVILES
      */
     public MutableLiveData<List<EstadoCivil>> obtenerEstadosCiviles() {
         enviarGetEstadosCiviles();
         return estadosCivilesMutable;
     }
 
-    /**
-     * Funcion encargada de enviar la solicitud GET al servidor para obtener listado de estados civiles
-     */
     private void enviarGetEstadosCiviles() {
 
         estadoCivilList.clear();
@@ -195,5 +171,16 @@ public class EstadoCivilRepositorio {
 
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_GET_ESTADOS_CIVILES);
+    }
+
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

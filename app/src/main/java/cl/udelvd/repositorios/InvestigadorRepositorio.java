@@ -35,6 +35,14 @@ import cl.udelvd.utilidades.Utils;
 
 public class InvestigadorRepositorio {
 
+    private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
+    private static final String TAG_INVESTIGADOR_RESET = "ResetearPassword";
+    private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
+    private static final Object TAG_INVESTIGADOR_ACTIVACION = "ActivacionInvestigador";
+    private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
+    private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
+    private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
+
     private static InvestigadorRepositorio instancia;
     private final Application application;
 
@@ -44,9 +52,7 @@ public class InvestigadorRepositorio {
     private final SingleLiveEvent<List<Investigador>> investigadoresSgtPaginaLiveData = new SingleLiveEvent<>();
     private List<Investigador> investigadoresSgtPagina = new ArrayList<>();
     private MutableLiveData<Integer> mutableNInvestigadores = new MutableLiveData<>();
-
-    //TAGS
-    private static final String TAG_INVESTIGADOR_LISTADO = "InvestigadorListado";
+    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
 
     //LOGIN
     private final SingleLiveEvent<Map<String, Object>> responseMsgLogin = new SingleLiveEvent<>();
@@ -56,40 +62,29 @@ public class InvestigadorRepositorio {
     private final SingleLiveEvent<Map<String, String>> responseMsgRegistro = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
 
-    //Actualizacion
+    //ACTUALIZACION
     private final SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<Map<String, Object>> responseMsgActualizacion = new SingleLiveEvent<>();
 
-    //Recuperacion Cuenta
+    //RECUPERACION CUENTA
     private final SingleLiveEvent<String> responseMsgErrorRecuperacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<Map<String, String>> responseMsgRecuperacion = new SingleLiveEvent<>();
 
-    //PROGRESS DIALOG
-    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private static final String TAG_INVESTIGADOR_RESET = "ResetearPassword";
-
     //Resetear password
     private final SingleLiveEvent<String> responseMsgReset = new SingleLiveEvent<>();
-    private static final String TAG_INVESTIGADOR_RECUPERACION = "RecuperarInvestigador";
-    private static final Object TAG_INVESTIGADOR_ACTIVACION = "ActivacionInvestigador";
     private final SingleLiveEvent<String> responseMsgErrorReset = new SingleLiveEvent<>();
-    private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
-    private static final String TAG_INVESTIGADOR_REGISTRO = "RegistroInvestigador";
-    private static final String TAG_INVESTIGADOR_LOGIN = "LoginInvestigador";
-    private static final String TAG_INVESTIGADOR_ACTUALIZACION = "ActualizacionInvestigador";
+
     //ACTIVACION
     private final SingleLiveEvent<String> responseMsgErrorActivacion = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgActivacion = new SingleLiveEvent<>();
+
+    //PROGRESS DIALOG
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private InvestigadorRepositorio(Application application) {
         this.application = application;
     }
 
-    /**
-     * Funcion singleton que instancia el repositorio
-     *
-     * @return Instancia
-     */
     public static InvestigadorRepositorio getInstance(Application application) {
 
         if (instancia == null) {
@@ -98,6 +93,9 @@ public class InvestigadorRepositorio {
         return instancia;
     }
 
+    /*
+    LISTADO INVESTIGADORES
+     */
     public SingleLiveEvent<List<Investigador>> obtenerInvestigadores(int pagina, Investigador investigador) {
         sendGetListado(pagina, investigador);
         if (pagina == 1) {
@@ -168,15 +166,15 @@ public class InvestigadorRepositorio {
 
                     }
 
-
                     if (pagina == 1) {
                         //Log.d("CARGANDO_PAGINA", "1");
                         investigadoresPrimeraPaginaLiveData.postValue(investigadorList);
-                        isLoading.postValue(false);
                     } else {
                         //Log.d("CARGANDO_PAGINA", String.valueOf(page));
                         investigadoresSgtPaginaLiveData.postValue(investigadoresSgtPagina); //Enviar a ViewModel listado paginado
                     }
+                    isLoading.postValue(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -253,20 +251,13 @@ public class InvestigadorRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_LISTADO);
     }
 
-    /**
-     * Funcion encargada de insertar investigador en BD
-     *
-     * @param investigador Objecto investigador a registrar
+    /*
+    REGISTRO INVESTIGADOR
      */
     public void registrarInvestigador(Investigador investigador) {
         enviarPostRegistro(investigador);
     }
 
-    /**
-     * Funcion encargada de enviar peticion POST para registro investigador
-     *
-     * @param investigador Objeto investigador que hara registro en sistema
-     */
     private void enviarPostRegistro(final Investigador investigador) {
 
         //Definicion de listener de respuesta
@@ -312,9 +303,8 @@ public class InvestigadorRepositorio {
                         map.put(application.getString(R.string.INTENT_KEY_INVES_ACTIVADO), String.valueOf(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO))));
 
                         responseMsgRegistro.postValue(map);
-
-                        isLoading.postValue(false);
                     }
+                    isLoading.postValue(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -419,26 +409,19 @@ public class InvestigadorRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_REGISTRO);
     }
 
-    /**
-     * Funcion encargada de realizar el login del investigador
-     *
-     * @param investigador Objeto investigador que hará login en sistema
+    /*
+    LOGIN
      */
     public void loginInvestigador(Investigador investigador) {
         enviarPostLogin(investigador);
     }
 
-    /**
-     * Funcion encargada de enviar peticion POST para login
-     *
-     * @param investigadorForm Datos del investigador enviados via POST
-     */
     private void enviarPostLogin(final Investigador investigadorForm) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
 
                 try {
 
@@ -497,13 +480,10 @@ public class InvestigadorRepositorio {
                         result.put(application.getString(R.string.LOGIN_MSG_VM), application.getString(R.string.LOGIN_MSG_VM_WELCOME));
 
                         responseMsgLogin.postValue(result);
-
-                        isLoading.postValue(false);
                     } else {
                         responseMsgErrorLogin.postValue(application.getString(R.string.SNACKBAR_CUENTA_WAIT));
-
-                        isLoading.postValue(false);
                     }
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -601,25 +581,17 @@ public class InvestigadorRepositorio {
                 return params;
             }
         };
-
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_LOGIN);
     }
 
-    /**
-     * Funcion encargada de actualizar los datos del investigador
-     *
-     * @param investigador Objeto investigador
+    /*
+    ACTUALIZACION INVESTIGADOR
      */
     public void actualizarInvestigador(Investigador investigador) {
         enviarPutActualizacion(investigador);
     }
 
-    /**
-     * Funcion encargada de enviar actualización al servidor mediante metodo PUT
-     *
-     * @param investigadorForm Objeto investigador a ser enviado
-     */
     private void enviarPutActualizacion(final Investigador investigadorForm) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -669,11 +641,8 @@ public class InvestigadorRepositorio {
                         result.put(application.getString(R.string.UPDATE_MSG_VM), application.getString(R.string.UPDATE_MSG_VM_SAVE));
 
                         responseMsgActualizacion.postValue(result);
-
-                        isLoading.postValue(false);
                     }
-
-
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -765,20 +734,13 @@ public class InvestigadorRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_ACTUALIZACION);
     }
 
-    /**
-     * Funcion encargada de recuperar la cuenta de in investigadort
-     *
-     * @param investigador Objeto de investigador
+    /*
+    RECUPERAR CUENTA
      */
     public void recuperarCuenta(Investigador investigador) {
         sendPostRecuperar(investigador);
     }
 
-    /**
-     * Peticion POST para recuperacion de cuenta
-     *
-     * @param investigador Objeto investigador con datos necesarios
-     */
     private void sendPostRecuperar(Investigador investigador) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -801,8 +763,6 @@ public class InvestigadorRepositorio {
 
                     if (status.equals(application.getString(R.string.RECOVERY_MSG_VM))) {
 
-                        isLoading.postValue(false);
-
                         Map<String, String> map = new HashMap<>();
 
                         map.put(application.getString(R.string.KEY_INVES_EMAIL), email);
@@ -811,8 +771,7 @@ public class InvestigadorRepositorio {
 
                         Log.d(application.getString(R.string.TAG_DYNAMIC_LINK_JSON), dybamicLink);
                     }
-
-
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -898,22 +857,13 @@ public class InvestigadorRepositorio {
 
     }
 
-    /**
-     * Funcion encargada de resetear contraseña
-     *
-     * @param email    Email del solicitante
-     * @param password Nueva pass
+    /*
+    RESETEAR PASSWORD
      */
     public void resetearPassword(String email, String password) {
         sendPostResetPass(email, password);
     }
 
-    /**
-     * Peticion post para resetar la contraseña
-     *
-     * @param email    Email del solicitante
-     * @param password Nueva pass
-     */
     private void sendPostResetPass(final String email, final String password) {
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -928,11 +878,9 @@ public class InvestigadorRepositorio {
                     String status = jsonReset.getString(application.getString(R.string.JSON_RESET_STATUS));
 
                     if (status.equals(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM))) {
-
-                        isLoading.postValue(false);
-
                         responseMsgReset.postValue(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM_RESULT));
                     }
+                    isLoading.postValue(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1007,11 +955,13 @@ public class InvestigadorRepositorio {
                 return params;
             }
         };
-
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RESET);
     }
 
+    /*
+    ACTIVAR CUENTA
+     */
     public void activarCuenta(Investigador investigador) {
         sendPatchActivar(investigador);
     }
@@ -1134,7 +1084,6 @@ public class InvestigadorRepositorio {
 
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_ACTIVACION);
-
     }
 
     /*

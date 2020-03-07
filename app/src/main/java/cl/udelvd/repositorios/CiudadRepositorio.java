@@ -40,6 +40,7 @@ public class CiudadRepositorio {
 
     private final MutableLiveData<List<Ciudad>> ciudadesMutableLiveData = new MutableLiveData<>();
     private final SingleLiveEvent<String> responseMsgErrorListado = new SingleLiveEvent<>();
+
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private static final String TAG_GET_CIUDADES = "ListaCiudades";
@@ -55,27 +56,14 @@ public class CiudadRepositorio {
         return instancia;
     }
 
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgErrorListado() {
-        return responseMsgErrorListado;
-    }
-
-    /**
-     * Funcion encargada de consultar la lista de ciudades actuales
-     *
-     * @return MutableLiveData usado en viewModel
+    /*
+    LISTADO CIUDADES
      */
     public MutableLiveData<List<Ciudad>> obtenerCiudades() {
         enviarGetCiudades();
         return ciudadesMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar la solicitud GET al servidor, para obtener listado de ciudades disponibles.
-     */
     private void enviarGetCiudades() {
 
         ciudadList.clear();
@@ -183,5 +171,16 @@ public class CiudadRepositorio {
         isLoading.postValue(true);
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_GET_CIUDADES);
 
+    }
+
+    /*
+    GETTERS
+     */
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
     }
 }

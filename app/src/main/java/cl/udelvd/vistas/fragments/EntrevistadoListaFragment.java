@@ -56,6 +56,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
     private Investigador investigador;
     private static final int REQUEST_CODE_EDITAR_ENTREVISTADO = 300;
     private boolean isSnackBarShow = false;
+    private Snackbar snackbar;
 
     public EntrevistadoListaFragment() {
         // Required empty public constructor
@@ -261,12 +262,16 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
             @Override
             public void onChanged(String s) {
 
+                progressBar.setVisibility(View.INVISIBLE);
+
                 if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.entrevistados_lista), Snackbar.LENGTH_LONG, s, null);
                     entrevistadoAdapter.resetPages();
                     entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
                 }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
         });
 
@@ -275,12 +280,20 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
-                    showSnackbar(v, Snackbar.LENGTH_LONG, s, null);
+
+                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+                        rv.setVisibility(View.INVISIBLE);
+                        showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, null);
+                    } else {
+                        showSnackbar(v, Snackbar.LENGTH_LONG, s, null);
+                    }
+                    entrevistadoAdapter.notifyDataSetChanged();
                 }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
             }
         });
     }
@@ -295,8 +308,12 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.menu_actualizar) {
+
             progressBar.setVisibility(View.VISIBLE);
             isSnackBarShow = false;
+            if (snackbar != null) {
+                snackbar.dismiss();
+            }
             entrevistadoAdapter.resetPages();
             entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
 
@@ -347,20 +364,21 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
 
     @Override
     public void showSnackbar(View v, int duration, String titulo, String accion) {
-        Snackbar snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, duration);
+        snackbar = Snackbar.make(v.findViewById(R.id.entrevistados_lista), titulo, duration);
 
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    progressBar.setVisibility(View.VISIBLE);
+                    isSnackBarShow = false;
+                    if (snackbar != null) {
+                        snackbar.dismiss();
+                    }
                     //Refresh listado de usuarios
                     entrevistadoAdapter.resetPages();
                     entrevistadoListaViewModel.refreshListaEntrevistados(investigador);
-
-                    progressBar.setVisibility(View.VISIBLE);
-
-                    isSnackBarShow = false;
                 }
             });
         }

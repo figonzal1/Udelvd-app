@@ -65,6 +65,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
     private List<Entrevista> entrevistasList;
     private boolean isSnackBarShow = false;
     private int annos;
+    private Snackbar snackbar;
 
 
     @Override
@@ -141,7 +142,13 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
 
         Utils.configurarIconoEntrevistado(entrevistado, annos, iv_persona, getApplicationContext());
 
-        entrevistaAdapter = new EntrevistaAdapter(entrevistasList, EntrevistasListaActivity.this, getSupportFragmentManager(), entrevistado, params, REQUEST_CODE_EDITAR_ENTREVISTA);
+        entrevistaAdapter = new EntrevistaAdapter(
+                entrevistasList,
+                EntrevistasListaActivity.this,
+                getSupportFragmentManager(),
+                entrevistado,
+                params,
+                REQUEST_CODE_EDITAR_ENTREVISTA);
         rv.setAdapter(entrevistaAdapter);
     }
 
@@ -183,6 +190,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                     progressBar.setVisibility(View.INVISIBLE);
                     cv_entrevistas.setVisibility(View.VISIBLE);
                     cv_info.setVisibility(View.VISIBLE);
+
                     if (entrevistasList.size() == 0) {
                         tv_entrevistas_vacias.setVisibility(View.VISIBLE);
                     } else {
@@ -229,7 +237,10 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             @Override
             public void onChanged(String s) {
 
+                progressBar.setVisibility(View.INVISIBLE);
+
                 if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTA))) {
+                    isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
                     EntrevistaRepositorio.getInstancia(getApplication()).obtenerEntrevistasPersonales(entrevistado);
                 }
@@ -245,9 +256,13 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
-                    rv.setVisibility(View.INVISIBLE);
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+
+                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+                        rv.setVisibility(View.INVISIBLE);
+                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, null);
+                    } else {
+                        showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);
+                    }
                     entrevistaAdapter.notifyDataSetChanged();
                 }
 
@@ -297,20 +312,21 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
     @Override
     public void showSnackbar(View v, int tipo_snackbar, String titulo, String accion) {
 
-        Snackbar snackbar = Snackbar.make(v, titulo, tipo_snackbar);
+        snackbar = Snackbar.make(v, titulo, tipo_snackbar);
         if (accion != null) {
             snackbar.setAction(accion, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    //Refresh listado de usuarios
-                    entrevistasListaViewModel.refreshEntrevistas(entrevistado);
-
                     progressBar.setVisibility(View.VISIBLE);
 
                     isSnackBarShow = false;
+                    if (snackbar != null) {
+                        snackbar.dismiss();
+                    }
 
-
+                    //Refresh listado de usuarios
+                    entrevistasListaViewModel.refreshEntrevistas(entrevistado);
                 }
             });
         }
@@ -334,10 +350,12 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
         } else if (item.getItemId() == R.id.menu_actualizar) {
 
             progressBar.setVisibility(View.VISIBLE);
-
-            entrevistasListaViewModel.refreshEntrevistas(entrevistado);
-
             isSnackBarShow = false;
+            if (snackbar != null) {
+                snackbar.dismiss();
+            }
+            entrevistasListaViewModel.refreshEntrevistas(entrevistado);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

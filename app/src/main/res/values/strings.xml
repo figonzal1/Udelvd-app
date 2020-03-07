@@ -337,12 +337,14 @@
     <string name="TAG_VIEW_MODEL_EDITAR_EVENTO" translatable="false">VM_MODEL_EDITAR_EVENTO</string>
     <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA" translatable="false">VM_ELIMINAR_ENTREVISTA</string>
+    <string name="TAG_VIEW_MODEL_ELIMINAR_ACCION" translatable="false">VM_ELIMINAR_ACCION</string>
     <string name="TAG_VIEW_MODEL_LISTADO_INVESTIGADORES" translatable="false">VM_LISTADO_INVESTIGADORES</string>
     <string name="TAG_VIEW_MODEL_ACTIVACION_INVES" translatable="false">VM_ACTIVACION_INVESTIGACION</string>
     <string name="MSG_UPDATE_EVENTO">¡Evento actualizado!</string>
     <string name="MSG_DELETE_EVENTO">¡Evento eliminado!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_EVENTO" translatable="false">VM_ELIMINAR_EVENTO</string>
     <string name="MSG_DELETE_ENTREVISTADO">¡Entrevistado eliminado!</string>
+    <string name="MSG_DELETE_ACCION">¡Acción eliminada!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO" translatable="false">VM_ELIMINAR_ENTREVISTADO</string>
     <string name="RECOVERY_MSG_VM" translatable="false">email sended</string>
     <string name="RECOVERY_MSG_VM_RESPONSE">Email de recuperación enviado</string>
@@ -384,6 +386,7 @@
     <string name="DIALOG_ACTIVAR">Activar</string>
     <string name="DIALOG_DESACTIVACION_MENSAJE">La desactivación de cuenta prohibirá al investigador acceso al sistema , ¿Está seguro?</string>
     <string name="DIALOG_DESACTIVAR">Desactivar</string>
+    <string name="DIALOG_MESSAGE_ACCION">¿Está seguro que quiere eliminar esta acción? Los eventos asociados a esta acción podrían perderse</string>
 
     <!-- NOTIFICACIONES-->
     <string name="NOTIFICACION_TITULO" translatable="false">titulo</string>
@@ -414,6 +417,8 @@
     <string name="MENU_ACCIONES">Acciones</string>
     <string name="MENU_EMOTICONES">Emoticones</string>
     <string name="MENU_INVESTIGADORES">Investigadores</string>
+    <string name="MENU_ACCION_EDITAR">Editar acción</string>
+    <string name="MENU_ACCION_ELIMINAR">Eliminar acción</string>
 
     <!-- SNACKLBAR -->
     <string name="SNACKBAR_REINTENTAR">Reintentar</string>

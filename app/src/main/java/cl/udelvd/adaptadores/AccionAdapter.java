@@ -2,12 +2,15 @@ package cl.udelvd.adaptadores;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.Locale;
 
 import cl.udelvd.R;
 import cl.udelvd.modelo.Accion;
+import cl.udelvd.vistas.fragments.DeleteAccionDialogFragment;
 
 /**
  * Adaptador para listado de acciones para ADMIN
@@ -23,10 +27,13 @@ public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.AccionView
 
     private List<Accion> accionList;
     private Context context;
+    private FragmentManager fragmentManager;
+    private String TAG_DELETE_DIALOG_ACCION = "DeleteAccion";
 
-    public AccionAdapter(List<Accion> accionList, Context context) {
+    public AccionAdapter(List<Accion> accionList, Context context, FragmentManager fragmentManager) {
         this.accionList = accionList;
         this.context = context;
+        this.fragmentManager = fragmentManager;
         setHasStableIds(true);
     }
 
@@ -38,19 +45,36 @@ public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.AccionView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AccionViewHolder holder, int position) {
-        Accion accion = accionList.get(position);
+    public void onBindViewHolder(@NonNull final AccionViewHolder holder, int position) {
+        final Accion accion = accionList.get(position);
 
         holder.tv_accion.setText(String.format(Locale.getDefault(), context.getString(R.string.FORMATO_ACCION), (position + 1)));
 
         holder.tv_espanol.setText(accion.getNombreEs());
         holder.tv_ingles.setText(accion.getNombreEn());
 
-        //TODO Generar menu de acciones
         holder.iv_menu_accion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(context, holder.iv_menu_accion);
+                popupMenu.inflate(R.menu.menu_holder_accion);
 
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        if (item.getItemId() == R.id.menu_editar_accion) {
+                            return true;
+                        } else if (item.getItemId() == R.id.menu_eliminar_accion) {
+                            DeleteAccionDialogFragment dialog = new DeleteAccionDialogFragment(accion);
+                            dialog.show(fragmentManager, TAG_DELETE_DIALOG_ACCION);
+                            return true;
+                        }
+
+                        return false;
+                    }
+                });
+                popupMenu.show();
             }
         });
     }

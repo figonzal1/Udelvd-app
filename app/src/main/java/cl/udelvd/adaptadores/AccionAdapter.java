@@ -1,6 +1,9 @@
 package cl.udelvd.adaptadores;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Locale;
 
+import cl.udelvd.EditarAccionActivity;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.vistas.fragments.DeleteAccionDialogFragment;
@@ -27,13 +31,17 @@ public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.AccionView
 
     private List<Accion> accionList;
     private Context context;
+    private Activity activity;
     private FragmentManager fragmentManager;
     private String TAG_DELETE_DIALOG_ACCION = "DeleteAccion";
+    private int REQUEST_CODE_EDITAR_ACCION;
 
-    public AccionAdapter(List<Accion> accionList, Context context, FragmentManager fragmentManager) {
+    public AccionAdapter(List<Accion> accionList, Context context, Activity activity, FragmentManager fragmentManager, int requestCode) {
         this.accionList = accionList;
         this.context = context;
+        this.activity = activity;
         this.fragmentManager = fragmentManager;
+        this.REQUEST_CODE_EDITAR_ACCION = requestCode;
         setHasStableIds(true);
     }
 
@@ -64,6 +72,15 @@ public class AccionAdapter extends RecyclerView.Adapter<AccionAdapter.AccionView
                     public boolean onMenuItemClick(MenuItem item) {
 
                         if (item.getItemId() == R.id.menu_editar_accion) {
+                            Intent intent = new Intent(context, EditarAccionActivity.class);
+
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(context.getString(R.string.KEY_ACCION_ID_LARGO), accion.getId());
+                            bundle.putString(context.getString(R.string.KEY_ACCION_NOMBRE_EN), accion.getNombreEn());
+                            bundle.putString(context.getString(R.string.KEY_ACCION_NOMBRE_ES), accion.getNombreEs());
+
+                            intent.putExtras(bundle);
+                            activity.startActivityForResult(intent, REQUEST_CODE_EDITAR_ACCION);
                             return true;
                         } else if (item.getItemId() == R.id.menu_eliminar_accion) {
                             DeleteAccionDialogFragment dialog = new DeleteAccionDialogFragment(accion);

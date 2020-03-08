@@ -37,6 +37,7 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
 
     private static final int REQUEST_CODE_CREAR_ACCION = 200;
     private static final int ACCIONES_ACTIVITY_CODE = 200;
+    private static final int REQUEST_CODE_EDITAR_ACCION = 201;
     private List<Accion> accionesList;
     private ProgressBar progressBar;
     private TextView tv_acciones_vacios;
@@ -80,7 +81,9 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
         accionAdapter = new AccionAdapter(
                 accionesList,
                 getApplicationContext(),
-                getSupportFragmentManager()
+                AccionesListActivity.this,
+                getSupportFragmentManager(),
+                REQUEST_CODE_EDITAR_ACCION
         );
 
         rv.setAdapter(accionAdapter);
@@ -266,7 +269,7 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
                     accionesListaViewModel.refreshAcciones();
                 }
             }
-        } /*else if (requestCode == REQUEST_CODE_EDITAR_EVENTO) {
+        } else if (requestCode == REQUEST_CODE_EDITAR_ACCION) {
 
             if (resultCode == RESULT_OK) {
 
@@ -277,13 +280,13 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
 
                 if (msg_actualizacion != null) {
                     isSnackBarShow = false;
-                    showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
-                    eventosListaViewModel.refreshEventos(entrevista);
+                    showSnackbar(findViewById(R.id.acciones_lista), Snackbar.LENGTH_LONG, msg_actualizacion, null);
+                    accionesListaViewModel.refreshAcciones();
 
-                    fragmentStatePageAdapter.notifyDataSetChanged();
+                    accionAdapter.notifyDataSetChanged();
                 }
             }
-        }*/
+        }
 
         super.onActivityResult(requestCode, resultCode, data);
     }

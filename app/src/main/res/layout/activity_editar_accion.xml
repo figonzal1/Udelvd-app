@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/formulario_nueva_accion"
+    android:id="@+id/formulario_editar_accion"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".vistas.activities.NuevaAccionActivity">
+    tools:context=".EditarAccionActivity">
 
     <ProgressBar
-        android:id="@+id/progress_horizontal_nueva_accion"
+        android:id="@+id/progress_horizontal_editar_accion"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_nueva_accion">
+        app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_editar_accion">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

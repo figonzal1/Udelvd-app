@@ -74,6 +74,8 @@
     <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Editar evento</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
     <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Listado Acciones</string>
+    <string name="TITULO_TOOLBAR_NUEVA_ACCION">Nueva acción</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ACCION">Editar Acción</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY" translatable="false">udelvd</string>
@@ -155,6 +157,7 @@
 
     <string name="KEY_ACCION_OBJECT" translatable="false">accion</string>
     <string name="KEY_ACCION_ID" translatable="false">id</string>
+    <string name="KEY_ACCION_ID_LARGO" translatable="false">id_accion</string>
     <string name="KEY_ACCION_NOMBRE" translatable="false">nombre</string>
     <string name="KEY_ACCION_NOMBRE_ES" translatable="false">nombre_es</string>
     <string name="KEY_ACCION_NOMBRE_EN" translatable="false">nombre_en</string>
@@ -256,6 +259,9 @@
     <string name="TAG_VOLLEY_ERR_ENTREVISTADOS" translatable="false">VOLLEY_ERR_ENTREVISTADOS</string>
     <string name="TAG_VOLLEY_ERR_NUEVO_ENTREVISTADO" translatable="false">VOLLEY_ERR_NUEVO_ENTREVISTADO</string>
     <string name="TAG_VOLLEY_ERR_ACCION" translatable="false">VOLLEY_ERR_ACCION</string>
+    <string name="TAG_VOLLEY_ERR_ELIMINAR_ACCION" translatable="false">VOLLEY_ERR_ELIMINAR_ACCION</string>
+    <string name="TAG_VOLLEY_ERR_NUEVA_ACCION" translatable="false">VOLLEY_ERR_NUEVA_ACCION</string>
+    <string name="TAG_VOLLEY_ERR_EDITAR_ACCION" translatable="false">VOLLEY_ERR_EDITAR_ACCION</string>
     <string name="TAG_VOLLEY_ERR_CIUDAD" translatable="false">VOLLEY_ERR_CIUDAD</string>
     <string name="TAG_VOLLEY_ERR_EMOTICON" translatable="false">VOLLEY_ERR_EMOTICON</string>
     <string name="TAG_VOLLEY_ERR_EST_CIVIL" translatable="false">VOLLEY_ERR_EST_CIVIL</string>
@@ -321,9 +327,11 @@
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTADO" translatable="false">VM_EDITAR_ENTREVISTADO</string>
     <string name="TAG_VIEW_MODEL_TIPO_ENTREVISTA" translatable="false">VM_TIPO_ENTREVISTA</string>
     <string name="TAG_VIEW_MODEL_NUEVA_ACCION" translatable="false">VM_NUEVA_ACCION</string>
+    <string name="TAG_VIEW_MODEL_EDITAR_ACCION" translatable="false">VM_EDITAR_ACCION</string>
     <string name="TAG_VIEW_MODEL_NEW_ENTREVISTA" translatable="false">VM_NEW_ENTREVISTA</string>
     <string name="MSG_REGISTRO_ENTREVISTA">¡Entrevista registrada!</string>
     <string name="MSG_UPDATE_ENTREVISTA">¡Entrevista actualizada!</string>
+    <string name="MSG_UPDATE_ACCION">¡Acción actualizada!</string>
     <string name="MSG_REGISTRO_ACCION">¡Acción registrada!</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTA" translatable="false">VM_EDITAR_ENTREVISTA</string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTAS" translatable="false">VM_LISTA_ENTREVISTAS</string>

@@ -35,7 +35,9 @@ public class AccionRepositorio {
 
     private static final String TAG_GET_ACCIONES = "ListaAcciones";
     private static final String TAG_NUEVA_ACCION = "NuevaAccion";
-    private static final Object TAG_ELIMINAR_ACCION = "EliminarAccion";
+    private static final String TAG_ELIMINAR_ACCION = "EliminarAccion";
+    private static final String TAG_UPDATE_ACCION = "ActualizarAccion";
+
     private static AccionRepositorio instancia;
     private final Application application;
 
@@ -48,12 +50,15 @@ public class AccionRepositorio {
     private SingleLiveEvent<String> responseMsgErrorRegistro = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgRegistro = new SingleLiveEvent<>();
 
+    //ACTUALIZACION
+    private SingleLiveEvent<String> responseMsgActualizacion = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> responseMsgErrorActualizacion = new SingleLiveEvent<>();
+
     //ELIMINACION
     private SingleLiveEvent<String> responseMsgEliminar = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseMsgErrorEliminar = new SingleLiveEvent<>();
 
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-
 
     private AccionRepositorio(Application application) {
         this.application = application;
@@ -66,40 +71,14 @@ public class AccionRepositorio {
         return instancia;
     }
 
-    public SingleLiveEvent<String> getResponseMsgErrorListado() {
-        return responseMsgErrorListado;
-    }
-
     /*
-    REGISTRO DE ACCION
-     */
-    public SingleLiveEvent<String> getResponseMsgRegistro() {
-        return responseMsgRegistro;
-    }
-
-    public SingleLiveEvent<String> getResponseMsgErrorRegistro() {
-        return responseMsgErrorRegistro;
-    }
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
-    /**
-     * Funcion encargada de obtener el listado de acciones desde el servidor segun el idioma del dispositivo
-     *
-     * @return MutableList con la lista de acciones
+    LISTADO ACCIONES SEGUN IDIOMA
      */
     public MutableLiveData<List<Accion>> obtenerAccionesIdioma(String idioma) {
         sendGetAccionesPorIdioma(idioma);
         return accionMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar peticion GET al servidor cuya respuesta depende del idioma del dispositivo
-     *
-     * @param idioma idioma de la consulta
-     */
     private void sendGetAccionesPorIdioma(String idioma) {
 
         accionList.clear();
@@ -202,19 +181,14 @@ public class AccionRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ACCIONES);
     }
 
-    /**
-     * Funcion encargada de obtener el listado de todas las acciones del sistema incluida sus traduccciones
-     *
-     * @return MutableLiveData con listado de acciones
+    /*
+    LISTADO ACCIONES
      */
     public MutableLiveData<List<Accion>> obtenerAcciones() {
         sendGetAcciones();
         return accionMutableLiveData;
     }
 
-    /**
-     * Funcion encargada de enviar peticion GET al servidor
-     */
     private void sendGetAcciones() {
         accionList.clear();
 
@@ -317,6 +291,9 @@ public class AccionRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ACCIONES);
     }
 
+    /*
+    REGISTRO
+     */
     public void registrarAccion(Accion accionIntent) {
         sendPostAccion(accionIntent);
     }
@@ -343,10 +320,9 @@ public class AccionRepositorio {
                     Log.d("INTERNET", accionInternet.getNombreEs() + " - " + accionInternet.getNombreEn());
 
                     if (accionIntent.equals(accionInternet) && !create_time.isEmpty()) {
-
                         responseMsgRegistro.postValue(application.getString(R.string.MSG_REGISTRO_ACCION));
-                        isLoading.postValue(false);
                     }
+                    isLoading.postValue(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -361,13 +337,13 @@ public class AccionRepositorio {
                 isLoading.postValue(false);
 
                 if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.TIMEOUT_ERROR));
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ACCION), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorRegistro.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.NETWORK_ERROR));
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ACCION), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorRegistro.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
@@ -388,12 +364,12 @@ public class AccionRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ACCION), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ACCION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
                         responseMsgErrorRegistro.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
@@ -429,7 +405,124 @@ public class AccionRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NUEVA_ACCION);
     }
 
+    /*
+    ACTUALIZACION
+     */
+    public void actualizarAccion(Accion accion) {
+        sendPutAccion(accion);
+    }
 
+    private void sendPutAccion(final Accion accion) {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d("RESPONSE_EDIT", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                    Accion accionInternet = new Accion();
+                    accionInternet.setId(jsonData.getInt(application.getString(R.string.KEY_ACCION_ID)));
+                    accionInternet.setNombreEs(jsonAttributes.getString(application.getString(R.string.KEY_ACCION_NOMBRE_ES)));
+                    accionInternet.setNombreEn(jsonAttributes.getString(application.getString(R.string.KEY_ACCION_NOMBRE_EN)));
+
+                    String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
+
+                    if (accion.equals(accionInternet) && !update_time.isEmpty()) {
+                        responseMsgActualizacion.postValue(application.getString(R.string.MSG_UPDATE_ACCION));
+                    }
+
+                    isLoading.postValue(false);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                isLoading.postValue(false);
+                if (error instanceof TimeoutError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ACCION), application.getString(R.string.TIMEOUT_ERROR));
+                    responseMsgErrorActualizacion.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                }
+
+                //Error de conexion a internet
+                else if (error instanceof NetworkError) {
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ACCION), application.getString(R.string.NETWORK_ERROR));
+                    responseMsgErrorActualizacion.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+                }
+
+                //Errores cuando el servidor si responde
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+                    String json = new String(error.networkResponse.data);
+
+                    JSONObject errorObject = null;
+
+                    //Obtener json error
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Error de autorizacion
+                    if (error instanceof AuthFailureError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ACCION), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                    }
+
+                    //Error de servidor
+                    else if (error instanceof ServerError) {
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ACCION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        responseMsgErrorActualizacion.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                    }
+                }
+            }
+        };
+
+        String url = String.format(application.getString(R.string.URL_PUT_ACCIONES), application.getString(R.string.HEROKU_DOMAIN), accion.getId());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, responseListener, errorListener) {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.KEY_ACCION_NOMBRE_EN), accion.getNombreEn());
+                params.put(application.getString(R.string.KEY_ACCION_NOMBRE_ES), accion.getNombreEs());
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+
+                SharedPreferences sharedPreferences = application.getSharedPreferences(application.getString(R.string.SHARED_PREF_MASTER_KEY),
+                        Context.MODE_PRIVATE);
+
+                String token = sharedPreferences.getString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                Map<String, String> params = new HashMap<>();
+                params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+                params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+                return params;
+            }
+        };
+
+        isLoading.postValue(true);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_UPDATE_ACCION);
+    }
+
+    /*
+    ELIMINACION
+     */
     public void eliminarAccion(Accion object) {
         sendDeleteAccion(object);
     }
@@ -439,7 +532,7 @@ public class AccionRepositorio {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -448,8 +541,8 @@ public class AccionRepositorio {
 
                     if (jsonData.length() == 0) {
                         responseMsgEliminar.postValue(application.getString(R.string.MSG_DELETE_ACCION));
-                        isLoading.postValue(false);
                     }
+                    isLoading.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -463,13 +556,13 @@ public class AccionRepositorio {
                 isLoading.postValue(false);
 
                 if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.TIMEOUT_ERROR));
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ACCION), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorEliminar.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
                 //Error de conexion a internet
                 else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), application.getString(R.string.NETWORK_ERROR));
+                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ACCION), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorEliminar.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
                 }
 
@@ -490,12 +583,12 @@ public class AccionRepositorio {
 
                     //Error de autorizacion
                     if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ACCION), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
                     }
 
                     //Error de servidor
                     else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ACCION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ACCION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
                         responseMsgErrorEliminar.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
                 }
@@ -523,11 +616,38 @@ public class AccionRepositorio {
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ELIMINAR_ACCION);
     }
 
+    /*
+    GETTERS
+     */
+    public SingleLiveEvent<String> getResponseMsgRegistro() {
+        return responseMsgRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorRegistro() {
+        return responseMsgErrorRegistro;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorListado() {
+        return responseMsgErrorListado;
+    }
+
     public SingleLiveEvent<String> getResponseMsgErrorEliminar() {
         return responseMsgErrorEliminar;
     }
 
     public SingleLiveEvent<String> getResponseMsgEliminar() {
         return responseMsgEliminar;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgActualizacion() {
+        return responseMsgActualizacion;
+    }
+
+    public SingleLiveEvent<String> getResponseMsgErrorActualizacion() {
+        return responseMsgErrorActualizacion;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

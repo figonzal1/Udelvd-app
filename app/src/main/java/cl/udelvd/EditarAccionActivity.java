@@ -1,4 +1,4 @@
-package cl.udelvd.vistas.activities;
+package cl.udelvd;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,98 +20,54 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
-import cl.udelvd.R;
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.repositorios.AccionRepositorio;
 import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
-import cl.udelvd.viewmodel.NuevaAccionViewModel;
+import cl.udelvd.viewmodel.EditarAccionViewModel;
 
-public class NuevaAccionActivity extends AppCompatActivity implements SnackbarInterface {
+public class EditarAccionActivity extends AppCompatActivity implements SnackbarInterface {
 
     private ProgressBar progressBar;
     private TextInputLayout ilAccionEspanol;
     private TextInputLayout ilAccionIngles;
     private TextInputEditText etAccionEspanol;
     private TextInputEditText etAccionIngles;
-    private NuevaAccionViewModel nuevaAccionViewModel;
+    private EditarAccionViewModel editarAccionViewModel;
     private boolean isSnackBarShow = false;
+    private Accion accionIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nueva_accion);
+        setContentView(R.layout.activity_editar_accion);
 
-        Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_NUEVA_ACCION));
+        Utils.configurarToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_EDITAR_ACCION));
 
         instanciarRecursosInterfaz();
+
+        obtenerDatosAccion();
 
         iniciarViewModel();
     }
 
-    private void iniciarViewModel() {
-        nuevaAccionViewModel.isLoadingRegistro().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    progressBar.setVisibility(View.VISIBLE);
+    private void obtenerDatosAccion() {
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
 
-                    //Desactivar entradas
-                    ilAccionEspanol.setEnabled(false);
-                    ilAccionIngles.setEnabled(false);
+            accionIntent = new Accion();
+            accionIntent.setId(bundle.getInt(getString(R.string.KEY_ACCION_ID_LARGO)));
+            accionIntent.setNombreEs(bundle.getString(getString(R.string.KEY_ACCION_NOMBRE_ES)));
+            accionIntent.setNombreEn(bundle.getString(getString(R.string.KEY_ACCION_NOMBRE_EN)));
 
-                    etAccionEspanol.setEnabled(false);
-                    etAccionIngles.setEnabled(false);
-                } else {
-                    progressBar.setVisibility(View.GONE);
-
-                    //Activar entradas
-                    ilAccionEspanol.setEnabled(true);
-                    ilAccionIngles.setEnabled(true);
-
-                    etAccionEspanol.setEnabled(true);
-                    etAccionIngles.setEnabled(true);
-                }
-            }
-        });
-
-        nuevaAccionViewModel.mostrarMsgRegistro().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
-                //Si el registro fue correcto cerrar la actividad
-                if (s.equals(getString(R.string.MSG_REGISTRO_ACCION))) {
-
-                    progressBar.setVisibility(View.GONE);
-
-                    Intent intent = getIntent();
-                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            }
-        });
-
-        nuevaAccionViewModel.mostrarMsgErrorRegistro().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                progressBar.setVisibility(View.GONE);
-
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.formulario_nueva_accion), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
-        });
-
+            etAccionEspanol.setText(accionIntent.getNombreEs());
+            etAccionIngles.setText(accionIntent.getNombreEn());
+        }
     }
 
     private void instanciarRecursosInterfaz() {
 
-        progressBar = findViewById(R.id.progress_horizontal_nueva_accion);
+        progressBar = findViewById(R.id.progress_horizontal_editar_accion);
         progressBar.setVisibility(View.VISIBLE);
 
         ilAccionEspanol = findViewById(R.id.il_accion_espanol);
@@ -120,9 +76,62 @@ public class NuevaAccionActivity extends AppCompatActivity implements SnackbarIn
         etAccionEspanol = findViewById(R.id.et_accion_espanol);
         etAccionIngles = findViewById(R.id.et_accion_ingles);
 
-        nuevaAccionViewModel = ViewModelProviders.of(this).get(NuevaAccionViewModel.class);
+        editarAccionViewModel = ViewModelProviders.of(this).get(EditarAccionViewModel.class);
     }
 
+    private void iniciarViewModel() {
+        editarAccionViewModel.isLoadingActualizacion().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    ilAccionIngles.setEnabled(false);
+                    ilAccionEspanol.setEnabled(false);
+
+                    etAccionIngles.setEnabled(false);
+                    etAccionEspanol.setEnabled(false);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    ilAccionIngles.setEnabled(true);
+                    ilAccionEspanol.setEnabled(true);
+
+                    etAccionIngles.setEnabled(true);
+                    etAccionEspanol.setEnabled(true);
+                }
+            }
+        });
+
+        editarAccionViewModel.mostrarMsgActualizacion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                if (s.equals(getString(R.string.MSG_UPDATE_ACCION))) {
+
+                    progressBar.setVisibility(View.GONE);
+
+                    Intent intent = getIntent();
+                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), s);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+        });
+
+        editarAccionViewModel.mostrarMsgErrorActualizacion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                progressBar.setVisibility(View.GONE);
+
+                if (!isSnackBarShow) {
+                    isSnackBarShow = true;
+                    showSnackbar(findViewById(R.id.formulario_editar_accion), Snackbar.LENGTH_LONG, s, null);
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,11 +153,12 @@ public class NuevaAccionActivity extends AppCompatActivity implements SnackbarIn
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                Accion accion = new Accion();
-                accion.setNombreEs(Objects.requireNonNull(etAccionEspanol.getText()).toString());
-                accion.setNombreEn(Objects.requireNonNull(etAccionIngles.getText()).toString());
+                Accion accionEditado = new Accion();
+                accionEditado.setId(accionIntent.getId());
+                accionEditado.setNombreEs(Objects.requireNonNull(etAccionEspanol.getText()).toString());
+                accionEditado.setNombreEn(Objects.requireNonNull(etAccionIngles.getText()).toString());
 
-                AccionRepositorio.getInstancia(getApplication()).registrarAccion(accion);
+                AccionRepositorio.getInstancia(getApplication()).actualizarAccion(accionEditado);
 
             }
             return true;

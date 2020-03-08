@@ -65,7 +65,7 @@
                 android:id="@+id/iv_icono_espanol"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:contentDescription="Icono accion en español"
+                android:contentDescription="@string/ICONO_ACCION_ESPANOL"
                 android:scaleType="centerCrop"
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_accion_espanol"
@@ -80,12 +80,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:hint="Acción español"
+                android:hint="@string/ACCION_ESPANOL"
                 app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_icono_espanol"
-                app:layout_constraintTop_toBottomOf="@+id/textView">
+                app:layout_constraintTop_toBottomOf="@+id/tv_instruccion">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_accion_espanol"
@@ -102,7 +102,7 @@
                 android:id="@+id/iv_icono_ingles"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:contentDescription="Icono accion en ingles"
+                android:contentDescription="@string/ICON_ACCION_INGLES"
                 android:scaleType="centerCrop"
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_accion_ingles"
@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:hint="Accion inglés"
+                android:hint="@string/ACCION_INGLES"
                 app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
@@ -136,11 +136,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tv_instruccion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Para crear una nueva acción ingrese el nombre de la acción tanto en español como en inglés"
+                android:text="@string/INTRUCCION_ACCION"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -63,18 +63,18 @@
     <!-- Titulos Toolbar -->
     <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
     <string name="TITULO_TOOLBAR_REGISTRO">Registro</string>
-    <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">Crear entrevistado</string>
-    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Editar entrevistado</string>
-    <string name="TITULO_TOOLBAR_NUEVA_ENTREVISTA">Crear entrevista</string>
-    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTA">Editar entrevista</string>
-    <string name="TITULO_TOOLBAR_CREAR_EVENTO">Crear evento</string>
+    <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">Crear Entrevistado</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Editar Entrevistado</string>
+    <string name="TITULO_TOOLBAR_NUEVA_ENTREVISTA">Crear Entrevista</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTA">Editar Entrevista</string>
+    <string name="TITULO_TOOLBAR_CREAR_EVENTO">Crear Evento</string>
     <string name="TITULO_TOOLBAR_EVENTOS">Eventos</string>
-    <string name="TITULO_TOOLBAR_LISTA_ENTREVISTAS">Listado entrevistas</string>
-    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Editar perfil</string>
-    <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Editar evento</string>
+    <string name="TITULO_TOOLBAR_LISTA_ENTREVISTAS">Listado Entrevistas</string>
+    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Editar Perfil</string>
+    <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Editar Evento</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
     <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Listado Acciones</string>
-    <string name="TITULO_TOOLBAR_NUEVA_ACCION">Nueva acción</string>
+    <string name="TITULO_TOOLBAR_NUEVA_ACCION">Nueva Acción</string>
     <string name="TITULO_TOOLBAR_EDITAR_ACCION">Editar Acción</string>
 
     <!-- SHARED PREF KEYS-->
@@ -526,6 +526,11 @@
     <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinaria</string>
+    <string name="ICONO_ACCION_ESPANOL">Icono accion en español</string>
+    <string name="ACCION_ESPANOL">Acción español</string>
+    <string name="ICON_ACCION_INGLES">Icono accion en ingles</string>
+    <string name="ACCION_INGLES">Accion inglés</string>
+    <string name="INTRUCCION_ACCION">Para crear una nueva acción ingrese el nombre de la acción tanto en español como en inglés</string>
 
 
 </resources>

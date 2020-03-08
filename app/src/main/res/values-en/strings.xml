@@ -131,16 +131,16 @@
     <string name="TIPO_CONVIVENCIA">Cohabit type</string>
     <string name="TIPO_ENTREVISTA">Interview type</string>
     <string name="TITULO_TOOLBAR_CREAR_EVENTO">New event</string>
-    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTA">Edit interview</string>
-    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Edit interviewee</string>
-    <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Edit event</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTA">Edit Interview</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Edit Interviewee</string>
+    <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Edit Event</string>
     <string name="TITULO_TOOLBAR_EVENTOS">Events</string>
-    <string name="TITULO_TOOLBAR_LISTA_ENTREVISTAS">Interviews list</string>
+    <string name="TITULO_TOOLBAR_LISTA_ENTREVISTAS">Interviews List</string>
     <string name="TITULO_TOOLBAR_NUEVA_ENTREVISTA">New Interview</string>
-    <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">New interviewee</string>
+    <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">New Interviewee</string>
     <string name="TITULO_TOOLBAR_PERFIL">Profile</string>
     <string name="TITULO_TOOLBAR_REGISTRO">Register</string>
-    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Edit profile</string>
+    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Edit Profile</string>
     <string name="VALIDACION_CAMPO_REQUERIDO">Required field</string>
     <string name="VALIDACION_EMAIL">Invalid email</string>
     <string name="VALIDACION_EMOTICON">Choose an emoticon</string>
@@ -187,4 +187,10 @@
     <string name="MENU_ACCION_ELIMINAR">Delete action</string>
     <string name="MSG_UPDATE_ACCION">Updated action!</string>
     <string name="TITULO_TOOLBAR_NUEVA_ACCION">New Action</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ACCION">Edit Action</string>
+    <string name="ACCION_ESPANOL">Spanish action</string>
+    <string name="ACCION_INGLES">English action</string>
+    <string name="ICON_ACCION_INGLES">English action icon</string>
+    <string name="ICONO_ACCION_ESPANOL">Spanish action icon</string>
+    <string name="INTRUCCION_ACCION">To create a new action enter the name of the action in both Spanish and English</string>
 </resources>

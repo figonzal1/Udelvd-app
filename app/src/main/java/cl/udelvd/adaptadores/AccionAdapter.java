@@ -19,9 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Locale;
 
-import cl.udelvd.EditarAccionActivity;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Accion;
+import cl.udelvd.vistas.activities.EditarAccionActivity;
 import cl.udelvd.vistas.fragments.DeleteAccionDialogFragment;
 
 /**

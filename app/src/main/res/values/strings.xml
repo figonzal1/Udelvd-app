@@ -76,6 +76,7 @@
     <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Listado Acciones</string>
     <string name="TITULO_TOOLBAR_NUEVA_ACCION">Nueva Acción</string>
     <string name="TITULO_TOOLBAR_EDITAR_ACCION">Editar Acción</string>
+    <string name="TITULO_TABLEAU" translatable="false">Tableau</string>
 
     <!-- SHARED PREF KEYS-->
     <string name="SHARED_PREF_MASTER_KEY" translatable="false">udelvd</string>
@@ -102,6 +103,7 @@
     <string name="FORMATO_EVENTO_N">Evento %d</string>
     <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d años</string>
     <string name="FORMATO_ACCION">Acción %d</string>
+    <string name="FORMATO_LINK_DIRECTO">Link directo: %s</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT" translatable="false">investigador</string>
@@ -390,6 +392,7 @@
     <string name="INTENT_KEY_NORMALES" translatable="false">normales</string>
     <string name="INTENT_KEY_EXTRAORDINARIAS" translatable="false">extraordinarias</string>
     <string name="INTENT_KEY_INVES_ACTIVADO" translatable="false">inv_activado</string>
+    <string name="INTENT_LINK_GRAFICO" translatable="false">link_grafico</string>
 
     <!--Dialog -->
     <string name="DIALOG_MESSAGE_ENTREVISTA">¿Está seguro que quiere eliminar esta entrevista?</string>
@@ -531,6 +534,9 @@
     <string name="ICON_ACCION_INGLES">Icono accion en ingles</string>
     <string name="ACCION_INGLES">Accion inglés</string>
     <string name="INTRUCCION_ACCION">Para crear una nueva acción ingrese el nombre de la acción tanto en español como en inglés</string>
+    <string name="COPIADO_PORTAPAPELES">Copiado al portapapeles</string>
+    <string name="DISTRIBUCION_EVENTOS">Distribución de eventos</string>
+    <string name="IR_VISUALIZACION">Ir</string>
 
 
 </resources>

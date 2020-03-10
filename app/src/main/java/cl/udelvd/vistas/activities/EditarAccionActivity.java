@@ -1,4 +1,4 @@
-package cl.udelvd;
+package cl.udelvd.vistas.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
+import cl.udelvd.R;
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.repositorios.AccionRepositorio;
 import cl.udelvd.utilidades.SnackbarInterface;

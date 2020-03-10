@@ -193,4 +193,8 @@
     <string name="ICON_ACCION_INGLES">English action icon</string>
     <string name="ICONO_ACCION_ESPANOL">Spanish action icon</string>
     <string name="INTRUCCION_ACCION">To create a new action enter the name of the action in both Spanish and English</string>
+    <string name="COPIADO_PORTAPAPELES">Copied to clipboard</string>
+    <string name="FORMATO_LINK_DIRECTO">Direct link : %s</string>
+    <string name="DISTRIBUCION_EVENTOS">Event distribution</string>
+    <string name="IR_VISUALIZACION">Go</string>
 </resources>

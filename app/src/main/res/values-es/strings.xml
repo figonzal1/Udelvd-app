@@ -193,4 +193,8 @@
     <string name="ICON_ACCION_INGLES">Icono accion en ingles</string>
     <string name="ICONO_ACCION_ESPANOL">Icono accion en español</string>
     <string name="INTRUCCION_ACCION">Para crear una nueva acción ingrese el nombre de la acción tanto en español como en inglés</string>
+    <string name="COPIADO_PORTAPAPELES">Copiado al portapapeles</string>
+    <string name="FORMATO_LINK_DIRECTO">Link directo: %s</string>
+    <string name="DISTRIBUCION_EVENTOS">Distribución de eventos</string>
+    <string name="IR_VISUALIZACION">Ir</string>
 </resources>

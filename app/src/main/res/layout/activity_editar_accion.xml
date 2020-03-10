@@ -5,7 +5,7 @@
     android:id="@+id/formulario_editar_accion"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditarAccionActivity">
+    tools:context=".vistas.activities.EditarAccionActivity">
 
     <ProgressBar
         android:id="@+id/progress_horizontal_editar_accion"

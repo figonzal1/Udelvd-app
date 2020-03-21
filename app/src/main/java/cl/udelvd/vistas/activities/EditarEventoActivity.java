@@ -487,7 +487,7 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
                     editarEventoViewModel.refreshAcciones(idioma);
                     editarEventoViewModel.refreshEmoticones();
 
-                    //editarEventoViewModel.refreshEvento(eventoIntent);
+                    editarEventoViewModel.refreshEvento(eventoIntent);
 
                     progressBar.setVisibility(View.VISIBLE);
 

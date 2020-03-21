@@ -174,6 +174,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     viewPager.setVisibility(View.VISIBLE);
+                    cv_info.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -208,11 +209,10 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.GONE);
+                viewPager.setVisibility(View.INVISIBLE);
+                cv_info.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
-                    viewPager.setVisibility(View.INVISIBLE);
-                    cv_info.setVisibility(View.INVISIBLE);
-
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.eventos_lista), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     fragmentStatePageAdapter.notifyDataSetChanged();

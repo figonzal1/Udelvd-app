@@ -34,6 +34,11 @@ public class EditarEventoViewModel extends AndroidViewModel {
         return eventoRepositorio.obtenerEvento(evento);
     }
 
+    public void refreshEvento(Evento eventoIntent) {
+        eventoRepositorio = EventoRepositorio.getInstancia(getApplication());
+        eventoRepositorio.obtenerEvento(eventoIntent);
+    }
+
     public SingleLiveEvent<String> mostrarMsgErrorEvento() {
         eventoRepositorio = EventoRepositorio.getInstancia(getApplication());
         return eventoRepositorio.getResponseErrorMsgEvento();

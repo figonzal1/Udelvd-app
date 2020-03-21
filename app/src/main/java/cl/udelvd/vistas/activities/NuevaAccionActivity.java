@@ -100,7 +100,7 @@ public class NuevaAccionActivity extends AppCompatActivity implements SnackbarIn
 
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.formulario_nueva_accion), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                    showSnackbar(findViewById(R.id.formulario_nueva_accion), Snackbar.LENGTH_INDEFINITE, s, null);
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -187,7 +187,6 @@ public class NuevaAccionActivity extends AppCompatActivity implements SnackbarIn
                 public void onClick(View v) {
 
                     progressBar.setVisibility(View.VISIBLE);
-
                     isSnackBarShow = false;
                 }
             });

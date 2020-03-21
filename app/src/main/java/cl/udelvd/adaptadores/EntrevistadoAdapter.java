@@ -54,6 +54,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Button btn_cargar_mas;
     private ProgressBar progressBar;
     private final Investigador investigador;
+    private int entrevistados_totales;
 
     public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment, FragmentManager fragmentManager, EntrevistadoListaViewModel entrevistadoListaViewModel, Investigador investigador) {
         this.entrevistadoList = entrevistadoList;
@@ -176,6 +177,10 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 btn_cargar_mas.setVisibility(View.GONE);
                 pagina = 1;
             }
+
+            if (entrevistados_totales == entrevistadoList.size()) {
+                btn_cargar_mas.setVisibility(View.GONE);
+            }
             btn_cargar_mas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -236,6 +241,10 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void resetPages() {
         pagina = 1;
+    }
+
+    public void setEntrevistadosTotales(int entrevistados_totales) {
+        this.entrevistados_totales = entrevistados_totales;
     }
 
     static class EntrevistadoViewHolder extends RecyclerView.ViewHolder {

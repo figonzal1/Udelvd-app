@@ -116,6 +116,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             @Override
             public void onChanged(Integer integer) {
                 investigadores_totales = integer;
+                investigadorAdapter.setInvestigadoresTotales(investigadores_totales);
             }
         });
 

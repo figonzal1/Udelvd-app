@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,6 +37,7 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ProgressBar progressBar;
     private Investigador investigador;
     private int pagina = 1;
+    private int investigadores_totales;
 
     public InvestigadorAdapter(List<Investigador> investigadorList, Context context, FragmentManager fragmentManager, InvestigadorListaViewModel investigadorListaViewModel, Investigador investigador) {
         this.investigadorList = investigadorList;
@@ -85,22 +85,15 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 holder.switch_activate.setText(context.getString(R.string.PERFIL_NO_ACTIVADO));
             }
 
-
-            holder.switch_activate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            holder.switch_activate.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        holder.switch_activate.setChecked(true);
-                        holder.switch_activate.setText(context.getString(R.string.PERFIL_ACTIVADO));
-
-                        ActivarInvestigadorDialogFragment dialogFragment = new ActivarInvestigadorDialogFragment(investigador, true);
+                public void onClick(View v) {
+                    if (holder.switch_activate.isChecked()) {
+                        ActivarInvestigadorDialogFragment dialogFragment = new ActivarInvestigadorDialogFragment(investigador, true, holder.switch_activate);
                         dialogFragment.setCancelable(false);
                         dialogFragment.show(fragmentManager, TAG_ACTIVAR_INVESTIGADOR);
                     } else {
-                        holder.switch_activate.setChecked(false);
-                        holder.switch_activate.setText(context.getString(R.string.PERFIL_NO_ACTIVADO));
-
-                        ActivarInvestigadorDialogFragment dialogFragment = new ActivarInvestigadorDialogFragment(investigador, false);
+                        ActivarInvestigadorDialogFragment dialogFragment = new ActivarInvestigadorDialogFragment(investigador, false, holder.switch_activate);
                         dialogFragment.setCancelable(false);
                         dialogFragment.show(fragmentManager, TAG_ACTIVAR_INVESTIGADOR);
                     }
@@ -117,6 +110,11 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 btn_cargar_mas.setVisibility(View.GONE);
                 pagina = 1;
             }
+
+            if (investigadores_totales == investigadorList.size()) {
+                btn_cargar_mas.setVisibility(View.GONE);
+            }
+
             btn_cargar_mas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -179,6 +177,10 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public List<Investigador> getInvestigadorList() {
         return investigadorList;
+    }
+
+    public void setInvestigadoresTotales(int investigadores_totales) {
+        this.investigadores_totales = investigadores_totales;
     }
 
     static class InvestigadorViewHolder extends RecyclerView.ViewHolder {

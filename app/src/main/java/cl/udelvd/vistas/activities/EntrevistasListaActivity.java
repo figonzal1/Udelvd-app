@@ -168,6 +168,8 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
+                    cv_entrevistas.setVisibility(View.VISIBLE);
+                    cv_info.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -222,6 +224,8 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.INVISIBLE);
+                cv_entrevistas.setVisibility(View.INVISIBLE);
+                cv_info.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
@@ -258,7 +262,6 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
                 if (!isSnackBarShow) {
 
                     if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
-                        rv.setVisibility(View.INVISIBLE);
                         showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_INDEFINITE, s, null);
                     } else {
                         showSnackbar(findViewById(R.id.entrevistas_list), Snackbar.LENGTH_LONG, s, null);

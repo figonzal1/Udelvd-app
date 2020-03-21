@@ -18,7 +18,7 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Evento;
 
-class DeleteEventoDialogFragment extends DialogFragment {
+public class DeleteEventoDialogFragment extends DialogFragment {
 
     private final Evento evento;
     private DeleteDialogListener listener;

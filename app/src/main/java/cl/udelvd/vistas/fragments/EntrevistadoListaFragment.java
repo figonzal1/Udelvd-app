@@ -187,6 +187,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
             @Override
             public void onChanged(Integer integer) {
                 entrevistados_totales = integer;
+                entrevistadoAdapter.setEntrevistadosTotales(entrevistados_totales);
             }
         });
 
@@ -284,7 +285,6 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
                     isSnackBarShow = true;
 
                     if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
-                        rv.setVisibility(View.INVISIBLE);
                         showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, null);
                     } else {
                         showSnackbar(v, Snackbar.LENGTH_LONG, s, null);

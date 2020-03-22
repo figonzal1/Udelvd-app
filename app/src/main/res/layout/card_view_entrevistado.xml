@@ -107,6 +107,7 @@
         tools:text="X entrevistas" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginTop="16dp"
@@ -129,5 +130,21 @@
         card_view:layout_constraintTop_toTopOf="parent"
         card_view:layout_constraintVertical_bias="0.0"
         card_view:srcCompat="@drawable/ic_more_vert_black_24dp" />
+
+    <TextView
+        android:id="@+id/tv_investigador_a_cargo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textSize="12sp"
+        android:visibility="gone"
+        card_view:layout_constraintBottom_toTopOf="@+id/view"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/tv_n_entrevistas"
+        tools:text="Investigador a cargo: Felipe Gonzalez"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

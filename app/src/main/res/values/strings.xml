@@ -12,7 +12,8 @@
     <string name="URL_PUT_RESETEAR_PASSWORD" translatable="false">%sinvestigadores/resetear</string>
     <string name="URL_PUT_INVESTIGADORES" translatable="false">%sinvestigadores/%d</string>
     <string name="URL_POST_ENTREVISTADOS" translatable="false">%sentrevistados</string>
-    <string name="URL_GET_ENTREVISTADOS" translatable="false">%sentrevistados/pagina/%d/investigador/%d</string>
+    <string name="URL_GET_ENTREVISTADOS_TOTALES" translatable="false">%sentrevistados/pagina/%d</string>
+    <string name="URL_GET_ENTREVISTADOS_INVESTIGADOR" translatable="false">%sentrevistados/pagina/%d/investigador/%d</string>
     <string name="URL_GET_ENTREVISTADO" translatable="false">%sentrevistados/%d</string>
     <string name="URL_PUT_ENTREVISTADOS" translatable="false">%sentrevistados/%d</string>
     <string name="URL_GET_ACCIONES_IDIOMA" translatable="false">%sacciones/idioma/%s</string>
@@ -537,6 +538,9 @@
     <string name="COPIADO_PORTAPAPELES">Copiado al portapapeles</string>
     <string name="DISTRIBUCION_EVENTOS">Distribución de eventos</string>
     <string name="IR_VISUALIZACION">Ir</string>
+    <string name="FORMAT_REGISTRADO_POR">Registrado por: %s %s</string>
+    <string name="TODOS">Todos</string>
+    <string name="MI_CUENTA">Mi cuenta</string>
 
 
 </resources>

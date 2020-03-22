@@ -55,14 +55,16 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ProgressBar progressBar;
     private final Investigador investigador;
     private int entrevistados_totales;
+    boolean listadoTotal;
 
-    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment, FragmentManager fragmentManager, EntrevistadoListaViewModel entrevistadoListaViewModel, Investigador investigador) {
+    public EntrevistadoAdapter(List<Entrevistado> entrevistadoList, Context context, EntrevistadoListaFragment entrevistadoListaFragment, FragmentManager fragmentManager, EntrevistadoListaViewModel entrevistadoListaViewModel, Investigador investigador, boolean listadoTotal) {
         this.entrevistadoList = entrevistadoList;
         this.context = context;
         this.entrevistadoListaFragment = entrevistadoListaFragment;
         this.fragmentManager = fragmentManager;
         this.entrevistadoListaViewModel = entrevistadoListaViewModel;
         this.investigador = investigador;
+        this.listadoTotal = listadoTotal;
         setHasStableIds(true);
     }
 
@@ -102,6 +104,11 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 holder.tv_n_entrevistas.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTA), entrevistado.getN_entrevistas()));
             } else {
                 holder.tv_n_entrevistas.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTAS), entrevistado.getN_entrevistas()));
+            }
+
+            if (listadoTotal) {
+                holder.tv_investigador_a_cargo.setVisibility(View.VISIBLE);
+                holder.tv_investigador_a_cargo.setText(String.format(context.getString(R.string.FORMAT_REGISTRADO_POR), entrevistado.getNombre_investigador(), entrevistado.getApellido_investigador()));
             }
 
             Utils.configurarIconoEntrevistado(entrevistado, annos, holder.iv_persona, context);
@@ -187,7 +194,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     pagina += 1;
 
                     if (entrevistadoListaViewModel != null) {
-                        entrevistadoListaViewModel.cargarSiguientePagina(pagina, investigador);
+                        entrevistadoListaViewModel.cargarSiguientePagina(pagina, investigador, listadoTotal);
                     }
 
                     progressBar.setVisibility(View.VISIBLE);
@@ -247,6 +254,11 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.entrevistados_totales = entrevistados_totales;
     }
 
+    public void setListadoTotal(boolean listadoTotal) {
+        this.listadoTotal = listadoTotal;
+        notifyDataSetChanged();
+    }
+
     static class EntrevistadoViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tv_nombre_apellido;
@@ -254,6 +266,7 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private final TextView tv_n_entrevistas;
         private final ImageView iv_menu_entrevistado;
         private final ImageView iv_persona;
+        private final TextView tv_investigador_a_cargo;
 
         private final View card_view_entrevistado;
 
@@ -266,6 +279,8 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tv_n_entrevistas = itemView.findViewById(R.id.tv_n_entrevistas);
             iv_menu_entrevistado = itemView.findViewById(R.id.iv_menu_entrevistado);
             iv_persona = itemView.findViewById(R.id.cv_iv_persona);
+
+            tv_investigador_a_cargo = itemView.findViewById(R.id.tv_investigador_a_cargo);
 
             card_view_entrevistado = itemView.findViewById(R.id.card_view_entrevistado);
         }

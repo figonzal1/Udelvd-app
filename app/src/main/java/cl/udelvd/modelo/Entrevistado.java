@@ -31,6 +31,8 @@ public class Entrevistado {
 
     //Relaciones
     private int n_entrevistas; //Numero total de entrevistas de la persona
+    private String nombre_investigador;
+    private String apellido_investigador;
 
     public Entrevistado() {
     }
@@ -161,6 +163,22 @@ public class Entrevistado {
 
     public void setN_entrevistas(int n_entrevistas) {
         this.n_entrevistas = n_entrevistas;
+    }
+
+    public String getNombre_investigador() {
+        return nombre_investigador;
+    }
+
+    public void setNombre_investigador(String nombre_investigador) {
+        this.nombre_investigador = nombre_investigador;
+    }
+
+    public String getApellido_investigador() {
+        return apellido_investigador;
+    }
+
+    public void setApellido_investigador(String apellido_investigador) {
+        this.apellido_investigador = apellido_investigador;
     }
 
     @Override

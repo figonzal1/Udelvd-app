@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -97,8 +98,8 @@ public class EntrevistadoRepositorio {
     /*
     LISTADO ENTREVISTADOS
      */
-    public SingleLiveEvent<List<Entrevistado>> obtenerEntrevistados(int page, Investigador investigador) {
-        sendGetEntrevistados(page, investigador);
+    public SingleLiveEvent<List<Entrevistado>> obtenerEntrevistados(int page, Investigador investigador, boolean listadoTotal) {
+        sendGetEntrevistados(page, investigador, listadoTotal);
         if (page == 1) {
             return entrevistadosPrimeraPaginaLiveData;
         } else {
@@ -110,7 +111,7 @@ public class EntrevistadoRepositorio {
         return entrevistadosSgtPaginaLiveData;
     }
 
-    private void sendGetEntrevistados(final int page, Investigador investigador) {
+    private void sendGetEntrevistados(final int page, Investigador investigador, final boolean listadoTotal) {
 
         final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -199,9 +200,26 @@ public class EntrevistadoRepositorio {
                         }
 
                         JSONObject jsonRelationships = jsonUsuario.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS));
+
+                        //ENTREVISTADO
+                        JSONObject jsonEntrevistados = jsonRelationships.getJSONObject(application.getString(R.string.KEY_ENTREVISTA_OBJECT));
                         entrevistado.setN_entrevistas(
-                                jsonRelationships.getJSONObject(application.getString(R.string.KEY_ENTREVISTA_OBJECT)).getJSONObject(application.getString(R.string.JSON_DATA)).getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))
+                                jsonEntrevistados.getJSONObject(application.getString(R.string.JSON_DATA))
+                                        .getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))
                         );
+
+                        if (listadoTotal) {
+                            //INVESTIGADOR
+                            JSONObject jsonInvestigadores = jsonRelationships.getJSONObject(application.getString(R.string.KEY_INVES));
+                            entrevistado.setNombre_investigador(
+                                    jsonInvestigadores.getJSONObject(application.getString(R.string.JSON_DATA))
+                                            .getString(application.getString(R.string.KEY_INVES_NOMBRE))
+                            );
+                            entrevistado.setApellido_investigador(
+                                    jsonInvestigadores.getJSONObject(application.getString(R.string.JSON_DATA))
+                                            .getString(application.getString(R.string.KEY_INVES_APELLIDO))
+                            );
+                        }
 
                         if (page == 1) {
                             entrevistadosList.add(entrevistado);
@@ -270,7 +288,13 @@ public class EntrevistadoRepositorio {
             }
         };
 
-        String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN), page, investigador.getId());
+        String url;
+        if (listadoTotal) {
+            url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS_TOTALES), application.getString(R.string.HEROKU_DOMAIN), page);
+        } else {
+            url = String.format(application.getString(R.string.URL_GET_ENTREVISTADOS_INVESTIGADOR), application.getString(R.string.HEROKU_DOMAIN), page, investigador.getId());
+        }
+
 
         //Hacer request
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener,
@@ -292,6 +316,10 @@ public class EntrevistadoRepositorio {
         if (page == 1) {
             isLoading.postValue(true);
         }
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADOS_LISTA);
     }
 

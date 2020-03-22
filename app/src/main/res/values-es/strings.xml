@@ -197,4 +197,7 @@
     <string name="FORMATO_LINK_DIRECTO">Link directo: %s</string>
     <string name="DISTRIBUCION_EVENTOS">Distribución de eventos</string>
     <string name="IR_VISUALIZACION">Ir</string>
+    <string name="FORMAT_REGISTRADO_POR">Registrado por: %s %s</string>
+    <string name="TODOS">Todos</string>
+    <string name="MI_CUENTA">Mi cuenta</string>
 </resources>

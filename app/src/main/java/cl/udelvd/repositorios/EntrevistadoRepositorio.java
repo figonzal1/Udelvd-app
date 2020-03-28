@@ -8,13 +8,13 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -37,6 +37,7 @@ import cl.udelvd.modelo.NivelEducacional;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.modelo.TipoConvivencia;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SSLConection;
 import cl.udelvd.utilidades.SingleLiveEvent;
 import cl.udelvd.utilidades.Utils;
 
@@ -117,6 +118,7 @@ public class EntrevistadoRepositorio {
             @Override
             public void onResponse(String response) {
 
+                //Log.d("RESPONSE", response);
                 //Reiniciar listado cuando se pregunta por primera pagina
                 if (page == 1) {
                     entrevistadosList.clear();
@@ -316,11 +318,14 @@ public class EntrevistadoRepositorio {
         if (page == 1) {
             isLoading.postValue(true);
         }
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                0,
+        /*request.setRetryPolicy(new DefaultRetryPolicy(
+                2500,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADOS_LISTA);
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+        VolleySingleton.getInstance(application).addToRequestQueue(request,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+
+        //VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADOS_LISTA);
     }
 
     /*
@@ -498,7 +503,9 @@ public class EntrevistadoRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADO_REGISTRO);
+        VolleySingleton.getInstance(application).addToRequestQueue(request,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_ENTREVISTADO_REGISTRO);
     }
 
     /*
@@ -657,7 +664,9 @@ public class EntrevistadoRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO);
     }
 
     /*
@@ -841,7 +850,9 @@ public class EntrevistadoRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO_ACTUALIZADO);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO_ACTUALIZADO);
     }
 
     /*
@@ -937,7 +948,10 @@ public class EntrevistadoRepositorio {
         };
 
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO_ELIMINAR);
+
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ENTREVISTADO_ELIMINAR);
     }
 
     /*

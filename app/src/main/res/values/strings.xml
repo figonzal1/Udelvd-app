@@ -3,7 +3,7 @@
 
     <!-- URLS-->
     <!--<string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>-->
-    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.19/</string>
+    <string name="HEROKU_DOMAIN" translatable="false">https://192.168.0.19/</string>
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/pagina/%d/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
     <string name="URL_PATCH_INVESTIGADORES_ACTIVAR" translatable="false">%sinvestigadores/%d/activar</string>
@@ -225,7 +225,7 @@
     <!-- JWT -->
     <string name="JWT_AUDIENCE_ANDROID" translatable="false">android</string>
     <string name="JWT_ISSUER_UDELVD" translatable="false">http://udelvd.cl</string>
-    <string name="JWT_JTI_CODE" translatable="false">4f1g23a12aa</string>
+    <string name="JWT_JTI_CODE" translatable="false">34d9e597a200e6256c6b73593287f75402e5b350f8e4a5b67e79fa8f4bccbadd5821f009690f1e01b1f7fa570896fdd4af63add7323d1a54d345980a5615f559</string>
     <string name="JWT_UID" translatable="false">uid</string>
     <string name="JWT_STATUS_NO_VACIO" translatable="false">NO VACIO</string>
     <string name="JWT_STATUS_INCOHERENTE" translatable="false">DATOS NO CUADRAN</string>

@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -28,6 +29,7 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Profesion;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SSLConection;
 import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class ProfesionRepositorio {
@@ -167,7 +169,10 @@ public class ProfesionRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_PROFESION);
+
+        VolleySingleton.getInstance(application).addToRequestQueue(request,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_PROFESION);
     }
 
     /*

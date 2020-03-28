@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -35,6 +36,7 @@ import cl.udelvd.modelo.Emoticon;
 import cl.udelvd.modelo.Entrevista;
 import cl.udelvd.modelo.Evento;
 import cl.udelvd.servicios.VolleySingleton;
+import cl.udelvd.utilidades.SSLConection;
 import cl.udelvd.utilidades.SingleLiveEvent;
 import cl.udelvd.utilidades.Utils;
 
@@ -211,7 +213,9 @@ public class EventoRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTOS_ENTREVISTA);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTOS_ENTREVISTA);
 
     }
 
@@ -335,7 +339,9 @@ public class EventoRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_CREAR_EVENTO);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_CREAR_EVENTO);
     }
 
     /*
@@ -456,7 +462,9 @@ public class EventoRepositorio {
         };
 
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTO);
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENTO);
     }
 
     /*
@@ -574,7 +582,10 @@ public class EventoRepositorio {
         };
 
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ACTUALIZAR_EVENTO);
+
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ACTUALIZAR_EVENTO);
     }
 
     /*
@@ -669,7 +680,10 @@ public class EventoRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ELIMINAR_EVENTO);
+
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ELIMINAR_EVENTO);
     }
 
     /*

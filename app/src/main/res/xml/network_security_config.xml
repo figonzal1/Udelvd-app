@@ -6,4 +6,12 @@
             <certificates src="@raw/apache_prod" />
         </trust-anchors>
     </base-config>
+
+    <!-- LOCALHOST-->
+    <!--<domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">192.168.0.19</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>-->
 </network-security-config>

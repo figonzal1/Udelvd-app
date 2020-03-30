@@ -75,7 +75,7 @@ public class InvestigadorAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             holder.tv_email.setText(investigador.getEmail());
             holder.tv_nombre.setText(String.format("%s %s", investigador.getNombre(), investigador.getApellido()));
-            holder.tv_fecha_registro.setText(Utils.dateToString(context, false, Utils.stringToDate(context, false, investigador.getCreateTime())));
+            holder.tv_fecha_registro.setText(String.format(context.getString(R.string.FORMATO_FECHA_REGISTRO), Utils.dateToString(context, false, Utils.stringToDate(context, false, investigador.getCreateTime()))));
 
             if (investigador.isActivado()) {
                 holder.switch_activate.setChecked(true);

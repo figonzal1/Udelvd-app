@@ -904,6 +904,10 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 ilNCaidas.setErrorEnabled(true);
                 ilNCaidas.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 contador_errores++;
+            } else if (etNCaidas.getText().toString().equals("0")) {
+                ilNCaidas.setErrorEnabled(true);
+                ilNCaidas.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO_CERO));
+                contador_errores++;
             } else {
                 ilNCaidas.setErrorEnabled(false);
             }

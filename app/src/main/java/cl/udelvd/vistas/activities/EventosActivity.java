@@ -26,6 +26,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.adaptadores.FragmentStatePageAdapter;
@@ -232,6 +233,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
                     EventoRepositorio.getInstancia(getApplication()).obtenerEventosEntrevista(entrevista);
 
                     fragmentStatePageAdapter.notifyDataSetChanged();
+                    Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
@@ -382,5 +384,6 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
     @Override
     public void onDialogPositiveClick(Object object) {
         EventoRepositorio.getInstancia(getApplication()).eliminarEvento((Evento) object);
+        fragmentStatePageAdapter.notifyDataSetChanged();
     }
 }

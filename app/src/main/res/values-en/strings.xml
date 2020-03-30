@@ -200,4 +200,6 @@
     <string name="FORMAT_REGISTRADO_POR">Registered by: %s %s</string>
     <string name="TODOS">All</string>
     <string name="MI_CUENTA">My account</string>
+    <string name="VALIDACION_CAMPO_REQUERIDO_CERO">It can\'t be zero</string>
+    <string name="FORMATO_FECHA_REGISTRO">Register date: %s</string>
 </resources>

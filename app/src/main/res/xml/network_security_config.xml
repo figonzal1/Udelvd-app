@@ -3,7 +3,7 @@
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="@raw/apache" />
-            <certificates src="@raw/apache_localhost" />
+            <certificates src="@raw/apache_prod" />
         </trust-anchors>
     </base-config>
 </network-security-config>

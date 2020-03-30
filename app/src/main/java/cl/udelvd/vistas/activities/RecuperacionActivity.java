@@ -94,7 +94,7 @@ public class RecuperacionActivity extends AppCompatActivity implements SnackbarI
                 assert msg_recovery != null;
                 if (msg_recovery.equals(getString(R.string.RECOVERY_MSG_VM_RESPONSE))) {
 
-                    showSnackbar(findViewById(R.id.recuperar_investigador), Snackbar.LENGTH_LONG, msg_recovery, null);
+                    showSnackbar(findViewById(R.id.recuperar_investigador), Snackbar.LENGTH_INDEFINITE, msg_recovery, null);
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
                     String sharedEmail = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");

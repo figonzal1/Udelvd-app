@@ -105,6 +105,7 @@
     <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d años</string>
     <string name="FORMATO_ACCION">Acción %d</string>
     <string name="FORMATO_LINK_DIRECTO">Link directo: %s</string>
+    <string name="FORMATO_FECHA_REGISTRO">Fecha registro: %s</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT" translatable="false">investigador</string>
@@ -290,6 +291,7 @@
     <string name="MSG_INVEST_ACTUALIZADO">¡Datos actualizados!</string>
     <string name="MSG_INVEST_REGISTRADO">¡Estas registrado!</string>
     <string name="VALIDACION_CAMPO_REQUERIDO">Campo requerido</string>
+    <string name="VALIDACION_CAMPO_REQUERIDO_CERO">No puede ser cero</string>
     <string name="VALIDACION_EMAIL">Email inválido</string>
     <string name="VALIDACION_PASSWORD_LARGO">Contraseña debe tener 8 carácteres mínimo</string>
     <string name="VALIDACION_PASSWORD_NO_IGUALES">Contraseñas no coinciden</string>

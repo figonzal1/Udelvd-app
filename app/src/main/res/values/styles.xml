@@ -7,7 +7,7 @@
     -->
 
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <item name="android:fontFamily">@font/roboto</item>
 

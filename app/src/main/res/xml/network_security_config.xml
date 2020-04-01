@@ -2,16 +2,7 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
-            <certificates src="@raw/apache" />
-            <certificates src="@raw/apache_prod" />
-        </trust-anchors>
-    </base-config>
-
-    <!-- LOCALHOST-->
-    <!--<domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">192.168.0.19</domain>
-        <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
-    </domain-config>-->
+    </base-config>
 </network-security-config>

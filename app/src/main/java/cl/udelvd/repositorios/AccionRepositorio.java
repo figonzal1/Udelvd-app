@@ -14,7 +14,6 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -30,7 +29,6 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Accion;
 import cl.udelvd.servicios.VolleySingleton;
-import cl.udelvd.utilidades.SSLConection;
 import cl.udelvd.utilidades.SingleLiveEvent;
 
 public class AccionRepositorio {
@@ -180,9 +178,9 @@ public class AccionRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ACCIONES);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ACCIONES);
     }
 
     /*
@@ -292,9 +290,9 @@ public class AccionRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ACCIONES);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_ACCIONES);
     }
 
     /*
@@ -408,9 +406,9 @@ public class AccionRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NUEVA_ACCION);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NUEVA_ACCION);
     }
 
     /*
@@ -525,9 +523,9 @@ public class AccionRepositorio {
         };
 
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_UPDATE_ACCION);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_UPDATE_ACCION);
     }
 
     /*
@@ -623,9 +621,9 @@ public class AccionRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ELIMINAR_ACCION);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_ELIMINAR_ACCION);
     }
 
     /*

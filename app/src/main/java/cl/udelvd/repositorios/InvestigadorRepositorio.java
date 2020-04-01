@@ -15,7 +15,6 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -31,7 +30,6 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.modelo.Investigador;
 import cl.udelvd.servicios.VolleySingleton;
-import cl.udelvd.utilidades.SSLConection;
 import cl.udelvd.utilidades.SingleLiveEvent;
 import cl.udelvd.utilidades.Utils;
 
@@ -250,9 +248,9 @@ public class InvestigadorRepositorio {
         if (pagina == 1) {
             isLoading.postValue(true);
         }
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_LISTADO);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_LISTADO);
     }
 
     /*
@@ -411,9 +409,9 @@ public class InvestigadorRepositorio {
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        VolleySingleton.getInstance(application).addToRequestQueue(request,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_REGISTRO);
+        //VolleySingleton.getInstance(application).addToRequestQueue(request,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_REGISTRO);
     }
 
     /*
@@ -589,9 +587,9 @@ public class InvestigadorRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(request,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_LOGIN);
+        //VolleySingleton.getInstance(application).addToRequestQueue(request,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_LOGIN);
     }
 
     /*
@@ -740,9 +738,9 @@ public class InvestigadorRepositorio {
         };
 
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(request,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_ACTUALIZACION);
+        //VolleySingleton.getInstance(application).addToRequestQueue(request,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INVESTIGADOR_ACTUALIZACION);
     }
 
     /*
@@ -863,9 +861,9 @@ public class InvestigadorRepositorio {
                 7000,
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RECUPERACION);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RECUPERACION);
     }
 
     /*
@@ -967,9 +965,9 @@ public class InvestigadorRepositorio {
             }
         };
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RESET);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_RESET);
     }
 
     /*
@@ -1096,9 +1094,9 @@ public class InvestigadorRepositorio {
         };
 
         isLoading.postValue(true);
-        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-                new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_ACTIVACION);
+        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
+        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
+        VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_ACTIVACION);
     }
 
     /*

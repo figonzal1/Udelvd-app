@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -165,7 +165,7 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
         progressBar = findViewById(R.id.progress_horizontal_registro_entrevistado);
         progressBar.setVisibility(View.VISIBLE);
 
-        nuevoEntrevistadoViewModel = ViewModelProviders.of(this).get(NuevoEntrevistadoViewModel.class);
+        nuevoEntrevistadoViewModel = new ViewModelProvider(this).get(NuevoEntrevistadoViewModel.class);
 
     }
 

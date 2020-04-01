@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -76,7 +76,7 @@ public class AccionesListActivity extends AppCompatActivity implements SnackbarI
         LinearLayoutManager ly = new LinearLayoutManager(getApplicationContext());
         rv.setLayoutManager(ly);
 
-        accionesListaViewModel = ViewModelProviders.of(this).get(AccionesListViewModel.class);
+        accionesListaViewModel = new ViewModelProvider(this).get(AccionesListViewModel.class);
 
         accionAdapter = new AccionAdapter(
                 accionesList,

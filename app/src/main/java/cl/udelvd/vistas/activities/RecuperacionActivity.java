@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -133,7 +133,7 @@ public class RecuperacionActivity extends AppCompatActivity implements SnackbarI
 
         btn_recuperar_cuenta = findViewById(R.id.btn_recuperar);
 
-        recuperacionViewModel = ViewModelProviders.of(this).get(RecuperacionViewModel.class);
+        recuperacionViewModel = new ViewModelProvider(this).get(RecuperacionViewModel.class);
     }
 
     private boolean validarCampos() {

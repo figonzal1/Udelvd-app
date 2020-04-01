@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -112,7 +112,7 @@ public class RegistroActivity extends AppCompatActivity implements SnackbarInter
         etPassword = findViewById(R.id.et_password_investigador);
         etConfirmacionPassword = findViewById(R.id.et_confirm_password_investigador);
 
-        registroViewModel = ViewModelProviders.of(this).get(RegistroViewModel.class);
+        registroViewModel = new ViewModelProvider(this).get(RegistroViewModel.class);
     }
 
     /**

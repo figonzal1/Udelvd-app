@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -190,7 +190,7 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
         tv_switch_caidas = findViewById(R.id.tv_switch_caidas);
         tv_switch_jubilado = findViewById(R.id.tv_switch_jubilado_value);
 
-        editarEntrevistadoViewModel = ViewModelProviders.of(this).get(EditarEntrevistadoViewModel.class);
+        editarEntrevistadoViewModel = new ViewModelProvider(this).get(EditarEntrevistadoViewModel.class);
 
     }
 

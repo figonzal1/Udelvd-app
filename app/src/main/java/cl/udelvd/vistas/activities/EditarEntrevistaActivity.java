@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -85,7 +85,7 @@ public class EditarEntrevistaActivity extends AppCompatActivity implements Snack
         etFechaEntrevista = findViewById(R.id.et_fecha_entrevista);
         acTipoEntrevista = findViewById(R.id.et_tipo_entrevista);
 
-        editarEntrevistaViewModel = ViewModelProviders.of(this).get(EditarEntrevistaViewModel.class);
+        editarEntrevistaViewModel = new ViewModelProvider(this).get(EditarEntrevistaViewModel.class);
     }
 
     private void obtenerDatosBundles() {

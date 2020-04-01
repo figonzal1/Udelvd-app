@@ -15,7 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,7 +82,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         tv_investigadores_vacios = findViewById(R.id.tv_investigadores_vacios);
         tv_investigadores_vacios.setVisibility(View.INVISIBLE);
 
-        investigadorListaViewModel = ViewModelProviders.of(this).get(InvestigadorListaViewModel.class);
+        investigadorListaViewModel = new ViewModelProvider(this).get(InvestigadorListaViewModel.class);
 
         investigadorAdapter = new InvestigadorAdapter(
                 investigadorList,

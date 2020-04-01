@@ -3,7 +3,7 @@
 
     <!-- URLS-->
     <!--<string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>-->
-    <string name="HEROKU_DOMAIN" translatable="false">https://192.168.0.19/</string>
+    <string name="HEROKU_DOMAIN" translatable="false">https://udelvd.tk/</string>
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/pagina/%d/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
     <string name="URL_PATCH_INVESTIGADORES_ACTIVAR" translatable="false">%sinvestigadores/%d/activar</string>
@@ -49,6 +49,7 @@
     <string name="SEXO_OTRO">Otro</string>
     <string name="SEXO_MASCULINO_MASTER_KEY" translatable="false">Masculino</string>
     <string name="SEXO_FEMENINO_MASTER_KEY" translatable="false">Femenino</string>
+    <string name="SEXO_OTRO_MASTER_KEY" translatable="false">Otro</string>
 
     <!-- ROLES -->
     <string name="ROL_INVESTIGADOR">Investigador</string>

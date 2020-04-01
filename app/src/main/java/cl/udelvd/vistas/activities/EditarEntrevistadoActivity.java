@@ -643,11 +643,11 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
             etNombre.setText(entrevistadoIntent.getNombre());
             etApellido.setText(entrevistadoIntent.getApellido());
 
-            if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_MASCULINO))) {
+            if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
                 acSexo.setText(getString(R.string.SEXO_MASCULINO), false);
-            } else if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_FEMENINO))) {
+            } else if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_FEMENINO_MASTER_KEY))) {
                 acSexo.setText(getString(R.string.SEXO_FEMENINO), false);
-            } else if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_OTRO))) {
+            } else if (entrevistadoIntent.getSexo().equals(getString(R.string.SEXO_OTRO_MASTER_KEY))) {
                 acSexo.setText(getString(R.string.SEXO_OTRO), false);
             }
 
@@ -744,7 +744,14 @@ public class EditarEntrevistadoActivity extends AppCompatActivity implements Sna
                 entrevistado.setIdInvestigador(id_investigador);
                 entrevistado.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
                 entrevistado.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
-                entrevistado.setSexo(acSexo.getText().toString());
+
+                if (acSexo.getText().toString().equals(getString(R.string.SEXO_MASCULINO))) {
+                    entrevistado.setSexo(getString(R.string.SEXO_MASCULINO_MASTER_KEY));
+                } else if (acSexo.getText().toString().equals(getString(R.string.SEXO_FEMENINO))) {
+                    entrevistado.setSexo(getString(R.string.SEXO_FEMENINO_MASTER_KEY));
+                } else if (acSexo.getText().toString().equals(getString(R.string.SEXO_OTRO))) {
+                    entrevistado.setSexo(getString(R.string.SEXO_OTRO_MASTER_KEY));
+                }
 
                 Date fechaNac = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etFechaNacimiento.getText()).toString());
                 entrevistado.setFechaNacimiento(fechaNac);

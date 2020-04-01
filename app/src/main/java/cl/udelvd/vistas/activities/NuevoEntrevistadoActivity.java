@@ -664,6 +664,10 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
                 ilNCaidas.setErrorEnabled(true);
                 ilNCaidas.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 contador_errores++;
+            } else if (etNCaidas.getText().toString().equals("0")) {
+                ilNCaidas.setErrorEnabled(true);
+                ilNCaidas.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO_CERO));
+                contador_errores++;
             } else {
                 ilNCaidas.setErrorEnabled(false);
             }
@@ -727,7 +731,14 @@ public class NuevoEntrevistadoActivity extends AppCompatActivity implements Snac
                 entrevistado.setIdInvestigador(idInvestigador);
                 entrevistado.setNombre(Objects.requireNonNull(etNombre.getText()).toString());
                 entrevistado.setApellido(Objects.requireNonNull(etApellido.getText()).toString());
-                entrevistado.setSexo(acSexo.getText().toString());
+
+                if (acSexo.getText().toString().equals(getString(R.string.SEXO_MASCULINO))) {
+                    entrevistado.setSexo(getString(R.string.SEXO_MASCULINO_MASTER_KEY));
+                } else if (acSexo.getText().toString().equals(getString(R.string.SEXO_FEMENINO))) {
+                    entrevistado.setSexo(getString(R.string.SEXO_FEMENINO_MASTER_KEY));
+                } else if (acSexo.getText().toString().equals(getString(R.string.SEXO_OTRO))) {
+                    entrevistado.setSexo(getString(R.string.SEXO_OTRO_MASTER_KEY));
+                }
 
                 Date fechaNac = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etFechaNacimiento.getText()).toString());
                 entrevistado.setFechaNacimiento(fechaNac);

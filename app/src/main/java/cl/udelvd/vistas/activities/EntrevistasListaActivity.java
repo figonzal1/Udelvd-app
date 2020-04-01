@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -138,7 +138,7 @@ public class EntrevistasListaActivity extends AppCompatActivity implements Delet
         tv_entrevistas_normales = findViewById(R.id.tv_normales_value);
         tv_entrevistas_extraordinarias = findViewById(R.id.tv_extraordinarias_value);
 
-        entrevistasListaViewModel = ViewModelProviders.of(this).get(EntrevistasListaViewModel.class);
+        entrevistasListaViewModel = new ViewModelProvider(this).get(EntrevistasListaViewModel.class);
 
         Utils.configurarIconoEntrevistado(entrevistado, annos, iv_persona, getApplicationContext());
 

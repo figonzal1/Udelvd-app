@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -77,7 +77,7 @@ public class EditarAccionActivity extends AppCompatActivity implements SnackbarI
         etAccionEspanol = findViewById(R.id.et_accion_espanol);
         etAccionIngles = findViewById(R.id.et_accion_ingles);
 
-        editarAccionViewModel = ViewModelProviders.of(this).get(EditarAccionViewModel.class);
+        editarAccionViewModel = new ViewModelProvider(this).get(EditarAccionViewModel.class);
     }
 
     private void iniciarViewModel() {

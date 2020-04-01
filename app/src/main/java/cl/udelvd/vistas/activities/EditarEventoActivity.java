@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -110,7 +110,7 @@ public class EditarEventoActivity extends AppCompatActivity implements SnackbarI
 
         spinner = findViewById(R.id.spinner_emoticon);
 
-        editarEventoViewModel = ViewModelProviders.of(this).get(EditarEventoViewModel.class);
+        editarEventoViewModel = new ViewModelProvider(this).get(EditarEventoViewModel.class);
 
         idioma = Utils.obtenerIdioma(getApplicationContext());
     }

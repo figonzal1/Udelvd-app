@@ -11,7 +11,7 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -170,7 +170,7 @@ public class ResetearPassActivity extends AppCompatActivity implements SnackbarI
 
         btn_resetear_pass = findViewById(R.id.btn_resetear_pass);
 
-        resetearPassViewModel = ViewModelProviders.of(this).get(ResetearPassViewModel.class);
+        resetearPassViewModel = new ViewModelProvider(this).get(ResetearPassViewModel.class);
     }
 
     @Override

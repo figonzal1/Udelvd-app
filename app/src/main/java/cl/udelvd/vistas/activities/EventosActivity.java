@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -117,7 +117,7 @@ public class EventosActivity extends AppCompatActivity implements DeleteDialogLi
 
         eventoList = new ArrayList<>();
 
-        eventosListaViewModel = ViewModelProviders.of(this).get(EventosListaViewModel.class);
+        eventosListaViewModel = new ViewModelProvider(this).get(EventosListaViewModel.class);
 
         cv_info = findViewById(R.id.card_view_info_entrevistado);
         cv_info.setVisibility(View.INVISIBLE);

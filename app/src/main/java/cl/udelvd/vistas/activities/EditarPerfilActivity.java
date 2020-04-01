@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -99,7 +99,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
         //ProgressBar
         progressBar = findViewById(R.id.progress_horizontal_editar_perfil);
 
-        editarPefilViewModel = ViewModelProviders.of(this).get(EditarPerfilViewModel.class);
+        editarPefilViewModel = new ViewModelProvider(this).get(EditarPerfilViewModel.class);
     }
 
     private void iniciarViewModel() {

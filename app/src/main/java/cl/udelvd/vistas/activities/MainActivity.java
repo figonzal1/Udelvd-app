@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Objects;
 
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
 
         sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 

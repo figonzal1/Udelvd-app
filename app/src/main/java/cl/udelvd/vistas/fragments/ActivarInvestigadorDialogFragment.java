@@ -19,7 +19,7 @@ import cl.udelvd.modelo.Investigador;
 public class ActivarInvestigadorDialogFragment extends DialogFragment {
 
     private final Investigador investigador;
-    private DeleteDialogListener listener;
+    private ActivarCuentaDialogListener listener;
     private final boolean activar;
     private SwitchMaterial switchMaterial;
 
@@ -43,7 +43,7 @@ public class ActivarInvestigadorDialogFragment extends DialogFragment {
                     switchMaterial.setChecked(true);
                     switchMaterial.setText(getString(R.string.PERFIL_ACTIVADO));
 
-                    listener.onDialogPositiveClick(investigador);
+                    listener.onDialogPositiveClick(investigador, investigador.isActivado());
 
                     dialog.dismiss();
                 }
@@ -64,7 +64,7 @@ public class ActivarInvestigadorDialogFragment extends DialogFragment {
                     investigador.setActivado(false);
                     switchMaterial.setChecked(false);
                     switchMaterial.setText(getString(R.string.PERFIL_NO_ACTIVADO));
-                    listener.onDialogPositiveClick(investigador);
+                    listener.onDialogPositiveClick(investigador, investigador.isActivado());
 
                     dialog.dismiss();
                 }
@@ -84,7 +84,7 @@ public class ActivarInvestigadorDialogFragment extends DialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        listener = (DeleteDialogListener) context;
+        listener = (ActivarCuentaDialogListener) context;
     }
 
     @Override

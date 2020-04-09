@@ -2,7 +2,7 @@
     <string name="app_name">Un día en la vida de &#8230;</string>
 
     <!-- URLS-->
-    <!--<string name="HEROKU_DOMAIN" translatable="false">https://udelvd-dev.herokuapp.com/</string>-->
+    <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.19/</string>-->
     <string name="HEROKU_DOMAIN" translatable="false">https://udelvd.tk/</string>
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/pagina/%d/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
@@ -544,6 +544,8 @@
     <string name="FORMAT_REGISTRADO_POR">Registrado por: %s %s</string>
     <string name="TODOS">Todos</string>
     <string name="MI_CUENTA">Mi cuenta</string>
+    <string name="ACTIVANDO_CUENTA">Activando cuenta</string>
+    <string name="DESACTIVANDO_CUENTA">Desactivando cuenta</string>
 
 
 </resources>

@@ -25,6 +25,11 @@ public class InvestigadorListaViewModel extends AndroidViewModel {
         return repositorio.getIsLoading();
     }
 
+    public MutableLiveData<Boolean> isActivando() {
+        repositorio = InvestigadorRepositorio.getInstance(getApplication());
+        return repositorio.getActivando();
+    }
+
     public SingleLiveEvent<List<Investigador>> mostrarPrimeraPagina(int page, Investigador investigador) {
         repositorio = InvestigadorRepositorio.getInstance(getApplication());
         return repositorio.obtenerInvestigadores(page, investigador);

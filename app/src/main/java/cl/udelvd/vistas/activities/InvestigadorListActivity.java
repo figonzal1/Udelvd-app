@@ -32,9 +32,9 @@ import cl.udelvd.repositorios.InvestigadorRepositorio;
 import cl.udelvd.utilidades.SnackbarInterface;
 import cl.udelvd.utilidades.Utils;
 import cl.udelvd.viewmodel.InvestigadorListaViewModel;
-import cl.udelvd.vistas.fragments.DeleteDialogListener;
+import cl.udelvd.vistas.fragments.ActivarCuentaDialogListener;
 
-public class InvestigadorListActivity extends AppCompatActivity implements SnackbarInterface, DeleteDialogListener {
+public class InvestigadorListActivity extends AppCompatActivity implements SnackbarInterface, ActivarCuentaDialogListener {
 
     private static final int INVESTIGADORES_ACTIVITY_CODE = 200;
     private RecyclerView rv;
@@ -45,6 +45,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
     private ProgressBar progressBar;
     private boolean isSnackBarShow = false;
     private TextView tv_investigadores_vacios;
+    private TextView tv_activado_investigador;
     private Investigador investigador;
     private int investigadores_totales;
     private TextView tv_n_ivestigadores;
@@ -81,6 +82,9 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
 
         tv_investigadores_vacios = findViewById(R.id.tv_investigadores_vacios);
         tv_investigadores_vacios.setVisibility(View.INVISIBLE);
+
+        tv_activado_investigador = findViewById(R.id.tv_activando);
+        tv_activado_investigador.setVisibility(View.INVISIBLE);
 
         investigadorListaViewModel = new ViewModelProvider(this).get(InvestigadorListaViewModel.class);
 
@@ -185,10 +189,28 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         /*
         ACTIVACIONES
          */
+        investigadorListaViewModel.isActivando().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    tv_activado_investigador.setVisibility(View.VISIBLE);
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    tv_n_ivestigadores.setVisibility(View.INVISIBLE);
+                    rv.setVisibility(View.INVISIBLE);
+                } else {
+                    tv_activado_investigador.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    rv.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         investigadorListaViewModel.mostrarMsgActivacion().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
+                tv_activado_investigador.setVisibility(View.INVISIBLE);
 
                 if (s.equals(getString(R.string.MSG_INVEST_CUENTA_ACTIVADA)) || s.equals(getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA))) {
                     isSnackBarShow = true;
@@ -203,6 +225,7 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
             @Override
             public void onChanged(String s) {
                 progressBar.setVisibility(View.INVISIBLE);
+                tv_activado_investigador.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
@@ -225,6 +248,20 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
         investigador = new Investigador();
         investigador.setId(sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0));
+    }
+
+    @Override
+    public void onDialogPositiveClick(Object object, boolean activado) {
+        Investigador invAdapter = (Investigador) object;
+        InvestigadorRepositorio.getInstance(getApplication()).activarCuenta(invAdapter);
+
+        if (activado) {
+            tv_activado_investigador.setText(getString(R.string.ACTIVANDO_CUENTA));
+            tv_activado_investigador.setVisibility(View.VISIBLE);
+        } else {
+            tv_activado_investigador.setText(getString(R.string.DESACTIVANDO_CUENTA));
+            tv_activado_investigador.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -252,12 +289,6 @@ public class InvestigadorListActivity extends AppCompatActivity implements Snack
         }
         snackbar.show();
         isSnackBarShow = false;
-    }
-
-    @Override
-    public void onDialogPositiveClick(Object object) {
-        Investigador invAdapter = (Investigador) object;
-        InvestigadorRepositorio.getInstance(getApplication()).activarCuenta(invAdapter);
     }
 
     @Override

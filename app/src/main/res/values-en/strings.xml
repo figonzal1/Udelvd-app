@@ -202,4 +202,6 @@
     <string name="MI_CUENTA">My account</string>
     <string name="VALIDACION_CAMPO_REQUERIDO_CERO">It can\'t be zero</string>
     <string name="FORMATO_FECHA_REGISTRO">Register date: %s</string>
+    <string name="ACTIVANDO_CUENTA">Activating account</string>
+    <string name="DESACTIVANDO_CUENTA">Deactivating account</string>
 </resources>

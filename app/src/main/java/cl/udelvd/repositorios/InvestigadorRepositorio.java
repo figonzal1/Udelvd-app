@@ -80,6 +80,7 @@ public class InvestigadorRepositorio {
 
     //PROGRESS DIALOG
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isActivando = new MutableLiveData<>();
 
     private InvestigadorRepositorio(Application application) {
         this.application = application;
@@ -1009,7 +1010,7 @@ public class InvestigadorRepositorio {
                             responseMsgActivacion.postValue(application.getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA));
                         }
                     }
-                    isLoading.postValue(false);
+                    isActivando.postValue(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1019,7 +1020,7 @@ public class InvestigadorRepositorio {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                isLoading.postValue(false);
+                isActivando.postValue(false);
 
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.TIMEOUT_ERROR));
@@ -1093,7 +1094,11 @@ public class InvestigadorRepositorio {
             }
         };
 
-        isLoading.postValue(true);
+        isActivando.postValue(true);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                7000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
         //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INVESTIGADOR_ACTIVACION);
@@ -1164,5 +1169,9 @@ public class InvestigadorRepositorio {
 
     public MutableLiveData<Integer> getNInvestigadores() {
         return mutableNInvestigadores;
+    }
+
+    public MutableLiveData<Boolean> getActivando() {
+        return isActivando;
     }
 }

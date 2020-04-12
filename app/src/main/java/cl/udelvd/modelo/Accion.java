@@ -57,8 +57,8 @@ public class Accion {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Accion accion = (Accion) o;
-        return getNombreEs().equals(accion.getNombreEs()) &&
-                getNombreEn().equals(accion.getNombreEn());
+        return getNombreEs().toLowerCase().equals(accion.getNombreEs().toLowerCase()) &&
+                getNombreEn().toLowerCase().equals(accion.getNombreEn().toLowerCase());
     }
 
     @Override

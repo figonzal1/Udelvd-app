@@ -190,9 +190,9 @@ public class Entrevistado {
                 isCaidas() == that.isCaidas() &&
                 nConvivientes3Meses == that.nConvivientes3Meses &&
                 getIdInvestigador() == that.getIdInvestigador() &&
-                getNombre().equals(that.getNombre()) &&
-                getApellido().equals(that.getApellido()) &&
-                getSexo().equals(that.getSexo()) &&
+                getNombre().toLowerCase().equals(that.getNombre().toLowerCase()) &&
+                getApellido().toLowerCase().equals(that.getApellido().toLowerCase()) &&
+                getSexo().toLowerCase().equals(that.getSexo().toLowerCase()) &&
                 getFechaNacimiento().equals(that.getFechaNacimiento());
     }
 

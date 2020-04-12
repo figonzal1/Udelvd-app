@@ -259,6 +259,12 @@ public class EntrevistadoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
     }
 
+    public void filtrarLista(List<Entrevistado> entrevistadoList) {
+        this.entrevistadoList.clear();
+        this.entrevistadoList = entrevistadoList;
+        notifyDataSetChanged();
+    }
+
     static class EntrevistadoViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tv_nombre_apellido;

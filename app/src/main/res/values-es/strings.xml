@@ -204,4 +204,5 @@
     <string name="FORMATO_FECHA_REGISTRO">Fecha registro: %s</string>
     <string name="ACTIVANDO_CUENTA">Activando cuenta</string>
     <string name="DESACTIVANDO_CUENTA">Desactivando cuenta</string>
+    <string name="MENU_BUSCAR">Buscar</string>
 </resources>

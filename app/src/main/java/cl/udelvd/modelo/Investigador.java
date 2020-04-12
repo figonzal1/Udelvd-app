@@ -114,8 +114,8 @@ public class Investigador {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Investigador that = (Investigador) o;
-        return getNombre().equals(that.getNombre()) &&
-                getApellido().equals(that.getApellido()) &&
+        return getNombre().toLowerCase().equals(that.getNombre().toLowerCase()) &&
+                getApellido().toLowerCase().equals(that.getApellido().toLowerCase()) &&
                 getEmail().equals(that.getEmail()) &&
                 Objects.equals(getNombreRol(), that.getNombreRol());
     }

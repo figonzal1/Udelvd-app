@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -42,7 +43,7 @@ import cl.udelvd.vistas.activities.NuevoEntrevistadoActivity;
 import static android.app.Activity.RESULT_OK;
 
 
-public class EntrevistadoListaFragment extends Fragment implements SnackbarInterface {
+public class EntrevistadoListaFragment extends Fragment implements SnackbarInterface, SearchView.OnQueryTextListener {
 
     private static final int REQUEST_CODE_NUEVA_ENTREVISTADO = 200;
     private RecyclerView rv;
@@ -276,6 +277,17 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
             }
         });
 
+        //ViewModel encargado de cargar los datos de sismos post-busqueda de usuario en SearchView
+        entrevistadoListaViewModel.showFilteredQuakeList().observe(requireActivity(), new Observer<List<Entrevistado>>() {
+            @Override
+            public void onChanged(@Nullable List<Entrevistado> list) {
+                //Setear el mAdapter con la lista de quakes
+
+                entrevistadoList = list;
+                entrevistadoAdapter.filtrarLista(entrevistadoList);
+            }
+        });
+
         //Manejador de Respuestas erroreas en fragment
         entrevistadoListaViewModel.mostrarMsgErrorListado().observe(this, new Observer<String>() {
             @Override
@@ -339,8 +351,35 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_actualizar, menu);
+        MenuItem menuItem = menu.findItem(R.id.menu_buscar);
+
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+
+        MenuItem.OnActionExpandListener onActionExpandListener =
+                new MenuItem.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+
+                        //Se oculta boton refresh
+                        menu.findItem(R.id.menu_buscar).setVisible(false);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+
+                        entrevistadoListaViewModel.refreshListaEntrevistados(investigador, listadoTotal);
+                        //Se vuelve a mostrar boton refresh
+                        menu.findItem(R.id.menu_buscar).setVisible(true);
+                        requireActivity().invalidateOptionsMenu();
+                        return true;
+                    }
+                };
+        menuItem.setOnActionExpandListener(onActionExpandListener);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -431,5 +470,17 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
         super.onResume();
         entrevistadoAdapter.resetPages();
         entrevistadoListaViewModel.refreshListaEntrevistados(investigador, listadoTotal);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        String input = query.toLowerCase();
+        entrevistadoListaViewModel.doSearch(entrevistadoList, input);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

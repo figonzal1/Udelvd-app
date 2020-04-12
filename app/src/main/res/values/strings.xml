@@ -441,6 +441,7 @@
     <string name="MENU_INVESTIGADORES">Investigadores</string>
     <string name="MENU_ACCION_EDITAR">Editar acción</string>
     <string name="MENU_ACCION_ELIMINAR">Eliminar acción</string>
+    <string name="MENU_BUSCAR">Buscar</string>
 
     <!-- SNACKLBAR -->
     <string name="SNACKBAR_REINTENTAR">Reintentar</string>

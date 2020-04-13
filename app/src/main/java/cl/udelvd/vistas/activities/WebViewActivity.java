@@ -3,6 +3,7 @@ package cl.udelvd.vistas.activities;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -41,8 +42,8 @@ public class WebViewActivity extends AppCompatActivity {
         web_view.loadUrl(linkGrafico);
         web_view.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(android.webkit.WebView view, String url) {
-                view.loadUrl(url);
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest url) {
+                view.loadUrl(url.getUrl().toString());
                 return true;
             }
         });

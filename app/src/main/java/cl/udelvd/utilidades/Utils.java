@@ -211,7 +211,7 @@ public class Utils {
     public static void configurarToolbar(AppCompatActivity activity, Context context, int id_custom_drawable_home, String titulo) {
 
         Toolbar toolbar = activity.findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(context.getResources().getColor(R.color.colorOnPrimary));
+        toolbar.setTitleTextColor(context.getResources().getColor(R.color.colorOnPrimary, context.getTheme()));
         activity.setSupportActionBar(toolbar);
 
         //Setear toolbar

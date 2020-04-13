@@ -24,7 +24,8 @@ import cl.udelvd.vistas.activities.WebViewActivity;
 
 public class EstadisticasFragment extends Fragment {
 
-    private final String URL_GRAFICO_DISTRIBUCIONES = "https://rb.gy/eknxh6";
+    //private final String URL_GRAFICO_DISTRIBUCIONES = "https://rb.gy/eknxh6";
+    private final String URL_GRAFICO_DISTRIBUCIONES = "https://rebrand.ly/oe2fton";
 
     public EstadisticasFragment() {
         // Required empty public constructor
@@ -78,7 +79,7 @@ public class EstadisticasFragment extends Fragment {
 
             }
         };
-        spans.setSpan(clickSpan, tv_registro.getText().toString().indexOf("rb"), spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans.setSpan(clickSpan, tv_registro.getText().toString().indexOf("rebrand.ly"), spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     private void configurarBoton(View v) {

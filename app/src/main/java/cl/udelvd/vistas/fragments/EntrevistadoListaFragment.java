@@ -352,7 +352,7 @@ public class EntrevistadoListaFragment extends Fragment implements SnackbarInter
 
     @Override
     public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_actualizar, menu);
+        inflater.inflate(R.menu.menu_main, menu);
         MenuItem menuItem = menu.findItem(R.id.menu_buscar);
 
         SearchView searchView = (SearchView) menuItem.getActionView();

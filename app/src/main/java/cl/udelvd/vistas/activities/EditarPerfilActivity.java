@@ -176,7 +176,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements SnackbarI
                         assert msg_update != null;
                         Log.d(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE), msg_update);
 
-                        if (msg_update.equals(getString(R.string.MSG_INVEST_ACTUALIZADO))) {
+                        if (msg_update.equals(getString(R.string.UPDATE_MSG_VM_SAVE))) {
 
                             //Toast.makeText(getApplicationContext(), msg_update, Toast.LENGTH_LONG).show();
 

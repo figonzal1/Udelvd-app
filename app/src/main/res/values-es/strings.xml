@@ -84,7 +84,6 @@
     <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
     <string name="MSG_DELETE_ENTREVISTADO">¡Entrevistado eliminado!</string>
     <string name="MSG_DELETE_EVENTO">¡Evento eliminado!</string>
-    <string name="MSG_INVEST_ACTUALIZADO">¡Datos actualizados!</string>
     <string name="MSG_INVEST_LOGIN">¡Bienvenido!</string>
     <string name="MSG_INVEST_REGISTRADO">¡Estas registrado!</string>
     <string name="MSG_LISTADO_ENTREVISTADOS_VACIO">No tienes entrevistados aún</string>
@@ -205,4 +204,5 @@
     <string name="ACTIVANDO_CUENTA">Activando cuenta</string>
     <string name="DESACTIVANDO_CUENTA">Desactivando cuenta</string>
     <string name="MENU_BUSCAR">Buscar</string>
+    <string name="UPDATE_MSG_VM_SAVE" translatable="false">¡Datos actualizados!</string>
 </resources>

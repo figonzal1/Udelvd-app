@@ -285,11 +285,10 @@
 
     <!-- Miscelaneos -->
     <string name="UPDATE_MSG_VM" translatable="false">mensaje_update</string>
-    <string name="UPDATE_MSG_VM_SAVE" translatable="false">¡Datos actualizados!</string>
+    <string name="UPDATE_MSG_VM_SAVE">¡Datos actualizados!</string>
     <string name="TAG_EDIT_PROFILE_RESULT" translatable="false">FINISH_EDIT_PROFILE_ACT</string>
     <string name="EDIT_PROFILE_RESULT_MSG" translatable="false">Cerrando formulario de edicion</string>
     <string name="TAG_VIEW_MODEL_INVEST_UPDATE" translatable="false">VM_INV_UPDATE</string>
-    <string name="MSG_INVEST_ACTUALIZADO">¡Datos actualizados!</string>
     <string name="MSG_INVEST_REGISTRADO">¡Estas registrado!</string>
     <string name="VALIDACION_CAMPO_REQUERIDO">Campo requerido</string>
     <string name="VALIDACION_CAMPO_REQUERIDO_CERO">No puede ser cero</string>

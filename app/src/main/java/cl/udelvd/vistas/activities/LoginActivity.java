@@ -99,7 +99,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                     Investigador investigador = new Investigador();
                     investigador.setEmail(Objects.requireNonNull(etEmail.getText()).toString().toLowerCase());
 
-                    //TODO: Deberia enviarse un hash desde cliente para seguridad de password
                     investigador.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
 
                     InvestigadorRepositorio.getInstance(getApplication()).loginInvestigador(investigador);
@@ -165,7 +164,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                     editor.putBoolean(getString(R.string.SHARED_PREF_INVES_ACTIVADO), investigador.isActivado());
                     editor.putString(getString(R.string.SHARED_PREF_INVES_CREATE_TIME), investigador.getCreateTime());
 
-                    //TODO: Almacenar hash de password y no texto plano
                     editor.putString(getString(R.string.SHARED_PREF_INVES_PASSWORD), Objects.requireNonNull(etPassword.getText()).toString());
                     editor.apply();
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:orderInCategory="3"
+        android:title="@string/MENU_ENTREVISTADO_INFO_BASICA"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/menu_edit_interviewee"
+        android:orderInCategory="2"
+        android:title="@string/MENU_ENTREVISTADO_EDITAR" />
+
+    <item
+        android:id="@+id/menu_see_interviews"
+        android:orderInCategory="1"
+        android:title="@string/MENU_ENTREVISTADO_VER_ENTREVISTAS" />
+
+    <item
+        android:id="@+id/menu_delete_interviewee"
+        android:orderInCategory="3"
+        android:title="@string/MENU_ENTREVISTADO_ELIMINAR" />
+</menu>

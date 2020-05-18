@@ -2,10 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login_investigador"
+    android:id="@+id/login_researcher"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".vistas.activities.LoginActivity">
+    tools:context=".views.activities.LoginActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                         app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                         app:endIconMode="clear_text"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
+                        app:layout_constraintStart_toEndOf="@+id/iv_icon_name"
                         app:layout_constraintTop_toBottomOf="@+id/progress_horizontal_login"
                         app:layout_constraintTop_toTopOf="@id/progress_horizontal_login">
 
@@ -114,7 +114,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
-                        android:id="@+id/iv_icono_nombre"
+                        android:id="@+id/iv_icon_name"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginStart="16dp"
@@ -137,7 +137,7 @@
                         android:layout_marginEnd="16dp"
                         android:hint="@string/CONTRASEÑA"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/iv_icono_nombre"
+                        app:layout_constraintStart_toEndOf="@+id/iv_icon_name"
                         app:layout_constraintTop_toBottomOf="@+id/il_email_login"
                         app:passwordToggleEnabled="true">
 
@@ -152,7 +152,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
-                        android:id="@+id/iv_icono_password"
+                        android:id="@+id/iv_icon_password"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginStart="16dp"
@@ -165,7 +165,7 @@
                         app:srcCompat="@drawable/ic_lock_black_24dp" />
 
                     <TextView
-                        android:id="@+id/tv_recuperar"
+                        android:id="@+id/tv_recovery"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -188,7 +188,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_recuperar" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_recovery" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -222,7 +222,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_logo_login" />
 
             <TextView
-                android:id="@+id/tv_registro"
+                android:id="@+id/tv_registry_researcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"

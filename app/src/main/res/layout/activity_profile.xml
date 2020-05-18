@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/researcher_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".views.activities.ProfileActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/white"
+                    app:cardElevation="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_researcher_name"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <View
+                            android:id="@+id/divider1"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:background="?attr/dividerHorizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/tv_email_researcher"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_email_researcher" />
+
+                        <View
+                            android:id="@+id/divider2"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:background="?attr/dividerHorizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@+id/tv_activated_researcher"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_activated_researcher" />
+
+                        <TextView
+                            android:id="@+id/tv_email_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:text="@string/EMAIL"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_icon_email"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_activated_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:text="@string/ESTADO_CUENTA"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_icon_activated"
+                            app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+                        <TextView
+                            android:id="@+id/tv_registry_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:text="@string/REGISTRO_CUENTA"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_icon_registry"
+                            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+                        <ImageView
+                            android:id="@+id/iv_icon_email"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="16dp"
+                            android:contentDescription="@string/ICONO_EMAIL_INVESTIGADOR"
+                            android:tint="@color/colorSecondaryVariant"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_email_researcher"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_email_title"
+                            app:srcCompat="@drawable/ic_email_black_24dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_icon_activated"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="16dp"
+                            android:contentDescription="@string/ICONO_CUENTA_ACTIVADA"
+                            android:tint="@color/colorSecondaryVariant"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_activated_researcher"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_activated_title"
+                            app:srcCompat="@drawable/ic_verified_user_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/tv_activated_researcher"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ACTIVADA"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="@+id/tv_activated_title"
+                            app:layout_constraintStart_toStartOf="@+id/tv_activated_title"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_activated_title"
+                            tools:text="@string/ACTIVADA" />
+
+                        <TextView
+                            android:id="@+id/tv_registry_researcher"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/tv_registry_title"
+                            app:layout_constraintStart_toStartOf="@+id/tv_registry_title"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_registry_title"
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:text="2019/07/07" />
+
+                        <TextView
+                            android:id="@+id/tv_email_researcher"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="@+id/tv_email_title"
+                            app:layout_constraintStart_toStartOf="@+id/tv_email_title"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_email_title"
+                            tools:text="tatafel_8@hotmail.com" />
+
+                        <ImageView
+                            android:id="@+id/iv_icon_registry"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="16dp"
+                            android:contentDescription="@string/ICONO_FECHA_REGISTRO"
+                            android:tint="@color/colorSecondaryVariant"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_registry_researcher"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_registry_title"
+                            app:srcCompat="@drawable/ic_access_time_black_24dp" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/ICONO_PERFIL_INVESTIGADOR"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/person_circle" />
+
+                <TextView
+                    android:id="@+id/tv_researcher_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/roboto"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.47"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_profile"
+                    tools:text="Nombre Apellido" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/ICONO_INVESTIGADOR_ONLINE"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_researcher_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/tv_researcher_name"
+                    app:layout_constraintTop_toTopOf="@+id/tv_researcher_name"
+                    app:srcCompat="@drawable/live_dot" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

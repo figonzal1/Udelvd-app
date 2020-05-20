@@ -278,7 +278,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        } else if (item.getItemId() == R.id.menu_update) {
+        } else if (item.getItemId() == R.id.menu_refresh) {
 
 
             progressBar.setVisibility(View.VISIBLE);

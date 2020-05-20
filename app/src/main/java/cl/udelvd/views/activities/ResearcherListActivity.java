@@ -302,7 +302,7 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
             setResult(RESEARCHER_ACTIVITY_CODE, intent);
             finish();
             return true;
-        } else if (item.getItemId() == R.id.menu_update) {
+        } else if (item.getItemId() == R.id.menu_refresh) {
 
             progressBar.setVisibility(View.VISIBLE);
 

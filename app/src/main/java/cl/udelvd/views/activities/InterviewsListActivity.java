@@ -338,7 +338,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        } else if (item.getItemId() == R.id.menu_update) {
+        } else if (item.getItemId() == R.id.menu_refresh) {
 
             progressBar.setVisibility(View.VISIBLE);
             isSnackBarShow = false;

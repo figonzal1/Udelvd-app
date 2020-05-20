@@ -368,7 +368,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if (item.getItemId() == R.id.menu_update) {
+        if (item.getItemId() == R.id.menu_refresh) {
 
             progressBar.setVisibility(View.VISIBLE);
             isSnackBarShow = false;

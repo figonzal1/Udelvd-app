@@ -168,7 +168,7 @@ public class ContextMenuInterviews {
     }
 
     @Test
-    public void test3OPenShowEvents() {
+    public void test3OpenShowEvents() {
 
         try {
             Thread.sleep(7000);
@@ -235,7 +235,7 @@ public class ContextMenuInterviews {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
+
         ViewInteraction appCompatImageView = onView(
                 allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
                         childAtPosition(

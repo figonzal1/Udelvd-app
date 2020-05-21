@@ -1,4 +1,4 @@
-package cl.udelvd.views.activities.action;
+package cl.udelvd.views.activities.interviewee;
 
 
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -16,42 +17,33 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
 import cl.udelvd.R;
-import cl.udelvd.views.activities.ActionListActivity;
+import cl.udelvd.views.activities.MainActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class EditActionTest {
-
-    private Context context;
+public class EditIntervieweeTest {
 
     @Rule
-    public ActivityTestRule<ActionListActivity> mActivityTestRule = new ActivityTestRule<>(ActionListActivity.class);
-
-    @Before
-    public void setUp() {
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-    }
+    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    private Context context;
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
@@ -72,8 +64,13 @@ public class EditActionTest {
         };
     }
 
+    @Before
+    public void setUp() {
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    }
+
     @Test
-    public void editActionTest() {
+    public void editIntervieweeTest() {
 
         try {
             Thread.sleep(7000);
@@ -82,27 +79,27 @@ public class EditActionTest {
         }
 
         //CONTEXTUAL MENU
-        ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_menu_action), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
+        ViewInteraction contextualMenuIcon = onView(
+                allOf(withId(R.id.iv_menu_interviewee), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
                         childAtPosition(
-                                allOf(withId(R.id.card_view_action),
+                                allOf(withId(R.id.card_view_interviewee),
                                         childAtPosition(
-                                                withId(R.id.rv_list_action),
+                                                withId(R.id.rv_interviewee_list),
                                                 0)),
-                                6),
+                                8),
                         isDisplayed()));
-        appCompatImageView.perform(click());
+        contextualMenuIcon.perform(click());
 
-        //EDIT ACTION NAME
-        ViewInteraction textView = onView(
-                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ACCION_EDITAR)),
+        //EDIT INTERVIEWEE MENU ITEM
+        ViewInteraction editMenuItem = onView(
+                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTADO_EDITAR)),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
                                         0),
                                 0),
                         isDisplayed()));
-        textView.perform(click());
+        editMenuItem.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -113,28 +110,49 @@ public class EditActionTest {
             e.printStackTrace();
         }
 
-        //CHECK SPANISH NAME IN FIRST ACTION
-        ViewInteraction actionSpanishText = onView(
-                allOf(withId(R.id.et_action_spanish), withText(containsString("Levantarse de la cama")),
+        //Check title of activity
+        ViewInteraction toolbarTitle = onView(
+                allOf(withText(context.getString(R.string.TITULO_TOOLBAR_EDITAR_ENTREVISTADO)), isDisplayed()));
+        toolbarTitle.check(matches(withText(context.getString(R.string.TITULO_TOOLBAR_EDITAR_ENTREVISTADO))));
+
+        //INTERVIEWEE NAME
+        ViewInteraction etName = onView(
+                allOf(withId(R.id.et_interview_name), withText("TestName"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.il_action_spanish),
+                                        withId(R.id.il_interview_name),
                                         0),
                                 0)));
-        actionSpanishText.perform(scrollTo(), replaceText("Levantarse de la cama editado"));
+        etName.perform(scrollTo(), replaceText("TestNameEditado"));
 
-        //CHECK ENGLISH NAME IN FIRST ACTION
-        ViewInteraction actionEnglishText = onView(
-                allOf(withId(R.id.et_action_english), withText("Wake up"),
+        //INTERVIEWEE LAST NAME
+        ViewInteraction etLastName = onView(
+                allOf(withId(R.id.et_interview_last_name), withText("TestLastName"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.il_action_english),
+                                        withId(R.id.il_interview_last_name),
                                         0),
                                 0)));
-        actionEnglishText.perform(scrollTo(), replaceText("Wake up editado"));
+        etLastName.perform(scrollTo(), replaceText("TestLastNameEditado"));
 
-        //BUTTON SAVE
-        ViewInteraction buttonSave = onView(
+        //GENRE
+        ViewInteraction genreSpinner = onView(withId(R.id.il_interviewee_genre));
+        genreSpinner.perform(click());
+
+        ViewInteraction genreSpinnerItem = onView(withText(context.getString(R.string.SEXO_OTRO)))
+                .inRoot(RootMatchers.isPlatformPopup());
+        genreSpinnerItem.perform(click());
+
+        //INTERVIEWEE CIVIL STATE
+        ViewInteraction civilStatusSpinner = onView(withId(R.id.il_interviewee_civil_state));
+        civilStatusSpinner.perform(click());
+
+        ViewInteraction civilStatusSpinnerItem = onView(withText("Divorce"))
+                .inRoot(RootMatchers.isPlatformPopup());
+        civilStatusSpinnerItem.perform(click());
+
+        //CLICK SAVE
+        ViewInteraction actionMenuItemView = onView(
                 allOf(withId(R.id.menu_save), withText(context.getString(R.string.MENU_GUARDAR_DATOS)),
                         childAtPosition(
                                 childAtPosition(
@@ -142,6 +160,6 @@ public class EditActionTest {
                                         2),
                                 0),
                         isDisplayed()));
-        buttonSave.perform(click());
+        actionMenuItemView.perform(click());
     }
 }

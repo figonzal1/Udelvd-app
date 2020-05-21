@@ -1,6 +1,7 @@
 package cl.udelvd.views.activities.action;
 
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -8,11 +9,13 @@ import android.view.ViewParent;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,8 +35,14 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class ActionListTest {
 
+    private Context context;
     @Rule
     public ActivityTestRule<ActionListActivity> mActivityTestRule = new ActivityTestRule<>(ActionListActivity.class);
+
+    @Before
+    public void setUp() {
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    }
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
@@ -70,12 +79,12 @@ public class ActionListTest {
 
         //Toolbar name
         ViewInteraction toolbarName = onView(
-                allOf(withText("Actions List"), isDisplayed()));
-        toolbarName.check(matches(withText("Actions List")));
+                allOf(withText(context.getString(R.string.TITULO_TOOLBAR_LISTADO_ACCIONES)), isDisplayed()));
+        toolbarName.check(matches(withText(context.getString(R.string.TITULO_TOOLBAR_LISTADO_ACCIONES))));
 
         //Refresh icon
         ViewInteraction refreshIcon = onView(
-                allOf(withId(R.id.menu_refresh), withContentDescription("Update"), isDisplayed()));
+                allOf(withId(R.id.menu_refresh), withContentDescription(context.getString(R.string.MENU_ACTUALIZAR)), isDisplayed()));
         refreshIcon.check(matches(isDisplayed()));
 
         //Fab icon (new action)
@@ -104,10 +113,5 @@ public class ActionListTest {
         ViewInteraction actionItemEnglish = onView(
                 allOf(withId(R.id.tv_english), withText("Wake up"), isDisplayed()));
         actionItemEnglish.check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void createActionTest() {
-
     }
 }

@@ -15,9 +15,11 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import cl.udelvd.R;
 import cl.udelvd.views.activities.NewActionActivity;
@@ -35,11 +37,17 @@ import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class NewActionsTest {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class NewActionTest {
 
     @Rule
     public ActivityTestRule<NewActionActivity> mActivityTestRule = new ActivityTestRule<>(NewActionActivity.class);
     private Context context;
+
+    @Before
+    public void setup() {
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    }
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
@@ -60,13 +68,8 @@ public class NewActionsTest {
         };
     }
 
-    @Before
-    public void setup() {
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-    }
-
     @Test
-    public void checkFormTest() {
+    public void test1CheckForm() {
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
@@ -90,7 +93,7 @@ public class NewActionsTest {
     }
 
     @Test
-    public void newActionTest() {
+    public void test2NewAction() {
 
         try {
             Thread.sleep(7000);
@@ -106,7 +109,7 @@ public class NewActionsTest {
         actionEnglish.perform(scrollTo(), replaceText("TestAction"));
 
         ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.menu_save), withText("Save"),
+                allOf(withId(R.id.menu_save), withText(context.getString(R.string.MENU_GUARDAR_DATOS)),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.toolbar),
@@ -114,5 +117,33 @@ public class NewActionsTest {
                                 0),
                         isDisplayed()));
         actionMenuItemView.perform(click());
+
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+/*
+        //CHECK SPANISH NAME IN FIRST ACTION
+        ViewInteraction actionSpanishText = onView(
+                allOf(withId(R.id.et_action_spanish), withText(containsString("TestAccion")),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.il_action_spanish),
+                                        0),
+                                0)));
+        actionSpanishText.perform(scrollTo(), replaceText("TestAccion"));
+
+        //CHECK ENGLISH NAME IN FIRST ACTION
+        ViewInteraction actionEnglishText = onView(
+                allOf(withId(R.id.et_action_english), withText("TestAction"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.il_action_english),
+                                        0),
+                                0)));
+        actionEnglishText.perform(scrollTo(), replaceText("TestAction"));
+        */
+
     }
 }

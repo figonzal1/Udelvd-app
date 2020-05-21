@@ -90,11 +90,6 @@ public class NewIntervieweeTest {
                 allOf(withId(R.id.iv_logo_registry), isDisplayed()));
         imageView.check(matches(isDisplayed()));
 
-        //Check save item menu
-        ViewInteraction saveItem = onView(
-                allOf(withId(R.id.menu_save), withText(context.getString(R.string.MENU_GUARDAR_DATOS)), isDisplayed()));
-        saveItem.check(matches(withText(context.getString(R.string.MENU_GUARDAR_DATOS))));
-
         //Check Home Up button
         ViewInteraction imageButton = onView(
                 allOf(withContentDescription("Navigate up"), isDisplayed()));
@@ -141,7 +136,7 @@ public class NewIntervieweeTest {
                 .inRoot(RootMatchers.isPlatformPopup());
         genreSpinnerItem.perform(click());
 
-
+        //BIRTH DATE DIALOG
         ViewInteraction openDateDialog = onView(
                 allOf(withId(R.id.et_birth_date),
                         childAtPosition(

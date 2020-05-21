@@ -1,5 +1,4 @@
-package cl.udelvd.views.activities.interviewee;
-
+package cl.udelvd.views.activities.interview;
 
 import android.content.Context;
 import android.view.View;
@@ -28,6 +27,7 @@ import cl.udelvd.views.activities.MainActivity;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -39,7 +39,7 @@ import static org.hamcrest.Matchers.is;
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ContextMenuInterviewee {
+public class ContextMenuInterviews {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -65,12 +65,60 @@ public class ContextMenuInterviewee {
     }
 
     @Before
-    public void setUp() {
+    public void setup() {
+
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        //CLick in firt interviewee of main list
+        ViewInteraction recyclerView = onView(
+                allOf(withId(R.id.rv_interviewee_list),
+                        childAtPosition(
+                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                5))
+        );
+        recyclerView.perform(actionOnItemAtPosition(0, click()));
     }
 
     @Test
-    public void test1ContextMenuInterviewee() {
+    public void test1CheckViews() {
+
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction textView = onView(
+                allOf(withText("Interviews List"), isDisplayed()));
+        textView.check(matches(withText("Interviews List")));
+
+        ViewInteraction imageButton = onView(
+                allOf(withContentDescription("Navigate up"), isDisplayed()));
+        imageButton.check(matches(isDisplayed()));
+
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.menu_refresh), withContentDescription("Update"), isDisplayed()));
+        textView2.check(matches(withText("")));
+
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.tv_interviewee_name), withText("TestName TestLastName"), isDisplayed()));
+        textView3.check(matches(withText("TestName TestLastName")));
+
+        //Check fab button
+        ViewInteraction imageButton2 = onView(
+                allOf(withId(R.id.fb_new_interview),
+                        childAtPosition(
+                                allOf(withId(R.id.interviewees_list),
+                                        childAtPosition(
+                                                withId(R.id.interviews_list),
+                                                1)),
+                                1),
+                        isDisplayed()));
+        imageButton2.check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void test2ContextMenu() {
 
         try {
             Thread.sleep(7000);
@@ -79,49 +127,48 @@ public class ContextMenuInterviewee {
         }
 
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_menu_interviewee), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
+                allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
                         childAtPosition(
-                                allOf(withId(R.id.card_view_interviewee),
-                                        childAtPosition(
-                                                withId(R.id.rv_interviewee_list),
-                                                0)),
-                                8),
+                                childAtPosition(
+                                        withId(R.id.card_view_interview),
+                                        0),
+                                5),
                         isDisplayed()));
         appCompatImageView.perform(click());
 
-        ViewInteraction showInterview = onView(
-                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTADO_VER_ENTREVISTAS)),
+        ViewInteraction showEventItem = onView(
+                allOf(withId(android.R.id.title), withText("Show events"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
                                         0),
                                 0),
                         isDisplayed()));
-        showInterview.check(matches(isDisplayed()));
+        showEventItem.check(matches(isDisplayed()));
 
-        ViewInteraction editInterview = onView(
-                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTADO_EDITAR)),
+        ViewInteraction editInterviewItem = onView(
+                allOf(withId(android.R.id.title), withText("Edit interview"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
                                         0),
                                 0),
                         isDisplayed()));
-        editInterview.check(matches(isDisplayed()));
+        editInterviewItem.check(matches(isDisplayed()));
 
-        ViewInteraction deleteInterview = onView(
-                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTADO_ELIMINAR)),
+        ViewInteraction deleteInterviewItem = onView(
+                allOf(withId(android.R.id.title), withText("Delete interview"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
                                         0),
                                 0),
                         isDisplayed()));
-        deleteInterview.check(matches(isDisplayed()));
+        deleteInterviewItem.check(matches(isDisplayed()));
     }
 
     @Test
-    public void test2OpenShowInterviews() {
+    public void test3OPenShowEvents() {
 
         try {
             Thread.sleep(7000);
@@ -130,29 +177,28 @@ public class ContextMenuInterviewee {
         }
 
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_menu_interviewee), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
+                allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
                         childAtPosition(
-                                allOf(withId(R.id.card_view_interviewee),
-                                        childAtPosition(
-                                                withId(R.id.rv_interviewee_list),
-                                                0)),
-                                8),
+                                childAtPosition(
+                                        withId(R.id.card_view_interview),
+                                        0),
+                                5),
                         isDisplayed()));
         appCompatImageView.perform(click());
 
-        ViewInteraction showInterview = onView(
-                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTADO_VER_ENTREVISTAS)),
+        ViewInteraction showEventItem = onView(
+                allOf(withId(android.R.id.title), withText("Show events"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
                                         0),
                                 0),
                         isDisplayed()));
-        showInterview.perform(click());
+        showEventItem.perform(click());
     }
 
     @Test
-    public void test3OpenEditInterviews() {
+    public void test4OpenEditInterview() {
 
         try {
             Thread.sleep(7000);
@@ -161,57 +207,53 @@ public class ContextMenuInterviewee {
         }
 
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_menu_interviewee), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
+                allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
                         childAtPosition(
-                                allOf(withId(R.id.card_view_interviewee),
-                                        childAtPosition(
-                                                withId(R.id.rv_interviewee_list),
-                                                0)),
-                                8),
+                                childAtPosition(
+                                        withId(R.id.card_view_interview),
+                                        0),
+                                5),
                         isDisplayed()));
         appCompatImageView.perform(click());
 
-        //MAKE CLICK
-        ViewInteraction showInterview = onView(
-                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTADO_EDITAR)),
+        ViewInteraction editInterviewItem = onView(
+                allOf(withId(android.R.id.title), withText("Edit interview"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
                                         0),
                                 0),
                         isDisplayed()));
-        showInterview.perform(click());
+        editInterviewItem.perform(click());
     }
 
     @Test
-    public void test4OpenDeleteInterviews() {
+    public void test5OpenDeleteInterview() {
 
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_menu_interviewee), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
+                allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
                         childAtPosition(
-                                allOf(withId(R.id.card_view_interviewee),
-                                        childAtPosition(
-                                                withId(R.id.rv_interviewee_list),
-                                                0)),
-                                8),
+                                childAtPosition(
+                                        withId(R.id.card_view_interview),
+                                        0),
+                                5),
                         isDisplayed()));
         appCompatImageView.perform(click());
 
-        //MAKE CLICK
-        ViewInteraction showInterview = onView(
-                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTADO_ELIMINAR)),
+        ViewInteraction deleteInterviewItem = onView(
+                allOf(withId(android.R.id.title), withText("Delete interview"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
                                         0),
                                 0),
                         isDisplayed()));
-        showInterview.perform(click());
+        deleteInterviewItem.perform(click());
     }
 }

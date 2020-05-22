@@ -89,15 +89,15 @@ public class ContextMenuInterviews {
         }
 
         ViewInteraction textView = onView(
-                allOf(withText("Interviews List"), isDisplayed()));
-        textView.check(matches(withText("Interviews List")));
+                allOf(withText(context.getString(R.string.TITULO_TOOLBAR_LISTA_ENTREVISTAS)), isDisplayed()));
+        textView.check(matches(withText(context.getString(R.string.TITULO_TOOLBAR_LISTA_ENTREVISTAS))));
 
         ViewInteraction imageButton = onView(
                 allOf(withContentDescription("Navigate up"), isDisplayed()));
         imageButton.check(matches(isDisplayed()));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.menu_refresh), withContentDescription("Update"), isDisplayed()));
+                allOf(withId(R.id.menu_refresh), withContentDescription(context.getString(R.string.MENU_ACTUALIZAR)), isDisplayed()));
         textView2.check(matches(withText("")));
 
         ViewInteraction textView3 = onView(
@@ -127,7 +127,7 @@ public class ContextMenuInterviews {
         }
 
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
+                allOf(withId(R.id.iv_menu_interview), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.card_view_interview),
@@ -137,7 +137,7 @@ public class ContextMenuInterviews {
         appCompatImageView.perform(click());
 
         ViewInteraction showEventItem = onView(
-                allOf(withId(android.R.id.title), withText("Show events"),
+                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTA_VER_EVENTO)),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
@@ -147,7 +147,7 @@ public class ContextMenuInterviews {
         showEventItem.check(matches(isDisplayed()));
 
         ViewInteraction editInterviewItem = onView(
-                allOf(withId(android.R.id.title), withText("Edit interview"),
+                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTA_EDITAR)),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
@@ -157,7 +157,7 @@ public class ContextMenuInterviews {
         editInterviewItem.check(matches(isDisplayed()));
 
         ViewInteraction deleteInterviewItem = onView(
-                allOf(withId(android.R.id.title), withText("Delete interview"),
+                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTA_ELIMINAR)),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
@@ -176,18 +176,18 @@ public class ContextMenuInterviews {
             e.printStackTrace();
         }
 
-        ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
+        ViewInteraction openContextMenu = onView(
+                allOf(withId(R.id.iv_menu_interview), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.card_view_interview),
                                         0),
                                 5),
                         isDisplayed()));
-        appCompatImageView.perform(click());
+        openContextMenu.perform(click());
 
         ViewInteraction showEventItem = onView(
-                allOf(withId(android.R.id.title), withText("Show events"),
+                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTA_VER_EVENTO)),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
@@ -207,7 +207,7 @@ public class ContextMenuInterviews {
         }
 
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
+                allOf(withId(R.id.iv_menu_interview), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.card_view_interview),
@@ -217,7 +217,7 @@ public class ContextMenuInterviews {
         appCompatImageView.perform(click());
 
         ViewInteraction editInterviewItem = onView(
-                allOf(withId(android.R.id.title), withText("Edit interview"),
+                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTA_EDITAR)),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),
@@ -237,7 +237,7 @@ public class ContextMenuInterviews {
         }
 
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.iv_interview_menu), withContentDescription("Contextual menu icon"),
+                allOf(withId(R.id.iv_menu_interview), withContentDescription(context.getString(R.string.ICONO_MENU_CONTEXTUAL)),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.card_view_interview),
@@ -247,7 +247,7 @@ public class ContextMenuInterviews {
         appCompatImageView.perform(click());
 
         ViewInteraction deleteInterviewItem = onView(
-                allOf(withId(android.R.id.title), withText("Delete interview"),
+                allOf(withId(android.R.id.title), withText(context.getString(R.string.MENU_ENTREVISTA_ELIMINAR)),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("com.android.internal.view.menu.ListMenuItemView")),

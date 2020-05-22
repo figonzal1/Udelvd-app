@@ -192,7 +192,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
             tvInterviewName = itemView.findViewById(R.id.tv_interview_name);
             tvInterviewRegistryDate = itemView.findViewById(R.id.tv_interview_registry_date);
             tvInterviewType = itemView.findViewById(R.id.tv_interview_type);
-            ivInterviewMenu = itemView.findViewById(R.id.iv_interview_menu);
+            ivInterviewMenu = itemView.findViewById(R.id.iv_menu_interview);
         }
     }
 }

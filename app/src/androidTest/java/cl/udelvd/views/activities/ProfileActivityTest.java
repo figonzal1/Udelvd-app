@@ -16,14 +16,18 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import cl.udelvd.R;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -33,6 +37,7 @@ import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ProfileActivityTest {
 
     @Rule
@@ -64,7 +69,7 @@ public class ProfileActivityTest {
     }
 
     @Test
-    public void profileActivityTest() {
+    public void test1ProfileActivityTest() {
 
         try {
             Thread.sleep(7000);
@@ -129,5 +134,74 @@ public class ProfileActivityTest {
                                 0),
                         isDisplayed()));
         materialTextView.perform(click());
+    }
+
+    @Test
+    public void test2EditProfileTest() {
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Open overflow menu
+        ViewInteraction overflowMenuButton = onView(
+                allOf(withContentDescription("More options"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.toolbar),
+                                        2),
+                                0),
+                        isDisplayed()));
+        overflowMenuButton.perform(click());
+
+
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Click on edit profile menu item on overflow menu
+        ViewInteraction materialTextView = onView(
+                allOf(withId(R.id.title), withText(mContext.getString(R.string.MENU_PERFIL_EDITAR)),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        materialTextView.perform(click());
+
+        //INTERVIEWEE NAME
+        ViewInteraction etName = onView(
+                allOf(withId(R.id.et_researcher_name), withText("TestName"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.il_researcher_name),
+                                        0),
+                                0)));
+        etName.perform(scrollTo(), replaceText("TestNameEditado"));
+
+        //INTERVIEWEE LAST NAME
+        ViewInteraction etLastName = onView(
+                allOf(withId(R.id.et_researcher_last_name), withText("TestLastName"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.il_researcher_last_name),
+                                        0),
+                                0)));
+        etLastName.perform(scrollTo(), replaceText("TestLastNameEditado"));
+
+        //CLICK SAVE
+        ViewInteraction actionMenuItemView = onView(
+                allOf(withId(R.id.menu_save), withText(mContext.getString(R.string.MENU_GUARDAR_DATOS)),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.toolbar),
+                                        2),
+                                0),
+                        isDisplayed()));
+        actionMenuItemView.perform(click());
     }
 }

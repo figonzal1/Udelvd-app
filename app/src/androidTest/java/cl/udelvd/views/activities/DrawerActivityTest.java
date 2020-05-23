@@ -89,7 +89,7 @@ public class DrawerActivityTest {
         ViewInteraction textView = onView(
                 allOf(withId(R.id.tv_header_nombre_rol), isDisplayed())
         );
-        textView.check(matches(withText(context.getString(R.string.ROL_INVESTIGADOR))));
+        textView.check(matches(withText(context.getString(R.string.ROL_ADMINITRADOR))));
 
         //Check the name of researcher in the drawer header
         ViewInteraction textView2 = onView(

@@ -76,7 +76,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/colorOnPrimary"
             card_view:layout_constraintBottom_toBottomOf="@+id/tv_interview_name"
-            card_view:layout_constraintEnd_toStartOf="@+id/iv__menu_interview"
+            card_view:layout_constraintEnd_toStartOf="@+id/iv_menu_interview"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toEndOf="@+id/tv_interview_name"
             card_view:layout_constraintTop_toTopOf="@+id/tv_interview_name"

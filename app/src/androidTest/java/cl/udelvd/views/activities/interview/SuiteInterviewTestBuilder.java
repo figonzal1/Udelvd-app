@@ -3,8 +3,6 @@ package cl.udelvd.views.activities.interview;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import cl.udelvd.views.activities.interviewee.DeleteIntervieweeTest;
-
 //RUN TEST IN THIS ORDER
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

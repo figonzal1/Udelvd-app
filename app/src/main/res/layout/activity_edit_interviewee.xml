@@ -478,14 +478,12 @@
             <!-- Autocompletado escrito a mano con coincidencias-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_interviewee_profession"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:hint="@string/PROFESION"
-                app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
-                app:endIconMode="clear_text"
                 app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toEndOf="@+id/iv_icon_interview_city"
@@ -493,14 +491,15 @@
 
                 <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/et_interviewee_profession"
-                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:completionThreshold="1"
                     android:fontFamily="@font/roboto"
                     android:inputType="textCapWords"
                     android:singleLine="true"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Profesion" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

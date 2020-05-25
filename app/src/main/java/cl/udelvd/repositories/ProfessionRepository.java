@@ -106,14 +106,10 @@ public class ProfessionRepository {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorList.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
+                } else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorList.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+                } else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
@@ -128,9 +124,7 @@ public class ProfessionRepository {
 
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
                         responseMsgErrorList.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }

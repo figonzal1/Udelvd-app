@@ -185,7 +185,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                         tvEmptyEvents.setVisibility(View.INVISIBLE);
                         fragmentStatePageAdapter.updateList(eventList);
 
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), eventList.toString()));
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), getString(R.string.VIEW_MODEL_LISTADO_CARGADO)));
                     }
                 }
             }

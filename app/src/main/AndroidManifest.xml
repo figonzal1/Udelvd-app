@@ -74,18 +74,7 @@
         <activity
             android:name=".views.activities.LoginActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="udelvd-dev.herokuapp.com"
-                    android:scheme="https" />
-            </intent-filter>
-        </activity>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".views.activities.ResetPassActivity"
             android:launchMode="singleTask"

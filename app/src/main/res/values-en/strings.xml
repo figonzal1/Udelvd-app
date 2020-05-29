@@ -204,5 +204,14 @@
     <string name="ACTIVANDO_CUENTA">Activating account</string>
     <string name="DESACTIVANDO_CUENTA">Deactivating account</string>
     <string name="MENU_BUSCAR">Search</string>
-    <string name="UPDATE_MSG_VM_SAVE" translatable="false">Update data!</string>
+    <string name="UPDATE_MSG_VM_SAVE">Update data!</string>
+    <string name="SLIDE_1_DESCRIPTION">Welcome to Android app designed to facilitate your research</string>
+    <string name="SLIDE_3_DESCRIPTION">And manage interviews for each person in simple steps</string>
+    <string name="SLIDE_3_TITLE">Do \n interviews</string>
+    <string name="SLIDE_2_DESCRIPTION">Conduct preliminary surveys of daily activities for user study</string>
+    <string name="SLIDE_2_TITLE">Our \n objectives</string>
+    <string name="SLIDE_4_DESCRIPTION">Record daily activities of your interviewees</string>
+    <string name="SLIDE_5_DESCRIPTION">Data and indicators accessible online</string>
+    <string name="SLIDE_4_TITLE">Daily \n events</string>
+    <string name="SLIDE_5_TITLE">Get \n statistics</string>
 </resources>

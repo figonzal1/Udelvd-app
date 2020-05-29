@@ -2,10 +2,10 @@
     <string name="app_name">Un día en la vida de &#8230;</string>
 
     <!-- PRODUCTION-->
-    <string name="HEROKU_DOMAIN" translatable="false">https://undiaenlavidade.cl/</string>
+    <!--<string name="HEROKU_DOMAIN" translatable="false">https://undiaenlavidade.cl/</string>-->
 
     <!-- DEV -->
-    <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.2/</string>-->
+    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.2/</string>
 
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/pagina/%d/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
@@ -42,6 +42,7 @@
     <string name="URL_PUT_EVENTO" translatable="false">%sentrevistas/%d/eventos/%d</string>
     <string name="URL_DELETE_EVENTO" translatable="false">%sentrevistas/%d/eventos/%d</string>
     <string name="URL_DELETE_ENTREVISTADO" translatable="false">%sentrevistados/%d</string>
+    <string name="URL_GET_ESTADISTICAS" translatable="false">%sestadisticas</string>
 
     <string name="LANGUAJE_EN" translatable="false">en</string>
     <string name="LANGUAJE_ES" translatable="false">es</string>
@@ -96,6 +97,7 @@
     <string name="SHARED_PREF_INVES_PASSWORD" translatable="false">password_investigador</string>
     <string name="SHARED_PREF_TOKEN_LOGIN" translatable="false">TOKEN_LOGIN</string>
     <string name="SHARED_PREF_RESET_PASS" translatable="false">reset_password</string>
+    <string name="SHARED_PREF_FIRST_LOAD" translatable="false">isFirstLoad</string>
 
     <!-- Formatos -->
     <string name="FORMATO_FECHA" translatable="false">yyyy-MM-dd</string>
@@ -204,6 +206,11 @@
     <string name="KEY_EVENTO_JUSTIFICACION" translatable="false">justificacion</string>
     <string name="KEY_EVENTO_HORA_EVENTO" translatable="false">hora_evento</string>
 
+    <string name="KEY_STAT_ID" translatable="false">id</string>
+    <string name="KEY_STAT_URL" translatable="false">url</string>
+    <string name="KEY_STAT_NAME_ES" translatable="false">nombre_es</string>
+    <string name="KEY_STAT_NAME_EN" translatable="false">nombre_en</string>
+
     <string name="KEY_CREATE_TIME" translatable="false">create_time</string>
     <string name="KEY_UPDATE_TIME" translatable="false">update_time</string>
 
@@ -267,6 +274,7 @@
     <string name="TAG_VOLLEY_ERR_ENTREVISTADOS" translatable="false">VOLLEY_ERR_ENTREVISTADOS</string>
     <string name="TAG_VOLLEY_ERR_NUEVO_ENTREVISTADO" translatable="false">VOLLEY_ERR_NUEVO_ENTREVISTADO</string>
     <string name="TAG_VOLLEY_ERR_ACCION" translatable="false">VOLLEY_ERR_ACCION</string>
+    <string name="TAG_VOLLEY_ERR_ESTADISTICAS" translatable="false">VOLLEY_ERR_ESTADISTICAS</string>
     <string name="TAG_VOLLEY_ERR_ELIMINAR_ACCION" translatable="false">VOLLEY_ERR_ELIMINAR_ACCION</string>
     <string name="TAG_VOLLEY_ERR_NUEVA_ACCION" translatable="false">VOLLEY_ERR_NUEVA_ACCION</string>
     <string name="TAG_VOLLEY_ERR_EDITAR_ACCION" translatable="false">VOLLEY_ERR_EDITAR_ACCION</string>
@@ -311,6 +319,8 @@
     <string name="TOKEN_LOGOUT_MSG" translatable="false">BORRANDO TOKEN:</string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTADO" translatable="false">VM_LISTA_ENTREVISTADO</string>
     <string name="TAG_VIEW_MODEL_LISTA_ACCIONES" translatable="false">VM_LISTA_ACCIONES</string>
+    <string name="TAG_VIEW_MODEL_LISTA_ESTADISTICAS" translatable="false">VM_LISTA_ESTADISTICAS</string>
+    <string name="TAG_VIEW_MODEL_LISTA_ESTADISTICAS_MSG" translatable="false">Listado cargado</string>
     <string name="TAG_VIEW_MODEL_LISTA_INVESTIGADORES" translatable="false">VM_LISTA_INVESTIGADORES</string>
     <string name="VIEW_MODEL_LISTA_ENTREVISTADO_MSG" translatable="false">Listado cargado</string>
     <string name="VIEW_MODEL_LISTA_INVESTIGADORES_MSG" translatable="false">Listado cargado</string>
@@ -550,5 +560,13 @@
     <string name="ACTIVANDO_CUENTA">Activando cuenta</string>
     <string name="DESACTIVANDO_CUENTA">Desactivando cuenta</string>
 
-
+    <string name="SLIDE_1_DESCRIPTION">Bienvenido a la app de Android diseñada para facilitar tu investigación</string>
+    <string name="SLIDE_2_TITLE">Nuestro \n objetivo</string>
+    <string name="SLIDE_2_DESCRIPTION">Realizar sondeos preliminares sobre actividades cotidianas para el estudio de usuarios</string>
+    <string name="SLIDE_3_TITLE">Hacer entrevistas</string>
+    <string name="SLIDE_3_DESCRIPTION">Y administrar entrevistas para cada persona en simples pasos</string>
+    <string name="SLIDE_4_TITLE">Eventos \n diarios</string>
+    <string name="SLIDE_4_DESCRIPTION">Registra actividades cotidianas de tus entrevistados</string>
+    <string name="SLIDE_5_TITLE">Obtén \n estadísticas</string>
+    <string name="SLIDE_5_DESCRIPTION">Datos e Indicadores accesibles de manera online</string>
 </resources>

@@ -28,7 +28,7 @@ import cl.udelvd.views.fragments.dialog.DeleteEventDialogFragment;
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
-public class EventsSwipeFragment extends Fragment {
+public class EventItemFragment extends Fragment {
 
     private static final int REQUEST_CODE_EDIT_EVENT = 300;
 
@@ -52,11 +52,11 @@ public class EventsSwipeFragment extends Fragment {
     private DeleteDialogListener listener;
 
 
-    public EventsSwipeFragment() {
+    public EventItemFragment() {
     }
 
-    public static EventsSwipeFragment newInstance() {
-        return new EventsSwipeFragment();
+    public static EventItemFragment newInstance() {
+        return new EventItemFragment();
     }
 
     @Override

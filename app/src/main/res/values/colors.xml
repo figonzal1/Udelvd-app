@@ -20,4 +20,9 @@
 
     <color name="white">#fff</color>
     <color name="black">#000</color>
+    <color name="grey">#9C3C3C3C</color>
+
+    <color name="tab_indicator_default">#40000000</color>
+    <color name="tab_indicator_selected">#99FFFFFF</color>
+    <color name="tab_indicator_event_selected">#8bc34a</color>
 </resources>

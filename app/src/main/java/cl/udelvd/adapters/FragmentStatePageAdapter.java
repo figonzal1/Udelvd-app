@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.List;
 
 import cl.udelvd.models.Event;
-import cl.udelvd.views.fragments.EventsSwipeFragment;
+import cl.udelvd.views.fragments.EventItemFragment;
 import cl.udelvd.views.fragments.dialog.DeleteDialogListener;
 
 /**
@@ -37,8 +37,8 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        EventsSwipeFragment fragment;
-        fragment = EventsSwipeFragment.newInstance();
+        EventItemFragment fragment;
+        fragment = EventItemFragment.newInstance();
 
         fragment.setEvent(eventList.get(position));
         fragment.setInterviewDate(interviewDate);

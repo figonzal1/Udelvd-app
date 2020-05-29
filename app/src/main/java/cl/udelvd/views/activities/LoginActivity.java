@@ -11,7 +11,10 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -43,6 +47,8 @@ import cl.udelvd.viewmodels.LoginViewModel;
 public class LoginActivity extends AppCompatActivity implements SnackbarInterface {
 
     private static final int REGISTRY_RESEARCHER_CODE = 200;
+    private MaterialCardView materialCardView;
+    private Animation cvAnimation, fadeAnimation;
     private TextInputLayout ilEmail;
     private TextInputLayout ilPassword;
     private TextInputEditText etEmail;
@@ -72,17 +78,30 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
     private void instantiateInterfaceResources() {
 
+        //Card View Animation
+        materialCardView = findViewById(R.id.cv_login);
+        cvAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.card_view_animation);
+        cvAnimation.setStartOffset(200);
+        materialCardView.startAnimation(cvAnimation);
 
+        //Title & Icon Animation
+        ImageView ivLogo = findViewById(R.id.iv_logo_login);
+        TextView tvAppName = findViewById(R.id.tv_name_app);
+
+        fadeAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_animation);
+        fadeAnimation.setStartOffset(500);
+
+        ivLogo.startAnimation(fadeAnimation);
+        tvAppName.startAnimation(fadeAnimation);
+
+        //Set form
         ilEmail = findViewById(R.id.il_email_login);
         ilPassword = findViewById(R.id.il_password_login);
-
 
         etEmail = findViewById(R.id.et_email_login);
         etPassword = findViewById(R.id.et_password_login);
 
-
         progressBar = findViewById(R.id.progress_horizontal_login);
-
 
         Button btn_login = findViewById(R.id.btn_login);
         btn_login.setOnClickListener(new View.OnClickListener() {

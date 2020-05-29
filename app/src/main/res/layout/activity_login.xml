@@ -202,7 +202,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:contentDescription="@string/LOGO_APLICACION"
-                android:src="@mipmap/ic_launcher_round"
+                android:src="@drawable/ic_logo_rounded"
                 app:layout_constraintBottom_toTopOf="@+id/guia_horizontal"
                 app:layout_constraintEnd_toStartOf="@+id/guia_der"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"

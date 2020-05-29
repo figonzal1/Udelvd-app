@@ -204,5 +204,15 @@
     <string name="ACTIVANDO_CUENTA">Activando cuenta</string>
     <string name="DESACTIVANDO_CUENTA">Desactivando cuenta</string>
     <string name="MENU_BUSCAR">Buscar</string>
-    <string name="UPDATE_MSG_VM_SAVE" translatable="false">¡Datos actualizados!</string>
+    <string name="UPDATE_MSG_VM_SAVE">¡Datos actualizados!</string>
+    <string name="SLIDE_1_DESCRIPTION">Bienvenido a la app de Android diseñada para facilitar tu investigación</string>
+    <string name="SLIDE_2_TITLE">Nuestro \n objetivo</string>
+    <string name="SLIDE_2_DESCRIPTION">Realizar sondeos preliminares sobre actividades cotidianas para el estudio de usuarios</string>
+    <string name="SLIDE_3_TITLE">Hacer \n entrevistas</string>
+    <string name="SLIDE_3_DESCRIPTION">Y administrar entrevistas para cada persona en simples pasos</string>
+    <string name="SLIDE_4_TITLE">Eventos \n diarios</string>
+    <string name="SLIDE_4_DESCRIPTION">Registra actividades cotidianas de tus entrevistados</string>
+    <string name="SLIDE_5_TITLE">Obtén \n estatísticas</string>
+    <string name="SLIDE_5_DESCRIPTION">Datos e Indicadores accesibles de manera online</string>
+
 </resources>

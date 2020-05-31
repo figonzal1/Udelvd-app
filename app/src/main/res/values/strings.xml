@@ -2,10 +2,10 @@
     <string name="app_name">Un día en la vida de &#8230;</string>
 
     <!-- PRODUCTION-->
-    <!--<string name="HEROKU_DOMAIN" translatable="false">https://undiaenlavidade.cl/</string>-->
+    <string name="HEROKU_DOMAIN" translatable="false">https://undiaenlavidade.cl/</string>
 
     <!-- DEV -->
-    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.2/</string>
+    <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.2/</string>-->
 
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/pagina/%d/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>

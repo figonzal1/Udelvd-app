@@ -214,4 +214,6 @@
     <string name="SLIDE_5_DESCRIPTION">Data and indicators accessible online</string>
     <string name="SLIDE_4_TITLE">Daily \n events</string>
     <string name="SLIDE_5_TITLE">Get \n statistics</string>
+    <string name="comenzar">Get started</string>
+    <string name="saltar">Skip</string>
 </resources>

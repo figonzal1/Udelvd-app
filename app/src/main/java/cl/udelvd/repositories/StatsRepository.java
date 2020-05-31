@@ -73,7 +73,7 @@ public class StatsRepository {
             @Override
             public void onResponse(String response) {
 
-                Log.d("RESPONSE", response);
+                //Log.d("RESPONSE", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 

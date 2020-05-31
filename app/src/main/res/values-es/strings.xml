@@ -212,7 +212,9 @@
     <string name="SLIDE_3_DESCRIPTION">Y administrar entrevistas para cada persona en simples pasos</string>
     <string name="SLIDE_4_TITLE">Eventos \n diarios</string>
     <string name="SLIDE_4_DESCRIPTION">Registra actividades cotidianas de tus entrevistados</string>
-    <string name="SLIDE_5_TITLE">Obtén \n estatísticas</string>
+    <string name="SLIDE_5_TITLE">Obtén \n estadísticas</string>
     <string name="SLIDE_5_DESCRIPTION">Datos e Indicadores accesibles de manera online</string>
+    <string name="comenzar">Comenzar</string>
+    <string name="saltar">Saltar</string>
 
 </resources>

@@ -559,6 +559,8 @@
     <string name="MI_CUENTA">Mi cuenta</string>
     <string name="ACTIVANDO_CUENTA">Activando cuenta</string>
     <string name="DESACTIVANDO_CUENTA">Desactivando cuenta</string>
+    <string name="comenzar">Comenzar</string>
+    <string name="saltar">Saltar</string>
 
     <string name="SLIDE_1_DESCRIPTION">Bienvenido a la app de Android diseñada para facilitar tu investigación</string>
     <string name="SLIDE_2_TITLE">Nuestro \n objetivo</string>

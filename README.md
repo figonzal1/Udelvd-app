@@ -17,6 +17,10 @@
     <img src="https://www.codefactor.io/repository/github/figonzal1/udelvd-app/badge" alt="CodeFactor" />
   </a>
   
+  <a href="https://img.shields.io/github/languages/top/figonzal1/Udelvd-app" alt="Top Language">
+        <img alt="GitHub repo language" src="https://img.shields.io/github/languages/top/figonzal1/Udelvd-app">
+  </a>
+  
   <a href="https://img.shields.io/github/repo-size/figonzal1/Udelvd-app" alt="GitHub repo size">
         <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/figonzal1/Udelvd-app">
   </a>

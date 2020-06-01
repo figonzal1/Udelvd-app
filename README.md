@@ -1,6 +1,8 @@
 <p align="center">
   <img src="https://github.com/figonzal1/Udelvd-app/blob/master/app/src/main/ic_launcher-web.png" width="200" height="200">
 </p>
+<h1 align="center">APP - Un día en la vida de...</h1>
+
 <p align="center">
   
   <a href="https://img.shields.io/github/v/release/figonzal1/Udelvd-app?color=orange&include_prereleases" alt="Version">
@@ -24,7 +26,6 @@
   </a>
   
 </p>
-<h1 align="center">APP - Un día en la vida de...</h1>
 
 ## ¿Qué es?
 APP móvil desarrollada para el método "Un día en la vida de ...", Sanders y Stappers (2012) que permite realizar sondeos preliminares sobre actividades cotidianas para el estudio de usuarios.

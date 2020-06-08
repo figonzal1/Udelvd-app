@@ -366,7 +366,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
-        } else if (etPassword.getText().length() < 8) {
+        } else if (Objects.requireNonNull(etPassword.getText()).length() < 8) {
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
             errorCounter++;

@@ -23,6 +23,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Objects;
 
+import cl.udelvd.ContactActivity;
 import cl.udelvd.R;
 import cl.udelvd.adapters.FragmentPageAdapter;
 import cl.udelvd.models.Interviewee;
@@ -205,11 +206,18 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                 }
 
 
+                if (menuItem.getItemId() == R.id.menu_contact) {
+                    Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+
+
                 if (menuItem.getItemId() == R.id.menu_logout) {
 
                     String token = sharedPreferences.getString(getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
 
-                    if (!token.isEmpty()) {
+                    if (!Objects.requireNonNull(token).isEmpty()) {
                         Log.d(getString(R.string.TAG_TOKEN_LOGOUT), String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
                         sharedPreferences.edit().remove(getString(R.string.SHARED_PREF_TOKEN_LOGIN)).apply();
 

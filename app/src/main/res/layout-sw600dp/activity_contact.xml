@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/tv_contact_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/CONTEXTO_PROYECTO"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="35sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include" />
+
+            <TextView
+                android:id="@+id/tv_contact_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/PROJECT_DESCRIPTION"
+                android:textSize="23sp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_contact_title"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_contact_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_contact_title" />
+
+            <TextView
+                android:id="@+id/tv_contact_title_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/MAIL_DE_CONTACTO"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="35sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_contact_description" />
+
+            <TextView
+                android:id="@+id/tv_contact_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/CONTACT_EMAIL"
+                android:textSize="23sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_contact_title_2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_contact_title_2" />
+
+            <TextView
+                android:id="@+id/tv_contact_email_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="@string/CONTACT_EMAIL_VALUE"
+                android:textSize="23sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tv_contact_title_2"
+                app:layout_constraintStart_toStartOf="@+id/tv_contact_email"
+                app:layout_constraintTop_toBottomOf="@+id/tv_contact_email"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

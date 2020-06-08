@@ -15,9 +15,9 @@
             android:title="@string/MENU_CONDICIONES"
             android:visible="false" />
         <item
+            android:id="@+id/menu_contact"
             android:icon="@drawable/ic_help_outline_black_24dp"
-            android:title="@string/MENU_CONTACTENOS"
-            android:visible="false" />
+            android:title="@string/MENU_CONTACTENOS" />
 
         <item
             android:id="@+id/menu_logout"

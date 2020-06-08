@@ -216,5 +216,11 @@
     <string name="SLIDE_5_DESCRIPTION">Datos e Indicadores accesibles de manera online</string>
     <string name="comenzar">Comenzar</string>
     <string name="saltar">Saltar</string>
+    <string name="MAIL_DE_CONTACTO">Mail de Contacto</string>
+    <string name="PROJECT_DESCRIPTION">Aplicación móvil desarrollada para el método <b><i>\"Un día en la vida de ..., Sanders y Stappers (2012)\"</i></b> que permite realizar sondeos preliminares sobre actividades cotidianas para el estudio de usuarios.\n\nEl desarrollo de esta APP está enmarcado en el proyecto de investigación Fondecyt Regular Nº1171037 <b><i>\"Investigación de un método participativo y de co-creación para el diseño de productos para el adulto mayor autovalente. Aplicación en la región del Biobío\"</i></b>, y la colaboración entre los investigadores del proyecto y Elizabeth Sanders Nielsen, como autora de esta herramienta metodológica.\n\nReferencias:\n
+- Sanders &amp; Stappers, (2012) Convivial Toolbox: Generative Research for the Front End of Design.BIS Publishers, Amsterdam/ The Nederlands. 312 Pages.</string>
+    <string name="CONTEXTO_PROYECTO">Contexto del proyecto</string>
+    <string name="CONTACT_EMAIL">Dudas y problemas enviar correo a:</string>
+    <string name="TITULO_TOOLBAR_CONTACTO">Contáctanos</string>
 
 </resources>

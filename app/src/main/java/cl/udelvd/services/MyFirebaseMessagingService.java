@@ -36,7 +36,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Defining channel notification attributes
         String name = context.getString(R.string.CANAL_NOMBRE);
         String description = context.getString(R.string.CANAL_DESCRIPCION);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        int importance = NotificationManager.IMPORTANCE_MAX;
 
         NotificationChannel notificationChannel = new NotificationChannel("1", name, importance);
         notificationChannel.setDescription(description);
@@ -129,8 +129,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Map<String, String> mParams = remoteMessage.getData();
 
-        String title = mParams.get(getString(R.string.NOTIFICACION_TITULO));
-        String description = mParams.get(getString(R.string.NOTIFICACION_DESCRIPCION));
+        String title, description;
+
+        if (Utils.getLanguage(getApplicationContext()).equals(getString(R.string.ESPANOL))) {
+            title = mParams.get(getString(R.string.NOTIFICACION_TITULO_ES));
+            description = mParams.get(getString(R.string.NOTIFICACION_DESCRIPCION_ES));
+        } else {
+            title = mParams.get(getString(R.string.NOTIFICACION_TITULO_EN));
+            description = mParams.get(getString(R.string.NOTIFICACION_DESCRIPCION_EN));
+        }
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
@@ -151,7 +158,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setContentText(description)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(description))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setSmallIcon(R.drawable.ic_logo_notification_1200)
                 .setAutoCancel(true)
                 .setContentIntent(mPendingIntent);

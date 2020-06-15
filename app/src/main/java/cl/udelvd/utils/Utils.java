@@ -342,10 +342,10 @@ public class Utils {
     public static String getLanguage(Context context) {
 
         String language = Locale.getDefault().getLanguage();
-        if (language.equals(context.getString(R.string.LANGUAJE_ES)) || language.equals(context.getString(R.string.LANGUAJE_EN))) {
+        if (language.equals(context.getString(R.string.ESPANOL)) || language.equals(context.getString(R.string.INGLES))) {
             return language;
         } else {
-            return context.getString(R.string.LANGUAJE_EN);
+            return context.getString(R.string.INGLES);
         }
     }
 

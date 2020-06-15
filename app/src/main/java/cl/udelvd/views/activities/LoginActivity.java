@@ -229,11 +229,11 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         };
 
 
-        if (Locale.getDefault().getLanguage().equals(getString(R.string.LANGUAJE_EN))) {
+        if (Locale.getDefault().getLanguage().equals(getString(R.string.INGLES))) {
             String registro = tvRegistry.getText().toString();
             int index = registro.indexOf("Sign up");
             spans.setSpan(clickSpan, index, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        } else if (Locale.getDefault().getLanguage().equals(getString(R.string.LANGUAJE_ES))) {
+        } else if (Locale.getDefault().getLanguage().equals(getString(R.string.ESPANOL))) {
             String registro = tvRegistry.getText().toString();
             int index = registro.indexOf("Regístrate");
             spans.setSpan(clickSpan, index, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

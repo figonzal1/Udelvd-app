@@ -44,8 +44,8 @@
     <string name="URL_DELETE_ENTREVISTADO" translatable="false">%sentrevistados/%d</string>
     <string name="URL_GET_ESTADISTICAS" translatable="false">%sestadisticas</string>
 
-    <string name="LANGUAJE_EN" translatable="false">en</string>
-    <string name="LANGUAJE_ES" translatable="false">es</string>
+    <string name="INGLES" translatable="false">en</string>
+    <string name="ESPANOL" translatable="false">es</string>
 
     <!-- SEXO-->
     <string name="SEXO_MASCULINO">Masculino</string>
@@ -424,8 +424,10 @@
     <string name="DIALOG_MESSAGE_ACCION">¿Está seguro que quiere eliminar esta acción? Los eventos asociados a esta acción podrían perderse</string>
 
     <!-- NOTIFICACIONES-->
-    <string name="NOTIFICACION_TITULO" translatable="false">titulo</string>
-    <string name="NOTIFICACION_DESCRIPCION" translatable="false">descripcion</string>
+    <string name="NOTIFICACION_TITULO_ES" translatable="false">titulo_es</string>
+    <string name="NOTIFICACION_TITULO_EN" translatable="false">titulo_en</string>
+    <string name="NOTIFICACION_DESCRIPCION_ES" translatable="false">descripcion_es</string>
+    <string name="NOTIFICACION_DESCRIPCION_EN" translatable="false">descripcion_en</string>
     <string name="NOTIFICACION_INTENT_ACTIVADO" translatable="false">notificacionActivaciones</string>
 
 

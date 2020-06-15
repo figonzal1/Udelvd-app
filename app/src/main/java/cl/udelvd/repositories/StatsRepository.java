@@ -89,9 +89,9 @@ public class StatsRepository {
 
                         String lang = Utils.getLanguage(application);
 
-                        if (lang.equals(application.getString(R.string.LANGUAJE_ES))) {
+                        if (lang.equals(application.getString(R.string.ESPANOL))) {
                             stat.setName(jsonAttributes.getString(application.getString(R.string.KEY_STAT_NAME_ES)));
-                        } else if (lang.equals(application.getString(R.string.LANGUAJE_EN))) {
+                        } else if (lang.equals(application.getString(R.string.INGLES))) {
                             stat.setName(jsonAttributes.getString(application.getString(R.string.KEY_STAT_NAME_EN)));
                         }
                         stat.setUrl(jsonAttributes.getString(application.getString(R.string.KEY_STAT_URL)));

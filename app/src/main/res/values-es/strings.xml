@@ -222,6 +222,6 @@
     <string name="CONTEXTO_PROYECTO">Contexto del proyecto</string>
     <string name="CONTACT_EMAIL">Dudas y problemas enviar correo a:</string>
     <string name="TITULO_TOOLBAR_CONTACTO">Contáctanos</string>
-    <string name="SI" translatable="false">Si</string>
+    <string name="SI">Si</string>
 
 </resources>

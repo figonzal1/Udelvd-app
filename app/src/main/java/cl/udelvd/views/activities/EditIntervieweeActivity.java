@@ -98,7 +98,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
     private ProfessionAdapter professionAdapter;
     private CoexistenceTypeAdapter coexistenceTypeAdapter;
 
-    
+
     private boolean isSnackBarShow = false;
     private boolean isAutoCompleteCityReady = false;
     private boolean isAutoCompleteCivilStateReady = false;
@@ -126,6 +126,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
         setSwitchFalls();
 
+        setSwitchRetire();
     }
 
     private void initViewModels() {
@@ -192,7 +193,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
     }
 
     private void setSpinnerGenre() {
-        
+
         String[] opcionesSexo = new String[]{getString(R.string.SEXO_MASCULINO), getString(R.string.SEXO_FEMENINO), getString(R.string.SEXO_OTRO)};
         ArrayAdapter<String> adapterSexo = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, opcionesSexo);
         acGenre.setAdapter(adapterSexo);
@@ -522,6 +523,21 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
     }
 
+    private void setSwitchRetire() {
+
+        switchLegalRetire.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    tvSwitchRetire.setText(getString(R.string.SI));
+                } else {
+                    tvSwitchRetire.setText(getString(R.string.NO));
+                }
+            }
+        });
+    }
+
     private void initViewModelInterviewee() {
 
 
@@ -635,6 +651,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
             etNCoexistence.setText(String.valueOf(intervieweeIntent.getNConvivientes3Meses()));
 
+            //LEGAL RETIREE
             if (intervieweeIntent.isLegalRetired()) {
                 switchLegalRetire.setChecked(true);
                 tvSwitchRetire.setText(getString(R.string.SI));
@@ -643,6 +660,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                 tvSwitchRetire.setText(getString(R.string.NO));
             }
 
+            //FALLS
             if (intervieweeIntent.isFalls()) {
                 switchFalls.setChecked(true);
                 etNFalls.setVisibility(View.VISIBLE);

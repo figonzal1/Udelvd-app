@@ -559,6 +559,10 @@ public class EditEventActivity extends AppCompatActivity implements SnackbarInte
             ilAction.setErrorEnabled(true);
             ilAction.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+        } else if (searchActionByName(acActions.getText().toString()) == null) {
+            ilAction.setErrorEnabled(true);
+            ilAction.setError("Por favor, elige una acción de la lista");
+            errorCounter++;
         } else {
             ilAction.setErrorEnabled(false);
         }

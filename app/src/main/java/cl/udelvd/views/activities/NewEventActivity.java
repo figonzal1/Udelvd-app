@@ -491,6 +491,10 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
             ilAction.setErrorEnabled(true);
             ilAction.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+        } else if (searchActionByName(acAction.getText().toString()) == null) {
+            ilAction.setErrorEnabled(true);
+            ilAction.setError("Por favor, elige una acción de la lista");
+            errorCounter++;
         } else {
             ilAction.setErrorEnabled(false);
         }

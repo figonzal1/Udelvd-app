@@ -302,7 +302,6 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:fontFamily="@font/roboto"
-                        android:inputType="numberDecimal"
                         android:singleLine="true"
                         android:textSize="16sp"
                         tools:text="Estado civil" />

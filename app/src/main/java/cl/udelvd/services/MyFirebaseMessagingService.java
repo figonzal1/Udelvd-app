@@ -37,7 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Defining channel notification attributes
         String name = context.getString(R.string.CANAL_NOMBRE);
         String description = context.getString(R.string.CANAL_DESCRIPCION);
-        int importance = NotificationManager.IMPORTANCE_MAX;
+        int importance = NotificationManager.IMPORTANCE_HIGH;
 
         NotificationChannel notificationChannel = new NotificationChannel("1", name, importance);
         notificationChannel.setDescription(description);

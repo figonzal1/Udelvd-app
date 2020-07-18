@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +49,14 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
     private boolean isSnackBarShow = false;
     private Snackbar snackbar;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_action_list);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_LISTADO_ACCIONES));
 
@@ -122,6 +127,7 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
                     }
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                 }
             }
         });
@@ -132,6 +138,7 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
                     rv.setVisibility(View.INVISIBLE);
@@ -153,6 +160,7 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
                     ActionRepository.getInstance(getApplication()).getActions();
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
             }
         });
@@ -175,7 +183,7 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }

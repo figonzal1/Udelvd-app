@@ -265,10 +265,10 @@
     <string name="SERVER_ERROR_REGISTRO_MSG_2" translatable="false">Email does not exist</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE" translatable="false">VOLLEY_ERR_INV_UPDATE</string>
-    <string name="TAG_VOLLEY_ERR_INV_RESET" translatable="false">VOLLEY_ERR_INV_RESET</string>
+    <string name="TAG_VOLLEY_ERR_INV_RESET" translatable="false">VOLLEY_ERR_INV_RESET </string>
     <string name="TAG_VOLLEY_ERR_INV_ACTIVAR" translatable="false">VOLLEY_ERR_INV_ACTIVAR</string>
     <string name="TAG_VOLLEY_ERR_INV_LISTA" translatable="false">VOLLEY_ERR_INV_LISTA</string>
-    <string name="TAG_VOLLEY_ERR_INV_RECUPERAR" translatable="false">VOLLEY_ERR_INV_RECUPERAR</string>
+    <string name="TAG_VOLLEY_ERR_INV_RECUPERAR" translatable="false">VOLLEY_ERR_INV_RECUPERAR </string>
     <string name="TAG_VOLLEY_ERR_ENTREVISTADO" translatable="false">VOLLEY_ERR_ENTREVISTADO</string>
     <string name="TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTADO" translatable="false">VOLLEY_ERR_ELIMINAR_ENTREVISTADO</string>
     <string name="TAG_VOLLEY_ERR_EDITAR_ENTREVISTADO" translatable="false">VOLLEY_ERR_EDITAR_ENTREVISTADO</string>
@@ -298,9 +298,9 @@
     <!-- Miscelaneos -->
     <string name="UPDATE_MSG_VM" translatable="false">mensaje_update</string>
     <string name="UPDATE_MSG_VM_SAVE">¡Datos actualizados!</string>
-    <string name="TAG_EDIT_PROFILE_RESULT" translatable="false">FINISH_EDIT_PROFILE_ACT</string>
+    <string name="TAG_EDIT_PROFILE_RESULT" translatable="false">FINISH_EDIT_PROFILE_ACT </string>
     <string name="EDIT_PROFILE_RESULT_MSG" translatable="false">Cerrando formulario de edicion</string>
-    <string name="TAG_VIEW_MODEL_INVEST_UPDATE" translatable="false">VM_INV_UPDATE</string>
+    <string name="TAG_VIEW_MODEL_INVEST_UPDATE" translatable="false">VM_INV_UPDATE </string>
     <string name="MSG_INVEST_REGISTRADO">¡Estas registrado!</string>
     <string name="VALIDACION_CAMPO_REQUERIDO">Campo requerido</string>
     <string name="VALIDACION_CAMPO_REQUERIDO_CERO">No puede ser cero</string>
@@ -310,30 +310,30 @@
     <string name="PERFIL_ACTIVADO">Activado</string>
     <string name="PERFIL_NO_ACTIVADO">No activado</string>
     <string name="TAG_TOKEN_LOGIN" translatable="false">TOKEN_LOGIN</string>
-    <string name="TAG_VM_INVES_REGISTRO" translatable="false">VM_INVES_REGISTRO</string>
+    <string name="TAG_VM_INVES_REGISTRO" translatable="false">VM_INVES_REGISTRO </string>
     <string name="VIEW_MODEL_MSG_RESPONSE" translatable="false">MSG_RESPONSE:</string>
     <string name="VIEW_MODEL_MSG_RESPONSE_ERROR" translatable="false">MSG_ERROR:</string>
     <string name="MSG_INVEST_LOGIN">¡Bienvenido!</string>
-    <string name="TAG_VM_INVES_LOGIN" translatable="false">VM_INVEST_LOGIN</string>
+    <string name="TAG_VM_INVES_LOGIN" translatable="false">VM_INVEST_LOGIN </string>
     <string name="TAG_TAB_SELECTED" translatable="false">TAB_SELECTED</string>
-    <string name="TAG_TOKEN_LOGOUT" translatable="false">LOGOUT</string>
+    <string name="TAG_TOKEN_LOGOUT" translatable="false">LOGOUT </string>
     <string name="TOKEN_LOGOUT_MSG" translatable="false">BORRANDO TOKEN:</string>
-    <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTADO" translatable="false">VM_LISTA_ENTREVISTADO</string>
-    <string name="TAG_VIEW_MODEL_LISTA_ACCIONES" translatable="false">VM_LISTA_ACCIONES</string>
-    <string name="TAG_VIEW_MODEL_LISTA_ESTADISTICAS" translatable="false">VM_LISTA_ESTADISTICAS</string>
+    <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTADO" translatable="false">VM_LISTA_ENTREVISTADO </string>
+    <string name="TAG_VIEW_MODEL_LISTA_ACCIONES" translatable="false">VM_LISTA_ACCIONES </string>
+    <string name="TAG_VIEW_MODEL_LISTA_ESTADISTICAS" translatable="false">VM_LISTA_ESTADISTICAS </string>
     <string name="TAG_VIEW_MODEL_LISTA_ESTADISTICAS_MSG" translatable="false">Listado cargado</string>
-    <string name="TAG_VIEW_MODEL_LISTA_INVESTIGADORES" translatable="false">VM_LISTA_INVESTIGADORES</string>
+    <string name="TAG_VIEW_MODEL_LISTA_INVESTIGADORES" translatable="false">VM_LISTA_INVESTIGADORES </string>
     <string name="VIEW_MODEL_LISTA_ENTREVISTADO_MSG" translatable="false">Listado cargado</string>
     <string name="VIEW_MODEL_LISTA_INVESTIGADORES_MSG" translatable="false">Listado cargado</string>
-    <string name="TAG_VIEW_MODEL_ESTADO_CIVIL" translatable="false">VM_ESTADO_CIVIL</string>
+    <string name="TAG_VIEW_MODEL_ESTADO_CIVIL" translatable="false">VM_ESTADO_CIVIL </string>
     <string name="VIEW_MODEL_LISTADO_CARGADO" translatable="false">Listado cargado</string>
-    <string name="TAG_VIEW_MODEL_CIUDAD" translatable="false">VM_CIUDAD</string>
-    <string name="TAG_VIEW_MODEL_NIVEL_EDUCACION" translatable="false">VM_NIVEL_EDUC</string>
+    <string name="TAG_VIEW_MODEL_CIUDAD" translatable="false">VM_CIUDAD </string>
+    <string name="TAG_VIEW_MODEL_NIVEL_EDUCACION" translatable="false">VM_NIVEL_EDUC </string>
     <string name="MSG_INVEST_CUENTA_ACTIVADA">¡Cuenta activada!</string>
     <string name="MSG_INVEST_CUENTA_DESACTIVADA">¡Cuenta desactivada!</string>
-    <string name="TAG_VIEW_MODEL_TIPO_CONVIVENCIA" translatable="false">VM_TIPO_CONVIVENCIA</string>
-    <string name="TAG_VIEW_MODEL_PROFESIONES" translatable="false">VM_PROFESIONES</string>
-    <string name="TAG_VIEW_MODEL_NUEVO_ENTREVISTADO" translatable="false">VM_NEW_ENTREVISTADO</string>
+    <string name="TAG_VIEW_MODEL_TIPO_CONVIVENCIA" translatable="false">VM_TIPO_CONVIVENCIA </string>
+    <string name="TAG_VIEW_MODEL_PROFESIONES" translatable="false">VM_PROFESIONES </string>
+    <string name="TAG_VIEW_MODEL_NUEVO_ENTREVISTADO" translatable="false">VM_NEW_ENTREVISTADO </string>
     <string name="MSG_REGISTRO_ENTREVISTADO">¡Entrevistado registrado!</string>
     <string name="REGEX_FECHA" translatable="false">-</string>
     <string name="REGEX_HORA" translatable="false">:</string>
@@ -343,62 +343,62 @@
     <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
     <string name="TAB_NAME_ENTREVISTADOS">Entrevistados</string>
     <string name="TAB_NAME_ESTADISTICAS">Estadísticas</string>
-    <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTADO" translatable="false">VM_EDITAR_ENTREVISTADO</string>
-    <string name="TAG_VIEW_MODEL_TIPO_ENTREVISTA" translatable="false">VM_TIPO_ENTREVISTA</string>
-    <string name="TAG_VIEW_MODEL_NUEVA_ACCION" translatable="false">VM_NUEVA_ACCION</string>
-    <string name="TAG_VIEW_MODEL_EDITAR_ACCION" translatable="false">VM_EDITAR_ACCION</string>
-    <string name="TAG_VIEW_MODEL_NEW_ENTREVISTA" translatable="false">VM_NEW_ENTREVISTA</string>
+    <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTADO" translatable="false">VM_EDITAR_ENTREVISTADO </string>
+    <string name="TAG_VIEW_MODEL_TIPO_ENTREVISTA" translatable="false">VM_TIPO_ENTREVISTA </string>
+    <string name="TAG_VIEW_MODEL_NUEVA_ACCION" translatable="false">VM_NUEVA_ACCION </string>
+    <string name="TAG_VIEW_MODEL_EDITAR_ACCION" translatable="false">VM_EDITAR_ACCION </string>
+    <string name="TAG_VIEW_MODEL_NEW_ENTREVISTA" translatable="false">VM_NEW_ENTREVISTA </string>
     <string name="MSG_REGISTRO_ENTREVISTA">¡Entrevista registrada!</string>
     <string name="MSG_UPDATE_ENTREVISTA">¡Entrevista actualizada!</string>
     <string name="MSG_UPDATE_ACCION">¡Acción actualizada!</string>
     <string name="MSG_REGISTRO_ACCION">¡Acción registrada!</string>
-    <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTA" translatable="false">VM_EDITAR_ENTREVISTA</string>
-    <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTAS" translatable="false">VM_LISTA_ENTREVISTAS</string>
-    <string name="TAG_JWT_STATUS" translatable="false">JWT_STATUS</string>
+    <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTA" translatable="false">VM_EDITAR_ENTREVISTA </string>
+    <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTAS" translatable="false">VM_LISTA_ENTREVISTAS </string>
+    <string name="TAG_JWT_STATUS" translatable="false">JWT_STATUS </string>
     <string name="TAG_JWT_ISSUER" translatable="false">JWT_ISSUER</string>
     <string name="TAG_JWT_AUDIENCE" translatable="false">JWT_AUDIENCE</string>
     <string name="TAG_JWT_JTI" translatable="false">JWT_JTI</string>
     <string name="TAG_JWT_CLAIM_UID" translatable="false">JWT_CLAIM_UID</string>
     <string name="TAG_JWT_FECHA_EXP" translatable="false">JWT_DATE_EXP</string>
     <string name="MSG_REGISTRO_EVENTO">¡Evento registrado!</string>
-    <string name="SPINNER_EMOTICON_SELECTED" translatable="false">SELECTED_ITEM</string>
-    <string name="TAG_VIEW_MODEL_ACCIONES" translatable="false">VM_ACCIONES</string>
-    <string name="TAG_VIEW_MODEL_EMOTICON" translatable="false">VM_EMOTICONES</string>
-    <string name="TAG_VIEW_MODEL_NUEVO_EVENTO" translatable="false">VM_NUEVO_EVENTO</string>
+    <string name="SPINNER_EMOTICON_SELECTED" translatable="false">SELECTED_ITEM </string>
+    <string name="TAG_VIEW_MODEL_ACCIONES" translatable="false">VM_ACCIONES </string>
+    <string name="TAG_VIEW_MODEL_EMOTICON" translatable="false">VM_EMOTICONES </string>
+    <string name="TAG_VIEW_MODEL_NUEVO_EVENTO" translatable="false">VM_NUEVO_EVENTO </string>
     <string name="VALIDACION_EMOTICON">Elige un emoticón</string>
-    <string name="TAG_VIEW_MODEL_LISTA_EVENTOS" translatable="false">VM_LISTA_EVENTOS</string>
-    <string name="TAG_VIEW_MODEL_EDITAR_PERFIL" translatable="false">VM_EDITAR_PERFIL</string>
-    <string name="TAG_VIEW_MODEL_EDITAR_EVENTO" translatable="false">VM_MODEL_EDITAR_EVENTO</string>
+    <string name="TAG_VIEW_MODEL_LISTA_EVENTOS" translatable="false">VM_LISTA_EVENTOS </string>
+    <string name="TAG_VIEW_MODEL_EDITAR_PERFIL" translatable="false">VM_EDITAR_PERFIL </string>
+    <string name="TAG_VIEW_MODEL_EDITAR_EVENTO" translatable="false">VM_MODEL_EDITAR_EVENTO </string>
     <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
-    <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA" translatable="false">VM_ELIMINAR_ENTREVISTA</string>
-    <string name="TAG_VIEW_MODEL_ELIMINAR_ACCION" translatable="false">VM_ELIMINAR_ACCION</string>
-    <string name="TAG_VIEW_MODEL_LISTADO_INVESTIGADORES" translatable="false">VM_LISTADO_INVESTIGADORES</string>
-    <string name="TAG_VIEW_MODEL_ACTIVACION_INVES" translatable="false">VM_ACTIVACION_INVESTIGACION</string>
+    <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA" translatable="false">VM_ELIMINAR_ENTREVISTA </string>
+    <string name="TAG_VIEW_MODEL_ELIMINAR_ACCION" translatable="false">VM_ELIMINAR_ACCION </string>
+    <string name="TAG_VIEW_MODEL_LISTADO_INVESTIGADORES" translatable="false">VM_LISTADO_INVESTIGADORES </string>
+    <string name="TAG_VIEW_MODEL_ACTIVACION_INVES" translatable="false">VM_ACTIVACION_INVESTIGACION </string>
     <string name="MSG_UPDATE_EVENTO">¡Evento actualizado!</string>
     <string name="MSG_DELETE_EVENTO">¡Evento eliminado!</string>
-    <string name="TAG_VIEW_MODEL_ELIMINAR_EVENTO" translatable="false">VM_ELIMINAR_EVENTO</string>
+    <string name="TAG_VIEW_MODEL_ELIMINAR_EVENTO" translatable="false">VM_ELIMINAR_EVENTO </string>
     <string name="MSG_DELETE_ENTREVISTADO">¡Entrevistado eliminado!</string>
     <string name="MSG_DELETE_ACCION">¡Acción eliminada!</string>
-    <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO" translatable="false">VM_ELIMINAR_ENTREVISTADO</string>
+    <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO" translatable="false">VM_ELIMINAR_ENTREVISTADO </string>
     <string name="RECOVERY_MSG_VM" translatable="false">email sended</string>
     <string name="RECOVERY_MSG_VM_RESPONSE">Email de recuperación enviado</string>
     <string name="MSG_RECOVERY" translatable="false">msg_recovery</string>
     <string name="MSG_PASSWORD_RESETEADA_VM" translatable="false">password reseted</string>
     <string name="MSG_PASSWORD_RESETEADA_VM_RESULT">¡Contraseña actualizada!</string>
-    <string name="TAG_DYNAMIC_LINK_FIREBASE" translatable="false">DYNAMIC_LINK_FIREBASE</string>
+    <string name="TAG_DYNAMIC_LINK_FIREBASE" translatable="false">DYNAMIC_LINK_FIREBASE </string>
     <string name="TAG_DYNAMIC_LINK_JSON" translatable="false">DYNAMIC_LINK_JSON</string>
     <string name="DYNAMIC_LINK_INVALIDO">Link de recuperacion ya no es válido</string>
     <string name="TAG_FIREBASE_TOKEN" translatable="false">FIREBASE_TOKEN</string>
-    <string name="FIREBASE_MESSAGE" translatable="false">FIREBASE_MESSAGE</string>
+    <string name="FIREBASE_MESSAGE" translatable="false">FIREBASE_MESSAGE </string>
     <string name="FIREBASE_MESSAGE_DATA" translatable="false">FIREBASE_MESSAGE_DATA</string>
-    <string name="TAG_FIREBASE_SUSCRIPCION" translatable="false">FIREBASE_SUSCRIPCION</string>
+    <string name="TAG_FIREBASE_SUSCRIPCION" translatable="false">FIREBASE_SUSCRIPCION </string>
     <string name="SUSCRIPCION_OK" translatable="false">Suscripcion ok</string>
     <string name="SUSCRIPCION_ELIMINADA" translatable="false">Suscripcion eliminada</string>
     <string name="SUSCRIPCION_ERRONEA" translatable="false">Suscripcion erronea</string>
-    <string name="TAG_FIREBASE_CHANNEL" translatable="false">FIREBASE_CHANNEL</string>
+    <string name="TAG_FIREBASE_CHANNEL" translatable="false">FIREBASE_CHANNEL </string>
     <string name="FIREBASE_CHANNEL_CREATED" translatable="false">Channel created</string>
-    <string name="TAG_TOKEN_FIREBASE" translatable="false">TOKEN_FIREBASE</string>
-    <string name="TAG_GOOGLE_PLAY" translatable="false">GOOGLE_PLAY</string>
+    <string name="TAG_TOKEN_FIREBASE" translatable="false">TOKEN_FIREBASE </string>
+    <string name="TAG_GOOGLE_PLAY" translatable="false">GOOGLE_PLAY </string>
     <string name="GOOGLE_PLAY_NO_SOPORTADO" translatable="false">Google play no soportado</string>
     <string name="GOOGLE_PLAY_ACTUALIZADO" translatable="false">Google play actualizado</string>
 

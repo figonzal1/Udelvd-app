@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Date;
 import java.util.List;
@@ -51,10 +52,14 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
     private NewInterviewViewModel newInterviewViewModel;
     private boolean isSnackBarShow = false;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_interview);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_NUEVA_ENTREVISTA));
 
@@ -135,6 +140,7 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
                     acInterviewType.setAdapter(interviewTypeAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                     interviewTypeAdapter.notifyDataSetChanged();
                 }
@@ -155,6 +161,7 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -191,7 +198,7 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
             public void onChanged(String s) {
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTA))) {
 
@@ -217,6 +224,7 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
                     showSnackbar(findViewById(R.id.form_new_interview), Snackbar.LENGTH_LONG, s, null);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }

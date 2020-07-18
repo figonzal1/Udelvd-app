@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Map;
 import java.util.Objects;
@@ -46,10 +47,14 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
 
     private RegistryViewModel registryViewModel;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registry);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_REGISTRO));
 
@@ -156,6 +161,7 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
                 String activado = stringStringMap.get(getString(R.string.INTENT_KEY_INVES_ACTIVADO));
 
                 Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), msg_registro));
+                crashlytics.log(getString(R.string.TAG_VM_INVES_REGISTRO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), msg_registro));
 
                 progressBar.setVisibility(View.GONE);
 
@@ -185,7 +191,7 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
                 showSnackbar(findViewById(R.id.registry_researcher), Snackbar.LENGTH_LONG, s, null);
 
                 Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
+                crashlytics.log(getString(R.string.TAG_VM_INVES_REGISTRO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -236,22 +242,18 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
-        }
-
-        else if (etPassword.getText().length() < 8) {
+        } else if (Objects.requireNonNull(etPassword.getText()).length() < 8) {
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
             errorCounter++;
-        }
-
-        else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
+        } else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
             ilConfirmacionPassword.setErrorEnabled(true);
             ilConfirmacionPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
         } else {
 
 
-            if (!etPassword.getText().toString().equals(etConfirmacionPassword.getText().toString())) {
+            if (!etPassword.getText().toString().equals(Objects.requireNonNull(etConfirmacionPassword.getText()).toString())) {
                 ilConfirmacionPassword.setErrorEnabled(true);
                 ilConfirmacionPassword.setError(getString(R.string.VALIDACION_PASSWORD_NO_IGUALES));
                 errorCounter++;

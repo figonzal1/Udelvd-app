@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Date;
 import java.util.List;
@@ -107,10 +108,15 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
     private boolean isAutoCompleteEducationalLevelReady = false;
     private boolean isIntervieweeReady = false;
 
+
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_interviewee);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_EDITAR_ENTREVISTADO));
 
@@ -249,6 +255,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     isAutoCompleteCityReady = true;
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                     progressBar.setVisibility(View.GONE);
 
@@ -272,6 +279,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -303,6 +311,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     acCivilState.setAdapter(civilStateAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                     civilStateAdapter.notifyDataSetChanged();
 
@@ -326,6 +335,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -359,6 +369,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     acEducationalLevel.setAdapter(educationalLevelAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                     educationalLevelAdapter.notifyDataSetChanged();
 
@@ -383,6 +394,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -415,6 +427,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     acProfession.setAdapter(professionAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                     professionAdapter.notifyDataSetChanged();
 
@@ -439,6 +452,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -471,6 +485,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     acCoexistenceType.setAdapter(coexistenceTypeAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                     coexistenceTypeAdapter.notifyDataSetChanged();
 
@@ -496,6 +511,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -566,6 +582,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     progressBar.setVisibility(View.GONE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), intervieweeIntent.toString()));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), intervieweeIntent.toString()));
 
                     isIntervieweeReady = true;
 
@@ -587,6 +604,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -597,6 +615,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                 progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTADO))) {
                     Intent intent = getIntent();
@@ -617,6 +636,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_LONG, s, null);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import cl.udelvd.R;
 import cl.udelvd.models.Researcher;
@@ -34,10 +35,14 @@ public class ProfileActivity extends AppCompatActivity implements SnackbarInterf
 
     private Researcher researcher;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), R.drawable.ic_arrow_back_black_24dp, getString(R.string.TITULO_TOOLBAR_PERFIL));
 
@@ -96,8 +101,6 @@ public class ProfileActivity extends AppCompatActivity implements SnackbarInterf
 
 
         if (item.getItemId() == android.R.id.home) {
-
-
             Intent intent = getIntent();
             setResult(PROFILE_ACTIVITY_CODE, intent);
             finish();
@@ -140,7 +143,7 @@ public class ProfileActivity extends AppCompatActivity implements SnackbarInterf
                 loadResearcherData();
 
                 Log.d(getString(R.string.TAG_EDIT_PROFILE_RESULT), getString(R.string.EDIT_PROFILE_RESULT_MSG));
-
+                crashlytics.log(getString(R.string.TAG_EDIT_PROFILE_RESULT) + getString(R.string.EDIT_PROFILE_RESULT_MSG));
             }
         }
     }

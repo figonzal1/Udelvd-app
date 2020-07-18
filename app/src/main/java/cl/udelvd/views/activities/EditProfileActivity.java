@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Map;
 import java.util.Objects;
@@ -57,10 +58,14 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
     private EditProfileViewModel editProfileViewModel;
     private boolean isSnackBarShow = false;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_EDITAR_PERFIL));
 
@@ -93,7 +98,6 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
         etEmail.setEnabled(false);
         etPassword = findViewById(R.id.et_researcher_password);
         etConfirmacionPassword = findViewById(R.id.et_research_confirm_password);
-
 
         progressBar = findViewById(R.id.progress_horizontal_edit_profile);
 
@@ -154,6 +158,7 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
                     if (researcher != null) {
 
                         Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), getString(R.string.VIEW_MODEL_MSG_RESPONSE) + researcher.toString());
+                        crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL) + getString(R.string.VIEW_MODEL_MSG_RESPONSE) + researcher.toString());
 
                         //Guardar en sharedPref investigador con datos actualizados
                         editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE), researcher.getName());
@@ -173,6 +178,7 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
 
                         assert msgUpdate != null;
                         Log.d(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE), msgUpdate);
+                        crashlytics.log(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE) + msgUpdate);
 
                         if (msgUpdate.equals(getString(R.string.UPDATE_MSG_VM_SAVE))) {
                             Intent intent = getIntent();
@@ -198,6 +204,7 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -297,22 +304,18 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
                 ilPassword.setErrorEnabled(true);
                 ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 errorCounter++;
-            }
-
-            else if (etPassword.getText().length() < 8) {
+            } else if (Objects.requireNonNull(etPassword.getText()).length() < 8) {
                 ilPassword.setErrorEnabled(true);
                 ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
                 errorCounter++;
-            }
-
-            else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
+            } else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
                 ilConfirmacionPassword.setErrorEnabled(true);
                 ilConfirmacionPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 errorCounter++;
             } else {
 
 
-                if (!etPassword.getText().toString().equals(etConfirmacionPassword.getText().toString())) {
+                if (!etPassword.getText().toString().equals(Objects.requireNonNull(etConfirmacionPassword.getText()).toString())) {
                     ilConfirmacionPassword.setErrorEnabled(true);
                     ilConfirmacionPassword.setError(getString(R.string.VALIDACION_PASSWORD_NO_IGUALES));
                     errorCounter++;

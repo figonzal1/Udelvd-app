@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,8 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
     private boolean isSnackBarShow = false;
     private Snackbar snackbar;
 
+    private FirebaseCrashlytics crashlytics;
+
     public StatsFragment() {
     }
 
@@ -51,6 +54,8 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
     }
 
     @Override
@@ -109,6 +114,7 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
                     progressBar.setVisibility(View.INVISIBLE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS), getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS) + getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS_MSG));
                 }
 
             }
@@ -120,6 +126,7 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
                     rv.setVisibility(View.INVISIBLE);

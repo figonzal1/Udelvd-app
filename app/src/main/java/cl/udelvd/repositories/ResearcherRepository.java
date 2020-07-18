@@ -182,14 +182,10 @@ public class ResearcherRepository {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorList.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
+                } else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorList.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+                } else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
@@ -204,9 +200,7 @@ public class ResearcherRepository {
 
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
                         responseMsgErrorList.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
@@ -312,9 +306,7 @@ public class ResearcherRepository {
                 else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorRegistry.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+                } else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
@@ -330,9 +322,7 @@ public class ResearcherRepository {
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
                         responseMsgErrorRegistry.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    }
-
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.SERVER_ERROR) + errorObject);
 
                         try {
@@ -477,14 +467,10 @@ public class ResearcherRepository {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
+                } else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorLogin.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+                } else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
@@ -511,9 +497,7 @@ public class ResearcherRepository {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    }
-
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.SERVER_ERROR) + errorObject);
 
                         try {
@@ -756,14 +740,10 @@ public class ResearcherRepository {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorRecovery.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
+                } else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorRecovery.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+                } else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
@@ -779,9 +759,7 @@ public class ResearcherRepository {
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
                         responseMsgErrorRecovery.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    }
-
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.SERVER_ERROR) + errorObject);
 
                         try {
@@ -858,14 +836,10 @@ public class ResearcherRepository {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorReset.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
+                } else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorReset.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+                } else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
@@ -881,9 +855,7 @@ public class ResearcherRepository {
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
                         responseMsgErrorReset.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    }
-
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.SERVER_ERROR) + errorObject);
                         responseMsgErrorReset.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }
@@ -968,14 +940,10 @@ public class ResearcherRepository {
                 if (error instanceof TimeoutError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorActivation.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
+                } else if (error instanceof NetworkError) {
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorActivation.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+                } else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
                     //Log.d("JSON", json);
@@ -992,9 +960,7 @@ public class ResearcherRepository {
                     if (error instanceof AuthFailureError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
                         responseMsgErrorActivation.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    }
-
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.SERVER_ERROR) + errorObject);
                         responseMsgErrorActivation.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                     }

@@ -25,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Date;
 import java.util.List;
@@ -101,6 +102,8 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
     private boolean isSnackBarShow = false;
 
+    private FirebaseCrashlytics crashlytics;
+
     public NewIntervieweeActivity() {
     }
 
@@ -108,6 +111,8 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_interviewee);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_NUEVO_ENTREVISTADO));
 
@@ -208,6 +213,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                 progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
 
                 if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTADO))) {
@@ -233,6 +239,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -271,6 +278,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                     progressBar.setVisibility(View.GONE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
                 }
             }
         });
@@ -288,6 +296,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -327,6 +336,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                     progressBar.setVisibility(View.GONE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
                 }
 
             }
@@ -342,6 +352,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -379,6 +390,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                     progressBar.setVisibility(View.GONE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
                 }
 
             }
@@ -394,7 +406,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -432,6 +444,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                     progressBar.setVisibility(View.GONE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
                 }
 
             }
@@ -447,6 +460,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -484,6 +498,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                     progressBar.setVisibility(View.GONE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
                 }
             }
         });
@@ -498,6 +513,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -640,7 +656,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                 ilNFalls.setErrorEnabled(true);
                 ilNFalls.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 errorCounter++;
-            } else if (etNFalls.getText().toString().equals("0")) {
+            } else if (Objects.requireNonNull(etNFalls.getText()).toString().equals("0")) {
                 ilNFalls.setErrorEnabled(true);
                 ilNFalls.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO_CERO));
                 errorCounter++;

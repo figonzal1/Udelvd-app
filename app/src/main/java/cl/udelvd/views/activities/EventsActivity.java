@@ -22,6 +22,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,10 +69,14 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
     private boolean isSnackBarShow = false;
     private Snackbar snackbar;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_main);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_EVENTOS));
 
@@ -184,10 +189,11 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                     } else {
                         tvEmptyEvents.setVisibility(View.INVISIBLE);
                         fragmentStatePageAdapter.updateList(eventList);
-
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), getString(R.string.VIEW_MODEL_LISTADO_CARGADO)));
                     }
                 }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), getString(R.string.VIEW_MODEL_LISTADO_CARGADO)));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), getString(R.string.VIEW_MODEL_LISTADO_CARGADO)));
             }
         });
 
@@ -208,6 +214,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -225,6 +232,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                     Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
         });
 
@@ -246,6 +254,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }

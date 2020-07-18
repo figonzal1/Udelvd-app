@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,11 +55,15 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
     private boolean isGetInterview = false;
     private boolean isSnackBarShow = false;
 
+    private FirebaseCrashlytics crashlytics;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_interview);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_EDITAR_ENTREVISTA));
 
@@ -144,6 +149,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
                     progressBar.setVisibility(View.GONE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                     setInterviewInformation();
                 }
@@ -163,6 +169,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -207,6 +214,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
                     progressBar.setVisibility(View.GONE);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), interviewIntent.toString()));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), interviewIntent.toString()));
 
                     setInterviewInformation();
                 }
@@ -218,6 +226,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
             public void onChanged(String s) {
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTA))) {
 
@@ -238,6 +247,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
                 progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
@@ -254,6 +264,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
                 progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;

@@ -30,6 +30,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
@@ -57,6 +58,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
     private LoginViewModel loginViewModel;
     private boolean isNotification = false;
+
+    private FirebaseCrashlytics crashlytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 if (researcher != null) {
 
                     Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), researcher.toString()));
-
+                    crashlytics.log(getString(R.string.TAG_VM_INVES_LOGIN) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), researcher.toString()));
 
                     editor.putInt(getString(R.string.SHARED_PREF_INVES_ID), researcher.getId());
                     editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE), researcher.getName());
@@ -207,6 +210,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VM_INVES_LOGIN) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 showSnackbar(findViewById(R.id.login_researcher), Snackbar.LENGTH_LONG, s, null);
             }
@@ -269,7 +273,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                             deepLink = pendingDynamicLinkData.getLink();
 
                             Log.d(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), String.valueOf(deepLink));
-
+                            crashlytics.log(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE) + deepLink);
 
                             SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
@@ -291,6 +295,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), "getDynamicLink:onFailure", e);
+                        crashlytics.log(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE) + "getDynamicLink:onFailure" + e);
                     }
                 });
     }

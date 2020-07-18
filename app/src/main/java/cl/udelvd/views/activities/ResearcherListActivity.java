@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,10 +53,14 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
     private TextView tvNResearchers;
     private Snackbar snackbar;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_researcher_list);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_LISTADO_INVESTIGADORES));
 
@@ -144,6 +149,7 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
                 tvNResearchers.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), researcherAdapter.getResearcherList().size(), totalResearchers));
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
             }
         });
@@ -167,6 +173,7 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
                 tvNResearchers.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), researcherAdapter.getResearcherList().size(), totalResearchers));
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES) + getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
             }
         });
 
@@ -183,6 +190,7 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -191,7 +199,6 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     tvActivatedResearcher.setVisibility(View.VISIBLE);
-
                     progressBar.setVisibility(View.VISIBLE);
                     tvNResearchers.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.INVISIBLE);
@@ -215,6 +222,7 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
                     ResearcherRepository.getInstance(getApplication()).getResearchers(1, researcher);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
         });
 
@@ -237,6 +245,7 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
                     researcherAdapter.notifyDataSetChanged();
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -254,11 +263,10 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
 
         if (activated) {
             tvActivatedResearcher.setText(getString(R.string.ACTIVANDO_CUENTA));
-            tvActivatedResearcher.setVisibility(View.VISIBLE);
         } else {
             tvActivatedResearcher.setText(getString(R.string.DESACTIVANDO_CUENTA));
-            tvActivatedResearcher.setVisibility(View.VISIBLE);
         }
+        tvActivatedResearcher.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -52,12 +52,14 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
     private String msgLogin;
     private String researchRole;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
         }
 
         researchRole = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), getString(R.string.ROL_INVESTIGADOR));
+        crashlytics.setCustomKey(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), getString(R.string.ROL_INVESTIGADOR));
+
         //If is Admin Role, notifications coming
         if (researchRole.equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
             MyFirebaseMessagingService.suscriptionTheme(this);
@@ -87,10 +91,10 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
         setViewPagerTabsDrawer();
 
-        getDeviationNotification();
+        newResearcherNotification();
     }
 
-    private void getDeviationNotification() {
+    private void newResearcherNotification() {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null && bundle.containsKey(getString(R.string.NOTIFICACION_INTENT_ACTIVADO))) {
@@ -216,9 +220,13 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                 if (menuItem.getItemId() == R.id.menu_logout) {
 
                     String token = sharedPreferences.getString(getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+                    assert token != null;
+                    crashlytics.setCustomKey(getString(R.string.SHARED_PREF_TOKEN_LOGIN), token);
 
-                    if (!Objects.requireNonNull(token).isEmpty()) {
+                    if (!token.isEmpty()) {
                         Log.d(getString(R.string.TAG_TOKEN_LOGOUT), String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
+                        crashlytics.log(getString(R.string.TAG_TOKEN_LOGOUT) + String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
+
                         sharedPreferences.edit().remove(getString(R.string.SHARED_PREF_TOKEN_LOGIN)).apply();
 
                         if (researchRole.equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {

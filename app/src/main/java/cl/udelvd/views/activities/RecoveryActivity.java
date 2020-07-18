@@ -15,6 +15,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Map;
 import java.util.Objects;
@@ -35,10 +36,14 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
     private ProgressBar progressBar;
     private RecoveryViewModel recoveryViewModel;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recovery);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         instantiateInterfaceResources();
 
@@ -86,6 +91,7 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
                 String msgRecovery = stringStringMap.get(getString(R.string.MSG_RECOVERY));
 
                 Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), stringStringMap.toString()));
+                crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), stringStringMap.toString()));
 
                 progressBar.setVisibility(View.GONE);
 
@@ -97,6 +103,7 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
                     String sharedEmail = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
 
+                    assert sharedEmail != null;
                     if (!sharedEmail.equals(email) || sharedEmail.isEmpty()) {
 
                         sharedPreferences.edit().putString(getString(R.string.SHARED_PREF_INVES_EMAIL), email).apply();
@@ -116,6 +123,7 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
                 progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 showSnackbar(findViewById(R.id.researcher_recovery), Snackbar.LENGTH_INDEFINITE, s, null);
             }

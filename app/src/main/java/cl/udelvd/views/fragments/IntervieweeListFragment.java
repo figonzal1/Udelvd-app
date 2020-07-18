@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
     private static final int REQUEST_CODE_NEW_INTERVIEWEE = 200;
     private static final int REQUEST_CODE_EDIT_INTERVIEWEE = 300;
-    
+
     private RecyclerView rv;
     private IntervieweeListViewModel intervieweeListViewModel;
     private IntervieweeAdapter intervieweeAdapter;
@@ -59,10 +60,12 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     private View v;
     private int totalInterviewees;
     private Researcher researcher;
-    
+
     private boolean isSnackBarShow = false;
     private Snackbar snackbar;
     private boolean listadoTotal = false;
+
+    private FirebaseCrashlytics crashlytics;
 
     public IntervieweeListFragment() {
     }
@@ -77,6 +80,8 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
     }
 
     @Override
@@ -141,23 +146,28 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireContext().getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
         String rolAdmin = sharedPreferences.getString(requireContext().getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), "");
 
+        assert rolAdmin != null;
         if (rolAdmin.equals(requireContext().getString(R.string.ROL_ADMIN_KEY_MASTER))) {
             switchMaterial.setVisibility(View.VISIBLE);
             listadoTotal = switchMaterial.isChecked();
 
             if (listadoTotal) {
                 switchMaterial.setText(R.string.TODOS);
+                crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.TODOS));
             } else {
                 switchMaterial.setText(R.string.MI_CUENTA);
+                crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
             }
 
             switchMaterial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        switchMaterial.setText(R.string.TODOS);
+                        switchMaterial.setText(getString(R.string.TODOS));
+                        crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.TODOS));
                     } else {
-                        switchMaterial.setText(R.string.MI_CUENTA);
+                        switchMaterial.setText(getString(R.string.MI_CUENTA));
+                        crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
                     }
                     listadoTotal = isChecked;
                     intervieweeAdapter.setTotalList(listadoTotal);
@@ -239,6 +249,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                 tvNInterviewees.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
             }
         });
 
@@ -259,6 +270,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
                 tvNInterviewees.setVisibility(View.VISIBLE);
                 tvNInterviewees.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG) + "PAGINA");
             }
         });
@@ -291,6 +303,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                     intervieweeAdapter.notifyDataSetChanged();
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
             }
         });
@@ -309,6 +322,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
         });
 
@@ -329,7 +343,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
         });
     }

@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -205,6 +206,8 @@ public class IntroActivity extends AppCompatActivity {
         boolean isFirstLoad = sharedPreferences.getBoolean(getString(R.string.SHARED_PREF_FIRST_LOAD), true);
 
         Log.d(getString(R.string.SHARED_PREF_FIRST_LOAD), String.valueOf(isFirstLoad));
+        FirebaseCrashlytics.getInstance().setCustomKey(getString(R.string.SHARED_PREF_FIRST_LOAD), isFirstLoad);
+
         if (!isFirstLoad) {
             Intent intent = new Intent(IntroActivity.this, MainActivity.class);
             startActivity(intent);

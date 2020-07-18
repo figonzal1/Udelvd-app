@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -51,6 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         Log.d(context.getString(R.string.TAG_FIREBASE_CHANNEL), context.getString(R.string.FIREBASE_CHANNEL_CREATED));
+        FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_CHANNEL) + context.getString(R.string.FIREBASE_CHANNEL_CREATED));
     }
 
     public static void suscriptionTheme(final Context context) {
@@ -61,6 +63,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         if (task.isSuccessful()) {
 
                             Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_OK));
+                            FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_OK));
 
                             //CRASH ANALYTIC LOG
                                 /*Crashlytics.setBool(activity.getString(R.string.FIREBASE_PREF_KEY)
@@ -80,6 +83,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     public void onComplete(@NonNull Task<Void> task) {
                         //LOG ZONE
                         Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_ELIMINADA));
+                        FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_ELIMINADA));
+
                         /*Crashlytics.log(Log.DEBUG,
                                 activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION),
                                 activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION_DELETE));
@@ -92,6 +97,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     public void onFailure(@NonNull Exception e) {
 
                         Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_ERRONEA));
+                        FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_ERRONEA));
                         /*Crashlytics.log(Log.DEBUG,
                                 activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION),
                                 activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION_ALREADY));*/
@@ -105,6 +111,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         Log.d(getString(R.string.FIREBASE_MESSAGE), "From: " + remoteMessage.getFrom());
+        FirebaseCrashlytics.getInstance().log(getString(R.string.FIREBASE_MESSAGE) + "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
@@ -176,6 +183,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
         Log.d(getString(R.string.TAG_FIREBASE_TOKEN), "Refreshed Token:" + s);
+        FirebaseCrashlytics.getInstance().setUserId(s);
         //Crashlytics.setUserIdentifier(s);
     }
 

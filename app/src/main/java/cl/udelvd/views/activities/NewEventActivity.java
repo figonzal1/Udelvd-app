@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 import java.util.Objects;
@@ -67,10 +68,14 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
     private boolean isSnackBarShow = false;
     private String language;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TOOLBAR_CREAR_EVENTO));
 
@@ -190,10 +195,11 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                     actionSelectorAdapter = new ActionSelectorAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, actionList);
                     acAction.setAdapter(actionSelectorAdapter);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-
                     actionSelectorAdapter.notifyDataSetChanged();
                 }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACCIONES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
             }
         });
@@ -210,6 +216,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                     isSnackBarShow = true;
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -262,6 +269,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                     spinner.setAdapter(emoticonAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EMOTICON) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                 }
             }
         });
@@ -279,6 +287,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EMOTICON), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EMOTICON) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }
@@ -291,6 +300,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(getString(R.string.SPINNER_EMOTICON_SELECTED), spinner.getSelectedItem().toString());
+                crashlytics.log(getString(R.string.SPINNER_EMOTICON_SELECTED) + spinner.getSelectedItem().toString());
 
                 Emoticon emoticon = emoticonList.get(position);
                 event.setEmoticon(emoticon);
@@ -361,6 +371,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
             public void onChanged(String s) {
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
                 if (s.equals(getString(R.string.MSG_REGISTRO_EVENTO))) {
 
@@ -386,6 +397,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                     showSnackbar(findViewById(R.id.form_new_event), Snackbar.LENGTH_LONG, s, null);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }

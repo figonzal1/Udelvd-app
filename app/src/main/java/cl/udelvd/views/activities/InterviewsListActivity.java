@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,10 +67,14 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
     private int annos;
     private Snackbar snackbar;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interview_list);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_LISTA_ENTREVISTAS));
 
@@ -205,6 +210,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                     rv.setAdapter(interviewAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), interviews.toString()));
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), interviews.toString()));
                 }
             }
         });
@@ -224,6 +230,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                     interviewAdapter.notifyDataSetChanged();
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 
@@ -240,6 +247,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                     InterviewRepository.getInstance(getApplication()).getPersonalInterviews(interviewee);
                 }
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
         });
 
@@ -261,6 +269,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
     }

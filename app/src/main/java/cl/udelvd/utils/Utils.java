@@ -23,6 +23,7 @@ import com.auth0.android.jwt.JWT;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -54,9 +55,7 @@ public class Utils {
                         String token = instanceIdResult.getToken();
                         Log.d(activity.getString(R.string.TAG_TOKEN_FIREBASE), token);
 
-                        //CRASH ANALYTICS LOG
-                        //Crashlytics.log(Log.DEBUG, getString(R.string.TAG_FIREBASE_TOKEN), token);
-                        //Crashlytics.setUserIdentifier(token);
+                        FirebaseCrashlytics.getInstance().log(activity.getString(R.string.TAG_TOKEN_FIREBASE) + token);
                     }
                 });
     }
@@ -84,7 +83,8 @@ public class Utils {
 
                 //The error cannot be solved by the user and the app closes
                 Log.d(activity.getString(R.string.TAG_GOOGLE_PLAY), activity.getString(R.string.GOOGLE_PLAY_NO_SOPORTADO));
-                //Crashlytics.log(Log.DEBUG, activity.getString(R.string.TAG_GOOGLE_PLAY),activity.getString(R.string.GOOGLE_PLAY_NOSOPORTADO));
+                FirebaseCrashlytics.getInstance().log(activity.getString(R.string.TAG_GOOGLE_PLAY) + activity.getString(R.string.GOOGLE_PLAY_NO_SOPORTADO));
+
                 activity.finish();
             }
         }
@@ -92,7 +92,7 @@ public class Utils {
         else {
 
             Log.d(activity.getString(R.string.TAG_GOOGLE_PLAY), activity.getString(R.string.GOOGLE_PLAY_ACTUALIZADO));
-            //Crashlytics.log(Log.DEBUG, activity.getString(R.string.TAG_GOOGLE_PLAY),activity.getString(R.string.GOOGLE_PLAY_ACTUALIZADO));
+            FirebaseCrashlytics.getInstance().log(activity.getString(R.string.TAG_GOOGLE_PLAY) + activity.getString(R.string.GOOGLE_PLAY_ACTUALIZADO));
         }
     }
 
@@ -118,14 +118,18 @@ public class Utils {
      */
     public static boolean jwtStatus(Context context, SharedPreferences sharedPreferences) {
 
+        FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+
         //Obtener token shared pref
         String json = sharedPreferences.getString(context.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
         int idResearcher = sharedPreferences.getInt(context.getString(R.string.KEY_INVES_ID_LARGO), 0);
 
         //Si no es vacio
+        assert json != null;
         if (!json.isEmpty()) {
 
             Log.d(context.getString(R.string.TAG_JWT_STATUS), context.getString(R.string.JWT_STATUS_NO_VACIO));
+            crashlytics.log(context.getString(R.string.TAG_JWT_STATUS) + context.getString(R.string.JWT_STATUS_NO_VACIO));
 
             JWT jwt = new JWT(json);
 
@@ -155,15 +159,20 @@ public class Utils {
 
                 boolean expired = jwt.isExpired(10);
                 Log.d(context.getString(R.string.TAG_JWT_STATUS), String.format("%s %s", context.getString(R.string.JWT_STATUS_EXPIRADO), expired));
+                crashlytics.log(context.getString(R.string.TAG_JWT_STATUS) + String.format("%s %s", context.getString(R.string.JWT_STATUS_EXPIRADO), expired));
+                crashlytics.setCustomKey("jwt_expired", expired);
+
                 return expired;
 
             } else {
                 Log.d(context.getString(R.string.TAG_JWT_STATUS), context.getString(R.string.JWT_STATUS_INCOHERENTE));
+                crashlytics.log(context.getString(R.string.TAG_JWT_STATUS) + context.getString(R.string.JWT_STATUS_INCOHERENTE));
                 return true;
             }
 
         } else {
             Log.d(context.getString(R.string.TAG_JWT_STATUS), context.getString(R.string.JWT_STATUS_VACIO));
+            crashlytics.log(context.getString(R.string.TAG_JWT_STATUS) + context.getString(R.string.JWT_STATUS_VACIO));
             return true;
         }
     }
@@ -342,6 +351,8 @@ public class Utils {
     public static String getLanguage(Context context) {
 
         String language = Locale.getDefault().getLanguage();
+        FirebaseCrashlytics.getInstance().setCustomKey("default_lang", language);
+
         if (language.equals(context.getString(R.string.ESPANOL)) || language.equals(context.getString(R.string.INGLES))) {
             return language;
         } else {

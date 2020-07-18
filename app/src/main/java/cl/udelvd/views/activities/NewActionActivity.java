@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Objects;
 
@@ -37,10 +38,14 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
     private NewActionViewModel newActionViewModel;
     private boolean isSnackBarShow = false;
 
+    private FirebaseCrashlytics crashlytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_action);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         Utils.configToolbar(this, getApplicationContext(), 0, getString(R.string.TITULO_TOOLBAR_NUEVA_ACCION));
 
@@ -79,6 +84,7 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
             @Override
             public void onChanged(String s) {
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
 
                 if (s.equals(getString(R.string.MSG_REGISTRO_ACCION))) {
@@ -104,6 +110,7 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
         });
 

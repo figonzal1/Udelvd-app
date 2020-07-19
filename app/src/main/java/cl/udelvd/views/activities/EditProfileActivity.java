@@ -15,12 +15,12 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -54,7 +54,7 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
 
     private Researcher researcher;
 
-    private SwitchCompat switchCompat;
+    private SwitchMaterial switchCompat;
     private EditProfileViewModel editProfileViewModel;
     private boolean isSnackBarShow = false;
 

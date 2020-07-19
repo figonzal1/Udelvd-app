@@ -160,7 +160,7 @@
                     app:layout_constraintTop_toTopOf="@+id/il_researcher_email"
                     app:srcCompat="@drawable/ic_email_black_24dp" />
 
-                <androidx.appcompat.widget.SwitchCompat
+                <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_password_on"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

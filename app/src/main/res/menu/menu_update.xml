@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_refresh"
-        android:contentDescription="Resfresh menu"
+        android:contentDescription="@string/actualizar_menu"
         android:icon="@drawable/ic_refresh_black_24dp"
         android:title="@string/MENU_ACTUALIZAR"
         app:showAsAction="ifRoom|collapseActionView" />

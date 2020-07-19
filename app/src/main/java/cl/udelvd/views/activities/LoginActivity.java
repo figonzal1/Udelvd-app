@@ -48,8 +48,6 @@ import cl.udelvd.viewmodels.LoginViewModel;
 public class LoginActivity extends AppCompatActivity implements SnackbarInterface {
 
     private static final int REGISTRY_RESEARCHER_CODE = 200;
-    private MaterialCardView materialCardView;
-    private Animation cvAnimation, fadeAnimation;
     private TextInputLayout ilEmail;
     private TextInputLayout ilPassword;
     private TextInputEditText etEmail;
@@ -65,6 +63,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        crashlytics = FirebaseCrashlytics.getInstance();
 
         instantiateInterfaceResources();
 
@@ -82,8 +82,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
     private void instantiateInterfaceResources() {
 
         //Card View Animation
-        materialCardView = findViewById(R.id.cv_login);
-        cvAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.card_view_animation);
+        MaterialCardView materialCardView = findViewById(R.id.cv_login);
+        Animation cvAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.card_view_animation);
         cvAnimation.setStartOffset(200);
         materialCardView.startAnimation(cvAnimation);
 
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         ImageView ivLogo = findViewById(R.id.iv_logo_login);
         TextView tvAppName = findViewById(R.id.tv_name_app);
 
-        fadeAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_animation);
+        Animation fadeAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_animation);
         fadeAnimation.setStartOffset(500);
 
         ivLogo.startAnimation(fadeAnimation);

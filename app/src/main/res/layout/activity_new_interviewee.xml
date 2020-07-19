@@ -75,6 +75,7 @@
                     android:cropToPadding="false"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
+                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/add_person_circle" />

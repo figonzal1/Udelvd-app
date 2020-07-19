@@ -546,12 +546,11 @@
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
     <string name="MSG_LISTADO_ACCIONES_VACIO">No hay acciones registradas</string>
     <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
-    <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinaria</string>
     <string name="ICONO_ACCION_ESPANOL">Icono accion en español</string>
     <string name="ACCION_ESPANOL">Acción español</string>
-    <string name="ICON_ACCION_INGLES">Icono accion en ingles</string>
+    <string name="ICONO_ACCION_INGLES">Icono accion en ingles</string>
     <string name="ACCION_INGLES">Accion inglés</string>
     <string name="INTRUCCION_ACCION">Para crear una nueva acción ingrese el nombre de la acción tanto en español como en inglés</string>
     <string name="COPIADO_PORTAPAPELES">Copiado al portapapeles</string>
@@ -564,6 +563,14 @@
     <string name="DESACTIVANDO_CUENTA">Desactivando cuenta</string>
     <string name="comenzar">Comenzar</string>
     <string name="saltar">Saltar</string>
+    <string name="PROJECT_DESCRIPTION">Aplicación móvil desarrollada para el método <b><i>\"Un día en la vida de ..., Sanders y Stappers (2012)\"</i></b> que permite realizar sondeos preliminares sobre actividades cotidianas para el estudio de usuarios.\n\nEl desarrollo de esta APP está enmarcado en el proyecto de investigación Fondecyt Regular Nº1171037 <b><i>\"Investigación de un método participativo y de co-creación para el diseño de productos para el adulto mayor autovalente. Aplicación en la región del Biobío\"</i></b>, y la colaboración entre los investigadores del proyecto y Elizabeth Sanders Nielsen, como autora de esta herramienta metodológica.\n\nReferencias:\n
+- Sanders &amp; Stappers, (2012) Convivial Toolbox: Generative Research for the Front End of Design.BIS Publishers, Amsterdam/ The Nederlands. 312 Pages.</string>
+    <string name="CONTACT_EMAIL">Dudas y problemas enviar correo a:</string>
+    <string name="CONTACT_EMAIL_VALUE" translatable="false">undiaenlavidade.cl@gmail.com</string>
+    <string name="CONTEXTO_PROYECTO">Contexto del proyecto</string>
+    <string name="MAIL_DE_CONTACTO">Mail de Contacto</string>
+    <string name="icono_item_estadisticas">Icono item estadisticas</string>
+    <string name="actualizar_menu">Actualizar menu</string>
 
     <string name="SLIDE_1_DESCRIPTION">Bienvenido a la app de Android diseñada para facilitar tu investigación</string>
     <string name="SLIDE_2_TITLE">Nuestro \n objetivo</string>
@@ -574,11 +581,5 @@
     <string name="SLIDE_4_DESCRIPTION">Registra actividades cotidianas de tus entrevistados</string>
     <string name="SLIDE_5_TITLE">Obtén \n estadísticas</string>
     <string name="SLIDE_5_DESCRIPTION">Datos e Indicadores accesibles de manera online</string>
-
-    <string name="PROJECT_DESCRIPTION">Aplicación móvil desarrollada para el método <b><i>\"Un día en la vida de ..., Sanders y Stappers (2012)\"</i></b> que permite realizar sondeos preliminares sobre actividades cotidianas para el estudio de usuarios.\n\nEl desarrollo de esta APP está enmarcado en el proyecto de investigación Fondecyt Regular Nº1171037 <b><i>\"Investigación de un método participativo y de co-creación para el diseño de productos para el adulto mayor autovalente. Aplicación en la región del Biobío\"</i></b>, y la colaboración entre los investigadores del proyecto y Elizabeth Sanders Nielsen, como autora de esta herramienta metodológica.\n\nReferencias:\n
-- Sanders &amp; Stappers, (2012) Convivial Toolbox: Generative Research for the Front End of Design.BIS Publishers, Amsterdam/ The Nederlands. 312 Pages.</string>
-    <string name="CONTACT_EMAIL">Dudas y problemas enviar correo a:</string>
-    <string name="CONTACT_EMAIL_VALUE" translatable="false">undiaenlavidade.cl@gmail.com</string>
-    <string name="CONTEXTO_PROYECTO">Contexto del proyecto</string>
-    <string name="MAIL_DE_CONTACTO">Mail de Contacto</string>
+    <string name="skip_intro">Saltar intro</string>
 </resources>

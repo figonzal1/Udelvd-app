@@ -102,7 +102,7 @@
                 android:id="@+id/iv_icon_english"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:contentDescription="@string/ICON_ACCION_INGLES"
+                android:contentDescription="@string/ICONO_ACCION_INGLES"
                 android:scaleType="centerCrop"
                 android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_action_english"

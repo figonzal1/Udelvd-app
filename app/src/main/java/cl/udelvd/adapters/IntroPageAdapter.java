@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,16 +19,10 @@ public class IntroPageAdapter extends PagerAdapter {
 
     private Context context;
     private List<IntroItem> introItemList;
-    private ImageView imgSlide;
-    private TextView title;
-    private TextView description;
-    private View layoutScreen;
-    private Animation itemAnimation;
 
     public IntroPageAdapter(Context context, List<IntroItem> introItemList) {
         this.context = context;
         this.introItemList = introItemList;
-        itemAnimation = AnimationUtils.loadAnimation(context, R.anim.intro_item_animation);
     }
 
 
@@ -57,11 +49,11 @@ public class IntroPageAdapter extends PagerAdapter {
         if (inflater != null) {
 
 
-            layoutScreen = inflater.inflate(R.layout.intro_item, null);
+            View layoutScreen = inflater.inflate(R.layout.intro_item, null);
 
-            imgSlide = layoutScreen.findViewById(R.id.iv_intro);
-            title = layoutScreen.findViewById(R.id.tv_intro_title);
-            description = layoutScreen.findViewById(R.id.tv_intro_description);
+            ImageView imgSlide = layoutScreen.findViewById(R.id.iv_intro);
+            TextView title = layoutScreen.findViewById(R.id.tv_intro_title);
+            TextView description = layoutScreen.findViewById(R.id.tv_intro_description);
 
             title.setText(introItemList.get(position).getTitle());
             description.setText(introItemList.get(position).getDescription());

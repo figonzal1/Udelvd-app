@@ -172,7 +172,6 @@
     <string name="FORMATO_N_ENTREVISTAS" tools:ignore="PluralsCandidate">%d interviews</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Researchers list</string>
     <string name="ULTIMOS_3_MESES">Last 3 months</string>
-    <string name="ABRIR_VISUALIZACIONES">Open Charts</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinary</string>
     <string name="MOSTRAR_INVESTIGADORES">Displaying %d of %d researchers</string>
@@ -189,7 +188,7 @@
     <string name="TITULO_TOOLBAR_EDITAR_ACCION">Edit Action</string>
     <string name="ACCION_ESPANOL">Spanish action</string>
     <string name="ACCION_INGLES">English action</string>
-    <string name="ICON_ACCION_INGLES">English action icon</string>
+    <string name="ICONO_ACCION_INGLES">English action icon</string>
     <string name="ICONO_ACCION_ESPANOL">Spanish action icon</string>
     <string name="INTRUCCION_ACCION">To create a new action enter the name of the action in both Spanish and English</string>
     <string name="COPIADO_PORTAPAPELES">Copied to clipboard</string>
@@ -223,4 +222,7 @@
 - Sanders &amp; Stappers, (2012) Convivial Toolbox: Generative Research for the Front End of Design.BIS Publishers, Amsterdam / The Nederlands. 312 Pages.</string>
     <string name="TITULO_TOOLBAR_CONTACTO">Contact us</string>
     <string name="SI">Yes</string>
+    <string name="actualizar_menu">Refresh menu</string>
+    <string name="icono_item_estadisticas">Stats item icon</string>
+    <string name="skip_intro">Skip intro</string>
 </resources>

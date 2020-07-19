@@ -1,5 +1,7 @@
 package cl.udelvd.models;
 
+import androidx.annotation.NonNull;
+
 public class IntroItem {
 
     private String title;
@@ -39,6 +41,7 @@ public class IntroItem {
         this.idResource = idResource;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "IntroItem{" +

@@ -1,5 +1,7 @@
 package cl.udelvd.models;
 
+import androidx.annotation.NonNull;
+
 public class Stat {
 
     private int id;
@@ -33,6 +35,7 @@ public class Stat {
         this.url = url;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Stat{" +

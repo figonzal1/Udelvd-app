@@ -13,8 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import java.util.Objects;
-
 import cl.udelvd.R;
 import cl.udelvd.models.Action;
 
@@ -30,7 +28,7 @@ public class DeleteActionDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setMessage(getString(R.string.DIALOG_MESSAGE_ACCION))
                 .setPositiveButton(getString(R.string.DIALOG_POSITIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

@@ -11,8 +11,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.Objects;
-
 import cl.udelvd.R;
 import cl.udelvd.models.Researcher;
 
@@ -33,7 +31,7 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
         if (activated) {
             builder.setMessage(getString(R.string.DIALOG_ACTIVACION_MENSAJE));

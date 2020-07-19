@@ -61,6 +61,7 @@
         android:textColor="@color/colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:focusable="true"
         app:layout_constraintTop_toTopOf="@+id/separator" />
 
     <com.google.android.material.tabs.TabLayout
@@ -90,6 +91,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/separator"
+        android:contentDescription="@string/skip_intro"
         app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

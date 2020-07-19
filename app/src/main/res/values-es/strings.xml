@@ -172,7 +172,6 @@
     <string name="FORMATO_N_ENTREVISTAS">%d entrevistas</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
     <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
-    <string name="ABRIR_VISUALIZACIONES">Abrir Visualizaciones</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinaria</string>
     <string name="MOSTRAR_INVESTIGADORES">Mostrando %d de %d investigadores</string>
@@ -188,9 +187,9 @@
     <string name="TITULO_TOOLBAR_NUEVA_ACCION">Nueva Acción</string>
     <string name="TITULO_TOOLBAR_EDITAR_ACCION">Editar Acción</string>
     <string name="ACCION_ESPANOL">Acción español</string>
-    <string name="ACCION_INGLES">Accion inglés</string>
-    <string name="ICON_ACCION_INGLES">Icono accion en ingles</string>
-    <string name="ICONO_ACCION_ESPANOL">Icono accion en español</string>
+    <string name="ACCION_INGLES">Acción inglés</string>
+    <string name="ICONO_ACCION_INGLES">Icono acción en ingles</string>
+    <string name="ICONO_ACCION_ESPANOL">Icono acción en español</string>
     <string name="INTRUCCION_ACCION">Para crear una nueva acción ingrese el nombre de la acción tanto en español como en inglés</string>
     <string name="COPIADO_PORTAPAPELES">Copiado al portapapeles</string>
     <string name="FORMATO_LINK_DIRECTO">Link directo: %s</string>
@@ -223,5 +222,8 @@
     <string name="CONTACT_EMAIL">Dudas y problemas enviar correo a:</string>
     <string name="TITULO_TOOLBAR_CONTACTO">Contáctanos</string>
     <string name="SI">Si</string>
+    <string name="icono_item_estadisticas">Icono item estadisticas</string>
+    <string name="actualizar_menu">Actualizar menu</string>
+    <string name="skip_intro">Saltar intro</string>
 
 </resources>

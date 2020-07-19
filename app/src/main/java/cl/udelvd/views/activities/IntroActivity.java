@@ -35,7 +35,6 @@ public class IntroActivity extends AppCompatActivity {
     private TextView skipButton;
     private ImageButton ibNext;
     private List<IntroItem> introItemList;
-    private IntroPageAdapter introPageAdapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private int position;
@@ -59,12 +58,17 @@ public class IntroActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_intro);
 
+        sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+
         checkFirstLoad();
 
         initResourcesSlicesAndViewPager();
     }
 
     private void initResourcesSlicesAndViewPager() {
+
+        editor = sharedPreferences.edit();
+
         skipButton = findViewById(R.id.tv_skip);
         ibNext = findViewById(R.id.ib_next);
         separator = findViewById(R.id.separator);
@@ -82,7 +86,7 @@ public class IntroActivity extends AppCompatActivity {
 
         //SETUP VIEW PAGER
         viewPager = findViewById(R.id.view_pager_intro);
-        introPageAdapter = new IntroPageAdapter(getApplicationContext(), introItemList);
+        IntroPageAdapter introPageAdapter = new IntroPageAdapter(getApplicationContext(), introItemList);
         viewPager.setAdapter(introPageAdapter);
 
         //SETUP TABS
@@ -200,8 +204,6 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private void checkFirstLoad() {
-        sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
         boolean isFirstLoad = sharedPreferences.getBoolean(getString(R.string.SHARED_PREF_FIRST_LOAD), true);
 

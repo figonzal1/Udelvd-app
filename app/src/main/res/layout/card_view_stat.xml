@@ -30,10 +30,8 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:contentDescription="@string/icono_item_estadisticas"
+        android:contentDescription="@string/ICONO_ITEM_ESTADISTICAS"
         android:tint="@color/colorSecondaryVariant"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_insert_chart_black_24dp" />
@@ -56,14 +54,24 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_go"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tv_stat_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_stat_name"
-        app:layout_constraintVertical_bias="0.0"
         tools:text="LINK CORTO" />
+
+    <TextView
+        android:id="@+id/tv_pin_pass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_short_link"
+        app:layout_constraintStart_toStartOf="@+id/tv_short_link"
+        app:layout_constraintTop_toBottomOf="@+id/tv_short_link"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="PIN PASS" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_go"

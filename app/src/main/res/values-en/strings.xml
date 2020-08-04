@@ -222,7 +222,9 @@
 - Sanders &amp; Stappers, (2012) Convivial Toolbox: Generative Research for the Front End of Design.BIS Publishers, Amsterdam / The Nederlands. 312 Pages.</string>
     <string name="TITULO_TOOLBAR_CONTACTO">Contact us</string>
     <string name="SI">Yes</string>
-    <string name="actualizar_menu">Refresh menu</string>
-    <string name="icono_item_estadisticas">Stats item icon</string>
+    <string name="ACTUALIZAR_MENU">Refresh menu</string>
+    <string name="ICONO_ITEM_ESTADISTICAS">Stats item icon</string>
     <string name="skip_intro">Skip intro</string>
+    <string name="ICONO_AVISO_DE_SEGURIDAD">Security warning icon</string>
+    <string name="WARNING_PIN_PASS">Please, NEVER share the pin pass, the private information of interviewees could be compromised.</string>
 </resources>

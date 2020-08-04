@@ -7,6 +7,7 @@ public class Stat {
     private int id;
     private String name;
     private String url;
+    private String pin_pass;
 
     public Stat() {
     }
@@ -35,6 +36,14 @@ public class Stat {
         this.url = url;
     }
 
+    public String getPin_pass() {
+        return pin_pass;
+    }
+
+    public void setPin_pass(String pin_pass) {
+        this.pin_pass = pin_pass;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -42,6 +51,7 @@ public class Stat {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
+                ", pin_pass='" + pin_pass + '\'' +
                 '}';
     }
 }

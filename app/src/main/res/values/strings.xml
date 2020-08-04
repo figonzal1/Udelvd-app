@@ -569,8 +569,10 @@
     <string name="CONTACT_EMAIL_VALUE" translatable="false">undiaenlavidade.cl@gmail.com</string>
     <string name="CONTEXTO_PROYECTO">Contexto del proyecto</string>
     <string name="MAIL_DE_CONTACTO">Mail de Contacto</string>
-    <string name="icono_item_estadisticas">Icono item estadisticas</string>
-    <string name="actualizar_menu">Actualizar menu</string>
+    <string name="ICONO_ITEM_ESTADISTICAS">Icono item estadisticas</string>
+    <string name="ACTUALIZAR_MENU">Actualizar menu</string>
+    <string name="ICONO_AVISO_DE_SEGURIDAD">Icono aviso de seguridad</string>
+    <string name="WARNING_PIN_PASS">Por favor, NUNCA compartas los pin pass, la información privada de entrevistados podría verse comprometida.</string>
 
     <string name="SLIDE_1_DESCRIPTION">Bienvenido a la app de Android diseñada para facilitar tu investigación</string>
     <string name="SLIDE_2_TITLE">Nuestro \n objetivo</string>
@@ -582,4 +584,5 @@
     <string name="SLIDE_5_TITLE">Obtén \n estadísticas</string>
     <string name="SLIDE_5_DESCRIPTION">Datos e Indicadores accesibles de manera online</string>
     <string name="skip_intro">Saltar intro</string>
+    <string name="PIN_PASS_FORMAT" translatable="false">Pin pass: %s</string>
 </resources>

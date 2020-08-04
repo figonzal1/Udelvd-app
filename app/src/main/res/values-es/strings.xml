@@ -222,8 +222,10 @@
     <string name="CONTACT_EMAIL">Dudas y problemas enviar correo a:</string>
     <string name="TITULO_TOOLBAR_CONTACTO">Contáctanos</string>
     <string name="SI">Si</string>
-    <string name="icono_item_estadisticas">Icono item estadisticas</string>
-    <string name="actualizar_menu">Actualizar menu</string>
+    <string name="ICONO_ITEM_ESTADISTICAS">Icono item estadisticas</string>
+    <string name="ACTUALIZAR_MENU">Actualizar menu</string>
     <string name="skip_intro">Saltar intro</string>
+    <string name="ICONO_AVISO_DE_SEGURIDAD">Icono aviso de seguridad</string>
+    <string name="WARNING_PIN_PASS">Por favor, NUNCA compartas los pin pass, la información privada de entrevistados podría verse comprometida.</string>
 
 </resources>

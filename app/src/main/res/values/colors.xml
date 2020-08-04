@@ -6,6 +6,7 @@
     <color name="white">#ffffff</color>-->
 
     <color name="red">#F75555</color>
+    <color name="redDark">#6E1616</color>
 
     <color name="colorPrimary">#fb8c00</color>
     <color name="colorPrimaryVariant">#c25e00</color>

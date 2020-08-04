@@ -95,6 +95,9 @@ public class StatsRepository {
                             stat.setName(jsonAttributes.getString(application.getString(R.string.KEY_STAT_NAME_EN)));
                         }
                         stat.setUrl(jsonAttributes.getString(application.getString(R.string.KEY_STAT_URL)));
+                        stat.setPin_pass(jsonAttributes.getString("pin_pass"));
+
+                        Log.d("HOLA", stat.toString());
 
                         statList.add(stat);
 

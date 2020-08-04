@@ -50,6 +50,8 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder
 
         holder.tvName.setText(stat.getName());
 
+        holder.tvPinPass.setText(String.format(context.getString(R.string.PIN_PASS_FORMAT), stat.getPin_pass()));
+
         holder.btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +105,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder
 
         private TextView tvName;
         private TextView tvLink;
+        private TextView tvPinPass;
         private MaterialButton btnGo;
 
         StatViewHolder(@NonNull View itemView) {
@@ -110,6 +113,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder
 
             tvName = itemView.findViewById(R.id.tv_stat_name);
             tvLink = itemView.findViewById(R.id.tv_short_link);
+            tvPinPass = itemView.findViewById(R.id.tv_pin_pass);
             btnGo = itemView.findViewById(R.id.btn_go);
         }
     }

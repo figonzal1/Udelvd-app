@@ -532,7 +532,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
             @Override
             public void onClick(View v) {
-                Utils.iniciarDatePicker(etBirthDate, NewIntervieweeActivity.this);
+                Utils.iniciarDatePicker(etBirthDate, NewIntervieweeActivity.this, "interviewee");
             }
         });
 
@@ -540,7 +540,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
         ilBirthDate.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.iniciarDatePicker(etBirthDate, NewIntervieweeActivity.this);
+                Utils.iniciarDatePicker(etBirthDate, NewIntervieweeActivity.this, "interviewee");
             }
         });
     }
@@ -617,6 +617,10 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
         if (Objects.requireNonNull(etBirthDate.getText()).toString().isEmpty()) {
             ilBirthDate.setErrorEnabled(true);
             ilBirthDate.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            errorCounter++;
+        } else if (Utils.isFutureDate(getApplicationContext(), etBirthDate.getText().toString())) {
+            ilBirthDate.setErrorEnabled(true);
+            ilBirthDate.setError(getString(R.string.VALIDACION_FECHA_FUTURA));
             errorCounter++;
         } else {
             ilBirthDate.setErrorEnabled(false);

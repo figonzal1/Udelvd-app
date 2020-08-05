@@ -236,7 +236,7 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
 
             @Override
             public void onClick(View v) {
-                Utils.iniciarDatePicker(etInterviewDate, NewInterviewActivity.this);
+                Utils.iniciarDatePicker(etInterviewDate, NewInterviewActivity.this, "interview");
             }
         });
 
@@ -245,7 +245,7 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
 
             @Override
             public void onClick(View v) {
-                Utils.iniciarDatePicker(etInterviewDate, NewInterviewActivity.this);
+                Utils.iniciarDatePicker(etInterviewDate, NewInterviewActivity.this, "interview");
             }
         });
 
@@ -257,6 +257,10 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
         if (Objects.requireNonNull(etInterviewDate.getText()).toString().isEmpty()) {
             ilInterviewDate.setErrorEnabled(true);
             ilInterviewDate.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
+            errorCounter++;
+        } else if (Utils.isFutureDate(getApplicationContext(), etInterviewDate.getText().toString())) {
+            ilInterviewDate.setErrorEnabled(true);
+            ilInterviewDate.setError(getString(R.string.VALIDACION_FECHA_FUTURA));
             errorCounter++;
         } else {
             ilInterviewDate.setErrorEnabled(false);

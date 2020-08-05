@@ -282,10 +282,17 @@ public class Utils {
         return mDFecha;
     }
 
+    public static boolean isFutureDate(Context context, String sDate) {
+        Date date = stringToDate(context, false, sDate);
+        Date now = new Date();
+
+        return date.after(now);
+    }
+
     /**
      * Function responsible for opening the DatePicker to choose date
      */
-    public static void iniciarDatePicker(final EditText editText, Context context) {
+    public static void iniciarDatePicker(final EditText editText, Context context, String parent) {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH) + 1;
@@ -304,9 +311,21 @@ public class Utils {
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+
                 editText.setText(String.format(Locale.US, "%d-%d-%d", year, month + 1, dayOfMonth));
             }
         }, year, month - 1, day);
+
+        //set the limit to the previous day
+        Calendar today = Calendar.getInstance();
+
+        if (parent.equals("interviewee")) {
+            today.add(Calendar.DATE, -1);
+        } else if (parent.equals("interview")) {
+            today.add(Calendar.MONTH, +1);
+        }
+        datePickerDialog.getDatePicker().setMaxDate(today.getTimeInMillis());
 
         datePickerDialog.show();
     }

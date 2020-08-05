@@ -26,7 +26,7 @@ public class Interviewee {
 
     //opcionales
     private EducationalLevel educationalLevel;
-    private CoexistanceType coexistenteType;
+    private CohabitType coexistenteType;
     private Profession profession;
 
     //Relaciones
@@ -141,11 +141,11 @@ public class Interviewee {
         this.educationalLevel = educationalLevel;
     }
 
-    public CoexistanceType getCoexistenteType() {
+    public CohabitType getCoexistenteType() {
         return coexistenteType;
     }
 
-    public void setCoexistenteType(CoexistanceType coexistenteType) {
+    public void setCoexistenteType(CohabitType coexistenteType) {
         this.coexistenteType = coexistenteType;
     }
 

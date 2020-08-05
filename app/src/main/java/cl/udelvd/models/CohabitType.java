@@ -2,12 +2,12 @@ package cl.udelvd.models;
 
 import androidx.annotation.NonNull;
 
-public class CoexistanceType {
+public class CohabitType {
 
     private int id;
     private String name;
 
-    public CoexistanceType() {
+    public CohabitType() {
     }
 
     public int getId() {

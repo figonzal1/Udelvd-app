@@ -35,12 +35,12 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.adapters.CityAdapter;
 import cl.udelvd.adapters.CivilStateAdapter;
-import cl.udelvd.adapters.CoexistenceTypeAdapter;
+import cl.udelvd.adapters.CohabitTypeAdapter;
 import cl.udelvd.adapters.EducationalLevelAdapter;
 import cl.udelvd.adapters.ProfessionAdapter;
 import cl.udelvd.models.City;
 import cl.udelvd.models.CivilState;
-import cl.udelvd.models.CoexistanceType;
+import cl.udelvd.models.CohabitType;
 import cl.udelvd.models.EducationalLevel;
 import cl.udelvd.models.Interviewee;
 import cl.udelvd.models.Profession;
@@ -92,14 +92,14 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
     private List<CivilState> civilStateList;
     private List<EducationalLevel> educationalLevelList;
     private List<Profession> professionList;
-    private List<CoexistanceType> coexistanceTypeList;
+    private List<CohabitType> cohabitTypeList;
 
 
     private CityAdapter cityAdapter;
     private CivilStateAdapter civilStateAdapter;
     private EducationalLevelAdapter educationalLevelAdapter;
     private ProfessionAdapter professionAdapter;
-    private CoexistenceTypeAdapter coexistenceTypeAdapter;
+    private CohabitTypeAdapter cohabitTypeAdapter;
 
 
     private boolean isSnackBarShow = false;
@@ -568,19 +568,19 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
             }
         });
 
-        editIntervieweeViewModel.loadCoexitenceType().observe(this, new Observer<List<CoexistanceType>>() {
+        editIntervieweeViewModel.loadCoexitenceType().observe(this, new Observer<List<CohabitType>>() {
             @Override
-            public void onChanged(List<CoexistanceType> list) {
+            public void onChanged(List<CohabitType> list) {
 
                 if (list != null && list.size() > 0) {
-                    coexistanceTypeList = list;
-                    coexistenceTypeAdapter = new CoexistenceTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, coexistanceTypeList);
-                    acCoexistenceType.setAdapter(coexistenceTypeAdapter);
+                    cohabitTypeList = list;
+                    cohabitTypeAdapter = new CohabitTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, cohabitTypeList);
+                    acCoexistenceType.setAdapter(cohabitTypeAdapter);
 
                     Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
                     crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    coexistenceTypeAdapter.notifyDataSetChanged();
+                    cohabitTypeAdapter.notifyDataSetChanged();
 
                     progressBar.setVisibility(View.GONE);
 
@@ -896,9 +896,9 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
                 if (!acCoexistenceType.getText().toString().isEmpty()) {
                     int id_tipo_convivencia = Objects.requireNonNull(searchCoexistenceTypeByName(acCoexistenceType.getText().toString())).getId();
-                    CoexistanceType coexistanceType = new CoexistanceType();
-                    coexistanceType.setId(id_tipo_convivencia);
-                    interviewee.setCoexistenteType(coexistanceType);
+                    CohabitType cohabitType = new CohabitType();
+                    cohabitType.setId(id_tipo_convivencia);
+                    interviewee.setCoexistenteType(cohabitType);
                 }
 
                 IntervieweeRepository.getInstance(getApplication()).updateInterviewee(interviewee);
@@ -1063,11 +1063,11 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
         acEducationalLevel.setEnabled(activate);
     }
 
-    private CoexistanceType searchCoexistenceTypeById(int id) {
+    private CohabitType searchCoexistenceTypeById(int id) {
 
-        for (int i = 0; i < coexistanceTypeList.size(); i++) {
-            if (coexistanceTypeList.get(i).getId() == id) {
-                return coexistanceTypeList.get(i);
+        for (int i = 0; i < cohabitTypeList.size(); i++) {
+            if (cohabitTypeList.get(i).getId() == id) {
+                return cohabitTypeList.get(i);
             }
         }
         return null;
@@ -1130,11 +1130,11 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
         return null;
     }
 
-    private CoexistanceType searchCoexistenceTypeByName(String nombre) {
+    private CohabitType searchCoexistenceTypeByName(String nombre) {
 
-        for (int i = 0; i < coexistanceTypeList.size(); i++) {
-            if (coexistanceTypeList.get(i).getName().equals(nombre)) {
-                return coexistanceTypeList.get(i);
+        for (int i = 0; i < cohabitTypeList.size(); i++) {
+            if (cohabitTypeList.get(i).getName().equals(nombre)) {
+                return cohabitTypeList.get(i);
             }
         }
         return null;

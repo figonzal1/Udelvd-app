@@ -36,12 +36,12 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.adapters.CityAdapter;
 import cl.udelvd.adapters.CivilStateAdapter;
-import cl.udelvd.adapters.CoexistenceTypeAdapter;
+import cl.udelvd.adapters.CohabitTypeAdapter;
 import cl.udelvd.adapters.EducationalLevelAdapter;
 import cl.udelvd.adapters.ProfessionAdapter;
 import cl.udelvd.models.City;
 import cl.udelvd.models.CivilState;
-import cl.udelvd.models.CoexistanceType;
+import cl.udelvd.models.CohabitType;
 import cl.udelvd.models.EducationalLevel;
 import cl.udelvd.models.Interviewee;
 import cl.udelvd.models.Profession;
@@ -90,14 +90,14 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
     private List<City> cityList;
     private List<CivilState> civilStateList;
     private List<EducationalLevel> educationalLevelList;
-    private List<CoexistanceType> coexistenceTypeList;
+    private List<CohabitType> coexistenceTypeList;
     private List<Profession> professionList;
 
     //Adaptadores
     private ArrayAdapter<City> cityAdapter;
     private ArrayAdapter<CivilState> civilStateAdapter;
     private ArrayAdapter<EducationalLevel> educacionalLevelAdapter;
-    private ArrayAdapter<CoexistanceType> coexistenceTypeAdapter;
+    private ArrayAdapter<CohabitType> coexistenceTypeAdapter;
     private ArrayAdapter<Profession> professionAdapter;
 
     private ProgressBar progressBar;
@@ -521,13 +521,13 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
         });
 
 
-        newIntervieweeViewModel.loadCoexistenceTypes().observe(this, new Observer<List<CoexistanceType>>() {
+        newIntervieweeViewModel.loadCoexistenceTypes().observe(this, new Observer<List<CohabitType>>() {
             @Override
-            public void onChanged(List<CoexistanceType> list) {
+            public void onChanged(List<CohabitType> list) {
 
                 if (list != null && list.size() > 0) {
                     coexistenceTypeList = list;
-                    coexistenceTypeAdapter = new CoexistenceTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, coexistenceTypeList);
+                    coexistenceTypeAdapter = new CohabitTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, coexistenceTypeList);
                     acCoexistenceType.setAdapter(coexistenceTypeAdapter);
 
                     coexistenceTypeAdapter.notifyDataSetChanged();
@@ -862,9 +862,9 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
                 if (!acCoexistenceType.getText().toString().isEmpty()) {
 
-                    CoexistanceType coexistanceType = new CoexistanceType();
-                    coexistanceType.setId(Objects.requireNonNull(searchCoexistenceTypeByName(acCoexistenceType.getText().toString())).getId());
-                    interviewee.setCoexistenteType(coexistanceType);
+                    CohabitType cohabitType = new CohabitType();
+                    cohabitType.setId(Objects.requireNonNull(searchCoexistenceTypeByName(acCoexistenceType.getText().toString())).getId());
+                    interviewee.setCoexistenteType(cohabitType);
                 }
 
                 IntervieweeRepository.getInstance(getApplication()).registryInterviewee(interviewee);
@@ -934,7 +934,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
         return null;
     }
 
-    private CoexistanceType searchCoexistenceTypeByName(String nombre) {
+    private CohabitType searchCoexistenceTypeByName(String nombre) {
         for (int i = 0; i < coexistenceTypeList.size(); i++) {
             if (coexistenceTypeList.get(i).getName().equals(nombre)) {
                 return coexistenceTypeList.get(i);

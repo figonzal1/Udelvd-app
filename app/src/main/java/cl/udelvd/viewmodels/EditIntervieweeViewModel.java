@@ -10,13 +10,13 @@ import java.util.List;
 
 import cl.udelvd.models.City;
 import cl.udelvd.models.CivilState;
-import cl.udelvd.models.CoexistanceType;
+import cl.udelvd.models.CohabitType;
 import cl.udelvd.models.EducationalLevel;
 import cl.udelvd.models.Interviewee;
 import cl.udelvd.models.Profession;
 import cl.udelvd.repositories.CityRepository;
 import cl.udelvd.repositories.CivilStateRepository;
-import cl.udelvd.repositories.CoexistenceTypeRepository;
+import cl.udelvd.repositories.CohabitTypeRepository;
 import cl.udelvd.repositories.EducationaLevelRepository;
 import cl.udelvd.repositories.IntervieweeRepository;
 import cl.udelvd.repositories.ProfessionRepository;
@@ -27,7 +27,7 @@ public class EditIntervieweeViewModel extends AndroidViewModel {
     private CityRepository cityRepository;
     private CivilStateRepository civilStateRepository;
     private EducationaLevelRepository educationaLevelRepository;
-    private CoexistenceTypeRepository coexistenceTypeRepository;
+    private CohabitTypeRepository cohabitTypeRepository;
     private ProfessionRepository professionRepository;
 
     private IntervieweeRepository intervieweeRepository;
@@ -35,7 +35,7 @@ public class EditIntervieweeViewModel extends AndroidViewModel {
     private MutableLiveData<List<City>> cityMutableList;
     private MutableLiveData<List<CivilState>> civilStateMutableList;
     private MutableLiveData<List<EducationalLevel>> educationalLevelMutableList;
-    private MutableLiveData<List<CoexistanceType>> coexistenceTypeMutableList;
+    private MutableLiveData<List<CohabitType>> coexistenceTypeMutableList;
     private MutableLiveData<List<Profession>> professionMutableList;
 
     public EditIntervieweeViewModel(@NonNull Application application) {
@@ -164,30 +164,30 @@ public class EditIntervieweeViewModel extends AndroidViewModel {
     /*
     COEXISTENCE TYPE
      */
-    public MutableLiveData<List<CoexistanceType>> loadCoexitenceType() {
+    public MutableLiveData<List<CohabitType>> loadCoexitenceType() {
 
         if (coexistenceTypeMutableList == null) {
             coexistenceTypeMutableList = new MutableLiveData<>();
-            coexistenceTypeRepository = CoexistenceTypeRepository.getInstance(getApplication());
-            coexistenceTypeMutableList = coexistenceTypeRepository.getCoexistenceType();
+            cohabitTypeRepository = CohabitTypeRepository.getInstance(getApplication());
+            coexistenceTypeMutableList = cohabitTypeRepository.getCoexistenceType();
         }
 
         return coexistenceTypeMutableList;
     }
 
     public MutableLiveData<Boolean> isLoadingCoexistenceType() {
-        coexistenceTypeRepository = CoexistenceTypeRepository.getInstance(getApplication());
-        return coexistenceTypeRepository.getIsLoading();
+        cohabitTypeRepository = CohabitTypeRepository.getInstance(getApplication());
+        return cohabitTypeRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> showMsgErrorListCoexistenceType() {
-        coexistenceTypeRepository = CoexistenceTypeRepository.getInstance(getApplication());
-        return coexistenceTypeRepository.getResponseMsgErrorList();
+        cohabitTypeRepository = CohabitTypeRepository.getInstance(getApplication());
+        return cohabitTypeRepository.getResponseMsgErrorList();
     }
 
     public void refreshCoexistenceType() {
-        coexistenceTypeRepository = CoexistenceTypeRepository.getInstance(getApplication());
-        coexistenceTypeRepository.getCoexistenceType();
+        cohabitTypeRepository = CohabitTypeRepository.getInstance(getApplication());
+        cohabitTypeRepository.getCoexistenceType();
     }
 
     /*

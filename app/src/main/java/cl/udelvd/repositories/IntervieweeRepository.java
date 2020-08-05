@@ -30,7 +30,7 @@ import java.util.Map;
 import cl.udelvd.R;
 import cl.udelvd.models.City;
 import cl.udelvd.models.CivilState;
-import cl.udelvd.models.CoexistanceType;
+import cl.udelvd.models.CohabitType;
 import cl.udelvd.models.EducationalLevel;
 import cl.udelvd.models.Interviewee;
 import cl.udelvd.models.Profession;
@@ -186,9 +186,9 @@ public class IntervieweeRepository {
                             interviewee.setEducationalLevel(educationalLevel);
                         }
                         if (jsonIntervieweeAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)) && !jsonIntervieweeAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA))) {
-                            CoexistanceType coexistanceType = new CoexistanceType();
-                            coexistanceType.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)));
-                            interviewee.setCoexistenteType(coexistanceType);
+                            CohabitType cohabitType = new CohabitType();
+                            cohabitType.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)));
+                            interviewee.setCoexistenteType(cohabitType);
                         }
                         if (jsonIntervieweeAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION)) && !jsonIntervieweeAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION))) {
                             Profession profession = new Profession();
@@ -554,10 +554,10 @@ public class IntervieweeRepository {
 
                     String idCoexistanceType = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA));
                     if (!idCoexistanceType.equals(application.getString(R.string.NULL))) {
-                        CoexistanceType coexistanceType = new CoexistanceType();
-                        coexistanceType.setId(Integer.parseInt(idCoexistanceType));
+                        CohabitType cohabitType = new CohabitType();
+                        cohabitType.setId(Integer.parseInt(idCoexistanceType));
 
-                        interviewee.setCoexistenteType(coexistanceType);
+                        interviewee.setCoexistenteType(cohabitType);
                     }
 
                     String idProfession = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION));

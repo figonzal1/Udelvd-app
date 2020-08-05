@@ -26,42 +26,42 @@ import java.util.List;
 import java.util.Map;
 
 import cl.udelvd.R;
-import cl.udelvd.models.CoexistanceType;
+import cl.udelvd.models.CohabitType;
 import cl.udelvd.services.VolleySingleton;
 import cl.udelvd.utils.SingleLiveEvent;
 import cl.udelvd.utils.Utils;
 
-public class CoexistenceTypeRepository {
+public class CohabitTypeRepository {
 
     private static final String TAG_COEXISTANCE_TYPE = "ListadoTipoConvivencia";
     private final Application application;
-    private static CoexistenceTypeRepository instance;
+    private static CohabitTypeRepository instance;
     //LIST
-    private final List<CoexistanceType> coexistanceTypeList = new ArrayList<>();
-    private final MutableLiveData<List<CoexistanceType>> coexistenceTypeMutableLiveData = new MutableLiveData<>();
+    private final List<CohabitType> cohabitTypeList = new ArrayList<>();
+    private final MutableLiveData<List<CohabitType>> coexistenceTypeMutableLiveData = new MutableLiveData<>();
 
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     private final SingleLiveEvent<String> responseMsgErrorList = new SingleLiveEvent<>();
 
-    private CoexistenceTypeRepository(Application application) {
+    private CohabitTypeRepository(Application application) {
         this.application = application;
     }
 
-    public static CoexistenceTypeRepository getInstance(Application application) {
+    public static CohabitTypeRepository getInstance(Application application) {
         if (instance == null) {
-            instance = new CoexistenceTypeRepository(application);
+            instance = new CohabitTypeRepository(application);
         }
         return instance;
     }
 
-    public MutableLiveData<List<CoexistanceType>> getCoexistenceType() {
+    public MutableLiveData<List<CohabitType>> getCoexistenceType() {
         sendGetCoexistenceType();
         return coexistenceTypeMutableLiveData;
     }
 
     private void sendGetCoexistenceType() {
 
-        coexistanceTypeList.clear();
+        cohabitTypeList.clear();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -82,14 +82,14 @@ public class CoexistenceTypeRepository {
                         JSONObject jsonAttributes = jsonCivilState.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
                         String civilStateName = jsonAttributes.getString(application.getString(R.string.KEY_TIPO_CONVIVENCIA_NOMBRE));
 
-                        CoexistanceType coexistanceType = new CoexistanceType();
-                        coexistanceType.setId(idCoexistenceType);
-                        coexistanceType.setName(civilStateName);
+                        CohabitType cohabitType = new CohabitType();
+                        cohabitType.setId(idCoexistenceType);
+                        cohabitType.setName(civilStateName);
 
-                        coexistanceTypeList.add(coexistanceType);
+                        cohabitTypeList.add(cohabitType);
                     }
 
-                    coexistenceTypeMutableLiveData.postValue(coexistanceTypeList);
+                    coexistenceTypeMutableLiveData.postValue(cohabitTypeList);
 
                     isLoading.postValue(false);
 

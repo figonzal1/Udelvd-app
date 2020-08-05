@@ -417,6 +417,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
+                    app:endIconMode="dropdown_menu"
                     android:hint="@string/NIVEL_EDUCACIONAL"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toEndOf="@+id/iv_icon_educational_level"

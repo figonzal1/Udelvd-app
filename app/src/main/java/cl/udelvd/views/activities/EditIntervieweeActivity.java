@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -184,9 +186,12 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
         acGenre = findViewById(R.id.et_interviewee_genre);
         acCity = findViewById(R.id.et_interview_city);
         acCivilState = findViewById(R.id.et_interviewee_civil_state);
+
+        //OPTIONALS
         acEducationalLevel = findViewById(R.id.et_interviewee_educational_level);
         acProfession = findViewById(R.id.et_interviewee_profession);
         acCoexistenceType = findViewById(R.id.et_interviewee_coexistence_type);
+        configEndIconsForOptionals();
 
         switchLegalRetire = findViewById(R.id.switch_retire_legal);
         switchFalls = findViewById(R.id.switch_interviewee_falls);
@@ -195,6 +200,94 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
         tvSwitchRetire = findViewById(R.id.tv_switch_retire_value);
 
         editIntervieweeViewModel = new ViewModelProvider(this).get(EditIntervieweeViewModel.class);
+
+    }
+
+    private void configEndIconsForOptionals() {
+        acEducationalLevel.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!s.toString().isEmpty()) {
+                    ilEducationalLevel.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                    ilEducationalLevel.setEndIconDrawable(R.drawable.ic_close_white_24dp);
+                    ilEducationalLevel.setEndIconOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            acEducationalLevel.setText("");
+                        }
+                    });
+                } else {
+                    ilEducationalLevel.setEndIconMode(TextInputLayout.END_ICON_DROPDOWN_MENU);
+                }
+            }
+        });
+        acCoexistenceType.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!s.toString().isEmpty()) {
+                    ilCoexistenceType.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                    ilCoexistenceType.setEndIconDrawable(R.drawable.ic_close_white_24dp);
+                    ilCoexistenceType.setEndIconOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            acCoexistenceType.setText("");
+                        }
+                    });
+                } else {
+                    ilCoexistenceType.setEndIconMode(TextInputLayout.END_ICON_DROPDOWN_MENU);
+                }
+            }
+        });
+        acProfession.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!s.toString().isEmpty()) {
+                    ilProfession.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                    ilProfession.setEndIconDrawable(R.drawable.ic_close_white_24dp);
+                    ilProfession.setEndIconOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            acProfession.setText("");
+                        }
+                    });
+                } else {
+                    ilProfession.setEndIconMode(TextInputLayout.END_ICON_DROPDOWN_MENU);
+                }
+            }
+        });
 
     }
 

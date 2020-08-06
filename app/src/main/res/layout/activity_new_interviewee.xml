@@ -190,6 +190,8 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:hint="@string/CIUDAD"
+                    app:helperText="@string/HELPER_CITY"
+                    app:helperTextEnabled="true"
                     app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toEndOf="@+id/iv_icon_interview_city"
@@ -249,7 +251,7 @@
                     android:hint="@string/CONVIVIENTES"
                     app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                     app:endIconMode="clear_text"
-                    app:helperText="@string/ULTIMOS_3_MESES"
+                    app:helperText="@string/HELPER_COHABITANTS"
                     app:helperTextEnabled="true"
                     app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
@@ -360,6 +362,7 @@
                     app:layout_constraintStart_toStartOf="@+id/il_n_coexistence_interviewee"
                     app:layout_constraintTop_toBottomOf="@+id/switch_retire_legal" />
 
+                <!-- TODO: CORREGIR TEXTO DE AYUDA PARA CAIDAS -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_n_falls_interviewee"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -369,10 +372,13 @@
                     android:visibility="gone"
                     app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                     app:endIconMode="clear_text"
+                    app:helperText="Texto de ayuda para las caidas"
+                    app:helperTextEnabled="true"
                     app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toStartOf="@+id/switch_interviewee_falls"
-                    app:layout_constraintTop_toBottomOf="@+id/switch_interviewee_falls">
+                    app:layout_constraintTop_toBottomOf="@+id/switch_interviewee_falls"
+                    tools:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_n_falls_interviewee"
@@ -382,7 +388,8 @@
                         android:fontFamily="@font/roboto"
                         android:inputType="numberDecimal"
                         android:singleLine="true"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -417,8 +424,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    app:endIconMode="dropdown_menu"
                     android:hint="@string/NIVEL_EDUCACIONAL"
+                    app:endIconMode="dropdown_menu"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toEndOf="@+id/iv_icon_educational_level"
                     app:layout_constraintTop_toBottomOf="@+id/tv_opcionals">
@@ -516,6 +523,8 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:hint="@string/PROFESION"
+                    app:helperText="@string/HELPER_PROFESSION"
+                    app:helperTextEnabled="true"
                     app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toEndOf="@+id/iv_icon_interview_city"

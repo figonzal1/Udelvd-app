@@ -171,7 +171,7 @@
     <string name="ROL_INVESTIGADOR">Investigador</string>
     <string name="FORMATO_N_ENTREVISTAS">%d entrevistas</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
-    <string name="ULTIMOS_3_MESES">Últimos 3 meses</string>
+    <string name="HELPER_COHABITANTS">*Últimos 3 meses</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinaria</string>
     <string name="MOSTRAR_INVESTIGADORES">Mostrando %d de %d investigadores</string>
@@ -227,5 +227,8 @@
     <string name="skip_intro">Saltar intro</string>
     <string name="ICONO_AVISO_DE_SEGURIDAD">Icono aviso de seguridad</string>
     <string name="WARNING_PIN_PASS">Por favor, NUNCA compartas los pin pass, la información privada de entrevistados podría verse comprometida.</string>
+    <string name="VALIDACION_FECHA_FUTURA">No puedes ingresar una fecha futura</string>
+    <string name="HELPER_CITY">*Si la ciudad no existe, escribe una nueva</string>
+    <string name="HELPER_PROFESSION">*Si la profesión no existe, escribe una nueva</string>
 
 </resources>

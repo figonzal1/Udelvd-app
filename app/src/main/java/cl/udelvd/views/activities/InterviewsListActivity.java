@@ -104,7 +104,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
             interviewee.setId(idInterview);
             interviewee.setName(nameInterview);
             interviewee.setLastName(lastNameInterview);
-            interviewee.setGenre(genre);
+            interviewee.setGender(genre);
             interviewee.setBirthDate(Utils.stringToDate(getApplicationContext(), false, birthDate));
         }
     }

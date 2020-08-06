@@ -84,7 +84,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
 
                 bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
                 bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
-                bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGenre());
+                bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
                 bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
 
                 bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
@@ -119,7 +119,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
 
                             bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
                             bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
-                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGenre());
+                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
                             bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
 
                             bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));

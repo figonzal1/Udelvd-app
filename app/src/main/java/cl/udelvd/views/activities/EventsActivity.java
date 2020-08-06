@@ -103,7 +103,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
             interviewee = new Interviewee();
             interviewee.setName(bundle.getString(getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO)));
             interviewee.setLastName(bundle.getString(getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO)));
-            interviewee.setGenre(bundle.getString(getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO)));
+            interviewee.setGender(bundle.getString(getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO)));
             annos = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_ANNOS));
 
             nInterviews = bundle.getInt(getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS));

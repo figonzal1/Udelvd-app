@@ -10,7 +10,7 @@ public class Interviewee {
     private int id;
     private String name;
     private String lastName;
-    private String genre;
+    private String gender;
 
     private Date birthDate;
     private boolean legalRetired;
@@ -61,12 +61,12 @@ public class Interviewee {
         this.lastName = lastName;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getGender() {
+        return gender;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public Date getBirthDate() {
@@ -192,13 +192,13 @@ public class Interviewee {
                 getIdResearcher() == that.getIdResearcher() &&
                 getName().toLowerCase().equals(that.getName().toLowerCase()) &&
                 getLastName().toLowerCase().equals(that.getLastName().toLowerCase()) &&
-                getGenre().toLowerCase().equals(that.getGenre().toLowerCase()) &&
+                getGender().toLowerCase().equals(that.getGender().toLowerCase()) &&
                 getBirthDate().equals(that.getBirthDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getLastName(), getGenre(), getBirthDate(), isLegalRetired(), isFalls(), nCohabiting3Months, getIdResearcher(), getCity(), getCivilState());
+        return Objects.hash(getName(), getLastName(), getGender(), getBirthDate(), isLegalRetired(), isFalls(), nCohabiting3Months, getIdResearcher(), getCity(), getCivilState());
     }
 
     @NonNull
@@ -208,7 +208,7 @@ public class Interviewee {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", genre='" + genre + '\'' +
+                ", genre='" + gender + '\'' +
                 ", birthDate=" + birthDate +
                 ", legalRetired=" + legalRetired +
                 ", isFalls=" + isFalls +

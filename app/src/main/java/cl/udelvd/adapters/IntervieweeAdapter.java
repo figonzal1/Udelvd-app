@@ -118,7 +118,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
                     bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
                     bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), Utils.dateToString(context, false, interviewee.getBirthDate()));
-                    bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGenre());
+                    bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
                     bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
                     intent.putExtras(bundle);
                     context.startActivity(intent, bundle);
@@ -157,7 +157,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
                                 bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
                                 bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), Utils.dateToString(context, false, interviewee.getBirthDate()));
-                                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGenre());
+                                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
                                 bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
                                 intent.putExtras(bundle);
                                 context.startActivity(intent);

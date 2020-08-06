@@ -117,7 +117,7 @@
     <string name="SERVER_ERROR_MSG_VM">Ups! A problem has occurred</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email already registered</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email not registered</string>
-    <string name="SEXO">Genre</string>
+    <string name="SEXO">Gender</string>
     <string name="SEXO_FEMENINO">Female</string>
     <string name="SEXO_MASCULINO">Male</string>
     <string name="SEXO_OTRO">Other</string>
@@ -171,7 +171,7 @@
     <string name="ROL_INVESTIGADOR">Researcher</string>
     <string name="FORMATO_N_ENTREVISTAS" tools:ignore="PluralsCandidate">%d interviews</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Researchers list</string>
-    <string name="ULTIMOS_3_MESES">Last 3 months</string>
+    <string name="HELPER_COHABITANTS">*Last 3 months</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinary</string>
     <string name="MOSTRAR_INVESTIGADORES">Displaying %d of %d researchers</string>
@@ -227,4 +227,7 @@
     <string name="skip_intro">Skip intro</string>
     <string name="ICONO_AVISO_DE_SEGURIDAD">Security warning icon</string>
     <string name="WARNING_PIN_PASS">Please, NEVER share the pin pass, the private information of interviewees could be compromised.</string>
+    <string name="HELPER_PROFESSION">*If the profession does not exist, write a new one</string>
+    <string name="HELPER_CITY">*If the city does not exist, write a new one</string>
+    <string name="VALIDACION_FECHA_FUTURA">You cannot enter a future date</string>
 </resources>

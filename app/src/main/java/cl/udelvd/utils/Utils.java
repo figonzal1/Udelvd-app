@@ -380,8 +380,8 @@ public class Utils {
     }
 
     public static void configIconInterviewee(Interviewee interviewee, int annos, ImageView ivPerson, Context context) {
-        if (interviewee.getGenre().equals(context.getString(R.string.SEXO_FEMENINO)) ||
-                interviewee.getGenre().equals(context.getString(R.string.SEXO_FEMENINO_MASTER_KEY))) {
+        if (interviewee.getGender().equals(context.getString(R.string.SEXO_FEMENINO)) ||
+                interviewee.getGender().equals(context.getString(R.string.SEXO_FEMENINO_MASTER_KEY))) {
 
             if (annos < 18) {
                 ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_girl, context.getTheme()));
@@ -390,8 +390,8 @@ public class Utils {
             } else {
                 ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_grand_mother, context.getTheme()));
             }
-        } else if (interviewee.getGenre().equals(context.getString(R.string.SEXO_MASCULINO)) ||
-                interviewee.getGenre().equals(context.getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
+        } else if (interviewee.getGender().equals(context.getString(R.string.SEXO_MASCULINO)) ||
+                interviewee.getGender().equals(context.getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
             if (annos < 18) {
                 ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_boy, context.getTheme()));
             } else if (annos < 65) {

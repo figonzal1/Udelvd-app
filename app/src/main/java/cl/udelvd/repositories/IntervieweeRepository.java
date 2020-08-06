@@ -146,7 +146,7 @@ public class IntervieweeRepository {
                         interviewee.setId(jsonInterviewee.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
                         interviewee.setName(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
                         interviewee.setLastName(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
-                        interviewee.setGenre(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
+                        interviewee.setGender(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
                         Date birthDate = Utils.stringToDate(application, false, jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                         interviewee.setBirthDate(birthDate);
@@ -342,7 +342,7 @@ public class IntervieweeRepository {
                     entResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
                     entResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
 
-                    entResponse.setGenre(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
+                    entResponse.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
                         entResponse.setLegalRetired(false);
@@ -429,7 +429,7 @@ public class IntervieweeRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE), interviewee.getName());
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO), interviewee.getLastName());
-                params.put(application.getString(R.string.KEY_ENTREVISTADO_SEXO), interviewee.getGenre());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_SEXO), interviewee.getGender());
 
                 String fechaNac = Utils.dateToString(application, false, interviewee.getBirthDate());
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), fechaNac);
@@ -512,7 +512,7 @@ public class IntervieweeRepository {
 
                     interviewee.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
                     interviewee.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
-                    interviewee.setGenre(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
+                    interviewee.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
                     Date birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
                     interviewee.setBirthDate(birthDate);
@@ -667,7 +667,7 @@ public class IntervieweeRepository {
 
                     intervieweeInternet.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
                     intervieweeInternet.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
-                    intervieweeInternet.setGenre(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
+                    intervieweeInternet.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
 
                     Date birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
@@ -765,7 +765,7 @@ public class IntervieweeRepository {
 
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE), interviewee.getName());
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO), interviewee.getLastName());
-                params.put(application.getString(R.string.KEY_ENTREVISTADO_SEXO), interviewee.getGenre());
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_SEXO), interviewee.getGender());
 
                 String fechaNac = Utils.dateToString(application, false, interviewee.getBirthDate());
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), fechaNac);

@@ -743,11 +743,11 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
             etName.setText(intervieweeIntent.getName());
             etLastName.setText(intervieweeIntent.getLastName());
 
-            if (intervieweeIntent.getGenre().equals(getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
+            if (intervieweeIntent.getGender().equals(getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
                 acGenre.setText(getString(R.string.SEXO_MASCULINO), false);
-            } else if (intervieweeIntent.getGenre().equals(getString(R.string.SEXO_FEMENINO_MASTER_KEY))) {
+            } else if (intervieweeIntent.getGender().equals(getString(R.string.SEXO_FEMENINO_MASTER_KEY))) {
                 acGenre.setText(getString(R.string.SEXO_FEMENINO), false);
-            } else if (intervieweeIntent.getGenre().equals(getString(R.string.SEXO_OTRO_MASTER_KEY))) {
+            } else if (intervieweeIntent.getGender().equals(getString(R.string.SEXO_OTRO_MASTER_KEY))) {
                 acGenre.setText(getString(R.string.SEXO_OTRO), false);
             }
 
@@ -846,11 +846,11 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                 interviewee.setLastName(Objects.requireNonNull(etLastName.getText()).toString());
 
                 if (acGenre.getText().toString().equals(getString(R.string.SEXO_MASCULINO))) {
-                    interviewee.setGenre(getString(R.string.SEXO_MASCULINO_MASTER_KEY));
+                    interviewee.setGender(getString(R.string.SEXO_MASCULINO_MASTER_KEY));
                 } else if (acGenre.getText().toString().equals(getString(R.string.SEXO_FEMENINO))) {
-                    interviewee.setGenre(getString(R.string.SEXO_FEMENINO_MASTER_KEY));
+                    interviewee.setGender(getString(R.string.SEXO_FEMENINO_MASTER_KEY));
                 } else if (acGenre.getText().toString().equals(getString(R.string.SEXO_OTRO))) {
-                    interviewee.setGenre(getString(R.string.SEXO_OTRO_MASTER_KEY));
+                    interviewee.setGender(getString(R.string.SEXO_OTRO_MASTER_KEY));
                 }
 
                 Date birthDate = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etBirthDate.getText()).toString());

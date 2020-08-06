@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Un día en la vida de &#8230;</string>
+    <string name="app_name">A day in the life of …</string>
 
     <!-- PRODUCTION-->
     <string name="HEROKU_DOMAIN" translatable="false">https://undiaenlavidade.cl/</string>
@@ -48,41 +48,41 @@
     <string name="ESPANOL" translatable="false">es</string>
 
     <!-- SEXO-->
-    <string name="SEXO_MASCULINO">Masculino</string>
-    <string name="SEXO_FEMENINO">Femenino</string>
-    <string name="SEXO_OTRO">Otro</string>
+    <string name="SEXO_MASCULINO">Male</string>
+    <string name="SEXO_FEMENINO">Female</string>
+    <string name="SEXO_OTRO">Other</string>
     <string name="SEXO_MASCULINO_MASTER_KEY" translatable="false">Masculino</string>
     <string name="SEXO_FEMENINO_MASTER_KEY" translatable="false">Femenino</string>
     <string name="SEXO_OTRO_MASTER_KEY" translatable="false">Otro</string>
 
     <!-- ROLES -->
-    <string name="ROL_INVESTIGADOR">Investigador</string>
-    <string name="ROL_ADMINITRADOR">Administrador</string>
+    <string name="ROL_INVESTIGADOR">Researcher</string>
+    <string name="ROL_ADMINITRADOR">Administrator</string>
     <string name="ROL_INVESTIG_KEY_MASTER" translatable="false">Investigador</string> <!-- NO BORRAR -->
     <string name="ROL_ADMIN_KEY_MASTER" translatable="false">Administrador</string> <!-- NO BORRAR -->
 
     <!-- NOTIFICACION -->
     <string name="TEMA_NOTIFICACION_REGISTRO" translatable="false">RegistroInvestigador</string>
-    <string name="CANAL_NOMBRE">Alertas de activaciones</string>
-    <string name="CANAL_DESCRIPCION">Alertas de registro de nuevos investigadores</string>
+    <string name="CANAL_NOMBRE">Activations alert</string>
+    <string name="CANAL_DESCRIPCION">Registration alerts for new researchers</string>
 
     <!-- Titulos Toolbar -->
-    <string name="TITULO_TOOLBAR_PERFIL">Perfil</string>
-    <string name="TITULO_TOOLBAR_REGISTRO">Registro</string>
-    <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">Crear Entrevistado</string>
-    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Editar Entrevistado</string>
-    <string name="TITULO_TOOLBAR_NUEVA_ENTREVISTA">Crear Entrevista</string>
-    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTA">Editar Entrevista</string>
-    <string name="TITULO_TOOLBAR_CREAR_EVENTO">Crear Evento</string>
-    <string name="TITULO_TOOLBAR_EVENTOS">Eventos</string>
-    <string name="TITULO_TOOLBAR_LISTA_ENTREVISTAS">Listado Entrevistas</string>
-    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Editar Perfil</string>
-    <string name="TITULO_TOOLBAR_CONTACTO">Contáctanos</string>
-    <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Editar Evento</string>
-    <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
-    <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Listado Acciones</string>
-    <string name="TITULO_TOOLBAR_NUEVA_ACCION">Nueva Acción</string>
-    <string name="TITULO_TOOLBAR_EDITAR_ACCION">Editar Acción</string>
+    <string name="TITULO_TOOLBAR_PERFIL">Profile</string>
+    <string name="TITULO_TOOLBAR_REGISTRO">Register</string>
+    <string name="TITULO_TOOLBAR_NUEVO_ENTREVISTADO">New Interviewee</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTADO">Edit Interviewee</string>
+    <string name="TITULO_TOOLBAR_NUEVA_ENTREVISTA">New Interview</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ENTREVISTA">Edit Interview</string>
+    <string name="TITULO_TOOLBAR_CREAR_EVENTO">New event</string>
+    <string name="TITULO_TOOLBAR_EVENTOS">Events</string>
+    <string name="TITULO_TOOLBAR_LISTA_ENTREVISTAS">Interviews List</string>
+    <string name="TITULO_TOOLBAR_EDITAR_PERFIL">Edit Profile</string>
+    <string name="TITULO_TOOLBAR_CONTACTO">Contact us</string>
+    <string name="TITULO_TOOLBAR_EDITAR_EVENTO">Edit Event</string>
+    <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Researchers list</string>
+    <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Actions List</string>
+    <string name="TITULO_TOOLBAR_NUEVA_ACCION">New Action</string>
+    <string name="TITULO_TOOLBAR_EDITAR_ACCION">Edit Action</string>
     <string name="TITULO_TABLEAU" translatable="false">Tableau</string>
 
     <!-- SHARED PREF KEYS-->
@@ -102,17 +102,17 @@
 
     <!-- Formatos -->
     <string name="FORMATO_FECHA" translatable="false">yyyy-MM-dd</string>
-    <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
+    <string name="FORMATO_FECHA_HORA">yyyy-dd-MM HH:mm:ss</string>
     <string name="FORMATO_HORA" translatable="false">HH:mm</string>
-    <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
-    <string name="FORMATO_N_ENTREVISTA" tools:ignore="PluralsCandidate">%d entrevista</string>
-    <string name="FORMATO_N_ENTREVISTAS" tools:ignore="PluralsCandidate">%d entrevistas</string>
-    <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
-    <string name="FORMATO_EVENTO_N">Evento %d</string>
-    <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d años</string>
-    <string name="FORMATO_ACCION">Acción %d</string>
-    <string name="FORMATO_LINK_DIRECTO">Link directo: %s</string>
-    <string name="FORMATO_FECHA_REGISTRO">Fecha registro: %s</string>
+    <string name="FORMATO_ENTREVISTA_N">Interview %d</string>
+    <string name="FORMATO_N_ENTREVISTA" tools:ignore="PluralsCandidate">%d interview</string>
+    <string name="FORMATO_N_ENTREVISTAS" tools:ignore="PluralsCandidate">%d interviews</string>
+    <string name="FORMATO_ENTREVISTA_FECHA">Interview day %s</string>
+    <string name="FORMATO_EVENTO_N">Event %d</string>
+    <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d years</string>
+    <string name="FORMATO_ACCION">Action %d</string>
+    <string name="FORMATO_LINK_DIRECTO">Direct link : %s</string>
+    <string name="FORMATO_FECHA_REGISTRO">Register date: %s</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT" translatable="false">investigador</string>
@@ -249,21 +249,21 @@
     <string name="TAG_VOLLEY_INVES_REGISTRO" translatable="false">VOLLEY_ERR_REGIS_INVEST</string>
     <string name="TIMEOUT_ERROR" translatable="false">TIMEOUT_ERROR</string>
     <string name="NETWORK_ERROR" translatable="false">NETWORK_ERROR</string>
-    <string name="TIMEOUT_ERROR_MSG_VM">Servidor no responde, intente más tarde</string>
-    <string name="SERVER_ERROR_MSG_VM">¡Ups! Ha ocurrido un problema</string>
-    <string name="NETWORK_ERROR_MSG_VM">No tienes conexión a Internet</string>
+    <string name="TIMEOUT_ERROR_MSG_VM">Server does not respond, try later</string>
+    <string name="SERVER_ERROR_MSG_VM">Ups! A problem has occurred</string>
+    <string name="NETWORK_ERROR_MSG_VM">You don\'t have internet connection</string>
     <string name="AUTHENTICATION_ERROR" translatable="false">AUTHENTICATION_ERROR:</string>
     <string name="AUTHENTICATION_ERROR_MSG_VM" translatable="false">Acceso no autorizado</string>
     <string name="SERVER_ERROR" translatable="false">SERVER_ERROR:</string>
     <string name="SERVER_ERROR_REGISTRO_MSG" translatable="false">Email already exists</string>
-    <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email ya registrado</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email already registered</string>
     <string name="LOGIN_MSG_VM" translatable="false">mensaje_login</string>
-    <string name="LOGIN_MSG_VM_WELCOME">¡Bienvenido!</string>
+    <string name="LOGIN_MSG_VM_WELCOME">Welcome!</string>
     <string name="TAG_VOLLEY_ERROR_LOGIN" translatable="false">VOLLEY_ERROR_LOGIN</string>
     <string name="SERVER_ERROR_AUTH_MSG" translatable="false">Please check your credentials</string>
-    <string name="SERVER_ERROR_AUTH_MSG_VM">Login fallido, revisa tus datos</string>
+    <string name="SERVER_ERROR_AUTH_MSG_VM">Log in failed, check yout credentials</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_2" translatable="false">Email does not exist</string>
-    <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email not registered</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE" translatable="false">VOLLEY_ERR_INV_UPDATE</string>
     <string name="TAG_VOLLEY_ERR_INV_RESET" translatable="false">VOLLEY_ERR_INV_RESET </string>
     <string name="TAG_VOLLEY_ERR_INV_ACTIVAR" translatable="false">VOLLEY_ERR_INV_ACTIVAR</string>
@@ -297,23 +297,23 @@
 
     <!-- Miscelaneos -->
     <string name="UPDATE_MSG_VM" translatable="false">mensaje_update</string>
-    <string name="UPDATE_MSG_VM_SAVE">¡Datos actualizados!</string>
+    <string name="UPDATE_MSG_VM_SAVE">Updated data!</string>
     <string name="TAG_EDIT_PROFILE_RESULT" translatable="false">FINISH_EDIT_PROFILE_ACT </string>
     <string name="EDIT_PROFILE_RESULT_MSG" translatable="false">Cerrando formulario de edicion</string>
     <string name="TAG_VIEW_MODEL_INVEST_UPDATE" translatable="false">VM_INV_UPDATE </string>
-    <string name="MSG_INVEST_REGISTRADO">¡Estas registrado!</string>
-    <string name="VALIDACION_CAMPO_REQUERIDO">Campo requerido</string>
-    <string name="VALIDACION_CAMPO_REQUERIDO_CERO">No puede ser cero</string>
-    <string name="VALIDACION_EMAIL">Email inválido</string>
-    <string name="VALIDACION_PASSWORD_LARGO">Contraseña debe tener 8 carácteres mínimo</string>
-    <string name="VALIDACION_PASSWORD_NO_IGUALES">Contraseñas no coinciden</string>
-    <string name="PERFIL_ACTIVADO">Activado</string>
-    <string name="PERFIL_NO_ACTIVADO">No activado</string>
+    <string name="MSG_INVEST_REGISTRADO">You have registered!</string>
+    <string name="VALIDACION_CAMPO_REQUERIDO">Required field</string>
+    <string name="VALIDACION_CAMPO_REQUERIDO_CERO">It can\'t be zero</string>
+    <string name="VALIDACION_EMAIL">Invalid email</string>
+    <string name="VALIDACION_PASSWORD_LARGO">Password must have 8 characters minimum</string>
+    <string name="VALIDACION_PASSWORD_NO_IGUALES">Passwords don\'t match</string>
+    <string name="PERFIL_ACTIVADO">Activated</string>
+    <string name="PERFIL_NO_ACTIVADO">Unactivated</string>
     <string name="TAG_TOKEN_LOGIN" translatable="false">TOKEN_LOGIN</string>
     <string name="TAG_VM_INVES_REGISTRO" translatable="false">VM_INVES_REGISTRO </string>
     <string name="VIEW_MODEL_MSG_RESPONSE" translatable="false">MSG_RESPONSE:</string>
     <string name="VIEW_MODEL_MSG_RESPONSE_ERROR" translatable="false">MSG_ERROR:</string>
-    <string name="MSG_INVEST_LOGIN">¡Bienvenido!</string>
+    <string name="MSG_INVEST_LOGIN">Welcome!</string>
     <string name="TAG_VM_INVES_LOGIN" translatable="false">VM_INVEST_LOGIN </string>
     <string name="TAG_TAB_SELECTED" translatable="false">TAB_SELECTED</string>
     <string name="TAG_TOKEN_LOGOUT" translatable="false">LOGOUT </string>
@@ -329,29 +329,29 @@
     <string name="VIEW_MODEL_LISTADO_CARGADO" translatable="false">Listado cargado</string>
     <string name="TAG_VIEW_MODEL_CIUDAD" translatable="false">VM_CIUDAD </string>
     <string name="TAG_VIEW_MODEL_NIVEL_EDUCACION" translatable="false">VM_NIVEL_EDUC </string>
-    <string name="MSG_INVEST_CUENTA_ACTIVADA">¡Cuenta activada!</string>
-    <string name="MSG_INVEST_CUENTA_DESACTIVADA">¡Cuenta desactivada!</string>
+    <string name="MSG_INVEST_CUENTA_ACTIVADA">Account activated!</string>
+    <string name="MSG_INVEST_CUENTA_DESACTIVADA">Account deactivated!</string>
     <string name="TAG_VIEW_MODEL_TIPO_CONVIVENCIA" translatable="false">VM_TIPO_CONVIVENCIA </string>
     <string name="TAG_VIEW_MODEL_PROFESIONES" translatable="false">VM_PROFESIONES </string>
     <string name="TAG_VIEW_MODEL_NUEVO_ENTREVISTADO" translatable="false">VM_NEW_ENTREVISTADO </string>
-    <string name="MSG_REGISTRO_ENTREVISTADO">¡Entrevistado registrado!</string>
+    <string name="MSG_REGISTRO_ENTREVISTADO">Registered interviewee!</string>
     <string name="REGEX_FECHA" translatable="false">-</string>
     <string name="REGEX_HORA" translatable="false">:</string>
-    <string name="SI">Si</string>
+    <string name="SI">Yes</string>
     <string name="NO" translatable="false">No</string>
     <string name="NULL" translatable="false">null</string>
-    <string name="MSG_UPDATE_ENTREVISTADO">¡Entrevistado actualizado!</string>
-    <string name="TAB_NAME_ENTREVISTADOS">Entrevistados</string>
-    <string name="TAB_NAME_ESTADISTICAS">Estadísticas</string>
+    <string name="MSG_UPDATE_ENTREVISTADO">Updated interviewee!</string>
+    <string name="TAB_NAME_ENTREVISTADOS">Interviewees</string>
+    <string name="TAB_NAME_ESTADISTICAS">Statistics</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTADO" translatable="false">VM_EDITAR_ENTREVISTADO </string>
     <string name="TAG_VIEW_MODEL_TIPO_ENTREVISTA" translatable="false">VM_TIPO_ENTREVISTA </string>
     <string name="TAG_VIEW_MODEL_NUEVA_ACCION" translatable="false">VM_NUEVA_ACCION </string>
     <string name="TAG_VIEW_MODEL_EDITAR_ACCION" translatable="false">VM_EDITAR_ACCION </string>
     <string name="TAG_VIEW_MODEL_NEW_ENTREVISTA" translatable="false">VM_NEW_ENTREVISTA </string>
-    <string name="MSG_REGISTRO_ENTREVISTA">¡Entrevista registrada!</string>
-    <string name="MSG_UPDATE_ENTREVISTA">¡Entrevista actualizada!</string>
-    <string name="MSG_UPDATE_ACCION">¡Acción actualizada!</string>
-    <string name="MSG_REGISTRO_ACCION">¡Acción registrada!</string>
+    <string name="MSG_REGISTRO_ENTREVISTA">Registered interview!</string>
+    <string name="MSG_UPDATE_ENTREVISTA">Updated interview!</string>
+    <string name="MSG_UPDATE_ACCION">Updated action!</string>
+    <string name="MSG_REGISTRO_ACCION">Registered action!</string>
     <string name="TAG_VIEW_MODEL_EDITAR_ENTREVISTA" translatable="false">VM_EDITAR_ENTREVISTA </string>
     <string name="TAG_VIEW_MODEL_LISTA_ENTREVISTAS" translatable="false">VM_LISTA_ENTREVISTAS </string>
     <string name="TAG_JWT_STATUS" translatable="false">JWT_STATUS </string>
@@ -360,34 +360,34 @@
     <string name="TAG_JWT_JTI" translatable="false">JWT_JTI</string>
     <string name="TAG_JWT_CLAIM_UID" translatable="false">JWT_CLAIM_UID</string>
     <string name="TAG_JWT_FECHA_EXP" translatable="false">JWT_DATE_EXP</string>
-    <string name="MSG_REGISTRO_EVENTO">¡Evento registrado!</string>
+    <string name="MSG_REGISTRO_EVENTO">Registered event!</string>
     <string name="SPINNER_EMOTICON_SELECTED" translatable="false">SELECTED_ITEM </string>
     <string name="TAG_VIEW_MODEL_ACCIONES" translatable="false">VM_ACCIONES </string>
     <string name="TAG_VIEW_MODEL_EMOTICON" translatable="false">VM_EMOTICONES </string>
     <string name="TAG_VIEW_MODEL_NUEVO_EVENTO" translatable="false">VM_NUEVO_EVENTO </string>
-    <string name="VALIDACION_EMOTICON">Elige un emoticón</string>
+    <string name="VALIDACION_EMOTICON">Choose an emoticon</string>
     <string name="TAG_VIEW_MODEL_LISTA_EVENTOS" translatable="false">VM_LISTA_EVENTOS </string>
     <string name="TAG_VIEW_MODEL_EDITAR_PERFIL" translatable="false">VM_EDITAR_PERFIL </string>
     <string name="TAG_VIEW_MODEL_EDITAR_EVENTO" translatable="false">VM_MODEL_EDITAR_EVENTO </string>
-    <string name="MSG_DELETE_ENTREVISTA">¡Entrevista eliminada!</string>
+    <string name="MSG_DELETE_ENTREVISTA">Deleted interview!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA" translatable="false">VM_ELIMINAR_ENTREVISTA </string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ACCION" translatable="false">VM_ELIMINAR_ACCION </string>
     <string name="TAG_VIEW_MODEL_LISTADO_INVESTIGADORES" translatable="false">VM_LISTADO_INVESTIGADORES </string>
     <string name="TAG_VIEW_MODEL_ACTIVACION_INVES" translatable="false">VM_ACTIVACION_INVESTIGACION </string>
-    <string name="MSG_UPDATE_EVENTO">¡Evento actualizado!</string>
-    <string name="MSG_DELETE_EVENTO">¡Evento eliminado!</string>
+    <string name="MSG_UPDATE_EVENTO">Updated event!</string>
+    <string name="MSG_DELETE_EVENTO">Deleted event!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_EVENTO" translatable="false">VM_ELIMINAR_EVENTO </string>
-    <string name="MSG_DELETE_ENTREVISTADO">¡Entrevistado eliminado!</string>
-    <string name="MSG_DELETE_ACCION">¡Acción eliminada!</string>
+    <string name="MSG_DELETE_ENTREVISTADO">Deleted interviewee!</string>
+    <string name="MSG_DELETE_ACCION">Deleted action!</string>
     <string name="TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO" translatable="false">VM_ELIMINAR_ENTREVISTADO </string>
     <string name="RECOVERY_MSG_VM" translatable="false">email sended</string>
-    <string name="RECOVERY_MSG_VM_RESPONSE">Email de recuperación enviado</string>
+    <string name="RECOVERY_MSG_VM_RESPONSE">Recovery email sended</string>
     <string name="MSG_RECOVERY" translatable="false">msg_recovery</string>
     <string name="MSG_PASSWORD_RESETEADA_VM" translatable="false">password reseted</string>
-    <string name="MSG_PASSWORD_RESETEADA_VM_RESULT">¡Contraseña actualizada!</string>
+    <string name="MSG_PASSWORD_RESETEADA_VM_RESULT">Updated password!</string>
     <string name="TAG_DYNAMIC_LINK_FIREBASE" translatable="false">DYNAMIC_LINK_FIREBASE </string>
     <string name="TAG_DYNAMIC_LINK_JSON" translatable="false">DYNAMIC_LINK_JSON</string>
-    <string name="DYNAMIC_LINK_INVALIDO">Link de recuperacion ya no es válido</string>
+    <string name="DYNAMIC_LINK_INVALIDO">Recovery is no longer valid</string>
     <string name="TAG_FIREBASE_TOKEN" translatable="false">FIREBASE_TOKEN</string>
     <string name="FIREBASE_MESSAGE" translatable="false">FIREBASE_MESSAGE </string>
     <string name="FIREBASE_MESSAGE_DATA" translatable="false">FIREBASE_MESSAGE_DATA</string>
@@ -412,16 +412,16 @@
     <string name="INTENT_LINK_GRAFICO" translatable="false">link_grafico</string>
 
     <!--Dialog -->
-    <string name="DIALOG_MESSAGE_ENTREVISTA">¿Está seguro que quiere eliminar esta entrevista?</string>
-    <string name="DIALOG_POSITIVE_BTN">Eliminar</string>
-    <string name="DIALOG_NEGATIVE_BTN">Cancelar</string>
-    <string name="DIALOG_MESSAGE_ENTREVISTADO">¿Está seguro que quiere eliminar este entrevistado?</string>
-    <string name="DIALOG_MESSAGE_EVENTO">¿Está seguro que quiere eliminar este evento?</string>
-    <string name="DIALOG_ACTIVACION_MENSAJE">La activación de cuenta concederá al investigador acceso al sistema , ¿Está seguro?</string>
-    <string name="DIALOG_ACTIVAR">Activar</string>
-    <string name="DIALOG_DESACTIVACION_MENSAJE">La desactivación de cuenta prohibirá al investigador acceso al sistema , ¿Está seguro?</string>
-    <string name="DIALOG_DESACTIVAR">Desactivar</string>
-    <string name="DIALOG_MESSAGE_ACCION">¿Está seguro que quiere eliminar esta acción? Los eventos asociados a esta acción podrían perderse</string>
+    <string name="DIALOG_MESSAGE_ENTREVISTA">Are you sure that you want to delete this interview?</string>
+    <string name="DIALOG_POSITIVE_BTN">Delete</string>
+    <string name="DIALOG_NEGATIVE_BTN">Cancel</string>
+    <string name="DIALOG_MESSAGE_ENTREVISTADO">Are you sure that you want to delete this interviewee?</string>
+    <string name="DIALOG_MESSAGE_EVENTO">Are you sure that you want to delete this event?</string>
+    <string name="DIALOG_ACTIVACION_MENSAJE">Account activation will grant the researcher access to the system, are you sure?</string>
+    <string name="DIALOG_ACTIVAR">Activate</string>
+    <string name="DIALOG_DESACTIVACION_MENSAJE">Account deactivation will prohibit the researcher from accessing the system, are you sure?</string>
+    <string name="DIALOG_DESACTIVAR">Deactivate</string>
+    <string name="DIALOG_MESSAGE_ACCION">Are you sure you want to delete this action? The events associated with this action could be lost</string>
 
     <!-- NOTIFICACIONES-->
     <string name="NOTIFICACION_TITULO_ES" translatable="false">titulo_es</string>
@@ -432,160 +432,159 @@
 
 
     <!-- Menu -->
-    <string name="MENU_ENTREVISTADO_INFO_BASICA">Ver información básica</string>
-    <string name="MENU_ENTREVISTADO_EDITAR">Editar entrevistado</string>
-    <string name="MENU_ENTREVISTADO_VER_ENTREVISTAS">Ver entrevistas</string>
-    <string name="MENU_ENTREVISTADO_ELIMINAR">Eliminar entrevistado</string>
-    <string name="MENU_ACTUALIZAR">Actualizar</string>
-    <string name="MENU_CERRAR_SESION">Cerrar sesión</string>
+    <string name="MENU_ENTREVISTADO_INFO_BASICA">Show basic information</string>
+    <string name="MENU_ENTREVISTADO_EDITAR">Edit interviewee</string>
+    <string name="MENU_ENTREVISTADO_VER_ENTREVISTAS">Show interviews</string>
+    <string name="MENU_ENTREVISTADO_ELIMINAR">Delete interviewee</string>
+    <string name="MENU_ACTUALIZAR">Update</string>
+    <string name="MENU_CERRAR_SESION">Log out</string>
     <string name="MENU_GENERAL">General</string>
-    <string name="MENU_MI_PERFIL">Mi perfil</string>
-    <string name="MENU_LISTA_ENTREVISTADOS">Entrevistados</string>
-    <string name="MENU_ESTADISTICAS">Estadísticas</string>
-    <string name="MENU_CONFIGURACION">Configuración</string>
-    <string name="MENU_GUARDAR_DATOS">Guardar</string>
-    <string name="MENU_ENTREVISTA_VER_EVENTO">Ver eventos</string>
-    <string name="MENU_ENTREVISTA_EDITAR">Editar entrevista</string>
-    <string name="MENU_ENTREVISTA_ELIMINAR">Eliminar entrevista</string>
-    <string name="MENU_PERFIL_EDITAR">Editar perfil</string>
-    <string name="MENU_CONDICIONES">Condiciones y privacidad</string>
-    <string name="MENU_CONTACTENOS">Contáctenos</string>
-    <string name="MENU_ADMIN">Administración</string>
-    <string name="MENU_ACCIONES">Acciones</string>
-    <string name="MENU_EMOTICONES">Emoticones</string>
-    <string name="MENU_INVESTIGADORES">Investigadores</string>
-    <string name="MENU_ACCION_EDITAR">Editar acción</string>
-    <string name="MENU_ACCION_ELIMINAR">Eliminar acción</string>
-    <string name="MENU_BUSCAR">Buscar</string>
+    <string name="MENU_MI_PERFIL">My profile</string>
+    <string name="MENU_LISTA_ENTREVISTADOS">Interviewees</string>
+    <string name="MENU_ESTADISTICAS">Statistics</string>
+    <string name="MENU_CONFIGURACION">Configuration</string>
+    <string name="MENU_GUARDAR_DATOS">Save</string>
+    <string name="MENU_ENTREVISTA_VER_EVENTO">Show events</string>
+    <string name="MENU_ENTREVISTA_EDITAR">Edit interview</string>
+    <string name="MENU_ENTREVISTA_ELIMINAR">Delete interview</string>
+    <string name="MENU_PERFIL_EDITAR">Edit profile</string>
+    <string name="MENU_CONDICIONES">Conditions and privacy</string>
+    <string name="MENU_CONTACTENOS">Contact us</string>
+    <string name="MENU_ADMIN">Admin</string>
+    <string name="MENU_ACCIONES">Actions</string>
+    <string name="MENU_EMOTICONES">Emoticons</string>
+    <string name="MENU_INVESTIGADORES">Researchers</string>
+    <string name="MENU_ACCION_EDITAR">Edit action</string>
+    <string name="MENU_ACCION_ELIMINAR">Delete action</string>
+    <string name="MENU_BUSCAR">Search</string>
 
     <!-- SNACKLBAR -->
-    <string name="SNACKBAR_REINTENTAR">Reintentar</string>
-    <string name="SNACKBAR_SOLICITAR_RECUPERACION">Solicitar nuevo</string>
-    <string name="SNACKBAR_INICIAR_SESION">Iniciar sesión</string>
-    <string name="SNACKBAR_ACTIVACION">, tu cuenta está en espera de activación</string>
-    <string name="SNACKBAR_CUENTA_WAIT">Cuenta en espera de activación</string>
+    <string name="SNACKBAR_REINTENTAR">Retry</string>
+    <string name="SNACKBAR_SOLICITAR_RECUPERACION">Request new</string>
+    <string name="SNACKBAR_INICIAR_SESION">Log in</string>
+    <string name="SNACKBAR_ACTIVACION">, your account is waiting for activation</string>
+    <string name="SNACKBAR_CUENTA_WAIT">Account Waiting for Activation</string>
 
     <!-- XML -->
-    <string name="ICONO_FECHA_ENTREVISTA">Icono fecha entrevista</string>
-    <string name="FECHA_ENTREVISTA">Fecha entrevista</string>
-    <string name="ICONO_TIPO_ENTREVISTA">Icono tipo entrevista</string>
-    <string name="TIPO_ENTREVISTA">Tipo entrevista</string>
-    <string name="ICONO_NOMBRE_ENTREVISTADO">Icono nombre entrevistado</string>
-    <string name="NOMBRE">Nombre</string>
-    <string name="APELLIDO">Apellido</string>
-    <string name="ICONO_FECHA_NAC_ENTREVISTADO">Icono fecha nacimiento entrevistado</string>
-    <string name="FECHA_NACIMIENTO">Fecha nacimiento</string>
-    <string name="CIUDAD">Ciudad</string>
-    <string name="ICONO_CIUDAD_ENTREVISTADO">Icono ciudad entrevistado</string>
-    <string name="JUBILADO_LEGAL">Jubilado legal</string>
-    <string name="CONVIVIENTES">Convivientes</string>
-    <string name="CONVIVIENTES_ENTREVISTADO">Icono convivientes entrevistado</string>
-    <string name="ESTADO_CIVIL">Estado civil</string>
-    <string name="SEXO">Sexo</string>
-    <string name="CAIDAS">Caídas</string>
-    <string name="CUANTAS_CAIDAS">¿Cuantas caídas?</string>
-    <string name="ICONO_GENERO_ENTREVISTADO">Icono genero del entrevistado</string>
-    <string name="ICONO_ESTADO_CIVIL_ENTREVISTADO">Icono estado civil del entrevistado</string>
-    <string name="NIVEL_EDUCACIONAL">Nivel educacional</string>
-    <string name="OPCIONALES">Opcionales</string>
-    <string name="ICONO_NIVEL_EDUCACIONAL_ENTREVISTADO">Icono nivel educacional entrevistado</string>
-    <string name="TIPO_CONVIVENCIA">Tipo convivencia</string>
-    <string name="PROFESION" tools:ignore="Typos">Profesion</string>
-    <string name="ICONO_PROFESION_ENTREVISTADO">Icono profusion entrevistado</string>
-    <string name="ICONO_HORA_EVENTO">Icono hora evento</string>
-    <string name="HORA_EVENTO">Hora evento</string>
-    <string name="ICONO_ACCION_EVENTO">Icono accion evento</string>
-    <string name="ACCION">Acción</string>
-    <string name="SELECCIONAR_EMOTICON">Seleccionar emoticón</string>
-    <string name="ICONO_EMOTICON_EVENTO">Icono emoticon evento</string>
-    <string name="ICONO_JUSTIFICACION_EVENTO">Icono justificacion evento</string>
-    <string name="JUSTIFICACION">Justificación</string>
-    <string name="ICONO_NOMBRE_INVESTIGADOR">Icono nombre investigador</string>
+    <string name="ICONO_FECHA_ENTREVISTA">Interview date icon</string>
+    <string name="FECHA_ENTREVISTA">Interview date</string>
+    <string name="ICONO_TIPO_ENTREVISTA">Interview type icon</string>
+    <string name="TIPO_ENTREVISTA">Interview type</string>
+    <string name="ICONO_NOMBRE_ENTREVISTADO">Interviewee name icon</string>
+    <string name="NOMBRE">Name</string>
+    <string name="APELLIDO">Last name</string>
+    <string name="ICONO_FECHA_NAC_ENTREVISTADO">Interviewee birthdate icon</string>
+    <string name="FECHA_NACIMIENTO">Birthdate</string>
+    <string name="CIUDAD">City</string>
+    <string name="ICONO_CIUDAD_ENTREVISTADO">Interviewee city icon</string>
+    <string name="JUBILADO_LEGAL">Legal retiree</string>
+    <string name="CONVIVIENTES">Cohabitants</string>
+    <string name="CONVIVIENTES_ENTREVISTADO">Icon cohabitants interviewee</string>
+    <string name="ESTADO_CIVIL">Marital status</string>
+    <string name="SEXO">Gender</string>
+    <string name="CAIDAS">Falls</string>
+    <string name="CUANTAS_CAIDAS">How many falls?</string>
+    <string name="ICONO_GENERO_ENTREVISTADO">Interviewee genre</string>
+    <string name="ICONO_ESTADO_CIVIL_ENTREVISTADO">Interviewee marital status icon</string>
+    <string name="NIVEL_EDUCACIONAL">Educational degree</string>
+    <string name="OPCIONALES">Optional</string>
+    <string name="ICONO_NIVEL_EDUCACIONAL_ENTREVISTADO">Interviewee educational degree icon</string>
+    <string name="TIPO_CONVIVENCIA">Cohabit type</string>
+    <string name="PROFESION" tools:ignore="Typos">Profession</string>
+    <string name="ICONO_PROFESION_ENTREVISTADO">Interviewee profession icon</string>
+    <string name="ICONO_HORA_EVENTO">Event hour icon</string>
+    <string name="HORA_EVENTO">Event hour</string>
+    <string name="ICONO_ACCION_EVENTO">Event action icon</string>
+    <string name="ACCION">Action</string>
+    <string name="SELECCIONAR_EMOTICON">Select emoticon</string>
+    <string name="ICONO_EMOTICON_EVENTO">Evento emoticon icon</string>
+    <string name="ICONO_JUSTIFICACION_EVENTO">Event justification icon</string>
+    <string name="JUSTIFICACION">Justification</string>
+    <string name="ICONO_NOMBRE_INVESTIGADOR">Investigator name icon</string>
     <string name="EMAIL">Email</string>
-    <string name="ICONO_EMAIL_INVESTIGADOR">Icono email investigador</string>
-    <string name="CAMBIAR_PASS">Cambiar contraseña</string>
-    <string name="ICONO_PASS_INVESTIGADOR">Icono contraseña investigador</string>
-    <string name="CONFIRMAR_NUEVA_PASS">Confirmar nueva contraseña</string>
-    <string name="ICONO_USUARIO">Foto Usuario</string>
-    <string name="NOMBRE_PERSONA">Nombre Persona</string>
-    <string name="TV_NORMALES">Normales</string>
-    <string name="TV_EXTRAORDINARIAS">Extraordinarias</string>
-    <string name="ICONO_N_ENTREVISTAS">Icono numero entrevistas</string>
-    <string name="MSG_LISTADO_ENTREVISTAS_VACIO">No hay entrevistas para esta persona</string>
-    <string name="MSG_LISTADO_EVENTOS_VACIOS">No hay eventos para esta entrevista</string>
-    <string name="CONTRASEÑA">Contraseña</string>
-    <string name="CUENTA_OLVIDADA">¿Olvidaste tu cuenta?</string>
-    <string name="INICIAR_SESION">Iniciar sesión</string>
-    <string name="LOGO_APLICACION">Logo Aplicacion</string>
-    <string name="NO_TIENES_CUENTA">¿No tienes cuenta? Regístrate</string>
-    <string name="LOGO_REGISTRO">Logo registro</string>
-    <string name="ICONO_TIPO_CONVIVENCIA">Icono tipo convivencia entrevistado</string>
-    <string name="ESTADO_CUENTA">Estado cuenta</string>
-    <string name="REGISTRO_CUENTA">Registro cuenta</string>
-    <string name="ICONO_CUENTA_ACTIVADA">Icono cuenta activada</string>
-    <string name="ACTIVADA">Activada</string>
-    <string name="ICONO_FECHA_REGISTRO">Icono fecha de registro</string>
-    <string name="ICONO_PERFIL_INVESTIGADOR">Imagen perfil investigador</string>
-    <string name="ICONO_INVESTIGADOR_ONLINE">Icono investigador en línea</string>
-    <string name="RECUPERAR_CUENTA">Recuperar Cuenta</string>
-    <string name="OLVIDAR_CONTRASEÑA">¿Olvidaste tu contraseña?</string>
-    <string name="INTRUCCIONES_RECUPERACION">Introduce tu correo electrónico para enviarte instrucciones de recuperación de cuenta</string>
-    <string name="REGISTRAR">Registrar</string>
-    <string name="NUEVA_CONTRASEÑA">Nueva contraseña</string>
-    <string name="NUEVA_PASS_INTRUCCIONES">Por favor, ingrese una nueva contraseña</string>
-    <string name="FECHA_REGISTRO_ENTREVISTA">Fecha registro:</string>
-    <string name="ICONO_MENU_CONTEXTUAL">Icono menu contextual</string>
-    <string name="MSG_LISTADO_ENTREVISTADOS_VACIO">No tienes entrevistados aún</string>
-    <string name="EMOTICON">Emoticón</string>
-    <string name="EMOTICON_EVENTO">Emoticon evento</string>
+    <string name="ICONO_EMAIL_INVESTIGADOR">Researcher email icon</string>
+    <string name="CAMBIAR_PASS">Change password</string>
+    <string name="ICONO_PASS_INVESTIGADOR">Investigator password icon</string>
+    <string name="CONFIRMAR_NUEVA_PASS">Confirm new password</string>
+    <string name="ICONO_USUARIO">User photo</string>
+    <string name="NOMBRE_PERSONA">Person name</string>
+    <string name="TV_NORMALES">Normals</string>
+    <string name="TV_EXTRAORDINARIAS">Extraordinary</string>
+    <string name="ICONO_N_ENTREVISTAS">Interviews number icon</string>
+    <string name="MSG_LISTADO_ENTREVISTAS_VACIO">No interviews for this person yet</string>
+    <string name="MSG_LISTADO_EVENTOS_VACIOS">No events for this interview yet</string>
+    <string name="CONTRASEÑA">Password</string>
+    <string name="CUENTA_OLVIDADA">Did you forget your account?</string>
+    <string name="INICIAR_SESION">Log in</string>
+    <string name="LOGO_APLICACION">App logo</string>
+    <string name="NO_TIENES_CUENTA">You don\'t have account? Sign up</string>
+    <string name="LOGO_REGISTRO">Registration logo</string>
+    <string name="ICONO_TIPO_CONVIVENCIA">Interviewee cohabit type icon</string>
+    <string name="ESTADO_CUENTA">Account state</string>
+    <string name="REGISTRO_CUENTA">Register account</string>
+    <string name="ICONO_CUENTA_ACTIVADA">Activated account icon</string>
+    <string name="ACTIVADA">Activated</string>
+    <string name="ICONO_FECHA_REGISTRO">Registry date icon</string>
+    <string name="ICONO_PERFIL_INVESTIGADOR">Investigator profile image</string>
+    <string name="ICONO_INVESTIGADOR_ONLINE">Online researcher icon</string>
+    <string name="RECUPERAR_CUENTA">Recover account</string>
+    <string name="OLVIDAR_CONTRASEÑA">Forgot password?</string>
+    <string name="INTRUCCIONES_RECUPERACION">Enter your email to send you account recovery instructions</string>
+    <string name="REGISTRAR">Register</string>
+    <string name="NUEVA_CONTRASEÑA">New password</string>
+    <string name="NUEVA_PASS_INTRUCCIONES">Please, enter a new password</string>
+    <string name="FECHA_REGISTRO_ENTREVISTA">Registry date</string>
+    <string name="ICONO_MENU_CONTEXTUAL">Contextual menu icon</string>
+    <string name="MSG_LISTADO_ENTREVISTADOS_VACIO">You don\'t have interviewees yet</string>
+    <string name="EMOTICON">Emoticon</string>
+    <string name="EMOTICON_EVENTO">Event emoticon</string>
     <string name="GUION" translatable="false">-</string>
-    <string name="CARGAR_MAS">Cargar más</string>
-    <string name="EMOTICON_SPINNER">Emoticon menu desplegable</string>
-    <string name="MOSTRAR_ENTREVISTADOS" tools:ignore="PluralsCandidate">Mostrando %d de %d entrevistados</string>
-    <string name="MOSTRAR_INVESTIGADORES" tools:ignore="PluralsCandidate">Mostrando %d de %d investigadores</string>
-    <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
-    <string name="MSG_LISTADO_ACCIONES_VACIO">No hay acciones registradas</string>
-    <string name="HELPER_COHABITANTS">*Últimos 3 meses</string>
+    <string name="CARGAR_MAS">Load more</string>
+    <string name="EMOTICON_SPINNER">Dropdown menu emoticon</string>
+    <string name="MOSTRAR_ENTREVISTADOS" tools:ignore="PluralsCandidate">Displaying %d of %d interviewees</string>
+    <string name="MOSTRAR_INVESTIGADORES" tools:ignore="PluralsCandidate">Displaying %d of %d researchers</string>
+    <string name="MSG_LISTADO_INVESTIGADORES_VACIO">There are no registered researchers</string>
+    <string name="MSG_LISTADO_ACCIONES_VACIO">No registered actions</string>
+    <string name="HELPER_COHABITANTS">*Last 3 months</string>
     <string name="NORMAL">Normal</string>
-    <string name="EXTRAORDINARIA">Extraordinaria</string>
-    <string name="ICONO_ACCION_ESPANOL">Icono accion en español</string>
-    <string name="ACCION_ESPANOL">Acción español</string>
-    <string name="ICONO_ACCION_INGLES">Icono accion en ingles</string>
-    <string name="ACCION_INGLES">Accion inglés</string>
-    <string name="INTRUCCION_ACCION">Para crear una nueva acción ingrese el nombre de la acción tanto en español como en inglés</string>
-    <string name="COPIADO_PORTAPAPELES">Copiado al portapapeles</string>
-    <string name="DISTRIBUCION_EVENTOS">Distribución de eventos</string>
-    <string name="IR_VISUALIZACION">Ir</string>
-    <string name="FORMAT_REGISTRADO_POR">Registrado por: %s %s</string>
-    <string name="TODOS">Todos</string>
-    <string name="MI_CUENTA">Mi cuenta</string>
-    <string name="ACTIVANDO_CUENTA">Activando cuenta</string>
-    <string name="DESACTIVANDO_CUENTA">Desactivando cuenta</string>
-    <string name="comenzar">Comenzar</string>
-    <string name="saltar">Saltar</string>
-    <string name="PROJECT_DESCRIPTION">Aplicación móvil desarrollada para el método <b><i>\"Un día en la vida de ..., Sanders y Stappers (2012)\"</i></b> que permite realizar sondeos preliminares sobre actividades cotidianas para el estudio de usuarios.\n\nEl desarrollo de esta APP está enmarcado en el proyecto de investigación Fondecyt Regular Nº1171037 <b><i>\"Investigación de un método participativo y de co-creación para el diseño de productos para el adulto mayor autovalente. Aplicación en la región del Biobío\"</i></b>, y la colaboración entre los investigadores del proyecto y Elizabeth Sanders Nielsen, como autora de esta herramienta metodológica.\n\nReferencias:\n
-- Sanders &amp; Stappers, (2012) Convivial Toolbox: Generative Research for the Front End of Design.BIS Publishers, Amsterdam/ The Nederlands. 312 Pages.</string>
-    <string name="CONTACT_EMAIL">Dudas y problemas enviar correo a:</string>
-    <string name="CONTACT_EMAIL_VALUE" translatable="false">undiaenlavidade.cl@gmail.com</string>
-    <string name="CONTEXTO_PROYECTO">Contexto del proyecto</string>
-    <string name="MAIL_DE_CONTACTO">Mail de Contacto</string>
-    <string name="ICONO_ITEM_ESTADISTICAS">Icono item estadisticas</string>
-    <string name="ACTUALIZAR_MENU">Actualizar menu</string>
-    <string name="ICONO_AVISO_DE_SEGURIDAD">Icono aviso de seguridad</string>
-    <string name="WARNING_PIN_PASS">Por favor, NUNCA compartas los pin pass, la información privada de entrevistados podría verse comprometida.</string>
+    <string name="EXTRAORDINARIA">Extraordinary</string>
+    <string name="ICONO_ACCION_ESPANOL">Spanish action icon</string>
+    <string name="ACCION_ESPANOL">Spanish action</string>
+    <string name="ICONO_ACCION_INGLES">English action icon</string>
+    <string name="ACCION_INGLES">English action</string>
+    <string name="INTRUCCION_ACCION">To create a new action enter the name of the action in both Spanish and English</string>
+    <string name="COPIADO_PORTAPAPELES">Copied to clipboard</string>
+    <string name="DISTRIBUCION_EVENTOS">Event distribution</string>
+    <string name="IR_VISUALIZACION">Go</string>
+    <string name="FORMAT_REGISTRADO_POR">Registered by: %s %s</string>
+    <string name="TODOS">All</string>
+    <string name="MI_CUENTA">My account</string>
+    <string name="ACTIVANDO_CUENTA">Activating account</string>
+    <string name="DESACTIVANDO_CUENTA">Deactivating account</string>
+    <string name="comenzar">Get started</string>
+    <string name="saltar">Skip</string>
+    <string name="PROJECT_DESCRIPTION">Mobile application developed for the method <b><i>\"A day in the life of ..., Sanders and Stappers (2012)\"</i></b> that allows preliminary surveys on daily activities for the study of users.The development of this APP is related in the research project Fondecyt Regular Nº1171037 <b><i>\"Investigation of a participatory and co-creation method for the design of products for the self-reliant older adult. Application in the Biobío region\"</i></b>, and the collaboration between the project researchers and Elizabeth Sanders Nielsen, as the author of this methodological tool.</string>
+    <string name="CONTACT_EMAIL_VALUE" translatable="false">References:</string>
+    <string name="CONTEXTO_PROYECTO">Proyect context</string>
+    <string name="MAIL_DE_CONTACTO">Contact mail</string>
+    <string name="ICONO_ITEM_ESTADISTICAS">Stats item icon</string>
+    <string name="ACTUALIZAR_MENU">Refresh menu</string>
+    <string name="ICONO_AVISO_DE_SEGURIDAD">Security warning icon</string>
+    <string name="WARNING_PIN_PASS">Please, NEVER share the pin pass, the private information of interviewees could be compromised.</string>
 
-    <string name="SLIDE_1_DESCRIPTION">Bienvenido a la app de Android diseñada para facilitar tu investigación</string>
-    <string name="SLIDE_2_TITLE">Nuestro \n objetivo</string>
-    <string name="SLIDE_2_DESCRIPTION">Realizar sondeos preliminares sobre actividades cotidianas para el estudio de usuarios</string>
-    <string name="SLIDE_3_TITLE">Hacer entrevistas</string>
-    <string name="SLIDE_3_DESCRIPTION">Y administrar entrevistas para cada persona en simples pasos</string>
-    <string name="SLIDE_4_TITLE">Eventos \n diarios</string>
-    <string name="SLIDE_4_DESCRIPTION">Registra actividades cotidianas de tus entrevistados</string>
-    <string name="SLIDE_5_TITLE">Obtén \n estadísticas</string>
-    <string name="SLIDE_5_DESCRIPTION">Datos e Indicadores accesibles de manera online</string>
-    <string name="skip_intro">Saltar intro</string>
+    <string name="SLIDE_1_DESCRIPTION">Welcome to Android app designed to facilitate your research</string>
+    <string name="SLIDE_2_TITLE">Our \n objectives</string>
+    <string name="SLIDE_2_DESCRIPTION">Conduct preliminary surveys of daily activities for user study</string>
+    <string name="SLIDE_3_TITLE">Do \n interviews</string>
+    <string name="SLIDE_3_DESCRIPTION">And manage interviews for each person in simple steps</string>
+    <string name="SLIDE_4_TITLE">Daily \n events</string>
+    <string name="SLIDE_4_DESCRIPTION">Record daily activities of your interviewees</string>
+    <string name="SLIDE_5_TITLE">Get \n statistics</string>
+    <string name="SLIDE_5_DESCRIPTION">Data and indicators accessible online</string>
+    <string name="skip_intro">Skip intro</string>
     <string name="PIN_PASS_FORMAT" translatable="false">Pin pass: %s</string>
-    <string name="VALIDACION_FECHA_FUTURA">No puedes ingresar una fecha futura</string>
-    <string name="HELPER_CITY">*Si la ciudad no existe, escribe una nueva</string>
-    <string name="HELPER_PROFESSION">*Si la profesión no existe, escribe una nueva</string>
+    <string name="VALIDACION_FECHA_FUTURA">You cannot enter a future date</string>
+    <string name="HELPER_CITY">*If the city does not exist, write a new one</string>
+    <string name="HELPER_PROFESSION">*If the profession does not exist, write a new one</string>
+    <string name="CONTACT_EMAIL">Questions and problems send mail to:</string>
 </resources>

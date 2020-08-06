@@ -203,7 +203,7 @@
     <string name="ACTIVANDO_CUENTA">Activating account</string>
     <string name="DESACTIVANDO_CUENTA">Deactivating account</string>
     <string name="MENU_BUSCAR">Search</string>
-    <string name="UPDATE_MSG_VM_SAVE">Update data!</string>
+    <string name="UPDATE_MSG_VM_SAVE">Updated data!</string>
     <string name="SLIDE_1_DESCRIPTION">Welcome to Android app designed to facilitate your research</string>
     <string name="SLIDE_3_DESCRIPTION">And manage interviews for each person in simple steps</string>
     <string name="SLIDE_3_TITLE">Do \n interviews</string>

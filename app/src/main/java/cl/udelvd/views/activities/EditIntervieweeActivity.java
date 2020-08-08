@@ -191,7 +191,6 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
         acEducationalLevel = findViewById(R.id.et_interviewee_educational_level);
         acProfession = findViewById(R.id.et_interviewee_profession);
         acCoexistenceType = findViewById(R.id.et_interviewee_coexistence_type);
-        configEndIconsForOptionals();
 
         switchLegalRetire = findViewById(R.id.switch_retire_legal);
         switchFalls = findViewById(R.id.switch_interviewee_falls);
@@ -199,11 +198,43 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
         tvSwitchFalls = findViewById(R.id.tv_switch_falls);
         tvSwitchRetire = findViewById(R.id.tv_switch_retire_value);
 
+        configEndIcons();
+
         editIntervieweeViewModel = new ViewModelProvider(this).get(EditIntervieweeViewModel.class);
 
     }
 
-    private void configEndIconsForOptionals() {
+    private void configEndIcons() {
+        acCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!s.toString().isEmpty()) {
+                    ilCity.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                    ilCity.setEndIconDrawable(R.drawable.ic_close_white_24dp);
+                    ilCity.setEndIconOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            acCity.setText("");
+                        }
+                    });
+                } else {
+                    ilCity.setEndIconMode(TextInputLayout.END_ICON_DROPDOWN_MENU);
+                }
+            }
+        });
+
+        //OPTIONALS
         acEducationalLevel.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

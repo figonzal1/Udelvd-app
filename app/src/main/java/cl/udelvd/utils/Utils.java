@@ -121,17 +121,16 @@ public class Utils {
         FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
 
         //Obtener token shared pref
-        String json = sharedPreferences.getString(context.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+        String token = sharedPreferences.getString(context.getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
         int idResearcher = sharedPreferences.getInt(context.getString(R.string.KEY_INVES_ID_LARGO), 0);
 
         //Si no es vacio
-        assert json != null;
-        if (!json.isEmpty()) {
+        if (token != null && !token.isEmpty()) {
 
             Log.d(context.getString(R.string.TAG_JWT_STATUS), context.getString(R.string.JWT_STATUS_NO_VACIO));
             crashlytics.log(context.getString(R.string.TAG_JWT_STATUS) + context.getString(R.string.JWT_STATUS_NO_VACIO));
 
-            JWT jwt = new JWT(json);
+            JWT jwt = new JWT(token);
 
             String issuer = jwt.getIssuer();
             String audience = Objects.requireNonNull(jwt.getAudience()).get(0);
@@ -149,15 +148,15 @@ public class Utils {
                     issuer.equals(context.getString(R.string.JWT_ISSUER_UDELVD)) && Objects.equals(claim.asInt(),
                     idResearcher)) {
 
-                Date date = jwt.getExpiresAt();
+                Date expiresAt = jwt.getExpiresAt();
 
                 SimpleDateFormat format = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA_HORA), Locale.US);
-                assert date != null;
-                String date_s = format.format(date);
+                assert expiresAt != null;
+                String date_s = format.format(expiresAt);
 
                 Log.d(context.getString(R.string.TAG_JWT_FECHA_EXP), date_s);
 
-                boolean expired = jwt.isExpired(10);
+                boolean expired = jwt.isExpired(3720); //1 hour and 2 minutes, the token still valid (Santiago timezone problem)
                 Log.d(context.getString(R.string.TAG_JWT_STATUS), String.format("%s %s", context.getString(R.string.JWT_STATUS_EXPIRADO), expired));
                 crashlytics.log(context.getString(R.string.TAG_JWT_STATUS) + String.format("%s %s", context.getString(R.string.JWT_STATUS_EXPIRADO), expired));
                 crashlytics.setCustomKey("jwt_expired", expired);

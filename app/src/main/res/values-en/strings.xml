@@ -230,4 +230,5 @@
     <string name="HELPER_PROFESSION">*If the profession does not exist, write a new one</string>
     <string name="HELPER_CITY">*If the city does not exist, write a new one</string>
     <string name="VALIDACION_FECHA_FUTURA">You cannot enter a future date</string>
+    <string name="por_comodidad_te_recomendamos_abrir_los_links_de_las_visualizaciones_en_una_pantalla_de_pc">For convenience, we recommend that you open the statistics links on a PC screen</string>
 </resources>

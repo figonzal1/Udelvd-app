@@ -571,6 +571,7 @@
     <string name="ACTUALIZAR_MENU">Refresh menu</string>
     <string name="ICONO_AVISO_DE_SEGURIDAD">Security warning icon</string>
     <string name="WARNING_PIN_PASS">Please, NEVER share the pin pass, the private information of interviewees could be compromised.</string>
+    <string name="por_comodidad_te_recomendamos_abrir_los_links_de_las_visualizaciones_en_una_pantalla_de_pc">For convenience, we recommend that you open the statistics links on a PC screen</string>
 
     <string name="SLIDE_1_DESCRIPTION">Welcome to Android app designed to facilitate your research</string>
     <string name="SLIDE_2_TITLE">Our \n objectives</string>
@@ -587,4 +588,5 @@
     <string name="HELPER_CITY">*If the city does not exist, write a new one</string>
     <string name="HELPER_PROFESSION">*If the profession does not exist, write a new one</string>
     <string name="CONTACT_EMAIL">Questions and problems send mail to:</string>
+
 </resources>

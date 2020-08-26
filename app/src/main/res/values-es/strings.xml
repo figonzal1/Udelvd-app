@@ -230,5 +230,6 @@
     <string name="VALIDACION_FECHA_FUTURA">No puedes ingresar una fecha futura</string>
     <string name="HELPER_CITY">*Si la ciudad no existe, escribe una nueva</string>
     <string name="HELPER_PROFESSION">*Si la profesión no existe, escribe una nueva</string>
+    <string name="por_comodidad_te_recomendamos_abrir_los_links_de_las_visualizaciones_en_una_pantalla_de_pc">Por comodidad, te recomendamos abrir los links de las estadísticas en una pantalla de PC</string>
 
 </resources>

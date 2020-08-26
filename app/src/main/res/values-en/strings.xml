@@ -4,7 +4,7 @@
     <string name="ACCION">Action</string>
     <string name="ACTIVADA">Activated</string>
     <string name="APELLIDO">Last name</string>
-    <string name="CAIDAS">Falls</string>
+    <string name="CAIDAS">Have you ever had falls?</string>
     <string name="CAMBIAR_PASS">Change password</string>
     <string name="CARGAR_MAS">Load more</string>
     <string name="CIUDAD">City</string>
@@ -231,4 +231,5 @@
     <string name="HELPER_CITY">*If the city does not exist, write a new one</string>
     <string name="VALIDACION_FECHA_FUTURA">You cannot enter a future date</string>
     <string name="por_comodidad_te_recomendamos_abrir_los_links_de_las_visualizaciones_en_una_pantalla_de_pc">For convenience, we recommend that you open the statistics links on a PC screen</string>
+    <string name="indique_cantidad">*Indicate an amount</string>
 </resources>

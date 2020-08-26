@@ -4,7 +4,7 @@
     <string name="ACCION">Acción</string>
     <string name="ACTIVADA">Activada</string>
     <string name="APELLIDO">Apellido</string>
-    <string name="CAIDAS">Caídas</string>
+    <string name="CAIDAS">¿Alguna vez ha tenido caídas?</string>
     <string name="CAMBIAR_PASS">Cambiar contraseña</string>
     <string name="NUEVA_CONTRASEÑA">Nueva contraseña</string>
     <string name="CARGAR_MAS">Cargar más</string>
@@ -231,5 +231,6 @@
     <string name="HELPER_CITY">*Si la ciudad no existe, escribe una nueva</string>
     <string name="HELPER_PROFESSION">*Si la profesión no existe, escribe una nueva</string>
     <string name="por_comodidad_te_recomendamos_abrir_los_links_de_las_visualizaciones_en_una_pantalla_de_pc">Por comodidad, te recomendamos abrir los links de las estadísticas en una pantalla de PC</string>
+    <string name="indique_cantidad">*Indique una cantidad</string>
 
 </resources>

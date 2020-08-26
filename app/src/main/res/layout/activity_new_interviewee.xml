@@ -362,7 +362,7 @@
                     app:layout_constraintStart_toStartOf="@+id/il_n_coexistence_interviewee"
                     app:layout_constraintTop_toBottomOf="@+id/switch_retire_legal" />
 
-                <!-- TODO: CORREGIR TEXTO DE AYUDA PARA CAIDAS -->
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_n_falls_interviewee"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -372,7 +372,7 @@
                     android:visibility="gone"
                     app:endIconDrawable="@drawable/ic_clear_text_black_24dp"
                     app:endIconMode="clear_text"
-                    app:helperText="Texto de ayuda para las caidas"
+                    app:helperText="@string/indique_cantidad"
                     app:helperTextEnabled="true"
                     app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"

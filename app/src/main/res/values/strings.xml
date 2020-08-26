@@ -2,10 +2,10 @@
     <string name="app_name">A day in the life of …</string>
 
     <!-- PRODUCTION-->
-    <string name="HEROKU_DOMAIN" translatable="false">https://undiaenlavidade.cl/</string>
+    <!--<string name="HEROKU_DOMAIN" translatable="false">https://undiaenlavidade.cl/</string>-->
 
     <!-- DEV -->
-    <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.2/</string>-->
+    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.2/</string>
 
     <string name="URL_GET_INVESTIGADORES" translatable="false">%sinvestigadores/pagina/%d/id_admin/%d</string>
     <string name="URL_POST_INVESTIGADORES" translatable="false">%sinvestigadores</string>
@@ -482,7 +482,7 @@
     <string name="CONVIVIENTES_ENTREVISTADO">Icon cohabitants interviewee</string>
     <string name="ESTADO_CIVIL">Marital status</string>
     <string name="SEXO">Gender</string>
-    <string name="CAIDAS">Falls</string>
+    <string name="CAIDAS">Have you ever had falls?</string>
     <string name="CUANTAS_CAIDAS">How many falls?</string>
     <string name="ICONO_GENERO_ENTREVISTADO">Interviewee genre</string>
     <string name="ICONO_ESTADO_CIVIL_ENTREVISTADO">Interviewee marital status icon</string>
@@ -588,5 +588,6 @@
     <string name="HELPER_CITY">*If the city does not exist, write a new one</string>
     <string name="HELPER_PROFESSION">*If the profession does not exist, write a new one</string>
     <string name="CONTACT_EMAIL">Questions and problems send mail to:</string>
+    <string name="indique_cantidad">*Indicate an amount</string>
 
 </resources>

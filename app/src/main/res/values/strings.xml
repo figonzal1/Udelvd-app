@@ -565,7 +565,7 @@
     <string name="comenzar">Get started</string>
     <string name="saltar">Skip</string>
     <string name="PROJECT_DESCRIPTION">Mobile application developed for the method <b><i>\"A day in the life of ..., Sanders and Stappers (2012)\"</i></b> that allows preliminary surveys on daily activities for the study of users.The development of this APP is related in the research project Fondecyt Regular Nº1171037 <b><i>\"Investigation of a participatory and co-creation method for the design of products for the self-reliant older adult. Application in the Biobío region\"</i></b>, and the collaboration between the project researchers and Elizabeth Sanders Nielsen, as the author of this methodological tool.</string>
-    <string name="CONTACT_EMAIL_VALUE" translatable="false">References:</string>
+    <string name="CONTACT_EMAIL_VALUE" translatable="false">undiaenlavidade.cl@gmail.com</string>
     <string name="CONTEXTO_PROYECTO">Proyect context</string>
     <string name="MAIL_DE_CONTACTO">Contact mail</string>
     <string name="ICONO_ITEM_ESTADISTICAS">Stats item icon</string>

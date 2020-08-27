@@ -232,5 +232,10 @@
     <string name="HELPER_PROFESSION">*Si la profesión no existe, escribe una nueva</string>
     <string name="por_comodidad_te_recomendamos_abrir_los_links_de_las_visualizaciones_en_una_pantalla_de_pc">Por comodidad, te recomendamos abrir los links de las estadísticas en una pantalla de PC</string>
     <string name="indique_cantidad">*Indique una cantidad</string>
+    <string name="quick_tip">Tip rápido</string>
+    <string name="ICONO_HELP">Icono ayuda</string>
+    <string name="tipos_entrevistas">Tipos entrevistas</string>
+    <string name="extraordinary_interviews">Extraordinaria: Son entrevistas que contienen eventos diarios que occuren esporádicamente.</string>
+    <string name="normal_interviews">Normales: Son entrevistas que contienen eventos diarios que ocurren en un día común y corriente.</string>
 
 </resources>

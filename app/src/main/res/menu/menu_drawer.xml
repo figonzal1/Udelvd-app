@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:checkableBehavior="none"
+        android:checkableBehavior="all"
         android:orderInCategory="3">
 
         <item
@@ -30,17 +30,16 @@
         android:orderInCategory="2"
         android:title="@string/MENU_ADMIN">
         <menu>
-            <group>
+            <group android:checkableBehavior="all">
 
                 <item
                     android:id="@+id/menu_actions"
-                    android:checkable="true"
+                    android:enabled="true"
                     android:icon="@drawable/ic_directions_run_black_24dp"
                     android:title="@string/MENU_ACCIONES" />
 
                 <item
                     android:id="@+id/menu_emoticons"
-                    android:checkable="true"
                     android:enabled="false"
                     android:icon="@drawable/ic_tag_faces_black_24dp"
                     android:title="@string/MENU_EMOTICONES"
@@ -48,7 +47,7 @@
 
                 <item
                     android:id="@+id/menu_researchers"
-                    android:checked="true"
+                    android:enabled="true"
                     android:icon="@drawable/ic_list_researcher_24dp"
                     android:title="@string/MENU_INVESTIGADORES" />
             </group>
@@ -60,7 +59,7 @@
         android:orderInCategory="1"
         android:title="@string/MENU_GENERAL">
         <menu>
-            <group>
+            <group android:checkableBehavior="all">
 
                 <item
                     android:id="@+id/menu_profile"

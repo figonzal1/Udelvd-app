@@ -87,6 +87,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
                 bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
                 bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
 
+                //PASS DATA TO NEXT PERSON CARD VIEW
                 bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
                 bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
                 bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS))));
@@ -122,6 +123,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
                             bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
                             bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
 
+                            //PASS DATA TO NEXT PERSON CARD VIEW
                             bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
                             bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
                             bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS))));

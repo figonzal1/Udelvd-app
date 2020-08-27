@@ -46,7 +46,6 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
     private static final int REQUEST_CODE_EDIT_INTERVIEW = 301;
 
     private RecyclerView rv;
-    private CardView cvInterviews;
     private CardView cvInfo;
     private InterviewAdapter interviewAdapter;
     private InterviewListViewModel interviewListViewModel;
@@ -124,8 +123,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
         tvEmptyInterviews.setVisibility(View.INVISIBLE);
 
         ImageView ivInterview = findViewById(R.id.cv_iv_interviewee_person);
-        cvInterviews = findViewById(R.id.cv_interview_list);
-        cvInterviews.setVisibility(View.INVISIBLE);
+        rv.setVisibility(View.INVISIBLE);
         cvInfo = findViewById(R.id.cv_interviewee_info);
         cvInfo.setVisibility(View.INVISIBLE);
 
@@ -159,12 +157,12 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                 if (aBoolean) {
                     progressBar.setVisibility(View.VISIBLE);
                     tvEmptyInterviews.setVisibility(View.INVISIBLE);
-                    cvInterviews.setVisibility(View.INVISIBLE);
+                    rv.setVisibility(View.INVISIBLE);
                     cvInfo.setVisibility(View.INVISIBLE);
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
-                    cvInterviews.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.VISIBLE);
                     cvInfo.setVisibility(View.VISIBLE);
                 }
             }
@@ -186,7 +184,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                     }
 
                     progressBar.setVisibility(View.INVISIBLE);
-                    cvInterviews.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.VISIBLE);
                     cvInfo.setVisibility(View.VISIBLE);
 
                     if (interviewList.size() == 0) {
@@ -221,7 +219,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
             public void onChanged(String s) {
 
                 progressBar.setVisibility(View.INVISIBLE);
-                cvInterviews.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.INVISIBLE);
                 cvInfo.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {

@@ -183,36 +183,56 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
 
                 if (menuItem.getItemId() == R.id.menu_profile) {
+
+                    navigationView.setCheckedItem(R.id.menu_profile);
+
                     Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivityForResult(intent, PROFILE_ACTIVITY_CODE);
 
                     return true;
                 } else if (menuItem.getItemId() == R.id.menu_interviewees) {
+
                     Objects.requireNonNull(tabLayout.getTabAt(0)).select();
                     drawerLayout.closeDrawer(GravityCompat.START, true);
+
                     return true;
                 } else if (menuItem.getItemId() == R.id.menu_stats) {
+
                     Objects.requireNonNull(tabLayout.getTabAt(1)).select();
                     drawerLayout.closeDrawer(GravityCompat.START, true);
+
                     return true;
                 }
 
                 if (menuItem.getItemId() == R.id.menu_actions) {
+
+                    navigationView.setCheckedItem(R.id.menu_actions);
+
                     Intent intent = new Intent(MainActivity.this, ActionListActivity.class);
                     startActivity(intent);
+
                     return true;
+
                 } else if (menuItem.getItemId() == R.id.menu_emoticons) {
                     return true;
                 } else if (menuItem.getItemId() == R.id.menu_researchers) {
+
+                    navigationView.setCheckedItem(R.id.menu_researchers);
+
                     Intent intent = new Intent(MainActivity.this, ResearcherListActivity.class);
                     startActivity(intent);
+
                     return true;
                 }
 
 
                 if (menuItem.getItemId() == R.id.menu_contact) {
+
+                    navigationView.setCheckedItem(R.id.menu_contact);
+
                     Intent intent = new Intent(MainActivity.this, ContactActivity.class);
                     startActivity(intent);
+
                     return true;
                 }
 

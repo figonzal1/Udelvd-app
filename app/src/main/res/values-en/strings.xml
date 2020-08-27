@@ -232,4 +232,9 @@
     <string name="VALIDACION_FECHA_FUTURA">You cannot enter a future date</string>
     <string name="por_comodidad_te_recomendamos_abrir_los_links_de_las_visualizaciones_en_una_pantalla_de_pc">For convenience, we recommend that you open the statistics links on a PC screen</string>
     <string name="indique_cantidad">*Indicate an amount</string>
+    <string name="quick_tip">Quick tip</string>
+    <string name="ICONO_HELP">Help icon</string>
+    <string name="tipos_entrevistas">Interviews types</string>
+    <string name="normal_interviews">Normal: These are interviews that contain daily events that occur on an ordinary day.</string>
+    <string name="extraordinary_interviews">" Extraordinary: They are interviews that contain daily events that occur sporadically."</string>
 </resources>

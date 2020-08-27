@@ -67,11 +67,11 @@
                 android:layout_height="30dp"
                 android:contentDescription="@string/ICONO_NOMBRE_ENTREVISTADO"
                 android:scaleType="centerCrop"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_interview_name"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_interview_name"
-                app:srcCompat="@drawable/ic_person_black_24dp" />
+                app:srcCompat="@drawable/ic_person_black_24dp"
+                app:tint="@color/colorSecondaryVariant" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_interview_name"
@@ -128,11 +128,11 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="@string/ICONO_FECHA_NAC_ENTREVISTADO"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_birth_date"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_birth_date"
-                app:srcCompat="@drawable/ic_cake_black_24dp" />
+                app:srcCompat="@drawable/ic_cake_black_24dp"
+                app:tint="@color/colorSecondaryVariant" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_birth_date"
@@ -196,11 +196,11 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="@string/ICONO_CIUDAD_ENTREVISTADO"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_interview_city"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_interview_city"
-                app:srcCompat="@drawable/ic_place_black_24dp" />
+                app:srcCompat="@drawable/ic_place_black_24dp"
+                app:tint="@color/colorSecondaryVariant" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switch_retire_legal"
@@ -256,11 +256,11 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="@string/CONVIVIENTES_ENTREVISTADO"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_n_coexistence_interviewee"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_n_coexistence_interviewee"
-                app:srcCompat="@drawable/ic_group_people_black_24dp" />
+                app:srcCompat="@drawable/ic_group_people_black_24dp"
+                app:tint="@color/colorSecondaryVariant" />
 
 
             <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
@@ -378,22 +378,22 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="@string/ICONO_GENERO_ENTREVISTADO"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toTopOf="@+id/il_birth_date"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_interviewee_genre"
-                app:srcCompat="@drawable/ic_gender_male_female" />
+                app:srcCompat="@drawable/ic_gender_male_female"
+                app:tint="@color/colorSecondaryVariant" />
 
             <ImageView
                 android:id="@+id/iv_icon_civil_state"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="@string/ICONO_ESTADO_CIVIL_ENTREVISTADO"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_interviewee_civil_state"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_interviewee_civil_state"
-                app:srcCompat="@drawable/ic_loyalty_black_24dp" />
+                app:srcCompat="@drawable/ic_loyalty_black_24dp"
+                app:tint="@color/colorSecondaryVariant" />
 
 
             <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
@@ -442,11 +442,11 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="@string/ICONO_NIVEL_EDUCACIONAL_ENTREVISTADO"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_interviewee_educational_level"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_interviewee_educational_level"
-                app:srcCompat="@drawable/ic_school_black_24dp" />
+                app:srcCompat="@drawable/ic_school_black_24dp"
+                app:tint="@color/colorSecondaryVariant" />
 
 
             <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
@@ -517,11 +517,11 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="@string/ICONO_PROFESION_ENTREVISTADO"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_interviewee_profession"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_interviewee_profession"
-                app:srcCompat="@drawable/ic_work_black_24dp" />
+                app:srcCompat="@drawable/ic_work_black_24dp"
+                app:tint="@color/colorSecondaryVariant" />
 
             <TextView
                 android:id="@+id/tv_switch_retire_value"
@@ -556,11 +556,11 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:contentDescription="@string/ICONO_TIPO_CONVIVENCIA"
-                android:tint="@color/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="@+id/il_interviewee_coexistence_type"
                 app:layout_constraintStart_toStartOf="@+id/guia_izq"
                 app:layout_constraintTop_toTopOf="@+id/il_interviewee_coexistence_type"
-                app:srcCompat="@drawable/ic_group_people_black_24dp" />
+                app:srcCompat="@drawable/ic_group_people_black_24dp"
+                app:tint="@color/colorSecondaryVariant" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

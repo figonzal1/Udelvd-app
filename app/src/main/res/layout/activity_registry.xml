@@ -112,11 +112,11 @@
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_NOMBRE_INVESTIGADOR"
                     android:scaleType="centerCrop"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_researcher_name"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_researcher_name"
-                    app:srcCompat="@drawable/ic_person_black_24dp" />
+                    app:srcCompat="@drawable/ic_person_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_researcher_last_name"
@@ -173,11 +173,11 @@
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_EMAIL_INVESTIGADOR"
                     android:scaleType="centerCrop"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_researcher_email"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_researcher_email"
-                    app:srcCompat="@drawable/ic_email_black_24dp" />
+                    app:srcCompat="@drawable/ic_email_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -209,11 +209,11 @@
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_PASS_INVESTIGADOR"
                     android:scaleType="centerCrop"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_researcher_password"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_researcher_password"
-                    app:srcCompat="@drawable/ic_lock_black_24dp" />
+                    app:srcCompat="@drawable/ic_lock_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_research_confirm_password"

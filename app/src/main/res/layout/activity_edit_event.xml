@@ -54,11 +54,11 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_HORA_EVENTO"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_event_hour"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_event_hour"
-                    app:srcCompat="@drawable/ic_date_black_24dp" />
+                    app:srcCompat="@drawable/ic_date_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_event_hour"
@@ -92,11 +92,11 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_ACCION_EVENTO"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_action_event"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_action_event"
-                    app:srcCompat="@drawable/ic_directions_run_black_24dp" />
+                    app:srcCompat="@drawable/ic_directions_run_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <!-- Autocompletado de escritura manual COMBINADO
                 con selector de opciones fijo (SPINNER)-->
@@ -148,11 +148,11 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_EMOTICON_EVENTO"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/spinner_emoticon"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/spinner_emoticon"
-                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+                    app:srcCompat="@drawable/ic_tag_faces_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <Spinner
                     android:id="@+id/spinner_emoticon"
@@ -172,11 +172,11 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_JUSTIFICACION_EVENTO"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_justification_event"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_justification_event"
-                    app:srcCompat="@drawable/ic_question_answer_black_24dp" />
+                    app:srcCompat="@drawable/ic_question_answer_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_justification_event"

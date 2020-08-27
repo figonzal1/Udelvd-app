@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
@@ -383,20 +384,20 @@ public class Utils {
                 interviewee.getGender().equals(context.getString(R.string.SEXO_FEMENINO_MASTER_KEY))) {
 
             if (annos < 18) {
-                ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_girl, context.getTheme()));
+                ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_girl, context.getTheme()));
             } else if (annos < 65) {
-                ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_adult_woman, context.getTheme()));
+                ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_adult_woman, context.getTheme()));
             } else {
-                ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_grand_mother, context.getTheme()));
+                ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_grand_mother, context.getTheme()));
             }
         } else if (interviewee.getGender().equals(context.getString(R.string.SEXO_MASCULINO)) ||
                 interviewee.getGender().equals(context.getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
             if (annos < 18) {
-                ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_boy, context.getTheme()));
+                ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_boy, context.getTheme()));
             } else if (annos < 65) {
-                ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_adult_man, context.getTheme()));
+                ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_adult_man, context.getTheme()));
             } else {
-                ivPerson.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_grand_father, context.getTheme()));
+                ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_grand_father, context.getTheme()));
             }
         }
     }

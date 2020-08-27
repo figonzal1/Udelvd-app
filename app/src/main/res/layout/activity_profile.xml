@@ -124,11 +124,11 @@
                             android:layout_height="35dp"
                             android:layout_marginStart="16dp"
                             android:contentDescription="@string/ICONO_EMAIL_INVESTIGADOR"
-                            android:tint="@color/colorSecondaryVariant"
                             app:layout_constraintBottom_toBottomOf="@+id/tv_email_researcher"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/tv_email_title"
-                            app:srcCompat="@drawable/ic_email_black_24dp" />
+                            app:srcCompat="@drawable/ic_email_black_24dp"
+                            app:tint="@color/colorSecondaryVariant" />
 
                         <ImageView
                             android:id="@+id/iv_icon_activated"
@@ -136,11 +136,11 @@
                             android:layout_height="35dp"
                             android:layout_marginStart="16dp"
                             android:contentDescription="@string/ICONO_CUENTA_ACTIVADA"
-                            android:tint="@color/colorSecondaryVariant"
                             app:layout_constraintBottom_toBottomOf="@+id/tv_activated_researcher"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/tv_activated_title"
-                            app:srcCompat="@drawable/ic_verified_user_black_24dp" />
+                            app:srcCompat="@drawable/ic_verified_user_black_24dp"
+                            app:tint="@color/colorSecondaryVariant" />
 
                         <TextView
                             android:id="@+id/tv_activated_researcher"
@@ -185,11 +185,11 @@
                             android:layout_height="35dp"
                             android:layout_marginStart="16dp"
                             android:contentDescription="@string/ICONO_FECHA_REGISTRO"
-                            android:tint="@color/colorSecondaryVariant"
                             app:layout_constraintBottom_toBottomOf="@+id/tv_registry_researcher"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/tv_registry_title"
-                            app:srcCompat="@drawable/ic_access_time_black_24dp" />
+                            app:srcCompat="@drawable/ic_access_time_black_24dp"
+                            app:tint="@color/colorSecondaryVariant" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

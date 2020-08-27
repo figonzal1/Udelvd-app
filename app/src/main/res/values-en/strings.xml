@@ -174,7 +174,7 @@
     <string name="HELPER_COHABITANTS">*Last 3 months</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinary</string>
-    <string name="MOSTRAR_INVESTIGADORES">Displaying %d of %d researchers</string>
+    <string name="MOSTRAR_INVESTIGADORES" tools:ignore="PluralsCandidate">Displaying %d of %d researchers</string>
     <string name="FORMATO_ACCION">Action %d</string>
     <string name="MSG_LISTADO_ACCIONES_VACIO">No registered actions</string>
     <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Actions List</string>

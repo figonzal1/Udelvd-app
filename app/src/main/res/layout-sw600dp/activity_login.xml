@@ -121,11 +121,11 @@
                         android:layout_marginStart="16dp"
                         android:contentDescription="@string/ICONO_NOMBRE_INVESTIGADOR"
                         android:scaleType="centerCrop"
-                        android:tint="@color/colorSecondaryVariant"
                         app:layout_constraintBottom_toBottomOf="@+id/il_email_login"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/il_email_login"
-                        app:srcCompat="@drawable/ic_person_black_24dp" />
+                        app:srcCompat="@drawable/ic_person_black_24dp"
+                        app:tint="@color/colorSecondaryVariant" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -160,11 +160,11 @@
                         android:layout_marginStart="16dp"
                         android:contentDescription="@string/ICONO_PASS_INVESTIGADOR"
                         android:scaleType="centerCrop"
-                        android:tint="@color/colorSecondaryVariant"
                         app:layout_constraintBottom_toBottomOf="@+id/il_password_login"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/il_password_login"
-                        app:srcCompat="@drawable/ic_lock_black_24dp" />
+                        app:srcCompat="@drawable/ic_lock_black_24dp"
+                        app:tint="@color/colorSecondaryVariant" />
 
                     <TextView
                         android:id="@+id/tv_recovery"

@@ -31,10 +31,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/ICONO_ITEM_ESTADISTICAS"
-        android:tint="@color/colorSecondaryVariant"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_insert_chart_black_24dp" />
+        app:srcCompat="@drawable/ic_insert_chart_black_24dp"
+        app:tint="@color/colorSecondaryVariant" />
 
     <View
         android:id="@+id/separator"

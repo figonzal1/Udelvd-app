@@ -1,5 +1,6 @@
 package cl.udelvd.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,7 @@ public class IntroPageAdapter extends PagerAdapter {
         if (inflater != null) {
 
 
-            View layoutScreen = inflater.inflate(R.layout.intro_item, null);
+            @SuppressLint("InflateParams") View layoutScreen = inflater.inflate(R.layout.intro_item, null);
 
             ImageView imgSlide = layoutScreen.findViewById(R.id.iv_intro);
             TextView title = layoutScreen.findViewById(R.id.tv_intro_title);

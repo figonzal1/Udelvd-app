@@ -71,11 +71,11 @@
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_ACCION_ESPANOL"
                     android:scaleType="centerCrop"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_action_spanish"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_action_spanish"
-                    app:srcCompat="@drawable/ic_language_black_24dp" />
+                    app:srcCompat="@drawable/ic_language_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_action_spanish"
@@ -108,11 +108,11 @@
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_ACCION_INGLES"
                     android:scaleType="centerCrop"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_action_english"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toBottomOf="@+id/il_action_spanish"
-                    app:srcCompat="@drawable/ic_language_black_24dp" />
+                    app:srcCompat="@drawable/ic_language_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_action_english"

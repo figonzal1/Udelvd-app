@@ -54,11 +54,11 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_FECHA_ENTREVISTA"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_interview_date"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_interview_date"
-                    app:srcCompat="@drawable/ic_date_black_24dp" />
+                    app:srcCompat="@drawable/ic_date_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_interview_date"
@@ -92,11 +92,11 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="@string/ICONO_TIPO_ENTREVISTA"
-                    android:tint="@color/colorSecondaryVariant"
                     app:layout_constraintBottom_toBottomOf="@+id/il_interview_type"
                     app:layout_constraintStart_toStartOf="@+id/guia_izq"
                     app:layout_constraintTop_toTopOf="@+id/il_interview_type"
-                    app:srcCompat="@drawable/ic_interview_black_24dp" />
+                    app:srcCompat="@drawable/ic_interview_black_24dp"
+                    app:tint="@color/colorSecondaryVariant" />
 
                 <!-- Autocompletado con selector de opciones fijo (SPINNER)-->
                 <com.google.android.material.textfield.TextInputLayout

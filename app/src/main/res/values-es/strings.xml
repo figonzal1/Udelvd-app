@@ -235,7 +235,7 @@
     <string name="quick_tip">Tip rápido</string>
     <string name="ICONO_HELP">Icono ayuda</string>
     <string name="tipos_entrevistas">Tipos entrevistas</string>
-    <string name="extraordinary_interviews">Extraordinaria: Son entrevistas que contienen eventos diarios que occuren esporádicamente.</string>
+    <string name="extraordinary_interviews">Extraordinaria: Son entrevistas que contienen eventos diarios que ocurren de manera esporádica o poco común.</string>
     <string name="normal_interviews">Normales: Son entrevistas que contienen eventos diarios que ocurren en un día común y corriente.</string>
 
 </resources>

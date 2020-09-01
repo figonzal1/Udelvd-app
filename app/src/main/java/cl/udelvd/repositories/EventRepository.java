@@ -7,12 +7,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -76,14 +72,18 @@ public class EventRepository {
     }
 
     public static EventRepository getInstance(Application application) {
+
         if (instance == null) {
             instance = new EventRepository(application);
         }
+
         return instance;
     }
 
     public SingleLiveEvent<List<Event>> getInterviewEvents(Interview interview) {
+
         sendGetInterviewEvents(interview);
+
         return eventsMutableLiveData;
     }
 
@@ -141,6 +141,8 @@ public class EventRepository {
                     isLoading.postValue(false);
 
                 } catch (JSONException | ParseException e) {
+
+                    Log.d("JSON_ERROR", "GET INTERVIEW EVENTS JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -152,37 +154,12 @@ public class EventRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), application.getString(R.string.TIMEOUT_ERROR));
-                    responseErrorMsgList.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                } else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), application.getString(R.string.NETWORK_ERROR));
-                    responseErrorMsgList.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                        responseErrorMsgList.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgList.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseErrorMsgList,
+                        application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS)
+                );
             }
         };
 
@@ -200,9 +177,11 @@ public class EventRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
+
         isLoading.postValue(true);
         //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
         //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
@@ -219,6 +198,7 @@ public class EventRepository {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 //Log.d("RESPONSE_CREATE", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -242,8 +222,12 @@ public class EventRepository {
                     if (event.equals(eventInternet) && !createTime.isEmpty()) {
                         responseMsgRegistry.postValue(application.getString(R.string.MSG_REGISTRO_EVENTO));
                     }
+
                     isLoading.postValue(false);
+
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "POST EVENT JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -255,38 +239,12 @@ public class EventRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
-                    responseErrorMsgRegistry.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), application.getString(R.string.NETWORK_ERROR));
-                    responseErrorMsgRegistry.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgRegistry.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseErrorMsgRegistry,
+                        application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO)
+                );
             }
         };
 
@@ -301,7 +259,6 @@ public class EventRepository {
                 params.put(application.getString(R.string.KEY_EVENTO_JUSTIFICACION), event.getJustification());
                 params.put(application.getString(R.string.KEY_EVENTO_ID_ACCION), String.valueOf(event.getAction().getId()));
                 params.put(application.getString(R.string.KEY_EVENTO_ID_EMOTICON), String.valueOf(event.getEmoticon().getId()));
-
                 params.put(application.getString(R.string.KEY_EVENTO_HORA_EVENTO), Utils.dateToString(application, true, event.getEventHour()));
 
                 return params;
@@ -318,9 +275,11 @@ public class EventRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
+
         isLoading.postValue(true);
         //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
         //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
@@ -328,15 +287,20 @@ public class EventRepository {
     }
 
     public SingleLiveEvent<Event> getEvent(Event eventIntent) {
+
         sendGetEvent(eventIntent);
+
         return eventMutableLiveData;
     }
 
     private void sendGetEvent(Event eventIntent) {
+
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 try {
+
                     JSONObject jsonObject = new JSONObject(response);
 
                     JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
@@ -367,6 +331,8 @@ public class EventRepository {
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "EVENT LIST JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -378,47 +344,16 @@ public class EventRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
-                    responseErrorMsgEvent.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), application.getString(R.string.NETWORK_ERROR));
-                    responseErrorMsgEvent.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgEvent.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseErrorMsgEvent,
+                        application.getString(R.string.TAG_VOLLEY_ERR_EVENTO)
+                );
             }
         };
 
-        String url = String.format(
-                Locale.US,
-                application.getString(R.string.URL_GET_EVENTO_ESPECIFICO),
-                application.getString(R.string.HEROKU_DOMAIN),
-                eventIntent.getInterview().getId(),
-                eventIntent.getId());
+        String url = String.format(Locale.US, application.getString(R.string.URL_GET_EVENTO_ESPECIFICO), application.getString(R.string.HEROKU_DOMAIN), eventIntent.getInterview().getId(), eventIntent.getId());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
 
@@ -433,6 +368,7 @@ public class EventRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
@@ -452,6 +388,7 @@ public class EventRepository {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -467,10 +404,15 @@ public class EventRepository {
                     String updateTime = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
 
                     if (event.equals(eventInternet) && !updateTime.isEmpty()) {
+
                         responseMsgUpdate.postValue(application.getString(R.string.MSG_UPDATE_EVENTO));
                     }
+
                     isLoading.postValue(false);
+
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "PUT EVENT JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -482,38 +424,12 @@ public class EventRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), application.getString(R.string.TIMEOUT_ERROR));
-                    responseErrorMsgUpdate.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), application.getString(R.string.NETWORK_ERROR));
-                    responseErrorMsgUpdate.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgUpdate.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseErrorMsgUpdate,
+                        application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO)
+                );
             }
         };
 
@@ -545,6 +461,7 @@ public class EventRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
@@ -577,6 +494,8 @@ public class EventRepository {
                     }
                     isLoading.postValue(false);
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "DELETE EVENT JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -588,42 +507,17 @@ public class EventRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
-                    responseErrorMsgDelete.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
-                    responseErrorMsgDelete.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseErrorMsgDelete.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseErrorMsgDelete,
+                        application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA)
+                );
             }
         };
 
         String url = String.format(Locale.US, application.getString(R.string.URL_DELETE_EVENTO), application.getString(R.string.HEROKU_DOMAIN), event.getInterview().getId(), event.getId());
+
         StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, resposeListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {
@@ -639,6 +533,7 @@ public class EventRepository {
                 return params;
             }
         };
+
         isLoading.postValue(true);
 
         //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,

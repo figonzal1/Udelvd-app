@@ -7,12 +7,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -71,6 +67,7 @@ public class InterviewRepository {
     }
 
     public static InterviewRepository getInstance(Application application) {
+
         if (instance == null) {
             instance = new InterviewRepository(application);
         }
@@ -78,7 +75,9 @@ public class InterviewRepository {
     }
 
     public SingleLiveEvent<List<Interview>> getPersonalInterviews(Interviewee interviewee) {
+
         sendGetPersonalInterviews(interviewee);
+
         return interviewsMutableLiveData;
     }
 
@@ -90,6 +89,7 @@ public class InterviewRepository {
             @Override
             public void onResponse(String response) {
                 //Log.d("RESPONSE", response);
+
                 try {
                     JSONObject jsonObject;
                     jsonObject = new JSONObject(response);
@@ -124,10 +124,10 @@ public class InterviewRepository {
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "PERSONAL INTERVIEWS JSON ERROR PARSE");
                     e.printStackTrace();
                 }
-
-
             }
         };
 
@@ -137,39 +137,13 @@ public class InterviewRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorList,
+                        application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA)
+                );
 
-                //Error de conexion a internet
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                        responseMsgErrorList.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.SERVER_ERROR) + errorObject);
-                        responseMsgErrorList.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
             }
         };
 
@@ -189,9 +163,11 @@ public class InterviewRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
+
         isLoading.postValue(true);
         //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
         //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
@@ -238,6 +214,8 @@ public class InterviewRepository {
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "POST INTERVIEW JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -249,38 +227,13 @@ public class InterviewRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorRegistry.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorRegistry,
+                        application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ENTREVISTA)
+                );
 
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorRegistry.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ENTREVISTA), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_NUEVA_ENTREVISTA), application.getString(R.string.SERVER_ERROR) + errorObject);
-                        responseMsgErrorRegistry.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
             }
         };
 
@@ -311,6 +264,7 @@ public class InterviewRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
@@ -323,7 +277,9 @@ public class InterviewRepository {
     }
 
     public SingleLiveEvent<Interview> getPersonalInterview(Interview interview) {
+
         sendGetPersonalInterview(interview);
+
         return interviewMutableLiveData;
     }
 
@@ -358,6 +314,8 @@ public class InterviewRepository {
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "PERSONAL INTERVIEW JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -368,38 +326,13 @@ public class InterviewRepository {
             public void onErrorResponse(VolleyError error) {
 
                 isLoading.postValue(false);
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorInterview.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
 
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorInterview.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorInterview.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorInterview,
+                        application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTA)
+                );
             }
         };
 
@@ -418,6 +351,7 @@ public class InterviewRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
@@ -426,6 +360,7 @@ public class InterviewRepository {
         //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
         //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_INTERVIEW);
+
     }
 
     public void updateInterview(Interview interview) {
@@ -460,6 +395,8 @@ public class InterviewRepository {
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "PUT INTERVIEW JSON ERROR PARSE");
                     e.printStackTrace();
                 }
 
@@ -471,38 +408,13 @@ public class InterviewRepository {
             public void onErrorResponse(VolleyError error) {
 
                 isLoading.postValue(false);
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorUpdate.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
 
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorUpdate.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ENTREVISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorUpdate.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorUpdate,
+                        application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ENTREVISTA)
+                );
             }
         };
 
@@ -532,6 +444,7 @@ public class InterviewRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
@@ -547,6 +460,7 @@ public class InterviewRepository {
     }
 
     private void sendDeleteInterview(Interview interview) {
+
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -559,12 +473,14 @@ public class InterviewRepository {
                     if (jsonData.length() == 0) {
                         responseMsgDelete.postValue(application.getString(R.string.MSG_DELETE_ENTREVISTA));
                     }
+
                     isLoading.postValue(false);
+
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "DELETE INTERVIEW JSON ERROR PARSE");
                     e.printStackTrace();
                 }
-
-
             }
         };
 
@@ -574,38 +490,12 @@ public class InterviewRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorDelete.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorDelete.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorDelete.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorDelete,
+                        application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA)
+                );
             }
         };
 
@@ -626,6 +516,7 @@ public class InterviewRepository {
                 return params;
             }
         };
+
         isLoading.postValue(true);
         //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
         //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));

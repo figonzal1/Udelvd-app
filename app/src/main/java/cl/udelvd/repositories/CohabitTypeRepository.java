@@ -7,12 +7,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -48,14 +44,18 @@ public class CohabitTypeRepository {
     }
 
     public static CohabitTypeRepository getInstance(Application application) {
+
         if (instance == null) {
             instance = new CohabitTypeRepository(application);
         }
+
         return instance;
     }
 
     public MutableLiveData<List<CohabitType>> getCoexistenceType() {
+
         sendGetCoexistenceType();
+
         return coexistenceTypeMutableLiveData;
     }
 
@@ -94,6 +94,8 @@ public class CohabitTypeRepository {
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "COHABIT TYPE LIST JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -105,38 +107,13 @@ public class CohabitTypeRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorList,
+                        application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV)
+                );
 
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorList.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
             }
         };
 
@@ -156,6 +133,7 @@ public class CohabitTypeRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };

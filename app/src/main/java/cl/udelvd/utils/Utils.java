@@ -1,6 +1,7 @@
 package cl.udelvd.utils;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -19,6 +20,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
 import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
 import com.google.android.gms.common.ConnectionResult;
@@ -28,6 +34,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -398,6 +407,64 @@ public class Utils {
                 ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_adult_man, context.getTheme()));
             } else {
                 ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_grand_father, context.getTheme()));
+            }
+        }
+    }
+
+    /**
+     * Error hanlder when API not respond
+     *
+     * @param error           Volley error
+     * @param application     Application error
+     * @param singleLiveEvent LiveEvent for MSG TO UI
+     * @param tagVolleyId
+     */
+    public static void deadAPIHandler(VolleyError error, Application application, SingleLiveEvent<String> singleLiveEvent, String tagVolleyId) {
+
+
+        //TIMEOUT ERROR
+        if (error instanceof TimeoutError) {
+
+            Log.d(tagVolleyId, application.getString(R.string.TIMEOUT_ERROR));
+            singleLiveEvent.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+        }
+
+        //NETWORK ERROR
+        else if (error instanceof NetworkError) {
+
+            Log.d(tagVolleyId, application.getString(R.string.NETWORK_ERROR));
+            singleLiveEvent.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+        }
+
+        //SERVER ERROR
+        else if (error.networkResponse != null && error.networkResponse.data != null) {
+
+            String json = new String(error.networkResponse.data);
+
+            JSONObject errorObject;
+
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+
+                //AUTH ERROR
+                if (error instanceof AuthFailureError) {
+
+                    Log.d(tagVolleyId, String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
+                }
+
+                //SERVER ERROR
+                else if (error instanceof ServerError) {
+
+                    Log.d(tagVolleyId, String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
+                    singleLiveEvent.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                }
+
+            } catch (JSONException e) {
+
+                //SEND ERROR TO UI
+                singleLiveEvent.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                e.printStackTrace();
             }
         }
     }

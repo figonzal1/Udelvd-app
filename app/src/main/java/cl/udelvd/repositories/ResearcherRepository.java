@@ -48,6 +48,7 @@ public class ResearcherRepository {
     private final SingleLiveEvent<List<Researcher>> researcherFirstPageLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<List<Researcher>> researcherSgtPageLiveData = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgErrorList = new SingleLiveEvent<>();
+
     //REGISTRY
     private final SingleLiveEvent<Map<String, String>> responseMsgRegistry = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> responseMsgErrorRegistry = new SingleLiveEvent<>();
@@ -89,7 +90,9 @@ public class ResearcherRepository {
     }
 
     public SingleLiveEvent<List<Researcher>> getResearchers(int page, Researcher researcher) {
+
         sendGetResearchers(page, researcher);
+
         if (page == 1) {
             return researcherFirstPageLiveData;
         } else {
@@ -127,6 +130,7 @@ public class ResearcherRepository {
                     JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
                     for (int i = 0; i < jsonArray.length(); i++) {
+
                         JSONObject jsonInve = jsonArray.getJSONObject(i);
                         JSONObject jsonAttributes = jsonInve.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
@@ -165,9 +169,12 @@ public class ResearcherRepository {
                         //Log.d("CARGANDO_PAGINA", String.valueOf(page));
                         researcherSgtPageLiveData.postValue(researcherSgtPage); //Enviar a ViewModel listado paginado
                     }
+
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "GET RESEARCHERS PARSE ERROR");
                     e.printStackTrace();
                 }
             }
@@ -179,36 +186,17 @@ public class ResearcherRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                } else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                } else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    } else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorList.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorList,
+                        application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA)
+                );
             }
         };
 
         String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN), page, researcher.getId());
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {
@@ -221,6 +209,7 @@ public class ResearcherRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
@@ -229,6 +218,7 @@ public class ResearcherRepository {
         if (page == 1) {
             isLoading.postValue(true);
         }
+
         //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
         //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_RESEARCHER_LIST);
@@ -266,8 +256,11 @@ public class ResearcherRepository {
                     invResponse.setRolName(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+
                         invResponse.setActivated(false);
+
                     } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
+
                         invResponse.setActivated(true);
                     }
 
@@ -283,9 +276,12 @@ public class ResearcherRepository {
 
                         responseMsgRegistry.postValue(map);
                     }
+
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "REGISTRY JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -297,47 +293,57 @@ public class ResearcherRepository {
 
                 isLoading.postValue(false);
 
+                //TIMEOUT ERROR
                 if (error instanceof TimeoutError) {
+
                     Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorRegistry.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
                 }
 
-                //Error de conexion a internet
+                //NETWORK ERROR
                 else if (error instanceof NetworkError) {
+
                     Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorRegistry.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                } else if (error.networkResponse != null && error.networkResponse.data != null) {
+                }
+
+                //SERVER ERROR
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
-                    JSONObject errorObject = null;
+                    JSONObject errorObject;
 
                     try {
                         JSONObject jsonObject = new JSONObject(json);
                         errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                        responseMsgErrorRegistry.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    } else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.SERVER_ERROR) + errorObject);
+                        //AUTH ERROR
+                        if (error instanceof AuthFailureError) {
 
-                        try {
+                            Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                            responseMsgErrorRegistry.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                        }
 
-                            assert errorObject != null;
-                            //Si el error es de mail repetido, postear error msg
+                        //SERVER ERROR
+                        else if (error instanceof ServerError) {
+
+                            Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.SERVER_ERROR) + errorObject);
+
+                            //MAIL REPEATED
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG))) {
+
                                 responseMsgErrorRegistry.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
                             } else {
                                 responseMsgErrorRegistry.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
+                    } catch (JSONException e) {
+
+                        //SEND ERROR TO UI
+                        responseMsgErrorRegistry.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        e.printStackTrace();
                     }
                 }
             }
@@ -364,8 +370,10 @@ public class ResearcherRepository {
 
             @Override
             public Map<String, String> getHeaders() {
+
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+
                 return params;
             }
         };
@@ -412,8 +420,11 @@ public class ResearcherRepository {
                     invResponse.setCreateTime(jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME)));
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+
                         invResponse.setActivated(false);
+
                     } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
+
                         invResponse.setActivated(true);
                     }
 
@@ -449,11 +460,16 @@ public class ResearcherRepository {
                         result.put(application.getString(R.string.LOGIN_MSG_VM), application.getString(R.string.LOGIN_MSG_VM_WELCOME));
 
                         responseMsgLogin.postValue(result);
+
                     } else {
                         responseMsgErrorLogin.postValue(application.getString(R.string.SNACKBAR_CUENTA_WAIT));
                     }
+
                     isLoading.postValue(false);
+
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "LOGIN JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -464,54 +480,65 @@ public class ResearcherRepository {
             public void onErrorResponse(VolleyError error) {
 
                 isLoading.postValue(false);
+
+                //TIMEOUT ERROR
                 if (error instanceof TimeoutError) {
+
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                } else if (error instanceof NetworkError) {
+                }
+
+                //INTERNET ERROR
+                else if (error instanceof NetworkError) {
+
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorLogin.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                } else if (error.networkResponse != null && error.networkResponse.data != null) {
+                }
+
+                //SERVER ERROR
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
-                    JSONObject errorObject = null;
+                    JSONObject errorObject;
 
                     try {
                         JSONObject jsonObject = new JSONObject(json);
                         errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        //AUTH ERROR
+                        if (error instanceof AuthFailureError) {
 
-                        try {
-                            assert errorObject != null;
+                            Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
 
+                            //PARSE AUTH ERROR API
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_AUTH_MSG))) {
+
                                 responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_AUTH_MSG_VM));
                             } else {
                                 responseMsgErrorLogin.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    } else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.SERVER_ERROR) + errorObject);
 
-                        try {
-                            assert errorObject != null;
+                        //SERVER ERROR
+                        else if (error instanceof ServerError) {
 
-                            //Si el error es de email no existente
+                            Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.SERVER_ERROR) + errorObject);
+
+                            //MAIL NOT REGISTERED
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
+
                                 responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
                             } else {
                                 responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
+
+                    } catch (JSONException e) {
+
+                        //Send error to UI
+                        responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        e.printStackTrace();
                     }
                 }
             }
@@ -523,19 +550,24 @@ public class ResearcherRepository {
                 errorListener) {
             @Override
             protected Map<String, String> getParams() {
+
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.KEY_INVES_EMAIL), researcherForm.getEmail());
                 params.put(application.getString(R.string.KEY_INVES_PASSWORD), researcherForm.getPassword());
+
                 return params;
             }
 
             @Override
             public Map<String, String> getHeaders() {
+
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+
                 return params;
             }
         };
+
         isLoading.postValue(true);
         //VolleySingleton.getInstance(application).addToRequestQueue(request,
         //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
@@ -555,9 +587,7 @@ public class ResearcherRepository {
                 //Log.d("RESPONSE", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-
                     JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-
 
                     //Investigador actualizado
                     Researcher invResponse = new Researcher();
@@ -571,8 +601,11 @@ public class ResearcherRepository {
                     invResponse.setIdRole(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+
                         invResponse.setActivated(false);
+
                     } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
+
                         invResponse.setActivated(true);
                     }
 
@@ -596,8 +629,12 @@ public class ResearcherRepository {
 
                         responseMsgUpdate.postValue(result);
                     }
+
                     isLoading.postValue(false);
+
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "UPDATE JSON ERROR PARSE");
                     e.printStackTrace();
                 }
 
@@ -610,44 +647,12 @@ public class ResearcherRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorUpdate.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                //Error de conexion a internet
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorUpdate.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                //Errores cuando el servidor si response
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    //Obtener json error
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    //Error de autorizacion
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                        responseMsgErrorUpdate.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    }
-
-                    //Error de servidor
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE), application.getString(R.string.SERVER_ERROR) + errorObject);
-                        responseMsgErrorUpdate.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorUpdate,
+                        application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE)
+                );
             }
         };
 
@@ -680,6 +685,7 @@ public class ResearcherRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
@@ -724,8 +730,12 @@ public class ResearcherRepository {
 
                         Log.d(application.getString(R.string.TAG_DYNAMIC_LINK_JSON), dybamicLink);
                     }
+
                     isLoading.postValue(false);
+
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "RECOVERY JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -737,54 +747,69 @@ public class ResearcherRepository {
 
                 isLoading.postValue(false);
 
+                //TIMEOUT ERROR
                 if (error instanceof TimeoutError) {
+
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.TIMEOUT_ERROR));
                     responseMsgErrorRecovery.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                } else if (error instanceof NetworkError) {
+                }
+
+                //NETWORK ERROR
+                else if (error instanceof NetworkError) {
+
                     Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.NETWORK_ERROR));
                     responseMsgErrorRecovery.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                } else if (error.networkResponse != null && error.networkResponse.data != null) {
+                }
+
+                //SERVER ERROR
+                else if (error.networkResponse != null && error.networkResponse.data != null) {
 
                     String json = new String(error.networkResponse.data);
 
-                    JSONObject errorObject = null;
+                    JSONObject errorObject;
 
                     try {
                         JSONObject jsonObject = new JSONObject(json);
                         errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                        responseMsgErrorRecovery.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    } else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.SERVER_ERROR) + errorObject);
+                        //AUTH ERROR
+                        if (error instanceof AuthFailureError) {
 
-                        try {
-                            assert errorObject != null;
+                            Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                            responseMsgErrorRecovery.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
+                        }
+
+                        //SERVER ERROR
+                        else if (error instanceof ServerError) {
+
+                            Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.SERVER_ERROR) + errorObject);
+
                             if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
+
                                 responseMsgErrorRecovery.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
                             } else {
                                 responseMsgErrorRecovery.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
+                    } catch (JSONException e) {
 
+                        //Send error to UI
+                        responseMsgErrorRecovery.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                        e.printStackTrace();
                     }
                 }
             }
         };
 
         String url = String.format(application.getString(R.string.URL_GET_RECUPERAR_INVESTIGADOR), application.getString(R.string.HEROKU_DOMAIN), researcher.getEmail(), Utils.getLanguage(application));
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() {
+
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+
                 return params;
             }
         };
@@ -817,11 +842,15 @@ public class ResearcherRepository {
                     String status = jsonReset.getString(application.getString(R.string.JSON_RESET_STATUS));
 
                     if (status.equals(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM))) {
+
                         responseMsgReset.postValue(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM_RESULT));
                     }
+
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "PASSWORD RESET JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -833,33 +862,12 @@ public class ResearcherRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorReset.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                } else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorReset.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                } else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                        responseMsgErrorReset.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    } else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET), application.getString(R.string.SERVER_ERROR) + errorObject);
-                        responseMsgErrorReset.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorReset,
+                        application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET)
+                );
             }
         };
 
@@ -869,9 +877,11 @@ public class ResearcherRepository {
 
             @Override
             protected Map<String, String> getParams() {
+
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.KEY_INVES_PASSWORD), password);
                 params.put(application.getString(R.string.KEY_INVES_EMAIL), email);
+
                 return params;
             }
 
@@ -880,6 +890,7 @@ public class ResearcherRepository {
 
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
+
                 return params;
             }
         };
@@ -911,6 +922,7 @@ public class ResearcherRepository {
                     invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+
                         invResponse.setActivated(false);
                     } else {
                         invResponse.setActivated(true);
@@ -920,13 +932,18 @@ public class ResearcherRepository {
                             (researcher.isActivated() == invResponse.isActivated())) {
 
                         if (researcher.isActivated()) {
+
                             responseMsgActivation.postValue(application.getString(R.string.MSG_INVEST_CUENTA_ACTIVADA));
                         } else {
                             responseMsgActivation.postValue(application.getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA));
                         }
                     }
+
                     isActivated.postValue(false);
+
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "ACTIVATION JSON ERROR PARSE");
                     e.printStackTrace();
                 }
             }
@@ -935,36 +952,15 @@ public class ResearcherRepository {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 isActivated.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorActivation.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                } else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorActivation.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                } else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-                    //Log.d("JSON", json);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                        responseMsgErrorActivation.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                    } else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR), application.getString(R.string.SERVER_ERROR) + errorObject);
-                        responseMsgErrorActivation.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorActivation,
+                        application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR)
+                );
             }
         };
 
@@ -974,12 +970,17 @@ public class ResearcherRepository {
 
             @Override
             protected Map<String, String> getParams() {
+
                 Map<String, String> params = new HashMap<>();
+
                 if (researcher.isActivated()) {
+
                     params.put(application.getString(R.string.KEY_INVES_ACTIVADO), String.valueOf(1));
                 } else {
+
                     params.put(application.getString(R.string.KEY_INVES_ACTIVADO), String.valueOf(0));
                 }
+
                 return params;
             }
 
@@ -994,6 +995,7 @@ public class ResearcherRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };

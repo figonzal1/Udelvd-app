@@ -211,6 +211,7 @@
     <string name="KEY_STAT_URL" translatable="false">url</string>
     <string name="KEY_STAT_NAME_ES" translatable="false">nombre_es</string>
     <string name="KEY_STAT_NAME_EN" translatable="false">nombre_en</string>
+    <string name="KEY_STAT_PIN_PASS" translatable="false">pin_pass</string>
 
     <string name="KEY_CREATE_TIME" translatable="false">create_time</string>
     <string name="KEY_UPDATE_TIME" translatable="false">update_time</string>
@@ -595,5 +596,6 @@
     <string name="tipos_entrevistas">Interviews types</string>
     <string name="normal_interviews">Normal: These are interviews that contain daily events that occur on an ordinary day.</string>
     <string name="extraordinary_interviews">" Extraordinary: They are interviews that contain daily events that occur sporadically."</string>
+
 
 </resources>

@@ -7,12 +7,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -47,14 +43,18 @@ public class CivilStateRepository {
     }
 
     public static CivilStateRepository getInstance(Application application) {
+
         if (instance == null) {
             instance = new CivilStateRepository(application);
         }
+
         return instance;
     }
 
     public MutableLiveData<List<CivilState>> getCivilStates() {
+
         sendGetCivilStates();
+
         return civilStateMutable;
     }
 
@@ -93,6 +93,8 @@ public class CivilStateRepository {
                     isLoading.postValue(false);
 
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "CIVIL STATES JSON PARSE ERROR");
                     e.printStackTrace();
                 }
             }
@@ -104,39 +106,12 @@ public class CivilStateRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
-
-                else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
-
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
-
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    }
-
-                    //Error de servidor
-                    else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorList.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorList,
+                        application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL)
+                );
             }
         };
 
@@ -156,6 +131,7 @@ public class CivilStateRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };

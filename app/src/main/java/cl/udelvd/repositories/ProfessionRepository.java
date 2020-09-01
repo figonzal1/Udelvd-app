@@ -7,12 +7,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -29,6 +25,7 @@ import cl.udelvd.R;
 import cl.udelvd.models.Profession;
 import cl.udelvd.services.VolleySingleton;
 import cl.udelvd.utils.SingleLiveEvent;
+import cl.udelvd.utils.Utils;
 
 public class ProfessionRepository {
 
@@ -47,14 +44,18 @@ public class ProfessionRepository {
     }
 
     public static ProfessionRepository getInstance(Application application) {
+
         if (instance == null) {
             instance = new ProfessionRepository(application);
         }
+
         return instance;
     }
 
     public MutableLiveData<List<Profession>> getProfessions() {
+
         sendGetProfession();
+
         return professionMutableLiveData;
     }
 
@@ -90,7 +91,10 @@ public class ProfessionRepository {
                     professionMutableLiveData.postValue(professionList);
 
                     isLoading.postValue(false);
+
                 } catch (JSONException e) {
+
+                    Log.d("JSON_ERROR", "PROFESION JSON ERROR PARSE");
                     e.printStackTrace();
                 }
 
@@ -103,32 +107,13 @@ public class ProfessionRepository {
 
                 isLoading.postValue(false);
 
-                if (error instanceof TimeoutError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                } else if (error instanceof NetworkError) {
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorList.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                } else if (error.networkResponse != null && error.networkResponse.data != null) {
+                Utils.deadAPIHandler(
+                        error,
+                        application,
+                        responseMsgErrorList,
+                        application.getString(R.string.TAG_VOLLEY_ERR_PROFESION)
+                );
 
-                    String json = new String(error.networkResponse.data);
-
-                    JSONObject errorObject = null;
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (error instanceof AuthFailureError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), String.format("%s %s", application.getString(R.string.AUTHENTICATION_ERROR), errorObject));
-                    } else if (error instanceof ServerError) {
-                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_PROFESION), String.format("%s %s", application.getString(R.string.SERVER_ERROR), errorObject));
-                        responseMsgErrorList.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                    }
-                }
             }
         };
 
@@ -147,9 +132,11 @@ public class ProfessionRepository {
                 Map<String, String> params = new HashMap<>();
                 params.put(application.getString(R.string.JSON_CONTENT_TYPE), application.getString(R.string.JSON_CONTENT_TYPE_MSG));
                 params.put(application.getString(R.string.JSON_AUTH), String.format("%s %s", application.getString(R.string.JSON_AUTH_MSG), token));
+
                 return params;
             }
         };
+
         isLoading.postValue(true);
 
         //VolleySingleton.getInstance(application).addToRequestQueue(request,

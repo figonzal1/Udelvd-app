@@ -22,6 +22,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import cl.udelvd.R;
@@ -48,35 +49,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         if (notificationManager != null) {
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
 
-        Log.d(context.getString(R.string.TAG_FIREBASE_CHANNEL), context.getString(R.string.FIREBASE_CHANNEL_CREATED));
-        FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_CHANNEL) + context.getString(R.string.FIREBASE_CHANNEL_CREATED));
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            Log.d(context.getString(R.string.TAG_FIREBASE_CHANNEL), context.getString(R.string.FIREBASE_CHANNEL_CREATED));
+            FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_CHANNEL) + context.getString(R.string.FIREBASE_CHANNEL_CREATED));
+
+        } else {
+            Log.d(context.getString(R.string.TAG_FIREBASE_CHANNEL), context.getString(R.string.FIREBASE_CHANNEL_NOT_CREATED));
+            FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_CHANNEL) + context.getString(R.string.FIREBASE_CHANNEL_NOT_CREATED));
+        }
     }
 
     public static void suscriptionTheme(final Context context) {
+
+        //Subscribte to notifications
         FirebaseMessaging.getInstance().subscribeToTopic(context.getString(R.string.TEMA_NOTIFICACION_REGISTRO))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+
                         if (task.isSuccessful()) {
 
                             Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_OK));
                             FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_OK));
-
-                            //CRASH ANALYTIC LOG
-                                /*Crashlytics.setBool(activity.getString(R.string.FIREBASE_PREF_KEY)
-                                        , true);
-                                Crashlytics.log(Log.DEBUG,
-                                        activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION),
-                                        activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION_OK));*/
                         }
                     }
                 });
     }
 
     public static void deleteSuscriptionTheme(final Context context) {
+
         FirebaseMessaging.getInstance().unsubscribeFromTopic(context.getString(R.string.TEMA_NOTIFICACION_REGISTRO))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -84,12 +87,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         //LOG ZONE
                         Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_ELIMINADA));
                         FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_ELIMINADA));
-
-                        /*Crashlytics.log(Log.DEBUG,
-                                activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION),
-                                activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION_DELETE));
-                        Crashlytics.setBool(activity.getString(R.string.FIREBASE_PREF_KEY)
-                                , false);*/
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -98,9 +95,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                         Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_ERRONEA));
                         FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_ERRONEA));
-                        /*Crashlytics.log(Log.DEBUG,
-                                activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION),
-                                activity.getString(R.string.TAG_FIREBASE_SUSCRIPTION_ALREADY));*/
                     }
                 });
     }
@@ -113,17 +107,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(getString(R.string.FIREBASE_MESSAGE), "From: " + remoteMessage.getFrom());
         FirebaseCrashlytics.getInstance().log(getString(R.string.FIREBASE_MESSAGE) + "From: " + remoteMessage.getFrom());
 
-        // Check if message contains a data payload.
+        // Check if message contains a data payload. (Notification from API SERVER)
         if (remoteMessage.getData().size() > 0) {
+
             Log.d(getString(R.string.FIREBASE_MESSAGE_DATA), "Message data payload: " + remoteMessage.getData());
 
-            /*Crashlytics.log(Log.DEBUG, getString(R.string.TAG_FIREBASE_MESSAGE),
-                    getString(R.string.TAG_FIREBASE_MESSAGE_DATA_INCOMING));
-            Crashlytics.setBool(getString(R.string.FIREBASE_MESSAGE_DATA_STATUS), true);*/
-
             //Obtener datos y mostrar notificacion
-            showNotification(remoteMessage);
+            showNotificationResearchers(remoteMessage);
 
+        }
+
+        //Notification comming from FCM
+        if (remoteMessage.getNotification() != null) {
+
+            Log.d(getString(R.string.FIREBASE_MESSAGE_NOTIFICATION), "Message notification: " + remoteMessage.getNotification().getTitle() + " - " + remoteMessage.getNotification().getBody());
+
+            showNotificationGeneric(remoteMessage);
+        }
+    }
+
+    private void showNotificationGeneric(RemoteMessage remoteMessage) {
+
+        String title = Objects.requireNonNull(remoteMessage.getNotification()).getTitle();
+        String description = remoteMessage.getNotification().getBody();
+
+        if (title != null && description != null) {
+
+            //Maneja la notificacion cuando esta en foreground
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "1")
+                    .setContentTitle(title)
+                    .setContentText(description)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(description))
+                    .setSmallIcon(R.drawable.ic_logo_notification_1200)
+                    .setAutoCancel(true);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            int notificationId = new Random().nextInt(60000);
+
+            //Notificar a sistema
+            notificationManager.notify(notificationId, mBuilder.build());
         }
     }
 
@@ -132,15 +155,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param remoteMessage fcm msg
      */
-    private void showNotification(RemoteMessage remoteMessage) {
+    private void showNotificationResearchers(RemoteMessage remoteMessage) {
 
         Map<String, String> mParams = remoteMessage.getData();
 
         String title, description;
 
         if (Utils.getLanguage(getApplicationContext()).equals(getString(R.string.ESPANOL))) {
+
             title = mParams.get(getString(R.string.NOTIFICACION_TITULO_ES));
             description = mParams.get(getString(R.string.NOTIFICACION_DESCRIPCION_ES));
+
         } else {
             title = mParams.get(getString(R.string.NOTIFICACION_TITULO_EN));
             description = mParams.get(getString(R.string.NOTIFICACION_DESCRIPCION_EN));
@@ -150,12 +175,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         boolean expired = Utils.jwtStatus(getApplicationContext(), sharedPreferences);
         Intent intent;
+
         if (expired) {
+
             intent = new Intent(this, LoginActivity.class);
             intent.putExtra(getString(R.string.NOTIFICACION_INTENT_ACTIVADO), true);
+
         } else {
             intent = new Intent(this, ResearcherListActivity.class);
         }
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent mPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -172,7 +201,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         int notificationId = new Random().nextInt(60000);
+
         if (notificationManager != null) {
             notificationManager.notify(notificationId, mBuilder.build());
         }
@@ -184,7 +215,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onNewToken(s);
         Log.d(getString(R.string.TAG_FIREBASE_TOKEN), "Refreshed Token:" + s);
         FirebaseCrashlytics.getInstance().setUserId(s);
-        //Crashlytics.setUserIdentifier(s);
     }
 
     @SuppressWarnings("EmptyMethod")

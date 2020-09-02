@@ -64,6 +64,7 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ActionView
         holder.ivMenuAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 PopupMenu popupMenu = new PopupMenu(context, holder.ivMenuAction);
                 popupMenu.inflate(R.menu.menu_holder_action);
 
@@ -72,6 +73,7 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ActionView
                     public boolean onMenuItemClick(MenuItem item) {
 
                         if (item.getItemId() == R.id.menu_edit_action) {
+
                             Intent intent = new Intent(context, EditActionActivity.class);
 
                             Bundle bundle = new Bundle();
@@ -81,10 +83,14 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ActionView
 
                             intent.putExtras(bundle);
                             activity.startActivityForResult(intent, REQUEST_CODE_EDITAR_ACTION);
+
                             return true;
+
                         } else if (item.getItemId() == R.id.menu_delete_action) {
+
                             DeleteActionDialogFragment dialog = new DeleteActionDialogFragment(action);
                             dialog.show(fragmentManager, TAG_DELETE_DIALOG_ACTION);
+
                             return true;
                         }
 
@@ -107,11 +113,14 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ActionView
     }
 
     public void updateList(List<Action> accionesList) {
+
         this.actionsList = accionesList;
+
         notifyDataSetChanged();
     }
 
     static class ActionViewHolder extends RecyclerView.ViewHolder {
+
         private final ImageView ivMenuAction;
         private TextView tvAction;
         private TextView tvEnglish;

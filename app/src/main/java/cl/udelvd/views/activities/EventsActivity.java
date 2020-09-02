@@ -92,6 +92,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
     private void getBundleData() {
 
         if (getIntent().getExtras() != null) {
+
             Bundle bundle = getIntent().getExtras();
 
             interview = new Interview();
@@ -162,9 +163,11 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
             public void onChanged(Boolean aBoolean) {
 
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
                     viewPager.setVisibility(View.INVISIBLE);
                     cvInfo.setVisibility(View.INVISIBLE);
+
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     viewPager.setVisibility(View.VISIBLE);
@@ -179,13 +182,16 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
             public void onChanged(List<Event> events) {
 
                 if (events != null) {
+
                     eventList = events;
                     progressBar.setVisibility(View.INVISIBLE);
                     viewPager.setVisibility(View.VISIBLE);
                     cvInfo.setVisibility(View.VISIBLE);
 
                     if (eventList.size() == 0) {
+
                         tvEmptyEvents.setVisibility(View.VISIBLE);
+
                     } else {
                         tvEmptyEvents.setVisibility(View.INVISIBLE);
                         fragmentStatePageAdapter.updateList(eventList);
@@ -207,6 +213,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                 cvInfo.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
+
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     fragmentStatePageAdapter.notifyDataSetChanged();
@@ -224,13 +231,16 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
             public void onChanged(String s) {
 
                 if (s.equals(getString(R.string.MSG_DELETE_EVENTO))) {
+
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_LONG, s, null);
                     EventRepository.getInstance(getApplication()).getInterviewEvents(interview);
 
                     fragmentStatePageAdapter.notifyDataSetChanged();
-                    Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
+                    Objects.requireNonNull(viewPager.getAdapter(), "View pager cannot be null").notifyDataSetChanged();
+
                 }
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
@@ -243,13 +253,17 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
+
                     isSnackBarShow = true;
 
                     if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
                         showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_INDEFINITE, s, null);
+
                     } else {
                         showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_LONG, s, null);
                     }
+
                     fragmentStatePageAdapter.notifyDataSetChanged();
                 }
 
@@ -266,6 +280,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
         fabNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(EventsActivity.this, NewEventActivity.class);
                 intent.putExtra(getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
                 startActivityForResult(intent, REQUEST_CODE_NEW_EVENT);
@@ -285,15 +300,18 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        } else if (item.getItemId() == R.id.menu_refresh) {
 
+            finish();
+
+            return true;
+
+        } else if (item.getItemId() == R.id.menu_refresh) {
 
             progressBar.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.INVISIBLE);
 
             isSnackBarShow = false;
+
             if (snackbar != null) {
                 snackbar.dismiss();
             }
@@ -313,6 +331,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
         snackbar = Snackbar.make(v, title, snack_length);
 
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -321,15 +340,16 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                     viewPager.setVisibility(View.INVISIBLE);
 
                     isSnackBarShow = false;
+
                     if (snackbar != null) {
                         snackbar.dismiss();
                     }
-
 
                     eventListViewModel.refreshEvents(interview);
                 }
             });
         }
+
         snackbar.show();
         isSnackBarShow = false;
     }
@@ -341,12 +361,11 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
 
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-                assert bundle != null;
-                String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
+                Bundle bundle = Objects.requireNonNull(data, "Extras cannot be null").getExtras();
+                String msg_registro = Objects.requireNonNull(bundle, "Msg_registro cannot be null").getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
 
                 if (msg_registro != null) {
+
                     isSnackBarShow = false;
                     showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_LONG, msg_registro, null);
                     eventListViewModel.refreshEvents(interview);
@@ -354,16 +373,16 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
                     fragmentStatePageAdapter.notifyDataSetChanged();
                 }
             }
+
         } else if (requestCode == REQUEST_CODE_EDIT_EVENT) {
 
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-                assert bundle != null;
-                String msg_actualizacion = bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
+                Bundle bundle = Objects.requireNonNull(data, "Extras cannot be null").getExtras();
+                String msg_actualizacion = Objects.requireNonNull(bundle, "Msg_actualizacion cannot be null").getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
 
                 if (msg_actualizacion != null) {
+
                     isSnackBarShow = false;
                     showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_LONG, msg_actualizacion, null);
                     eventListViewModel.refreshEvents(interview);
@@ -378,6 +397,7 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
 
     @Override
     public void onDialogPositiveClick(Object object) {
+
         EventRepository.getInstance(getApplication()).deleteEvent((Event) object);
         fragmentStatePageAdapter.notifyDataSetChanged();
     }

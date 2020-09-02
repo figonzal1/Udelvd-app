@@ -10,6 +10,7 @@ import java.util.List;
 import cl.udelvd.models.City;
 
 public class CityAdapter extends ArrayAdapter<City> {
+
     public CityAdapter(@NonNull Context context, int resource, List<City> cityList) {
         super(context, resource, cityList);
     }

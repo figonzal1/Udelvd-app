@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -147,7 +148,14 @@ public class IntervieweeRepository {
                         interviewee.setLastName(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
                         interviewee.setGender(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                        Date birthDate = Utils.stringToDate(application, false, jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                        Date birthDate = null;
+                        try {
+                            birthDate = Utils.stringToDate(application, false, jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                        } catch (ParseException e) {
+
+                            Log.d("STRING_TO_DATE", "Parse exception error");
+                            e.printStackTrace();
+                        }
                         interviewee.setBirthDate(birthDate);
 
                         City city = new City();
@@ -337,7 +345,14 @@ public class IntervieweeRepository {
                         entResponse.setFalls(true);
                     }
 
-                    Date birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    Date birthDate = null;
+                    try {
+                        birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    } catch (ParseException e) {
+
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
                     entResponse.setBirthDate(birthDate);
 
                     entResponse.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
@@ -478,7 +493,14 @@ public class IntervieweeRepository {
                     interviewee.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
                     interviewee.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                    Date birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    Date birthDate = null;
+                    try {
+                        birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    } catch (ParseException e) {
+
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
                     interviewee.setBirthDate(birthDate);
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
@@ -510,6 +532,7 @@ public class IntervieweeRepository {
                     String idEducationalLevel = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL));
 
                     if (!idEducationalLevel.equals(application.getString(R.string.NULL))) {
+
                         EducationalLevel educationalLevel = new EducationalLevel();
                         educationalLevel.setId(Integer.parseInt(idEducationalLevel));
 
@@ -616,7 +639,13 @@ public class IntervieweeRepository {
                     intervieweeInternet.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
 
-                    Date birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    Date birthDate = null;
+                    try {
+                        birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    } catch (ParseException e) {
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
                     intervieweeInternet.setBirthDate(birthDate);
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
@@ -764,6 +793,7 @@ public class IntervieweeRepository {
                         responseMsgDelete.postValue(application.getString(R.string.MSG_DELETE_ENTREVISTADO));
                     }
                     isLoading.postValue(false);
+
                 } catch (JSONException e) {
 
                     Log.d("JSON_ERROR", "DELETE INTERVIEWEE JSON ERROR PARSE");

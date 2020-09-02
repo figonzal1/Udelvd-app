@@ -18,17 +18,20 @@ public class ResetPassViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<Boolean> isLoading() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> showMsgErrorReset() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgErrorReset();
 
     }
 
     public SingleLiveEvent<String> showMsgReset() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgReset();
     }

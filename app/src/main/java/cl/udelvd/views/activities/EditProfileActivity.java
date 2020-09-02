@@ -110,7 +110,9 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
         editProfileViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
 
                     ilName.setEnabled(false);
@@ -124,6 +126,7 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
 
                     ilConfirmacionPassword.setEnabled(false);
                     etConfirmacionPassword.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
 
@@ -176,15 +179,19 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
 
                         progressBar.setVisibility(View.GONE);
 
-                        assert msgUpdate != null;
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE), msgUpdate);
-                        crashlytics.log(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE) + msgUpdate);
+                        if (msgUpdate != null) {
 
-                        if (msgUpdate.equals(getString(R.string.UPDATE_MSG_VM_SAVE))) {
-                            Intent intent = getIntent();
-                            intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), msgUpdate);
-                            setResult(RESULT_OK, intent);
-                            finish();
+                            Log.d(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE), msgUpdate);
+
+                            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE) + msgUpdate);
+
+                            if (msgUpdate.equals(getString(R.string.UPDATE_MSG_VM_SAVE))) {
+
+                                Intent intent = getIntent();
+                                intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), msgUpdate);
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
                         }
                     }
                 }
@@ -227,12 +234,14 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
     }
 
     private void loadResearcherData() {
+
         etName.setText(researcher.getName());
         etLastName.setText(researcher.getLastName());
         etEmail.setText(researcher.getEmail());
     }
 
     private void configSwitchPasswordOptional() {
+
         switchCompat = findViewById(R.id.switch_password_on);
 
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -260,8 +269,8 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
 
         int errorCounter = 0;
 
-
         if (TextUtils.isEmpty(etName.getText())) {
+
             ilName.setErrorEnabled(true);
             ilName.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
@@ -276,6 +285,7 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
             ilLastName.setErrorEnabled(true);
             ilLastName.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilLastName.setErrorEnabled(false);
         }
@@ -286,13 +296,15 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
             ilEmail.setErrorEnabled(true);
             ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
 
-
             if (Utils.isInvalidEmail(etEmail.getText())) {
+
                 ilEmail.setErrorEnabled(true);
                 ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 errorCounter++;
+
             } else {
                 ilEmail.setErrorEnabled(false);
             }
@@ -301,24 +313,31 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
         if (switchCompat.isChecked()) {
 
             if (TextUtils.isEmpty(etPassword.getText())) {
+
                 ilPassword.setErrorEnabled(true);
                 ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 errorCounter++;
-            } else if (Objects.requireNonNull(etPassword.getText()).length() < 8) {
+
+            } else if (Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").length() < 8) {
+
                 ilPassword.setErrorEnabled(true);
                 ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
                 errorCounter++;
+
             } else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
+
                 ilConfirmacionPassword.setErrorEnabled(true);
                 ilConfirmacionPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
                 errorCounter++;
+
             } else {
 
+                if (!etPassword.getText().toString().equals(Objects.requireNonNull(etConfirmacionPassword.getText(), "Et conf password cannot be null").toString())) {
 
-                if (!etPassword.getText().toString().equals(Objects.requireNonNull(etConfirmacionPassword.getText()).toString())) {
                     ilConfirmacionPassword.setErrorEnabled(true);
                     ilConfirmacionPassword.setError(getString(R.string.VALIDACION_PASSWORD_NO_IGUALES));
                     errorCounter++;
+
                 } else {
                     errorCounter = 0;
                     ilPassword.setErrorEnabled(false);
@@ -326,7 +345,6 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
                 }
             }
         }
-
 
         return errorCounter == 0;
     }
@@ -343,25 +361,27 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
+
             finish();
+
             return true;
+
         } else if (item.getItemId() == R.id.menu_save) {
 
             if (validateFields()) {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-
                 Researcher invesUpdate = new Researcher();
 
                 invesUpdate.setId(researcher.getId());
-                invesUpdate.setName(Objects.requireNonNull(etName.getText()).toString());
-                invesUpdate.setLastName(Objects.requireNonNull(etLastName.getText()).toString());
-                invesUpdate.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
+                invesUpdate.setName(Objects.requireNonNull(etName.getText(), "Et name cannot be null").toString());
+                invesUpdate.setLastName(Objects.requireNonNull(etLastName.getText(), "Et last name cannot be null").toString());
+                invesUpdate.setEmail(Objects.requireNonNull(etEmail.getText(), "Et email cannot be null").toString());
 
                 if (switchCompat.isChecked()) {
                     //Nueva pass
-                    invesUpdate.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
+                    invesUpdate.setPassword(Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").toString());
                 } else {
                     //Pass antigua
                     invesUpdate.setPassword(researcher.getPassword());

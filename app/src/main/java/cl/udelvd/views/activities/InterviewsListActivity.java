@@ -24,11 +24,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.adapters.InterviewAdapter;
@@ -88,7 +90,9 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
     }
 
     private void getBundleData() {
+
         if (getIntent().getExtras() != null) {
+
             Bundle bundle = getIntent().getExtras();
 
             interviewee = new Interviewee();
@@ -104,11 +108,19 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
             interviewee.setName(nameInterview);
             interviewee.setLastName(lastNameInterview);
             interviewee.setGender(genre);
-            interviewee.setBirthDate(Utils.stringToDate(getApplicationContext(), false, birthDate));
+
+            try {
+                interviewee.setBirthDate(Utils.stringToDate(getApplicationContext(), false, birthDate));
+            } catch (ParseException e) {
+
+                Log.d("STRING_TO_DATE", "Parse exception error");
+                e.printStackTrace();
+            }
         }
     }
 
     private void instantiateInterfaceResources() {
+
         interviewList = new ArrayList<>();
 
         progressBar = findViewById(R.id.progress_bar_interviews);
@@ -146,6 +158,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                 interviewee,
                 params,
                 REQUEST_CODE_EDIT_INTERVIEW);
+
         rv.setAdapter(interviewAdapter);
     }
 
@@ -154,11 +167,14 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
         interviewListViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
                     tvEmptyInterviews.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.INVISIBLE);
                     cvInfo.setVisibility(View.INVISIBLE);
+
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
@@ -172,10 +188,10 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
         interviewListViewModel.loadInterviews(interviewee).observe(this, new Observer<List<Interview>>() {
             @Override
             public void onChanged(List<Interview> interviews) {
+
                 if (interviews != null) {
 
                     interviewList = interviews;
-
 
                     if (interviews.size() == 1) {
                         tvNInterviews.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), interviews.size()));
@@ -192,7 +208,6 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                     } else {
                         tvEmptyInterviews.setVisibility(View.INVISIBLE);
                     }
-
 
                     Map<String, Integer> types = countTypes(interviews);
                     tvNormalInterview.setText(String.valueOf(types.get(getString(R.string.INTENT_KEY_NORMALES))));
@@ -223,10 +238,13 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                 cvInfo.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
+
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     interviewAdapter.notifyDataSetChanged();
+
                 }
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -240,10 +258,13 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTA))) {
+
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, s, null);
                     InterviewRepository.getInstance(getApplication()).getPersonalInterviews(interviewee);
+
                 }
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
             }
@@ -259,10 +280,13 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                 if (!isSnackBarShow) {
 
                     if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
                         showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_INDEFINITE, s, null);
+
                     } else {
                         showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, s, null);
                     }
+
                     interviewAdapter.notifyDataSetChanged();
                 }
 
@@ -273,10 +297,13 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
     }
 
     private void floatingButtonNewInterview() {
+
         FloatingActionButton fabNewInterviews = findViewById(R.id.fb_new_interview);
+
         fabNewInterviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(InterviewsListActivity.this, NewInterviewActivity.class);
                 intent.putExtra(getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
                 startActivityForResult(intent, REQUEST_CODE_NEW_INTERVIEW);
@@ -291,13 +318,20 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
      * @return Map with normal and extraordinary counts
      */
     private Map<String, Integer> countTypes(List<Interview> interviews) {
+
         int normals = 0;
         int extraordinaries = 0;
+
         for (int i = 0; i < interviews.size(); i++) {
+
             if (interviews.get(i).getInterviewType().getName().equals(getString(R.string.NORMAL))) {
+
                 normals++;
+
             } else if (interviews.get(i).getInterviewType().getName().equals(getString(R.string.EXTRAORDINARIA))) {
+
                 extraordinaries++;
+
             }
         }
 
@@ -311,7 +345,9 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
     public void showSnackbar(View v, int tipo_snackbar, String title, String action) {
 
         snackbar = Snackbar.make(v, title, tipo_snackbar);
+
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -319,15 +355,16 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
                     progressBar.setVisibility(View.VISIBLE);
 
                     isSnackBarShow = false;
+
                     if (snackbar != null) {
                         snackbar.dismiss();
                     }
-
 
                     interviewListViewModel.refreshInterviews(interviewee);
                 }
             });
         }
+
         snackbar.show();
         isSnackBarShow = false;
     }
@@ -342,17 +379,25 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         if (item.getItemId() == android.R.id.home) {
+
             finish();
+
             return true;
+
         } else if (item.getItemId() == R.id.menu_refresh) {
 
             progressBar.setVisibility(View.VISIBLE);
+
             isSnackBarShow = false;
+
             if (snackbar != null) {
                 snackbar.dismiss();
             }
+
             interviewListViewModel.refreshInterviews(interviewee);
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -362,27 +407,28 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if (requestCode == REQUEST_CODE_NEW_INTERVIEW) {
+
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-                assert bundle != null;
-                showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO)), null);
+                Bundle bundle = Objects.requireNonNull(data, "Extras cannot be null").getExtras();
+                showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, Objects.requireNonNull(bundle, "Msg-registro cannot be null").getString(getString(R.string.INTENT_KEY_MSG_REGISTRO)), null);
 
                 interviewListViewModel.refreshInterviews(interviewee);
             }
+
         } else if (requestCode == REQUEST_CODE_EDIT_INTERVIEW) {
+
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-                assert bundle != null;
-                showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION)), null);
+                Bundle bundle = Objects.requireNonNull(data, "Data cannot be null").getExtras();
+                showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, Objects.requireNonNull(bundle, "Msg_actualizacion cannot be null").getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION)), null);
 
                 interviewListViewModel.refreshInterviews(interviewee);
             }
         }
+
         isSnackBarShow = false;
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 

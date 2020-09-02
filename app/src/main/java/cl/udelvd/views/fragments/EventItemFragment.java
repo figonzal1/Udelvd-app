@@ -67,6 +67,7 @@ public class EventItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.fragment_swipe_event, container, false);
 
         instantiateInterfaceResources(v);
@@ -78,6 +79,7 @@ public class EventItemFragment extends Fragment {
 
 
     private void instantiateInterfaceResources(View v) {
+
         tvInterviewDate = v.findViewById(R.id.tv_interview_date);
         tvEvent = v.findViewById(R.id.tv_event_detail);
         tvEventHour = v.findViewById(R.id.tv_event_hour);
@@ -88,9 +90,11 @@ public class EventItemFragment extends Fragment {
 
         fbEditarEvento = v.findViewById(R.id.fb_edit_event);
         fbEliminarEvento = v.findViewById(R.id.fb_delete_event);
+
     }
 
     private void setEventInformation() {
+
         tvInterviewDate.setText(String.format(getString(R.string.FORMATO_ENTREVISTA_FECHA), interviewDate));
         tvEvent.setText(String.format(Locale.US, getString(R.string.FORMATO_EVENTO_N), position + 1));
 
@@ -114,6 +118,7 @@ public class EventItemFragment extends Fragment {
         fbEditarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(activity.getApplicationContext(), EditEventActivity.class);
                 intent.putExtra(getString(R.string.KEY_EVENTO_ID_ENTREVISTA), event.getInterview().getId());
                 intent.putExtra(getString(R.string.KEY_EVENTO_ID_LARGO), event.getId());
@@ -124,6 +129,7 @@ public class EventItemFragment extends Fragment {
         fbEliminarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 DeleteEventDialogFragment dialog = new DeleteEventDialogFragment(listener, event);
                 dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
             }

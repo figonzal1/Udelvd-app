@@ -20,16 +20,19 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     public SingleLiveEvent<Map<String, Object>> showMsgLogin() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgLogin();
     }
 
     public SingleLiveEvent<String> showMsgErrorLogin() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgErrorLogin();
     }
 
     public MutableLiveData<Boolean> isLoading() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getIsLoading();
     }

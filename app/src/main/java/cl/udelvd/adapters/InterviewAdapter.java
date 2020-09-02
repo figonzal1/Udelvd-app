@@ -40,18 +40,21 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
     private final Activity activity;
 
     public InterviewAdapter(List<Interview> interviewList, Activity activity, FragmentManager fragmentManager, Interviewee interviewee, Map<String, Integer> params, int requestCodeEditarEntrevista) {
+
         this.interviewList = interviewList;
         this.fragmentManager = fragmentManager;
         this.interviewee = interviewee;
         this.params = params;
         this.activity = activity;
         this.REQUEST_CODE_EDIT_INTERVIEW = requestCodeEditarEntrevista;
+
         setHasStableIds(true);
     }
 
     @NonNull
     @Override
     public InterviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_interview, parent, false);
         return new InterviewViewHolder(v);
     }
@@ -66,7 +69,6 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
         holder.tvInterviewType.setText(interview.getInterviewType().getName());
 
         final String fechaEntrevista = Utils.dateToString(activity, false, interview.getInterviewDate());
-
         holder.tvInterviewRegistryDate.setText(fechaEntrevista);
 
         final int annos = Utils.calculateYearsOld(interviewee.getBirthDate());
@@ -74,6 +76,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
         holder.cardViewInterView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(activity, EventsActivity.class);
 
                 Bundle bundle = new Bundle();
@@ -110,6 +113,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
 
                         //SEE EVENTS FROM INTERVIEW
                         if (item.getItemId() == R.id.menu_see_events) {
+
                             Intent intent = new Intent(activity, EventsActivity.class);
 
                             Bundle bundle = new Bundle();
@@ -130,6 +134,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
 
                             intent.putExtras(bundle);
                             activity.startActivity(intent);
+
                             return true;
                         }
 
@@ -142,6 +147,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
                             bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
                             bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), interview.getIdInterviewee());
                             intent.putExtras(bundle);
+
                             activity.startActivityForResult(intent, REQUEST_CODE_EDIT_INTERVIEW);
 
                             return true;
@@ -149,6 +155,7 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
 
                         //DELETE INTERVIEW
                         else if (item.getItemId() == R.id.menu_delete_interview) {
+
                             DeleteInterviewDialogFragment dialog = new DeleteInterviewDialogFragment(interview);
                             dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
 
@@ -170,11 +177,13 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
     }
 
     public void updateList(List<Interview> interviewList) {
+
         this.interviewList = interviewList;
         notifyDataSetChanged();
     }
 
     public void setParams(Map<String, Integer> params) {
+
         this.params = params;
         notifyDataSetChanged();
     }

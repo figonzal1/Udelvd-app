@@ -22,6 +22,7 @@ public class DeleteEventDialogFragment extends DialogFragment {
     private DeleteDialogListener listener;
 
     public DeleteEventDialogFragment(DeleteDialogListener listener, Event event) {
+
         this.event = event;
         this.listener = listener;
     }
@@ -31,14 +32,17 @@ public class DeleteEventDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+
         builder.setMessage(getString(R.string.DIALOG_MESSAGE_EVENTO))
                 .setPositiveButton(getString(R.string.DIALOG_POSITIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         listener.onDialogPositiveClick(event);
                     }
                 })
                 .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         dismiss();
                     }
                 });

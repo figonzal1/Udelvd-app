@@ -55,6 +55,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder
         holder.btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(context, WebViewActivity.class);
                 intent.putExtra(context.getString(R.string.INTENT_LINK_GRAFICO), stat.getUrl());
                 context.startActivity(intent);
@@ -97,6 +98,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder
     }
 
     public void updateList(List<Stat> statList) {
+
         this.statList = statList;
         notifyDataSetChanged();
     }

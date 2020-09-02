@@ -24,6 +24,7 @@ public class IntervieweeListViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<Boolean> isLoading() {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         return intervieweeRepository.getIsLoading();
     }
@@ -32,31 +33,37 @@ public class IntervieweeListViewModel extends AndroidViewModel {
     LIST
      */
     public SingleLiveEvent<List<Interviewee>> loadFirstPage(int page, Researcher researcher, boolean totalList) {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         return intervieweeRepository.getInterviewees(page, researcher, totalList);
     }
 
     public void loadNextPage(int page, Researcher researcher, boolean totalList) {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         intervieweeRepository.getInterviewees(page, researcher, totalList);
     }
 
     public SingleLiveEvent<List<Interviewee>> showNextPage() {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         return intervieweeRepository.getNextPage();
     }
 
     public void refreshIntervieweeList(Researcher researcher, boolean listadoTotal) {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         intervieweeRepository.getInterviewees(1, researcher, listadoTotal);
     }
 
     public SingleLiveEvent<String> showMsgErrorList() {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         return intervieweeRepository.getResponseMsgErrorList();
     }
 
     public MutableLiveData<Integer> showNInterviewees() {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         return intervieweeRepository.getNInterviewees();
     }
@@ -68,6 +75,7 @@ public class IntervieweeListViewModel extends AndroidViewModel {
     public void doSearch(List<Interviewee> intervieweeList, String s) {
 
         if (intervieweeList.size() > 0 && !s.isEmpty()) {
+
             //Lista utilizada para el searchView
             List<Interviewee> filteredList = new ArrayList<>();
 
@@ -88,22 +96,25 @@ public class IntervieweeListViewModel extends AndroidViewModel {
                     filteredList.add(l);
                 }
             }
+
             filterList.postValue(filteredList);
+
         } else {
             filterList.postValue(intervieweeList);
         }
-
     }
 
     /*
     DELETE
      */
     public SingleLiveEvent<String> showMsgErrorDelete() {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         return intervieweeRepository.getResponseMsgErrorDelete();
     }
 
     public SingleLiveEvent<String> showMsgDelete() {
+
         intervieweeRepository = IntervieweeRepository.getInstance(getApplication());
         return intervieweeRepository.getResponseMsgDelete();
     }

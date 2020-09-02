@@ -13,6 +13,7 @@ import cl.udelvd.models.Action;
  * Adapter to fill action selector
  */
 public class ActionSelectorAdapter extends ArrayAdapter<Action> {
+
     public ActionSelectorAdapter(@NonNull Context context, int resource, @NonNull List<Action> actionsList) {
         super(context, resource, actionsList);
     }

@@ -61,6 +61,7 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.fragment_stats, container, false);
 
         instantiateInterfaceResources(v);
@@ -93,9 +94,12 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
         statViewModel.isLoading().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
                     rv.setVisibility(View.INVISIBLE);
+
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
@@ -108,6 +112,7 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
             public void onChanged(List<Stat> stats) {
 
                 if (stats != null) {
+
                     statList = stats;
                     statAdapter.updateList(statList);
 
@@ -123,12 +128,14 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
         statViewModel.showMsgErrorList().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
+
                     rv.setVisibility(View.INVISIBLE);
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.stats_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
@@ -142,7 +149,9 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
     public void showSnackbar(View v, int duration, String title, String action) {
 
         snackbar = Snackbar.make(v, title, duration);
+
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -158,12 +167,14 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
                 }
             });
         }
+
         snackbar.show();
         isSnackBarShow = false;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
         inflater.inflate(R.menu.menu_update, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -175,10 +186,12 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
 
             progressBar.setVisibility(View.VISIBLE);
             isSnackBarShow = false;
+
             if (snackbar != null) {
                 snackbar.dismiss();
             }
             statViewModel.refreshStats();
+
             return true;
         }
         return super.onOptionsItemSelected(item);

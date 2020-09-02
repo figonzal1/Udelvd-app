@@ -92,6 +92,7 @@ public class IntroActivity extends AppCompatActivity {
         //SETUP TABS
         tabLayout = findViewById(R.id.tab_intro);
         tabLayout.setupWithViewPager(viewPager);
+
         //TAB LAYOUT CHANGE LISTENER
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -119,7 +120,9 @@ public class IntroActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 position = viewPager.getCurrentItem();
+
                 if (position < introItemList.size()) {
+
                     position++;
                     viewPager.setCurrentItem(position);
                 }
@@ -135,6 +138,7 @@ public class IntroActivity extends AppCompatActivity {
         btnGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 editor.putBoolean(getString(R.string.SHARED_PREF_FIRST_LOAD), false);
                 editor.apply();
 
@@ -164,6 +168,7 @@ public class IntroActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
                 if (position == 0) {
+
                     View v = viewPager.findViewWithTag("view" + position);
                     ImageView imgSlide = v.findViewById(R.id.iv_intro);
                     TextView title = v.findViewById(R.id.tv_intro_title);
@@ -179,6 +184,7 @@ public class IntroActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
 
                 if (position > 0) {
+
                     View v = viewPager.findViewWithTag("view" + position);
                     ImageView imgSlide = v.findViewById(R.id.iv_intro);
                     TextView title = v.findViewById(R.id.tv_intro_title);
@@ -211,6 +217,7 @@ public class IntroActivity extends AppCompatActivity {
         FirebaseCrashlytics.getInstance().setCustomKey(getString(R.string.SHARED_PREF_FIRST_LOAD), isFirstLoad);
 
         if (!isFirstLoad) {
+
             Intent intent = new Intent(IntroActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -220,6 +227,7 @@ public class IntroActivity extends AppCompatActivity {
     private void startAnimationBtnGetStarted() {
 
         if (!isShowBtnGetStarted) {
+
             tabLayout.setVisibility(View.INVISIBLE);
             skipButton.setVisibility(View.INVISIBLE);
             ibNext.setVisibility(View.INVISIBLE);

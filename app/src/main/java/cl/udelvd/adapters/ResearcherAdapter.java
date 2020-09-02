@@ -1,6 +1,7 @@
 package cl.udelvd.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,11 +42,13 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private int totalResearchers;
 
     public ResearcherAdapter(List<Researcher> researcherList, Context context, FragmentManager fragmentManager, ResearcherListViewModel researcherListViewModel, Researcher researcher) {
+
         this.researcherList = researcherList;
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.researcher = researcher;
         this.researcherListViewModel = researcherListViewModel;
+
         setHasStableIds(true);
     }
 
@@ -56,12 +60,16 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         View v;
         if (viewType == RESEARCHER) {
+
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_researcher, parent, false);
             viewHolder = new ResearcherViewHolder(v);
+
         } else if (viewType == PROGRESS_PAGINATION) {
+
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.pagination_item, parent, false);
             viewHolder = new LoadingViewHolder(v);
         }
+
         return Objects.requireNonNull(viewHolder);
     }
 
@@ -75,9 +83,16 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             holder.tvEmail.setText(researcher.getEmail());
             holder.tvName.setText(String.format("%s %s", researcher.getName(), researcher.getLastName()));
-            holder.tvRegistryDate.setText(String.format(context.getString(R.string.FORMATO_FECHA_REGISTRO), Utils.dateToString(context, false, Utils.stringToDate(context, false, researcher.getCreateTime()))));
+            try {
+                holder.tvRegistryDate.setText(String.format(context.getString(R.string.FORMATO_FECHA_REGISTRO), Utils.dateToString(context, false, Utils.stringToDate(context, false, researcher.getCreateTime()))));
+            } catch (ParseException e) {
+
+                Log.d("STRING_TO_DATE", "Parse exception error");
+                e.printStackTrace();
+            }
 
             if (researcher.isActivated()) {
+
                 holder.switchActivate.setChecked(true);
                 holder.switchActivate.setText(context.getString(R.string.PERFIL_ACTIVADO));
             } else {
@@ -88,11 +103,15 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.switchActivate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     if (holder.switchActivate.isChecked()) {
+
                         ActivateResearcherDialogFragment dialogFragment = new ActivateResearcherDialogFragment(researcher, true, holder.switchActivate);
                         dialogFragment.setCancelable(false);
                         dialogFragment.show(fragmentManager, TAG_ACTIVATE_RESEARCHER);
+
                     } else {
+
                         ActivateResearcherDialogFragment dialogFragment = new ActivateResearcherDialogFragment(researcher, false, holder.switchActivate);
                         dialogFragment.setCancelable(false);
                         dialogFragment.show(fragmentManager, TAG_ACTIVATE_RESEARCHER);
@@ -101,6 +120,7 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             });
 
         } else if (getItemViewType(position) == PROGRESS_PAGINATION) {
+
             final LoadingViewHolder holder = (LoadingViewHolder) viewHolder;
 
             btnLoadMore = holder.btnLoadMore;
@@ -118,6 +138,7 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             btnLoadMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     page += 1;
 
                     if (researcherListViewModel != null) {
@@ -153,23 +174,28 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void updateList(List<Researcher> researcherList) {
+
         this.researcherList = researcherList;
         notifyDataSetChanged();
     }
 
     public void addInterviewee(List<Researcher> invesSgt) {
+
         if (btnLoadMore != null) {
+
             if (invesSgt.size() == 0) {
                 btnLoadMore.setVisibility(View.GONE);
             } else {
                 btnLoadMore.setVisibility(View.VISIBLE);
             }
         }
+
         researcherList.addAll(invesSgt);
         notifyDataSetChanged();
     }
 
     public void hideProgress() {
+
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }

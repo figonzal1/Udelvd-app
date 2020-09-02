@@ -20,17 +20,20 @@ public class RecoveryViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<Boolean> isLoading() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> showMsgErrorRecovery() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgErrorRecovery();
 
     }
 
     public SingleLiveEvent<Map<String, String>> showMsgRecovery() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgRecovery();
     }

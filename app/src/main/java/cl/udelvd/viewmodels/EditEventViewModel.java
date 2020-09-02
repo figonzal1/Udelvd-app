@@ -30,31 +30,37 @@ public class EditEventViewModel extends AndroidViewModel {
     EVENT
      */
     public SingleLiveEvent<Event> loadEvent(Event event) {
+
         eventRepository = EventRepository.getInstance(getApplication());
         return eventRepository.getEvent(event);
     }
 
     public void refreshEvent(Event eventIntent) {
+
         eventRepository = EventRepository.getInstance(getApplication());
         eventRepository.getEvent(eventIntent);
     }
 
     public SingleLiveEvent<String> showMsgErrorEvent() {
+
         eventRepository = EventRepository.getInstance(getApplication());
         return eventRepository.getResponseErrorMsgEvent();
     }
 
     public MutableLiveData<Boolean> isLoadingEvent() {
+
         eventRepository = EventRepository.getInstance(getApplication());
         return eventRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> showMsgErrorUpdate() {
+
         eventRepository = EventRepository.getInstance(getApplication());
         return eventRepository.getResponseErrorMsgUpdate();
     }
 
     public SingleLiveEvent<String> showMsgUpdate() {
+
         eventRepository = EventRepository.getInstance(getApplication());
         return eventRepository.getResponseMsgUpdate();
     }
@@ -63,21 +69,25 @@ public class EditEventViewModel extends AndroidViewModel {
     ACTION
      */
     public MutableLiveData<Boolean> isLoadingAction() {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> showMsgErrorAction() {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getResponseMsgErrorList();
     }
 
     public MutableLiveData<List<Action>> loadAction(String idioma) {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getActionsByLanguage(idioma);
     }
 
     public void refreshAction(String idioma) {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         actionRepository.getActionsByLanguage(idioma);
     }
@@ -87,21 +97,25 @@ public class EditEventViewModel extends AndroidViewModel {
      */
 
     public MutableLiveData<Boolean> isLoadingEmoticons() {
+
         emoticonRepository = EmoticonRepository.getInstance(getApplication());
         return emoticonRepository.getIsLoading();
     }
 
     public MutableLiveData<List<Emoticon>> loadEmoticons() {
+
         emoticonRepository = EmoticonRepository.getInstance(getApplication());
         return emoticonRepository.getEmoticons();
     }
 
     public SingleLiveEvent<String> showMsgErrorEmoticons() {
+
         emoticonRepository = EmoticonRepository.getInstance(getApplication());
         return emoticonRepository.getResponseMsgErrorList();
     }
 
     public void refreshEmoticons() {
+
         emoticonRepository = EmoticonRepository.getInstance(getApplication());
         emoticonRepository.getEmoticons();
     }

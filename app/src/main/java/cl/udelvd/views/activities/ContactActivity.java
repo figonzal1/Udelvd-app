@@ -1,4 +1,4 @@
-package cl.udelvd;
+package cl.udelvd.views.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import cl.udelvd.R;
 import cl.udelvd.utils.Utils;
 
 public class ContactActivity extends AppCompatActivity {
@@ -30,6 +31,7 @@ public class ContactActivity extends AppCompatActivity {
 
         tvEmail = findViewById(R.id.tv_contact_email_value);
         tvEmail.setMovementMethod(LinkMovementMethod.getInstance());
+
         Spannable spans = (Spannable) tvEmail.getText();
         ClickableSpan clickSpan = new ClickableSpan() {
 
@@ -40,12 +42,14 @@ public class ContactActivity extends AppCompatActivity {
                 ClipData clipData = ClipData.newPlainText(getString(R.string.INTENT_LINK_GRAFICO), tvEmail.getText());
 
                 if (clipboardManager != null) {
+
                     clipboardManager.setPrimaryClip(clipData);
                     Toast.makeText(getApplicationContext(), R.string.COPIADO_PORTAPAPELES, Toast.LENGTH_LONG).show();
                 }
 
             }
         };
+
         spans.setSpan(clickSpan, 0, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 

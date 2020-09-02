@@ -22,6 +22,7 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
     private SwitchMaterial switchMaterial;
 
     public ActivateResearcherDialogFragment(Researcher researcher, boolean activated, SwitchMaterial switchMaterial) {
+
         this.researcher = researcher;
         this.activated = activated;
         this.switchMaterial = switchMaterial;
@@ -34,9 +35,11 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
         if (activated) {
+
             builder.setMessage(getString(R.string.DIALOG_ACTIVACION_MENSAJE));
             builder.setPositiveButton(getString(R.string.DIALOG_ACTIVAR), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+
                     researcher.setActivated(true);
                     switchMaterial.setChecked(true);
                     switchMaterial.setText(getString(R.string.PERFIL_ACTIVADO));
@@ -49,6 +52,7 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
 
             builder.setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+
                     switchMaterial.setChecked(false);
                     switchMaterial.setText(getString(R.string.PERFIL_NO_ACTIVADO));
                     dismiss();
@@ -56,9 +60,11 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
             });
 
         } else {
+
             builder.setMessage(getString(R.string.DIALOG_DESACTIVACION_MENSAJE));
             builder.setPositiveButton(getString(R.string.DIALOG_DESACTIVAR), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+
                     researcher.setActivated(false);
                     switchMaterial.setChecked(false);
                     switchMaterial.setText(getString(R.string.PERFIL_NO_ACTIVADO));
@@ -70,6 +76,7 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
 
             builder.setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+
                     switchMaterial.setChecked(true);
                     switchMaterial.setText(getString(R.string.PERFIL_ACTIVADO));
                     dismiss();
@@ -87,8 +94,11 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        if (getDialog() != null && getRetainInstance())
+
+        if (getDialog() != null && getRetainInstance()) {
+
             getDialog().setDismissMessage(null);
+        }
         super.onDestroyView();
     }
 }

@@ -58,18 +58,19 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
         newActionViewModel.isLoadingRegistry().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    progressBar.setVisibility(View.VISIBLE);
 
+                if (aBoolean) {
+
+                    progressBar.setVisibility(View.VISIBLE);
 
                     ilActionES.setEnabled(false);
                     ilActionEN.setEnabled(false);
 
                     etActionES.setEnabled(false);
                     etActionEN.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
-
 
                     ilActionES.setEnabled(true);
                     ilActionEN.setEnabled(true);
@@ -83,9 +84,9 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
         newActionViewModel.showMsgRegistry().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
 
                 if (s.equals(getString(R.string.MSG_REGISTRO_ACCION))) {
 
@@ -94,6 +95,7 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
                     Intent intent = getIntent();
                     intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
                     setResult(RESULT_OK, intent);
+
                     finish();
                 }
             }
@@ -102,6 +104,7 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
         newActionViewModel.showMsgErrorRegistry().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
@@ -143,8 +146,11 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
+
             finish();
+
             return true;
+
         } else if (item.getItemId() == R.id.menu_save) {
 
             if (validateField()) {
@@ -152,8 +158,8 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
                 progressBar.setVisibility(View.VISIBLE);
 
                 Action action = new Action();
-                action.setNameEs(Objects.requireNonNull(etActionES.getText()).toString());
-                action.setNameEng(Objects.requireNonNull(etActionEN.getText()).toString());
+                action.setNameEs(Objects.requireNonNull(etActionES.getText(), "Et actionEs cannot be null").toString());
+                action.setNameEng(Objects.requireNonNull(etActionEN.getText(), "Et actionEN cannot be null").toString());
 
                 ActionRepository.getInstance(getApplication()).registryAction(action);
 
@@ -164,20 +170,25 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
     }
 
     private boolean validateField() {
+
         int errorCounter = 0;
 
-        if (Objects.requireNonNull(etActionES.getText()).toString().isEmpty()) {
+        if (Objects.requireNonNull(etActionES.getText(), "Et actionES cannot be null").toString().isEmpty()) {
+
             ilActionES.setErrorEnabled(true);
             ilActionES.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilActionES.setErrorEnabled(false);
         }
 
-        if (Objects.requireNonNull(etActionEN.getText()).toString().isEmpty()) {
+        if (Objects.requireNonNull(etActionEN.getText(), "Et actionEN cannot be null").toString().isEmpty()) {
+
             ilActionEN.setErrorEnabled(true);
             ilActionEN.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilActionEN.setErrorEnabled(false);
         }
@@ -187,8 +198,11 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
 
     @Override
     public void showSnackbar(View v, int duration, String title, String action) {
+
         Snackbar snackbar = Snackbar.make(v, title, duration);
+
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

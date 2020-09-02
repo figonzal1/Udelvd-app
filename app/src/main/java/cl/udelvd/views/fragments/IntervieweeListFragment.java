@@ -32,6 +32,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.adapters.IntervieweeAdapter;
@@ -70,7 +71,6 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     public IntervieweeListFragment() {
     }
 
-
     public static IntervieweeListFragment newInstance() {
         return new IntervieweeListFragment();
 
@@ -87,6 +87,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         v = inflater.inflate(R.layout.fragment_interviewee_list, container, false);
 
         getResearcherLoginData();
@@ -103,6 +104,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     }
 
     private void getResearcherLoginData() {
+
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
         int idResearcher = sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID), 0);
         researcher = new Researcher();
@@ -112,6 +114,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     private void getBundleData(View v) {
 
         if (getArguments() != null) {
+
             String msgLogin = getArguments().getString(getString(R.string.INTENT_KEY_MSG_LOGIN));
 
             if (msgLogin != null) {
@@ -146,37 +149,46 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireContext().getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
         String rolAdmin = sharedPreferences.getString(requireContext().getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), "");
 
-        assert rolAdmin != null;
-        if (rolAdmin.equals(requireContext().getString(R.string.ROL_ADMIN_KEY_MASTER))) {
-            switchMaterial.setVisibility(View.VISIBLE);
-            listadoTotal = switchMaterial.isChecked();
+        if (rolAdmin != null) {
 
-            if (listadoTotal) {
-                switchMaterial.setText(R.string.TODOS);
-                crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.TODOS));
-            } else {
-                switchMaterial.setText(R.string.MI_CUENTA);
-                crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
-            }
+            if (rolAdmin.equals(requireContext().getString(R.string.ROL_ADMIN_KEY_MASTER))) {
 
-            switchMaterial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        switchMaterial.setText(getString(R.string.TODOS));
-                        crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.TODOS));
-                    } else {
-                        switchMaterial.setText(getString(R.string.MI_CUENTA));
-                        crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
-                    }
-                    listadoTotal = isChecked;
-                    intervieweeAdapter.setTotalList(listadoTotal);
-                    intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
+                switchMaterial.setVisibility(View.VISIBLE);
+                listadoTotal = switchMaterial.isChecked();
 
+                if (listadoTotal) {
+
+                    switchMaterial.setText(R.string.TODOS);
+                    crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.TODOS));
+
+                } else {
+                    switchMaterial.setText(R.string.MI_CUENTA);
+                    crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
                 }
-            });
-        } else {
-            switchMaterial.setVisibility(View.GONE);
+
+                switchMaterial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if (isChecked) {
+
+                            switchMaterial.setText(getString(R.string.TODOS));
+                            crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.TODOS));
+
+                        } else {
+                            switchMaterial.setText(getString(R.string.MI_CUENTA));
+                            crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
+                        }
+
+                        listadoTotal = isChecked;
+                        intervieweeAdapter.setTotalList(listadoTotal);
+                        intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
+
+                    }
+                });
+            } else {
+                switchMaterial.setVisibility(View.GONE);
+            }
         }
 
         intervieweeAdapter = new IntervieweeAdapter(
@@ -194,6 +206,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     private void floatingButtonNewInterviewee(View v) {
 
         FloatingActionButton fbCrearUsuario = v.findViewById(R.id.fb_new_interviewee);
+
         fbCrearUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,11 +222,14 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
         intervieweeListViewModel.isLoading().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
                     tvEmptyInterviewee.setVisibility(View.INVISIBLE);
                     tvNInterviewees.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.INVISIBLE);
+
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
@@ -224,6 +240,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
         intervieweeListViewModel.showNInterviewees().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
+
                 totalInterviewees = integer;
                 intervieweeAdapter.setTotalInterviewee(totalInterviewees);
             }
@@ -239,8 +256,10 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                 rv.setAdapter(intervieweeAdapter);
 
                 progressBar.setVisibility(View.INVISIBLE);
+
                 if (intervieweeList.size() == 0) {
                     tvEmptyInterviewee.setVisibility(View.VISIBLE);
+
                 } else {
                     tvEmptyInterviewee.setVisibility(View.INVISIBLE);
                 }
@@ -263,6 +282,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                 intervieweeList = intervieweeAdapter.getIntervieweeList();
 
                 if (intervieweeList.size() == 0) {
+
                     tvEmptyInterviewee.setVisibility(View.VISIBLE);
                 } else {
                     tvEmptyInterviewee.setVisibility(View.INVISIBLE);
@@ -279,7 +299,6 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
             @Override
             public void onChanged(@Nullable List<Interviewee> list) {
 
-
                 intervieweeList = list;
                 intervieweeAdapter.filterList(intervieweeList);
             }
@@ -292,19 +311,22 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (intervieweeAdapter != null) {
+
                     intervieweeAdapter.hideProgress();
                     intervieweeAdapter.resetPages();
                 }
 
                 if (!isSnackBarShow) {
+
                     rv.setVisibility(View.INVISIBLE);
                     isSnackBarShow = true;
                     showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     intervieweeAdapter.notifyDataSetChanged();
+
                 }
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
             }
         });
 
@@ -315,6 +337,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
+
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, s, null);
                     intervieweeAdapter.resetPages();
@@ -329,16 +352,20 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
         intervieweeListViewModel.showMsgErrorDelete().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
                     isSnackBarShow = true;
 
                     if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
                         showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, null);
                     } else {
+
                         showSnackbar(v, Snackbar.LENGTH_LONG, s, null);
                     }
+
                     intervieweeAdapter.notifyDataSetChanged();
                 }
 
@@ -350,6 +377,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
     @Override
     public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull MenuInflater inflater) {
+
         inflater.inflate(R.menu.menu_main, menu);
         MenuItem menuItem = menu.findItem(R.id.menu_search);
 
@@ -386,6 +414,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
             progressBar.setVisibility(View.VISIBLE);
             isSnackBarShow = false;
+
             if (snackbar != null) {
                 snackbar.dismiss();
             }
@@ -404,13 +433,11 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-
-                assert bundle != null;
-                String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
+                Bundle bundle = Objects.requireNonNull(data, "Data cannot be null").getExtras();
+                String msg_registro = Objects.requireNonNull(bundle, "Msg_registro cannot be null").getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
 
                 if (msg_registro != null) {
+
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, msg_registro, null);
                     intervieweeAdapter.resetPages();
@@ -418,20 +445,21 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
                 }
             }
+
         } else if (requestCode == REQUEST_CODE_EDIT_INTERVIEWEE) {
+
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-
-                assert bundle != null;
-                String msgUpdate = bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
+                Bundle bundle = Objects.requireNonNull(data, "Data cannot be null").getExtras();
+                String msgUpdate = Objects.requireNonNull(bundle, "Msg_actualizacion cannot be null").getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
 
                 if (msgUpdate != null) {
+
                     isSnackBarShow = true;
                     showSnackbar(v.findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, msgUpdate, null);
                     intervieweeAdapter.resetPages();
                     intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
+
                 }
             }
         }
@@ -439,15 +467,18 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
     @Override
     public void showSnackbar(View v, int duration, String title, String action) {
+
         snackbar = Snackbar.make(v.findViewById(R.id.interviewees_list), title, duration);
 
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     progressBar.setVisibility(View.VISIBLE);
                     isSnackBarShow = false;
+
                     if (snackbar != null) {
                         snackbar.dismiss();
                     }
@@ -457,6 +488,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                 }
             });
         }
+
         snackbar.show();
         isSnackBarShow = false;
     }
@@ -464,12 +496,14 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     @Override
     public void onResume() {
         super.onResume();
+
         intervieweeAdapter.resetPages();
         intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+
         String input = query.toLowerCase();
         intervieweeListViewModel.doSearch(intervieweeList, input);
         return true;

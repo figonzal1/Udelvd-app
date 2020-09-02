@@ -53,6 +53,7 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
     }
 
     private void btnRecoveryAccount() {
+
         btnRecoveryAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +61,7 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
                 if (validateField()) {
 
                     Researcher researcher = new Researcher();
-                    researcher.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
+                    researcher.setEmail(Objects.requireNonNull(etEmail.getText(), "Et email cannot be null").toString());
 
                     ResearcherRepository.getInstance(getApplication()).recoveryAccount(researcher);
                 }
@@ -69,13 +70,16 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
     }
 
     private void initViewModels() {
+
         recoveryViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
 
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
                     ilEmail.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
                     ilEmail.setEnabled(true);
@@ -95,19 +99,16 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
 
                 progressBar.setVisibility(View.GONE);
 
-                assert msgRecovery != null;
-                if (msgRecovery.equals(getString(R.string.RECOVERY_MSG_VM_RESPONSE))) {
+                if (msgRecovery != null && msgRecovery.equals(getString(R.string.RECOVERY_MSG_VM_RESPONSE))) {
 
                     showSnackbar(findViewById(R.id.researcher_recovery), Snackbar.LENGTH_INDEFINITE, msgRecovery, null);
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
                     String sharedEmail = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
 
-                    assert sharedEmail != null;
-                    if (!sharedEmail.equals(email) || sharedEmail.isEmpty()) {
+                    if (sharedEmail != null && (!sharedEmail.equals(email) || sharedEmail.isEmpty())) {
 
                         sharedPreferences.edit().putString(getString(R.string.SHARED_PREF_INVES_EMAIL), email).apply();
-
                         Log.d("SHARED_EMAIL", "guardando email desde recuperacion en shared pref");
                     }
 
@@ -146,19 +147,20 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
 
         int errorCounter = 0;
 
-
-        if (Objects.requireNonNull(etEmail.getText()).toString().isEmpty()) {
+        if (Objects.requireNonNull(etEmail.getText(), "Et email cannot be null").toString().isEmpty()) {
 
             ilEmail.setErrorEnabled(true);
             ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
 
-
             if (Utils.isInvalidEmail(etEmail.getText())) {
+
                 ilEmail.setErrorEnabled(true);
                 ilEmail.setError(getString(R.string.VALIDACION_EMAIL));
                 errorCounter++;
+
             } else {
                 ilEmail.setErrorEnabled(false);
             }
@@ -169,6 +171,7 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
 
     @Override
     public void showSnackbar(View v, int duration, String title, String action) {
+
         Snackbar snackbar = Snackbar.make(v, title, duration);
         snackbar.show();
     }
@@ -176,6 +179,7 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
         finish();
     }
 }

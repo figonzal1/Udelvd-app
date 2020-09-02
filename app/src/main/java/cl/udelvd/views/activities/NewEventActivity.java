@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
 
@@ -97,7 +98,9 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
     }
 
     private void getBundleData() {
+
         if (getIntent().getExtras() != null) {
+
             Bundle bundle = getIntent().getExtras();
             interviewIntent = new Interview();
             interviewIntent.setId(bundle.getInt(getString(R.string.KEY_EVENTO_ID_ENTREVISTA)));
@@ -128,11 +131,11 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
 
     private void setPickerEventHour() {
 
-
         etEventHour.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
                 Utils.initHourPicker(etEventHour, NewEventActivity.this);
             }
         });
@@ -142,6 +145,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
 
             @Override
             public void onClick(View v) {
+
                 Utils.initHourPicker(etEventHour, NewEventActivity.this);
             }
         });
@@ -153,7 +157,9 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
         newEventViewModel.isLoadingActions().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
 
                     ilAction.setEnabled(false);
@@ -166,6 +172,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
 
                     ilJustification.setEnabled(false);
                     etJustification.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
 
@@ -189,6 +196,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
             public void onChanged(List<Action> list) {
 
                 if (list != null && list.size() > 0) {
+
                     progressBar.setVisibility(View.GONE);
 
                     actionList = list;
@@ -196,6 +204,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                     acAction.setAdapter(actionSelectorAdapter);
 
                     actionSelectorAdapter.notifyDataSetChanged();
+
                 }
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
@@ -212,9 +221,11 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
+
                     showSnackbar(findViewById(R.id.form_new_event), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
                 }
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -226,7 +237,9 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
         newEventViewModel.isLoadingEmoticons().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
 
                     ilAction.setEnabled(false);
@@ -239,6 +252,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
 
                     ilJustification.setEnabled(false);
                     etJustification.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
 
@@ -260,6 +274,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
         newEventViewModel.loadEmoticons().observe(this, new Observer<List<Emoticon>>() {
             @Override
             public void onChanged(List<Emoticon> emoticons) {
+
                 if (emoticons != null && emoticons.size() > 0) {
 
                     progressBar.setVisibility(View.GONE);
@@ -282,6 +297,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
+
                     showSnackbar(findViewById(R.id.form_new_event), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
                     isSnackBarShow = true;
                 }
@@ -296,9 +312,11 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
      * Function in charge of configuring the emoticon spinner in event form
      */
     private void configSpinnerEmoticones() {
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 Log.d(getString(R.string.SPINNER_EMOTICON_SELECTED), spinner.getSelectedItem().toString());
                 crashlytics.log(getString(R.string.SPINNER_EMOTICON_SELECTED) + spinner.getSelectedItem().toString());
 
@@ -318,9 +336,11 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
      * Try to open the Voice To Text Google program
      */
     private void configSpeechIntent() {
+
         ilJustification.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 
@@ -336,6 +356,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
             public void onChanged(Boolean aBoolean) {
 
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
 
                     ilAction.setEnabled(false);
@@ -348,6 +369,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
 
                     ilJustification.setEnabled(false);
                     etJustification.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
 
@@ -393,9 +415,11 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
+
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.form_new_event), Snackbar.LENGTH_LONG, s, null);
                 }
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
@@ -409,10 +433,10 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
         Snackbar snackbar = Snackbar.make(v, title, duration);
 
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
 
                     newEventViewModel.refreshActions(language);
                     newEventViewModel.refreshEmoticons();
@@ -423,6 +447,7 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                 }
             });
         }
+
         snackbar.show();
         isSnackBarShow = false;
     }
@@ -439,8 +464,11 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
+
             finish();
+
             return true;
+
         } else if (item.getItemId() == R.id.menu_save) {
 
             if (validateFields()) {
@@ -451,20 +479,25 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
                 interview.setId(interviewIntent.getId());
                 event.setInterview(interview);
 
-                int id = Objects.requireNonNull(searchActionByName(acAction.getText().toString())).getId();
+                int id = Objects.requireNonNull(searchActionByName(acAction.getText().toString()), "Id action cannot be null").getId();
                 Action action = new Action();
                 action.setId(id);
                 event.setAction(action);
 
-                event.setEventHour(Utils.stringToDate(getApplicationContext(), true, Objects.requireNonNull(etEventHour.getText()).toString()));
+                try {
+                    event.setEventHour(Utils.stringToDate(getApplicationContext(), true, Objects.requireNonNull(etEventHour.getText(), "Et event hour cannot be null").toString()));
+                } catch (ParseException e) {
 
-                event.setJustification(Objects.requireNonNull(etJustification.getText()).toString());
+                    Log.d("STRING_TO_DATE", "Parse error");
+                    e.printStackTrace();
+                }
+
+                event.setJustification(Objects.requireNonNull(etJustification.getText(), "Et justification cannot be null").toString());
 
                 EventRepository.getInstance(getApplication()).registryEvent(event);
             }
 
             return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -474,10 +507,9 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
 
 
         if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
-            assert data != null;
-            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            assert results != null;
-            String spokenText = results.get(0);
+
+            List<String> results = Objects.requireNonNull(data, "Data cannot be null").getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String spokenText = Objects.requireNonNull(results, "Result 0 cannot be null").get(0);
 
             etJustification.setText(spokenText);
         }
@@ -489,39 +521,47 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
 
         int errorCounter = 0;
 
+        if (Objects.requireNonNull(etEventHour.getText(), "Et event hour cannot be null").toString().isEmpty()) {
 
-        if (Objects.requireNonNull(etEventHour.getText()).toString().isEmpty()) {
             ilEventHour.setErrorEnabled(true);
             ilEventHour.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilEventHour.setErrorEnabled(false);
         }
 
 
         if (acAction.getText().toString().isEmpty()) {
+
             ilAction.setErrorEnabled(true);
             ilAction.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else if (searchActionByName(acAction.getText().toString()) == null) {
+
             ilAction.setErrorEnabled(true);
             ilAction.setError("Por favor, elige una acción de la lista");
             errorCounter++;
+
         } else {
             ilAction.setErrorEnabled(false);
         }
 
 
         if (!spinner.isSelected()) {
+
             Toast.makeText(getApplicationContext(), getString(R.string.VALIDACION_EMOTICON), Toast.LENGTH_LONG).show();
             errorCounter++;
         }
 
 
-        if (Objects.requireNonNull(etJustification.getText()).toString().isEmpty()) {
+        if (Objects.requireNonNull(etJustification.getText(), "Et justification cannot be null").toString().isEmpty()) {
+
             ilJustification.setErrorEnabled(true);
             ilJustification.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilJustification.setErrorEnabled(false);
         }
@@ -533,7 +573,9 @@ public class NewEventActivity extends AppCompatActivity implements SnackbarInter
     private Action searchActionByName(String name) {
 
         for (int i = 0; i < actionList.size(); i++) {
+
             if (actionList.get(i).getName().equals(name)) {
+
                 return actionList.get(i);
             }
         }

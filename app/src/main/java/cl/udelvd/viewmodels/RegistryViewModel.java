@@ -20,16 +20,19 @@ public class RegistryViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<Boolean> isLoading() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getIsLoading();
     }
 
     public SingleLiveEvent<Map<String, String>> showMsgRegistry() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgRegistry();
     }
 
     public SingleLiveEvent<String> showMsgErrorRegistry() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgErrorRegistry();
     }

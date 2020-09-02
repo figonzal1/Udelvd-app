@@ -392,12 +392,14 @@
     <string name="TAG_FIREBASE_TOKEN" translatable="false">FIREBASE_TOKEN</string>
     <string name="FIREBASE_MESSAGE" translatable="false">FIREBASE_MESSAGE </string>
     <string name="FIREBASE_MESSAGE_DATA" translatable="false">FIREBASE_MESSAGE_DATA</string>
+    <string name="FIREBASE_MESSAGE_NOTIFICATION" translatable="false">FIREBASE_MESSAGE_NOTIFICATION</string>
     <string name="TAG_FIREBASE_SUSCRIPCION" translatable="false">FIREBASE_SUSCRIPCION </string>
     <string name="SUSCRIPCION_OK" translatable="false">Suscripcion ok</string>
     <string name="SUSCRIPCION_ELIMINADA" translatable="false">Suscripcion eliminada</string>
     <string name="SUSCRIPCION_ERRONEA" translatable="false">Suscripcion erronea</string>
     <string name="TAG_FIREBASE_CHANNEL" translatable="false">FIREBASE_CHANNEL </string>
     <string name="FIREBASE_CHANNEL_CREATED" translatable="false">Channel created</string>
+    <string name="FIREBASE_CHANNEL_NOT_CREATED" translatable="false">Channel NO created</string>
     <string name="TAG_TOKEN_FIREBASE" translatable="false">TOKEN_FIREBASE </string>
     <string name="TAG_GOOGLE_PLAY" translatable="false">GOOGLE_PLAY </string>
     <string name="GOOGLE_PLAY_NO_SOPORTADO" translatable="false">Google play no soportado</string>

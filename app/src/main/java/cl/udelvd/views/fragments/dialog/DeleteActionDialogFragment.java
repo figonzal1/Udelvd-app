@@ -28,18 +28,23 @@ public class DeleteActionDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+
         builder.setMessage(getString(R.string.DIALOG_MESSAGE_ACCION))
                 .setPositiveButton(getString(R.string.DIALOG_POSITIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         listener.onDialogPositiveClick(action);
                     }
                 })
                 .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         dismiss();
                     }
                 });
+
         return builder.create();
     }
 

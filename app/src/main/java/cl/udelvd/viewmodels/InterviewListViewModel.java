@@ -22,31 +22,37 @@ public class InterviewListViewModel extends AndroidViewModel {
     }
 
     public SingleLiveEvent<List<Interview>> loadInterviews(Interviewee interviewee) {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getPersonalInterviews(interviewee);
     }
 
     public void refreshInterviews(Interviewee interviewee) {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         interviewRepository.getPersonalInterviews(interviewee);
     }
 
     public SingleLiveEvent<String> showMsgErrorList() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getResponseMsgErrorList();
     }
 
     public MutableLiveData<Boolean> isLoading() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> mostrarMsgDelete() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getResponseMsgDelete();
     }
 
     public SingleLiveEvent<String> showMsgErrorDelete() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getResponseMsgErrorDelete();
     }

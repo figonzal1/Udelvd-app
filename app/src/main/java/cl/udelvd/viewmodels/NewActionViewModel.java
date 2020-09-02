@@ -18,16 +18,19 @@ public class NewActionViewModel extends AndroidViewModel {
     }
 
     public SingleLiveEvent<String> showMsgRegistry() {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getResponseMsgRegistry();
     }
 
     public SingleLiveEvent<String> showMsgErrorRegistry() {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getResponseMsgErrorRegistry();
     }
 
     public MutableLiveData<Boolean> isLoadingRegistry() {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getIsLoading();
     }

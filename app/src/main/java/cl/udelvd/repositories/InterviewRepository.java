@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -104,7 +105,14 @@ public class InterviewRepository {
                         interview.setId(jsonInterview.getInt(application.getString(R.string.KEY_ENTREVISTA_ID)));
                         interview.setIdInterviewee(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO)));
 
-                        Date interviewDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                        Date interviewDate = null;
+                        try {
+                            interviewDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                        } catch (ParseException e) {
+
+                            Log.d("STRING_TO_DATE", "Parse exception error");
+                            e.printStackTrace();
+                        }
                         interview.setInterviewDate(interviewDate);
 
                         //Relationship
@@ -196,7 +204,14 @@ public class InterviewRepository {
 
                     interviewInternet.setIdInterviewee(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO)));
 
-                    Date interviewDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    Date interviewDate = null;
+                    try {
+                        interviewDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    } catch (ParseException e) {
+
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
                     interviewInternet.setInterviewDate(interviewDate);
 
                     InterviewType interviewType = new InterviewType();
@@ -306,7 +321,14 @@ public class InterviewRepository {
 
                     interviewInternet.setInterviewType(interviewType);
 
-                    Date interviewDate = Utils.stringToDate(application, false, jsonAttribute.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    Date interviewDate = null;
+                    try {
+                        interviewDate = Utils.stringToDate(application, false, jsonAttribute.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    } catch (ParseException e) {
+
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
                     interviewInternet.setInterviewDate(interviewDate);
 
                     interviewMutableLiveData.postValue(interviewInternet);
@@ -384,7 +406,14 @@ public class InterviewRepository {
                     interviewInternet.setId(jsonData.getInt(application.getString(R.string.KEY_ENTREVISTA_ID)));
                     interviewInternet.setIdInterviewee(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO)));
 
-                    Date interviewDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    Date interviewDate = null;
+                    try {
+                        interviewDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA)));
+                    } catch (ParseException e) {
+
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
                     interviewInternet.setInterviewDate(interviewDate);
 
                     String updateTime = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));

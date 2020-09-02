@@ -58,7 +58,9 @@ public class EditActionActivity extends AppCompatActivity implements SnackbarInt
     }
 
     private void getActionData() {
+
         if (getIntent().getExtras() != null) {
+
             Bundle bundle = getIntent().getExtras();
 
             actionIntent = new Action();
@@ -86,16 +88,20 @@ public class EditActionActivity extends AppCompatActivity implements SnackbarInt
     }
 
     private void initViewModel() {
+
         editActionViewModel.isLoadingUpdate().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
                     ilActionEng.setEnabled(false);
                     ilActionEsp.setEnabled(false);
 
                     etActionEng.setEnabled(false);
                     etActionEsp.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
                     ilActionEng.setEnabled(true);
@@ -110,6 +116,7 @@ public class EditActionActivity extends AppCompatActivity implements SnackbarInt
         editActionViewModel.showMsgUpdate().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
@@ -128,9 +135,11 @@ public class EditActionActivity extends AppCompatActivity implements SnackbarInt
         editActionViewModel.showMsgErrorUpdate().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.GONE);
 
                 if (!isSnackBarShow) {
+
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.form_edit_action), Snackbar.LENGTH_LONG, s, null);
                 }
@@ -153,8 +162,11 @@ public class EditActionActivity extends AppCompatActivity implements SnackbarInt
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
+
             finish();
+
             return true;
+
         } else if (item.getItemId() == R.id.menu_save) {
 
             if (validateFields()) {
@@ -175,20 +187,25 @@ public class EditActionActivity extends AppCompatActivity implements SnackbarInt
     }
 
     private boolean validateFields() {
+
         int errorCounter = 0;
 
         if (Objects.requireNonNull(etActionEsp.getText()).toString().isEmpty()) {
+
             ilActionEsp.setErrorEnabled(true);
             ilActionEsp.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilActionEsp.setErrorEnabled(false);
         }
 
         if (Objects.requireNonNull(etActionEng.getText()).toString().isEmpty()) {
+
             ilActionEng.setErrorEnabled(true);
             ilActionEng.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilActionEng.setErrorEnabled(false);
         }
@@ -198,8 +215,11 @@ public class EditActionActivity extends AppCompatActivity implements SnackbarInt
 
     @Override
     public void showSnackbar(View v, int duration, String title, String action) {
+
         Snackbar snackbar = Snackbar.make(v, title, duration);
+
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

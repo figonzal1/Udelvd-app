@@ -211,7 +211,13 @@ public class EventRepository {
 
                     eventInternet.setJustification(jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
 
-                    Date eventHour = Utils.stringToDate(application, true, jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO)));
+                    Date eventHour = null;
+                    try {
+                        eventHour = Utils.stringToDate(application, true, jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO)));
+                    } catch (ParseException e) {
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
                     eventInternet.setEventHour(eventHour);
 
                     Log.d("MEMORIA", event.toString());
@@ -312,7 +318,13 @@ public class EventRepository {
 
                     event.setJustification(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
 
-                    event.setEventHour(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+                    try {
+                        event.setEventHour(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+                    } catch (ParseException e) {
+
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
 
                     Action action = new Action();
                     action.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_ACCION)));
@@ -398,7 +410,13 @@ public class EventRepository {
 
                     Event eventInternet = new Event();
                     eventInternet.setId(jsonData.getInt(application.getString(R.string.KEY_EVENTO_ID)));
-                    eventInternet.setEventHour(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+
+                    try {
+                        eventInternet.setEventHour(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+                    } catch (ParseException e) {
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
                     eventInternet.setJustification(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
 
                     String updateTime = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));

@@ -22,12 +22,15 @@ public class StatViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<Boolean> isLoading() {
+
         repository = StatsRepository.getInstance(getApplication());
         return repository.getIsLoading();
     }
 
     public MutableLiveData<List<Stat>> loadStats() {
+
         if (mutableLiveData == null) {
+
             mutableLiveData = new MutableLiveData<>();
             repository = StatsRepository.getInstance(getApplication());
             mutableLiveData = repository.getStats();
@@ -37,11 +40,13 @@ public class StatViewModel extends AndroidViewModel {
     }
 
     public SingleLiveEvent<String> showMsgErrorList() {
+
         repository = StatsRepository.getInstance(getApplication());
         return repository.getResponseMsgErrorList();
     }
 
     public void refreshStats() {
+
         repository = StatsRepository.getInstance(getApplication());
         repository.getStats();
     }

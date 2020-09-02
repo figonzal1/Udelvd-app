@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -110,7 +111,9 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
         editInterviewViewModel.isLoadingInterviewTypes().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
 
 
@@ -119,6 +122,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
 
                     ilInterviewDate.setEnabled(false);
                     etInterviewDate.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
 
@@ -180,7 +184,9 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
         editInterviewViewModel.isLoadingInterview().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
 
 
@@ -189,6 +195,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
 
                     ilInterviewDate.setEnabled(false);
                     etInterviewDate.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
 
@@ -207,6 +214,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
             public void onChanged(Interview interviewInternet) {
 
                 if (interviewInternet != null) {
+
                     interviewIntent = interviewInternet;
 
                     isGetInterview = true;
@@ -278,6 +286,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
     private void setInterviewInformation() {
 
         if (isAutoCompleteInterviewTypeReady && isGetInterview) {
+
             String date = Utils.dateToString(getApplicationContext(), false, interviewIntent.getInterviewDate());
             etInterviewDate.setText(date);
 
@@ -296,6 +305,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
 
             @Override
             public void onClick(View v) {
+
                 Utils.iniciarDatePicker(etInterviewDate, EditInterviewActivity.this, "interview");
             }
         });
@@ -305,6 +315,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
 
             @Override
             public void onClick(View v) {
+
                 Utils.iniciarDatePicker(etInterviewDate, EditInterviewActivity.this, "interview");
             }
         });
@@ -321,8 +332,10 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+
             finish();
             return true;
+
         } else if (item.getItemId() == R.id.menu_save) {
 
             if (validateFields()) {
@@ -334,10 +347,19 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
                 interviewUpdate.setId(interviewIntent.getId());
                 interviewUpdate.setIdInterviewee(interviewIntent.getIdInterviewee());
 
-                Date interviewDate = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etInterviewDate.getText()).toString());
+                Date interviewDate = null;
+
+                try {
+                    interviewDate = Utils.stringToDate(getApplicationContext(), false, Objects.requireNonNull(etInterviewDate.getText(), "Et interview date cannot be null").toString());
+                } catch (ParseException e) {
+
+                    Log.d("STRING_TO_DATE", "Parse error exception");
+                    e.printStackTrace();
+                }
+
                 interviewUpdate.setInterviewDate(interviewDate);
 
-                int idInterviewType = Objects.requireNonNull(searchInterviewTypeByName(acInterviewType.getText().toString())).getId();
+                int idInterviewType = Objects.requireNonNull(searchInterviewTypeByName(acInterviewType.getText().toString()), "Ac interview type cannot be null").getId();
 
                 InterviewType interviewType = new InterviewType();
                 interviewType.setId(idInterviewType);
@@ -355,22 +377,37 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
         int errorCounter = 0;
 
 
-        if (Objects.requireNonNull(etInterviewDate.getText()).toString().isEmpty()) {
+        if (Objects.requireNonNull(etInterviewDate.getText(), "Et interview date cannot be null").toString().isEmpty()) {
+
             ilInterviewDate.setErrorEnabled(true);
             ilInterviewDate.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
-        } else if (Utils.isFutureDate(getApplicationContext(), etInterviewDate.getText().toString())) {
-            ilInterviewDate.setErrorEnabled(true);
-            ilInterviewDate.setError(getString(R.string.VALIDACION_FECHA_FUTURA));
-            errorCounter++;
+
         } else {
-            ilInterviewDate.setErrorEnabled(false);
+
+            try {
+                if (Utils.isFutureDate(getApplicationContext(), etInterviewDate.getText().toString())) {
+
+                    ilInterviewDate.setErrorEnabled(true);
+                    ilInterviewDate.setError(getString(R.string.VALIDACION_FECHA_FUTURA));
+                    errorCounter++;
+
+                } else {
+                    ilInterviewDate.setErrorEnabled(false);
+                }
+            } catch (ParseException e) {
+
+                Log.d("FUTURE_DATE", "Parse exception error");
+                e.printStackTrace();
+            }
         }
 
         if (acInterviewType.getText().toString().isEmpty()) {
+
             ilInterviewType.setErrorEnabled(true);
             ilInterviewType.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilInterviewType.setErrorEnabled(false);
         }
@@ -382,11 +419,12 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
     public void showSnackbar(View v, int tipo_snackbar, String title, String action) {
 
         Snackbar snackbar = Snackbar.make(v, title, tipo_snackbar);
+
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
 
                     isAutoCompleteInterviewTypeReady = false;
                     isGetInterview = false;
@@ -400,6 +438,7 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
                 }
             });
         }
+
         snackbar.show();
         isSnackBarShow = false;
     }
@@ -408,7 +447,9 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
     private InterviewType searchInterviewTypeById(int id) {
 
         for (int i = 0; i < interviewTypeList.size(); i++) {
+
             if (interviewTypeList.get(i).getId() == id) {
+
                 return interviewTypeList.get(i);
             }
         }
@@ -419,10 +460,13 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
     private InterviewType searchInterviewTypeByName(String name) {
 
         for (int i = 0; i < interviewTypeList.size(); i++) {
+
             if (interviewTypeList.get(i).getName().equals(name)) {
+
                 return interviewTypeList.get(i);
             }
         }
+
         return null;
     }
 }

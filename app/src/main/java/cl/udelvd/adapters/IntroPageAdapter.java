@@ -47,8 +47,8 @@ public class IntroPageAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (inflater != null) {
 
+        if (inflater != null) {
 
             @SuppressLint("InflateParams") View layoutScreen = inflater.inflate(R.layout.intro_item, null);
 
@@ -63,7 +63,9 @@ public class IntroPageAdapter extends PagerAdapter {
             container.addView(layoutScreen);
 
             layoutScreen.setTag("view" + position);
+
             return layoutScreen;
+
         }
         return super.instantiateItem(container, position);
     }

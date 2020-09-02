@@ -18,6 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
+import java.text.ParseException;
+import java.util.Objects;
+
 import cl.udelvd.R;
 import cl.udelvd.models.Researcher;
 import cl.udelvd.utils.SnackbarInterface;
@@ -53,6 +56,7 @@ public class ProfileActivity extends AppCompatActivity implements SnackbarInterf
 
 
     private void instantiateInterfaceResources() {
+
         tvName = findViewById(R.id.tv_researcher_name);
         tvActivated = findViewById(R.id.tv_activated_researcher);
         tvEmail = findViewById(R.id.tv_email_researcher);
@@ -60,7 +64,6 @@ public class ProfileActivity extends AppCompatActivity implements SnackbarInterf
     }
 
     private void loadResearcherData() {
-
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
@@ -73,18 +76,25 @@ public class ProfileActivity extends AppCompatActivity implements SnackbarInterf
         researcher.setCreateTime(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_CREATE_TIME), ""));
         researcher.setPassword(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_PASSWORD), ""));
 
-
         researcher.setIdRole(sharedPreferences.getInt(getString(R.string.SHARED_PREF_INVES_ID_ROL), 0));
         researcher.setRolName(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE_ROL), ""));
 
         tvName.setText(String.format("%s %s", researcher.getName(), researcher.getLastName()));
         tvEmail.setText(researcher.getEmail());
+
         if (researcher.isActivated()) {
             tvActivated.setText(R.string.PERFIL_ACTIVADO);
         } else {
             tvActivated.setText(R.string.PERFIL_NO_ACTIVADO);
         }
-        tvRegistryAccount.setText(Utils.dateToString(getApplicationContext(), false, Utils.stringToDate(getApplicationContext(), false, researcher.getCreateTime())));
+
+        try {
+            tvRegistryAccount.setText(Utils.dateToString(getApplicationContext(), false, Utils.stringToDate(getApplicationContext(), false, researcher.getCreateTime())));
+        } catch (ParseException e) {
+
+            Log.d("STRING_TO_DATE", "Parse exception");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -99,12 +109,14 @@ public class ProfileActivity extends AppCompatActivity implements SnackbarInterf
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-
         if (item.getItemId() == android.R.id.home) {
+
             Intent intent = getIntent();
             setResult(PROFILE_ACTIVITY_CODE, intent);
             finish();
+
             return true;
+
         } else if (item.getItemId() == R.id.menu_edit_profile) {
 
             Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
@@ -131,14 +143,11 @@ public class ProfileActivity extends AppCompatActivity implements SnackbarInterf
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == EDIT_PROFILE_CODE) {
+
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-
-                assert bundle != null;
-
-                showSnackbar(findViewById(R.id.researcher_profile), Snackbar.LENGTH_LONG, bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION)), null);
+                Bundle bundle = Objects.requireNonNull(data, "Extra data cannot be null").getExtras();
+                showSnackbar(findViewById(R.id.researcher_profile), Snackbar.LENGTH_LONG, Objects.requireNonNull(bundle, "Msg_actualizacion cannot be null").getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION)), null);
 
                 loadResearcherData();
 

@@ -68,7 +68,7 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
                 email = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
 
                 if (validateField() && !email.isEmpty()) {
-                    ResearcherRepository.getInstance(getApplication()).resetPassword(email, Objects.requireNonNull(etPassword.getText()).toString());
+                    ResearcherRepository.getInstance(getApplication()).resetPassword(email, Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").toString());
                 }
 
             }
@@ -80,23 +80,31 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
         int errorCounter = 0;
 
         if (TextUtils.isEmpty(etPassword.getText())) {
+
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
-        } else if (Objects.requireNonNull(etPassword.getText()).length() < 8) {
+
+        } else if (Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").length() < 8) {
+
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
             errorCounter++;
+
         } else if (TextUtils.isEmpty(etConfirmarPass.getText())) {
+
             ilConfirmarPass.setErrorEnabled(true);
             ilConfirmarPass.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
 
-            if (!etPassword.getText().toString().equals(Objects.requireNonNull(etConfirmarPass.getText()).toString())) {
+            if (!etPassword.getText().toString().equals(Objects.requireNonNull(etConfirmarPass.getText(), "Et conf pass cannot be null").toString())) {
+
                 ilConfirmarPass.setErrorEnabled(true);
                 ilConfirmarPass.setError(getString(R.string.VALIDACION_PASSWORD_NO_IGUALES));
                 errorCounter++;
+
             } else {
                 ilPassword.setErrorEnabled(false);
                 ilConfirmarPass.setErrorEnabled(false);
@@ -107,10 +115,13 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
     }
 
     private void initViewModels() {
+
         resetPassViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
 
                     ilPassword.setEnabled(false);
@@ -118,6 +129,7 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
 
                     ilConfirmarPass.setEnabled(false);
                     etConfirmarPass.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
 
@@ -141,6 +153,7 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
                     sharedPreferences.edit().putBoolean(getString(R.string.SHARED_PREF_RESET_PASS), true).apply();
+
                     showSnackbar(findViewById(R.id.reset_pass), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_INICIAR_SESION));
                 }
             }
@@ -149,6 +162,7 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
         resetPassViewModel.showMsgErrorReset().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.GONE);
 
                 Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RESET), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -177,9 +191,11 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
 
     @Override
     public void showSnackbar(View v, int duration, String title, String action) {
+
         Snackbar snackbar = Snackbar.make(v, title, duration);
 
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -190,6 +206,7 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
                 }
             });
         }
+
         snackbar.show();
     }
 }

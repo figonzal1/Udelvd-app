@@ -27,6 +27,7 @@ public class EmoticonAdapter extends ArrayAdapter<Emoticon> {
     private final Context context;
 
     public EmoticonAdapter(@NonNull Context context, List<Emoticon> emoticonList) {
+
         super(context, R.layout.spinner_emoticons, emoticonList);
         this.context = context;
         this.emoticonList = emoticonList;
@@ -46,16 +47,16 @@ public class EmoticonAdapter extends ArrayAdapter<Emoticon> {
         ViewHolder holder = new ViewHolder();
 
         if (convertView == null) {
-            LayoutInflater mInflater = (LayoutInflater) context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            assert mInflater != null;
+            LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
             convertView = mInflater.inflate(R.layout.spinner_emoticons, parent, false);
 
             holder.ivEmoticon = convertView.findViewById(R.id.id_emoticon);
             holder.tvEmoticonDescription = convertView.findViewById(R.id.tv_description_emoticon);
 
             convertView.setTag(holder);
+
         } else {
             holder = (ViewHolder) convertView.getTag();
         }

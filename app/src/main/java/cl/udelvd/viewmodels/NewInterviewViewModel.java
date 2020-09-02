@@ -28,25 +28,31 @@ public class NewInterviewViewModel extends AndroidViewModel {
     INTERVIEW TYPES
      */
     public MutableLiveData<List<InterviewType>> loadInterviewTypes() {
+
         if (interviewTypeMutable == null) {
+
             interviewTypeMutable = new MutableLiveData<>();
             interviewTypeRepository = InterviewTypeRepository.getInstance(getApplication());
             interviewTypeMutable = interviewTypeRepository.getInterviewType();
         }
+
         return interviewTypeMutable;
     }
 
     public void refreshInterviewTypes() {
+
         interviewTypeRepository = InterviewTypeRepository.getInstance(getApplication());
         interviewTypeRepository.getInterviewType();
     }
 
     public SingleLiveEvent<String> showMsgErrorInterviewTypes() {
+
         interviewTypeRepository = InterviewTypeRepository.getInstance(getApplication());
         return interviewTypeRepository.getResponseMsgErrorList();
     }
 
     public MutableLiveData<Boolean> isLoadingInterviewTypes() {
+
         interviewTypeRepository = InterviewTypeRepository.getInstance(getApplication());
         return interviewTypeRepository.getIsLoading();
     }
@@ -56,16 +62,19 @@ public class NewInterviewViewModel extends AndroidViewModel {
         INTERVIEWEES REGISTRY
      */
     public SingleLiveEvent<String> showMsgErrorRegistry() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getResponseMsgErrorRegistry();
     }
 
     public SingleLiveEvent<String> showMsgRegistry() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getResponseMsgRegistry();
     }
 
     public MutableLiveData<Boolean> isLoadingRegistryInterviews() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getIsLoading();
     }

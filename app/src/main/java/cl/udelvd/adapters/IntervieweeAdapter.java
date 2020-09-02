@@ -53,6 +53,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private boolean totalList;
 
     public IntervieweeAdapter(List<Interviewee> intervieweeList, Context context, IntervieweeListFragment intervieweeListFragment, FragmentManager fragmentManager, IntervieweeListViewModel intervieweeListViewModel, Researcher researcher, boolean totalList) {
+
         this.intervieweeList = intervieweeList;
         this.context = context;
         this.intervieweeListFragment = intervieweeListFragment;
@@ -71,9 +72,12 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         View v;
         if (viewType == INTERVIEWEE) {
+
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_interviewee, parent, false);
             viewHolder = new IntervieweeViewHolder(v);
+
         } else if (viewType == PROGRESS_PAGINATION) {
+
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.pagination_item, parent, false);
             viewHolder = new LoadingViewHolder(v);
         }
@@ -96,7 +100,9 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.tvBirthDate.setText(String.format(context.getString(R.string.FORMATO_FECHA_NAC), Utils.dateToString(context.getApplicationContext(), false, interviewee.getBirthDate()), annos));
 
             if (interviewee.getnInterviews() == 1) {
+
                 holder.tvNInterviewees.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTA), interviewee.getnInterviews()));
+
             } else {
                 holder.tvNInterviewees.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTAS), interviewee.getnInterviews()));
             }
@@ -111,6 +117,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.cardViewInterviewee.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     Intent intent = new Intent(context, InterviewsListActivity.class);
 
                     Bundle bundle = new Bundle();
@@ -121,6 +128,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
                     bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
                     intent.putExtras(bundle);
+
                     context.startActivity(intent, bundle);
                 }
             });
@@ -160,6 +168,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
                                 bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
                                 intent.putExtras(bundle);
+
                                 context.startActivity(intent);
 
                                 return true;
@@ -167,6 +176,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                             //DELETE INTERVIEWEE
                             else if (item.getItemId() == R.id.menu_delete_interviewee) {
+
                                 DeleteIntervieweeDialogFragment dialog = new DeleteIntervieweeDialogFragment(interviewee);
                                 dialog.show(fragmentManager, TAG_DELETE_DIALOG_INTERVIEWEE);
 
@@ -180,12 +190,14 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             });
         } else if (getItemViewType(position) == PROGRESS_PAGINATION) {
+
             final LoadingViewHolder holder = (LoadingViewHolder) viewHolder;
 
             btnLoadMore = holder.btnLoadMore;
             progressBar = holder.progressBar;
 
             if (intervieweeList.size() == 0) {
+
                 btnLoadMore.setVisibility(View.GONE);
                 page = 1;
             }
@@ -193,6 +205,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (totalInterviewees == intervieweeList.size()) {
                 btnLoadMore.setVisibility(View.GONE);
             }
+
             btnLoadMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -226,13 +239,16 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void addInterviewees(List<Interviewee> entrevSgt) {
 
         if (btnLoadMore != null) {
+
             if (entrevSgt.size() == 0) {
+
                 btnLoadMore.setVisibility(View.GONE);
             } else {
                 btnLoadMore.setVisibility(View.VISIBLE);
             }
         }
         intervieweeList.addAll(entrevSgt);
+
         notifyDataSetChanged();
     }
 
@@ -241,12 +257,14 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void hideProgress() {
+
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }
     }
 
     public void updateList(List<Interviewee> intervieweeList) {
+
         this.intervieweeList = intervieweeList;
         notifyDataSetChanged();
     }
@@ -260,13 +278,16 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void setTotalList(boolean totalList) {
+
         this.totalList = totalList;
         notifyDataSetChanged();
     }
 
     public void filterList(List<Interviewee> intervieweeList) {
+
         this.intervieweeList.clear();
         this.intervieweeList = intervieweeList;
+
         notifyDataSetChanged();
     }
 

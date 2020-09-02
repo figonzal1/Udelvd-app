@@ -143,30 +143,30 @@ public class Utils {
             JWT jwt = new JWT(token);
 
             String issuer = jwt.getIssuer();
-            String audience = Objects.requireNonNull(jwt.getAudience()).get(0);
+            String audience = Objects.requireNonNull(jwt.getAudience(), "Audience cannot be null").get(0);
             String jti = jwt.getId();
             Claim claim = jwt.getClaim(context.getString(R.string.JWT_UID));
 
-            assert jti != null;
-            assert issuer != null;
-            Log.d(context.getString(R.string.TAG_JWT_ISSUER), issuer);
-            Log.d(context.getString(R.string.TAG_JWT_AUDIENCE), audience);
-            Log.d(context.getString(R.string.TAG_JWT_JTI), jti);
-            Log.d(context.getString(R.string.TAG_JWT_CLAIM_UID), Objects.requireNonNull(claim.asString()));
 
-            if (jti.equals(context.getString(R.string.JWT_JTI_CODE)) && audience.equals(context.getString(R.string.JWT_AUDIENCE_ANDROID)) &&
-                    issuer.equals(context.getString(R.string.JWT_ISSUER_UDELVD)) && Objects.equals(claim.asInt(),
-                    idResearcher)) {
+            Log.d(context.getString(R.string.TAG_JWT_ISSUER), Objects.requireNonNull(issuer, "Issuer cannot be null"));
+            Log.d(context.getString(R.string.TAG_JWT_AUDIENCE), audience);
+            Log.d(context.getString(R.string.TAG_JWT_JTI), Objects.requireNonNull(jti, "JTI cannot be null"));
+            Log.d(context.getString(R.string.TAG_JWT_CLAIM_UID), Objects.requireNonNull(claim.asString(), "Claim cannot be null"));
+
+            if (jti.equals(context.getString(R.string.JWT_JTI_CODE))
+                    && audience.equals(context.getString(R.string.JWT_AUDIENCE_ANDROID)) &&
+                    issuer.equals(context.getString(R.string.JWT_ISSUER_UDELVD)) &&
+                    Objects.equals(claim.asInt(), idResearcher)) {
 
                 Date expiresAt = jwt.getExpiresAt();
 
                 SimpleDateFormat format = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA_HORA), Locale.US);
-                assert expiresAt != null;
-                String date_s = format.format(expiresAt);
+                String date_s = format.format(Objects.requireNonNull(expiresAt, "Expires At cannot be null"));
 
                 Log.d(context.getString(R.string.TAG_JWT_FECHA_EXP), date_s);
 
                 boolean expired = jwt.isExpired(3720); //1 hour and 2 minutes, the token still valid (Santiago timezone problem)
+
                 Log.d(context.getString(R.string.TAG_JWT_STATUS), String.format("%s %s", context.getString(R.string.JWT_STATUS_EXPIRADO), expired));
                 crashlytics.log(context.getString(R.string.TAG_JWT_STATUS) + String.format("%s %s", context.getString(R.string.JWT_STATUS_EXPIRADO), expired));
                 crashlytics.setCustomKey("jwt_expired", expired);
@@ -236,6 +236,7 @@ public class Utils {
         ActionBar actionBar = activity.getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
+
         if (id_custom_drawable_home != 0) {
             actionBar.setHomeAsUpIndicator(id_custom_drawable_home);
         }
@@ -270,7 +271,7 @@ public class Utils {
      * @param sFecha Date in string to be converted into date
      * @return dFecha Date on Date delivered by the function
      */
-    public static Date stringToDate(Context context, boolean idHour, String sFecha) {
+    public static Date stringToDate(Context context, boolean idHour, String sFecha) throws ParseException {
 
         SimpleDateFormat mFormat;
 
@@ -279,19 +280,15 @@ public class Utils {
         } else {
             mFormat = new SimpleDateFormat(context.getString(R.string.FORMATO_FECHA), Locale.getDefault());
         }
-        Date mDFecha = null;
 
-        try {
-            mDFecha = mFormat.parse(sFecha);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Date mDFecha;
+        mDFecha = mFormat.parse(sFecha);
 
         return mDFecha;
     }
 
-    public static boolean isFutureDate(Context context, String sDate) {
+    public static boolean isFutureDate(Context context, String sDate) throws ParseException {
+
         Date date = stringToDate(context, false, sDate);
         Date now = new Date();
 
@@ -302,12 +299,13 @@ public class Utils {
      * Function responsible for opening the DatePicker to choose date
      */
     public static void iniciarDatePicker(final EditText editText, Context context, String parent) {
+
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH) + 1;
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        if (Objects.requireNonNull(editText.getText()).length() > 0) {
+        if (Objects.requireNonNull(editText.getText(), "Edit text cannot be null").length() > 0) {
 
             String fecha = editText.getText().toString();
             String[] fecha_split = fecha.split(context.getString(R.string.REGEX_FECHA));
@@ -321,7 +319,6 @@ public class Utils {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-
                 editText.setText(String.format(Locale.US, "%d-%d-%d", year, month + 1, dayOfMonth));
             }
         }, year, month - 1, day);
@@ -330,10 +327,14 @@ public class Utils {
         Calendar today = Calendar.getInstance();
 
         if (parent.equals("interviewee")) {
+
             today.add(Calendar.DATE, -1);
+
         } else if (parent.equals("interview")) {
+
             today.add(Calendar.MONTH, +1);
         }
+
         datePickerDialog.getDatePicker().setMaxDate(today.getTimeInMillis());
 
         datePickerDialog.show();
@@ -343,11 +344,12 @@ public class Utils {
      * Function in charge of configuring the picker to select Time
      */
     public static void initHourPicker(final EditText editText, Context context) {
+
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR);
         int minute = c.get(Calendar.MINUTE);
 
-        if (Objects.requireNonNull(editText.getText()).length() > 0) {
+        if (Objects.requireNonNull(editText.getText(), "EditText cannot be null").length() > 0) {
 
             String fecha = editText.getText().toString();
             String[] fecha_split = fecha.split(context.getString(R.string.REGEX_HORA));
@@ -359,9 +361,13 @@ public class Utils {
         TimePickerDialog timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
                 if (minute <= 9) {
+
                     editText.setText(String.format(Locale.US, "%d:0%d", hourOfDay, minute));
+
                 } else {
+
                     editText.setText(String.format(Locale.US, "%d:%d", hourOfDay, minute));
                 }
             }
@@ -389,22 +395,29 @@ public class Utils {
     }
 
     public static void configIconInterviewee(Interviewee interviewee, int annos, ImageView ivPerson, Context context) {
+
         if (interviewee.getGender().equals(context.getString(R.string.SEXO_FEMENINO)) ||
                 interviewee.getGender().equals(context.getString(R.string.SEXO_FEMENINO_MASTER_KEY))) {
 
             if (annos < 18) {
+
                 ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_girl, context.getTheme()));
+
             } else if (annos < 65) {
                 ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_adult_woman, context.getTheme()));
+
             } else {
                 ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_grand_mother, context.getTheme()));
             }
-        } else if (interviewee.getGender().equals(context.getString(R.string.SEXO_MASCULINO)) ||
-                interviewee.getGender().equals(context.getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
+
+        } else if (interviewee.getGender().equals(context.getString(R.string.SEXO_MASCULINO)) || interviewee.getGender().equals(context.getString(R.string.SEXO_MASCULINO_MASTER_KEY))) {
+
             if (annos < 18) {
                 ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_boy, context.getTheme()));
+
             } else if (annos < 65) {
                 ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_adult_man, context.getTheme()));
+
             } else {
                 ivPerson.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_grand_father, context.getTheme()));
             }

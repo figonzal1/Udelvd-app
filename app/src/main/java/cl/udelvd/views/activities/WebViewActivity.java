@@ -27,6 +27,7 @@ public class WebViewActivity extends AppCompatActivity {
         Utils.configToolbar(this, getApplicationContext(), R.drawable.ic_close_white_24dp, getString(R.string.TITULO_TABLEAU));
 
         if (getIntent().getExtras() != null) {
+
             Bundle bundle = getIntent().getExtras();
             linkGrafico = bundle.getString(getString(R.string.INTENT_LINK_GRAFICO));
         }
@@ -47,6 +48,7 @@ public class WebViewActivity extends AppCompatActivity {
                 return true;
             }
         });
+
         /*final ProgressBar progressBar = findViewById(R.id.progressBar);
 
         web_view.setWebChromeClient(new WebChromeClient() {
@@ -69,7 +71,9 @@ public class WebViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
+
             finish();
+
             return true;
         }
         return super.onOptionsItemSelected(item);

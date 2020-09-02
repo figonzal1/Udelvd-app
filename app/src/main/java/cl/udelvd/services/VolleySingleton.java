@@ -29,7 +29,7 @@ public class VolleySingleton {
      * @return Volley Instance
      */
     public static synchronized VolleySingleton getInstance(Context context) {
-        //Si la instancia no existe
+
         if (instance == null) {
             instance = new VolleySingleton(context);
         }
@@ -37,9 +37,11 @@ public class VolleySingleton {
     }
 
     private RequestQueue getRequestQueue() {
+
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(context);
         }
+
         return requestQueue;
     }
 

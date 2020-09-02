@@ -25,7 +25,9 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
     private final DeleteDialogListener listener;
 
     public FragmentStatePageAdapter(@NonNull FragmentManager fm, int behavior, List<Event> eventList, String interviewDate, Activity activity, DeleteDialogListener listener) {
+
         super(fm, behavior);
+
         this.eventList = eventList;
         this.interviewDate = interviewDate;
         this.activity = activity;
@@ -61,6 +63,7 @@ public class FragmentStatePageAdapter extends FragmentStatePagerAdapter {
     }
 
     public void updateList(List<Event> eventList) {
+
         this.eventList = eventList;
         notifyDataSetChanged();
     }

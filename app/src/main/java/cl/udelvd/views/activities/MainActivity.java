@@ -23,7 +23,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Objects;
 
-import cl.udelvd.ContactActivity;
 import cl.udelvd.R;
 import cl.udelvd.adapters.FragmentPageAdapter;
 import cl.udelvd.models.Interviewee;
@@ -108,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
     }
 
     private void instantiateInterfaceResources() {
+
         viewPager = findViewById(R.id.view_pager_main);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
     }
 
     private void getBundleData() {
+
         researcher = new Researcher();
         researcher.setName(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_NOMBRE), ""));
         researcher.setLastName(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_APELLIDO), ""));
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
         researcher.setEmail(sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), ""));
 
         if (getIntent().getExtras() != null) {
+
             Bundle bundle = getIntent().getExtras();
             msgLogin = bundle.getString(getString(R.string.INTENT_KEY_MSG_LOGIN));
         }
@@ -139,17 +141,24 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
         tabLayout.setupWithViewPager(viewPager);
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
+
             TabLayout.Tab tab = tabLayout.getTabAt(i);
-            assert tab != null;
-            if (i == 0) {
-                tab.setIcon(R.drawable.ic_list_black_24dp);
-            } else if (i == 1) {
-                tab.setIcon(R.drawable.ic_show_chart_black_24dp);
+
+            if (tab != null) {
+
+                if (i == 0) {
+
+                    tab.setIcon(R.drawable.ic_list_black_24dp);
+
+                } else if (i == 1) {
+
+                    tab.setIcon(R.drawable.ic_show_chart_black_24dp);
+                }
             }
         }
 
         navigationView.setCheckedItem(R.id.menu_interviewees);
-        Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+        Objects.requireNonNull(tabLayout.getTabAt(0), "Get tab 0 cannot be null").select();
 
         cargarDatosInvestigador();
 
@@ -157,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
         if (!researcher.getRolName().equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
             navigationView.getMenu().findItem(R.id.group_admin).setVisible(false);
         }
+
         navigationListener();
 
         tabsListener();
@@ -168,7 +178,9 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
         tvResearchEmail.setText(researcher.getEmail());
 
         if (researcher.getRolName().equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
+
             tvResearchRoleName.setText(getString(R.string.ROL_ADMINITRADOR));
+
         } else {
             tvResearchRoleName.setText(getString(R.string.ROL_INVESTIGADOR));
         }
@@ -181,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-
                 if (menuItem.getItemId() == R.id.menu_profile) {
 
                     navigationView.setCheckedItem(R.id.menu_profile);
@@ -190,15 +201,17 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                     startActivityForResult(intent, PROFILE_ACTIVITY_CODE);
 
                     return true;
+
                 } else if (menuItem.getItemId() == R.id.menu_interviewees) {
 
-                    Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+                    Objects.requireNonNull(tabLayout.getTabAt(0), "get tab 0 cannot be null").select();
                     drawerLayout.closeDrawer(GravityCompat.START, true);
 
                     return true;
+
                 } else if (menuItem.getItemId() == R.id.menu_stats) {
 
-                    Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+                    Objects.requireNonNull(tabLayout.getTabAt(1), "get tab 1 cannot be null").select();
                     drawerLayout.closeDrawer(GravityCompat.START, true);
 
                     return true;
@@ -214,7 +227,9 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                     return true;
 
                 } else if (menuItem.getItemId() == R.id.menu_emoticons) {
+
                     return true;
+
                 } else if (menuItem.getItemId() == R.id.menu_researchers) {
 
                     navigationView.setCheckedItem(R.id.menu_researchers);
@@ -224,7 +239,6 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
                     return true;
                 }
-
 
                 if (menuItem.getItemId() == R.id.menu_contact) {
 
@@ -240,10 +254,12 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                 if (menuItem.getItemId() == R.id.menu_logout) {
 
                     String token = sharedPreferences.getString(getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
-                    assert token != null;
-                    crashlytics.setCustomKey(getString(R.string.SHARED_PREF_TOKEN_LOGIN), token);
 
-                    if (!token.isEmpty()) {
+                    if (token != null && !token.isEmpty()) {
+
+                        crashlytics.setCustomKey(getString(R.string.SHARED_PREF_TOKEN_LOGIN), token);
+
+
                         Log.d(getString(R.string.TAG_TOKEN_LOGOUT), String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
                         crashlytics.log(getString(R.string.TAG_TOKEN_LOGOUT) + String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
 
@@ -256,8 +272,9 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
+
+                        return true;
                     }
-                    return true;
                 }
                 return false;
             }
@@ -274,9 +291,13 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
 
                 if (tab.getPosition() == 0) {
+
                     navigationView.setCheckedItem(R.id.menu_interviewees);
+
                 } else if (tab.getPosition() == 1) {
+
                     navigationView.setCheckedItem(R.id.menu_stats);
+
                 }
             }
 
@@ -296,7 +317,9 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
+
             drawerLayout.openDrawer(GravityCompat.START);
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -306,8 +329,10 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if (requestCode == PROFILE_ACTIVITY_CODE) {
+
             navigationView.setCheckedItem(R.id.menu_interviewees);
-            Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+
+            Objects.requireNonNull(tabLayout.getTabAt(0), "Get tab 0 cannot be null").select();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

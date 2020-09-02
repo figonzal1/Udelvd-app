@@ -27,31 +27,41 @@ public class ActionListViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<List<Action>> loadActions() {
+
         if (mutableLiveData == null) {
+
             mutableLiveData = new MutableLiveData<>();
             repository = ActionRepository.getInstance(getApplication());
             mutableLiveData = repository.getActions();
         }
+
         return mutableLiveData;
     }
 
     public SingleLiveEvent<String> showMsgErrorList() {
+
         repository = ActionRepository.getInstance(getApplication());
         return repository.getResponseMsgErrorList();
     }
 
     public void refreshActions() {
+
         repository = ActionRepository.getInstance(getApplication());
+
         repository.getActions();
     }
 
     public SingleLiveEvent<String> showMsgErrorDelete() {
+
         repository = ActionRepository.getInstance(getApplication());
+
         return repository.getResponseMsgErrorDelete();
     }
 
     public SingleLiveEvent<String> showMsgDelete() {
+
         repository = ActionRepository.getInstance(getApplication());
+
         return repository.getResponseMsgDelete();
     }
 }

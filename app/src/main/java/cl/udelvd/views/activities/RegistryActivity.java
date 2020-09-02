@@ -67,6 +67,7 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
 
     private void botonRegistry() {
         Button btnRegistry = findViewById(R.id.btn_registry);
+
         btnRegistry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,14 +76,12 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
 
                     progressBar.setVisibility(View.VISIBLE);
 
-
                     Researcher researcher = new Researcher();
-                    researcher.setName(Objects.requireNonNull(etName.getText()).toString());
-                    researcher.setLastName(Objects.requireNonNull(etLastName.getText())
-                            .toString());
+                    researcher.setName(Objects.requireNonNull(etName.getText(), "Et name cannot be null").toString());
+                    researcher.setLastName(Objects.requireNonNull(etLastName.getText(), "Et last name cannot be null").toString());
 
-                    researcher.setEmail(Objects.requireNonNull(etEmail.getText()).toString());
-                    researcher.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
+                    researcher.setEmail(Objects.requireNonNull(etEmail.getText(), "Et email cannot be null").toString());
+                    researcher.setPassword(Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").toString());
                     researcher.setRolName(getString(R.string.ROL_INVESTIG_KEY_MASTER));
                     researcher.setActivated(false);
 
@@ -94,6 +93,7 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
     }
 
     private void instantiateInterfaceResources() {
+
         progressBar = findViewById(R.id.progress_horizontal_registry_researcher);
 
         ilName = findViewById(R.id.il_researcher_name);
@@ -101,7 +101,6 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
         ilEmail = findViewById(R.id.il_researcher_email);
         ilPassword = findViewById(R.id.il_researcher_password);
         ilConfirmacionPassword = findViewById(R.id.il_research_confirm_password);
-
 
         etName = findViewById(R.id.et_researcher_name);
         etLastName = findViewById(R.id.et_researcher_last_name);
@@ -114,14 +113,13 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
 
     private void initViewModel() {
 
-
         registryViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
 
                 if (aBoolean) {
-                    progressBar.setVisibility(View.VISIBLE);
 
+                    progressBar.setVisibility(View.VISIBLE);
 
                     ilName.setEnabled(false);
                     etName.setEnabled(false);
@@ -134,9 +132,9 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
 
                     ilPassword.setEnabled(false);
                     ilConfirmacionPassword.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.GONE);
-
 
                     ilName.setEnabled(true);
                     etName.setEnabled(true);
@@ -165,18 +163,22 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
 
                 progressBar.setVisibility(View.GONE);
 
+                if (msg_registro != null && msg_registro.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
 
-                assert msg_registro != null;
-                assert activado != null;
-
-                if (msg_registro.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
                     Intent intent = getIntent();
 
-                    if (activado.equals("0")) {
-                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro + getString(R.string.SNACKBAR_ACTIVACION));
-                    } else if (activado.equals("1")) {
-                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro);
+                    if (activado != null) {
+
+                        if (activado.equals("0")) {
+
+                            intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro + getString(R.string.SNACKBAR_ACTIVACION));
+
+                        } else if (activado.equals("1")) {
+
+                            intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro);
+                        }
                     }
+
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -202,6 +204,7 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
         int errorCounter = 0;
 
         if (TextUtils.isEmpty(etName.getText())) {
+
             ilName.setErrorEnabled(true);
             ilName.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
@@ -216,6 +219,7 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
             ilLastName.setErrorEnabled(true);
             ilLastName.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
             ilLastName.setErrorEnabled(false);
         }
@@ -226,48 +230,59 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
             ilEmail.setErrorEnabled(true);
             ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
 
-
             if (Utils.isInvalidEmail(etEmail.getText())) {
+
                 ilEmail.setErrorEnabled(true);
                 ilEmail.setError(getString(R.string.VALIDACION_EMAIL));
                 errorCounter++;
+
             } else {
                 ilEmail.setErrorEnabled(false);
             }
         }
 
         if (TextUtils.isEmpty(etPassword.getText())) {
+
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
-        } else if (Objects.requireNonNull(etPassword.getText()).length() < 8) {
+
+        } else if (Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").length() < 8) {
+
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
             errorCounter++;
+
         } else if (TextUtils.isEmpty(etConfirmacionPassword.getText())) {
+
             ilConfirmacionPassword.setErrorEnabled(true);
             ilConfirmacionPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
 
+            if (!etPassword.getText().toString().equals(Objects.requireNonNull(etConfirmacionPassword.getText(), "Et conf password cannot be null").toString())) {
 
-            if (!etPassword.getText().toString().equals(Objects.requireNonNull(etConfirmacionPassword.getText()).toString())) {
                 ilConfirmacionPassword.setErrorEnabled(true);
                 ilConfirmacionPassword.setError(getString(R.string.VALIDACION_PASSWORD_NO_IGUALES));
                 errorCounter++;
+
             } else {
                 errorCounter = 0;
                 ilPassword.setErrorEnabled(false);
                 ilConfirmacionPassword.setErrorEnabled(false);
             }
         }
+
         return errorCounter == 0;
     }
 
     @Override
     public void showSnackbar(View v, int duration, String title, String action) {
+
         Snackbar snackbar = Snackbar.make(v, title, duration);
         snackbar.show();
     }
@@ -276,7 +291,9 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
+
             finish();
+
             return true;
         }
 

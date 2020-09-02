@@ -29,25 +29,31 @@ public class EditInterviewViewModel extends AndroidViewModel {
     INTERVIEW TYPES
      */
     public MutableLiveData<List<InterviewType>> loadInterviewTypes() {
+
         if (interviewTypeMutableLiveData == null) {
+
             interviewTypeMutableLiveData = new MutableLiveData<>();
             interviewTypeRepository = InterviewTypeRepository.getInstance(getApplication());
             interviewTypeMutableLiveData = interviewTypeRepository.getInterviewType();
         }
+
         return interviewTypeMutableLiveData;
     }
 
     public SingleLiveEvent<String> showMsgErrorInterviewTypeList() {
+
         interviewTypeRepository = InterviewTypeRepository.getInstance(getApplication());
         return interviewTypeRepository.getResponseMsgErrorList();
     }
 
     public MutableLiveData<Boolean> isLoadingInterviewTypes() {
+
         interviewTypeRepository = InterviewTypeRepository.getInstance(getApplication());
         return interviewTypeRepository.getIsLoading();
     }
 
     public void refreshInterviewTypes() {
+
         interviewTypeRepository = InterviewTypeRepository.getInstance(getApplication());
         interviewTypeRepository.getInterviewType();
     }
@@ -56,31 +62,37 @@ public class EditInterviewViewModel extends AndroidViewModel {
     INTERVIEW
      */
     public SingleLiveEvent<Interview> loadInterview(Interview interview) {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getPersonalInterview(interview);
     }
 
     public MutableLiveData<Boolean> isLoadingInterview() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> showMsgErrorInterview() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getResponseMsgErrorInterview();
     }
 
     public SingleLiveEvent<String> showMsgUpdate() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getResponseMsgUpdate();
     }
 
     public SingleLiveEvent<String> showMsgErrorUpdate() {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         return interviewRepository.getResponseMsgErrorUpdate();
     }
 
     public void refreshInterview(Interview interviewIntent) {
+
         interviewRepository = InterviewRepository.getInstance(getApplication());
         interviewRepository.getPersonalInterview(interviewIntent);
     }

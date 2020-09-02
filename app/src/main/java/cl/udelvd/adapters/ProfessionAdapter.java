@@ -10,6 +10,7 @@ import java.util.List;
 import cl.udelvd.models.Profession;
 
 public class ProfessionAdapter extends ArrayAdapter<Profession> {
+
     public ProfessionAdapter(@NonNull Context context, int resource, @NonNull List<Profession> professionList) {
         super(context, resource, professionList);
     }

@@ -24,6 +24,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import cl.udelvd.R;
 import cl.udelvd.adapters.ActionAdapter;
@@ -100,10 +101,13 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
         actionListViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
                     tvEmptyAction.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.INVISIBLE);
+
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
                     rv.setVisibility(View.VISIBLE);
@@ -114,13 +118,16 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
         actionListViewModel.loadActions().observe(this, new Observer<List<Action>>() {
             @Override
             public void onChanged(List<Action> actions) {
+
                 if (actions != null) {
 
                     actionList = actions;
                     actionAdapter.updateList(actionList);
 
                     progressBar.setVisibility(View.INVISIBLE);
+
                     if (actionList.size() == 0) {
+
                         tvEmptyAction.setVisibility(View.VISIBLE);
                     } else {
                         tvEmptyAction.setVisibility(View.INVISIBLE);
@@ -135,12 +142,14 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
         actionListViewModel.showMsgErrorList().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
                 if (!isSnackBarShow) {
+
                     rv.setVisibility(View.INVISIBLE);
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
@@ -152,30 +161,36 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
         actionListViewModel.showMsgDelete().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (s.equals(getString(R.string.MSG_DELETE_ACCION))) {
+
                     isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_LONG, s, null);
                     ActionRepository.getInstance(getApplication()).getActions();
                 }
+
                 Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
                 crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
             }
         });
 
         actionListViewModel.showMsgErrorDelete().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.INVISIBLE);
 
                 if (!isSnackBarShow) {
+
                     isSnackBarShow = true;
 
                     if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
                         rv.setVisibility(View.INVISIBLE);
                         showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_INDEFINITE, s, null);
+
                     } else {
                         showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_LONG, s, null);
                     }
@@ -189,10 +204,13 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
     }
 
     private void floatingButtonNewAction() {
+
         FloatingActionButton fabNewAction = findViewById(R.id.fb_new_action);
+
         fabNewAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(ActionListActivity.this, NewActionActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_NEW_ACTION);
             }
@@ -203,7 +221,9 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
     public void showSnackbar(View v, int duration, String title, String action) {
 
         snackbar = Snackbar.make(v, title, duration);
+
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -211,16 +231,16 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
                     progressBar.setVisibility(View.VISIBLE);
 
                     isSnackBarShow = false;
+
                     if (snackbar != null) {
                         snackbar.dismiss();
                     }
 
                     actionListViewModel.refreshActions();
-
-
                 }
             });
         }
+
         snackbar.show();
         isSnackBarShow = false;
     }
@@ -235,20 +255,26 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         if (item.getItemId() == android.R.id.home) {
+
             Intent intent = getIntent();
             setResult(ACTIONS_ACTIVITY_CODE, intent);
             finish();
+
             return true;
+
         } else if (item.getItemId() == R.id.menu_refresh) {
 
             progressBar.setVisibility(View.VISIBLE);
 
             isSnackBarShow = false;
+
             if (snackbar != null) {
                 snackbar.dismiss();
             }
             actionListViewModel.refreshActions();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -261,12 +287,11 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
 
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-                assert bundle != null;
-                String msg_registro = bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
+                Bundle bundle = Objects.requireNonNull(data, "Get extras cannot be null").getExtras();
+                String msg_registro = Objects.requireNonNull(bundle, "Msg_registro cannot be null").getString(getString(R.string.INTENT_KEY_MSG_REGISTRO));
 
                 if (msg_registro != null) {
+
                     isSnackBarShow = false;
                     showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_LONG, msg_registro, null);
                     actionListViewModel.refreshActions();
@@ -276,14 +301,15 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
 
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-                assert bundle != null;
-                String msg_actualizacion = bundle.getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
+                Bundle bundle = Objects.requireNonNull(data, "Get extras cannot be null").getExtras();
+                String msg_actualizacion = Objects.requireNonNull(bundle, "Msg_actualizacion cannot be null").getString(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION));
 
                 if (msg_actualizacion != null) {
+
                     isSnackBarShow = false;
+
                     showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_LONG, msg_actualizacion, null);
+
                     actionListViewModel.refreshActions();
 
                     actionAdapter.notifyDataSetChanged();

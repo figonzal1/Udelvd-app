@@ -29,16 +29,19 @@ public class NewEventViewModel extends AndroidViewModel {
     EVENTS
      */
     public MutableLiveData<Boolean> isLoadingEvents() {
+
         eventRepository = EventRepository.getInstance(getApplication());
         return eventRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> showMsgErrorRegistry() {
+
         eventRepository = EventRepository.getInstance(getApplication());
         return eventRepository.getResponseErrorMsgRegistry();
     }
 
     public SingleLiveEvent<String> showMsgRegistry() {
+
         eventRepository = EventRepository.getInstance(getApplication());
         return eventRepository.getResponseMsgRegistry();
     }
@@ -47,21 +50,25 @@ public class NewEventViewModel extends AndroidViewModel {
     ACTIONS
      */
     public MutableLiveData<Boolean> isLoadingActions() {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getIsLoading();
     }
 
     public SingleLiveEvent<String> showMsgErrorActions() {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getResponseMsgErrorList();
     }
 
     public MutableLiveData<List<Action>> loadActions(String idioma) {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         return actionRepository.getActionsByLanguage(idioma);
     }
 
     public void refreshActions(String idioma) {
+
         actionRepository = ActionRepository.getInstance(getApplication());
         actionRepository.getActionsByLanguage(idioma);
     }
@@ -71,21 +78,25 @@ public class NewEventViewModel extends AndroidViewModel {
      */
 
     public MutableLiveData<Boolean> isLoadingEmoticons() {
+
         emoticonRepository = EmoticonRepository.getInstance(getApplication());
         return emoticonRepository.getIsLoading();
     }
 
     public MutableLiveData<List<Emoticon>> loadEmoticons() {
+
         emoticonRepository = EmoticonRepository.getInstance(getApplication());
         return emoticonRepository.getEmoticons();
     }
 
     public SingleLiveEvent<String> showMsgErrorEmoticons() {
+
         emoticonRepository = EmoticonRepository.getInstance(getApplication());
         return emoticonRepository.getResponseMsgErrorList();
     }
 
     public void refreshEmoticons() {
+
         emoticonRepository = EmoticonRepository.getInstance(getApplication());
         emoticonRepository.getEmoticons();
     }

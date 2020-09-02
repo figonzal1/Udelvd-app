@@ -107,13 +107,14 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         progressBar = findViewById(R.id.progress_horizontal_login);
 
         Button btn_login = findViewById(R.id.btn_login);
+
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (validateFields()) {
-                    progressBar.setVisibility(View.VISIBLE);
 
+                    progressBar.setVisibility(View.VISIBLE);
 
                     Researcher researcher = new Researcher();
                     researcher.setEmail(Objects.requireNonNull(etEmail.getText()).toString().toLowerCase());
@@ -134,7 +135,9 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         loginViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if (aBoolean) {
+
                     progressBar.setVisibility(View.VISIBLE);
 
                     ilEmail.setEnabled(false);
@@ -142,6 +145,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
                     ilPassword.setEnabled(false);
                     etPassword.setEnabled(false);
+
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
 
@@ -187,17 +191,15 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
                     progressBar.setVisibility(View.INVISIBLE);
 
-
-                    assert msg_login != null;
-                    if (msg_login.equals(getString(R.string.MSG_INVEST_LOGIN))) {
+                    if (msg_login != null && msg_login.equals(getString(R.string.MSG_INVEST_LOGIN))) {
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra(getString(R.string.INTENT_KEY_MSG_LOGIN), msg_login);
                         intent.putExtra(getString(R.string.NOTIFICACION_INTENT_ACTIVADO), isNotification);
                         startActivity(intent);
+
                         finish();
                     }
-
                 }
             }
 
@@ -207,6 +209,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         loginViewModel.showMsgErrorLogin().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 progressBar.setVisibility(View.INVISIBLE);
 
                 Log.d(getString(R.string.TAG_VM_INVES_LOGIN), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
@@ -222,6 +225,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         TextView tvRegistry = findViewById(R.id.tv_registry_researcher);
         tvRegistry.setMovementMethod(LinkMovementMethod.getInstance());
         Spannable spans = (Spannable) tvRegistry.getText();
+
         ClickableSpan clickSpan = new ClickableSpan() {
 
             @Override
@@ -234,10 +238,13 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
 
         if (Locale.getDefault().getLanguage().equals(getString(R.string.INGLES))) {
+
             String registro = tvRegistry.getText().toString();
             int index = registro.indexOf("Sign up");
             spans.setSpan(clickSpan, index, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         } else if (Locale.getDefault().getLanguage().equals(getString(R.string.ESPANOL))) {
+
             String registro = tvRegistry.getText().toString();
             int index = registro.indexOf("Regístrate");
             spans.setSpan(clickSpan, index, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -249,6 +256,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         TextView tvRecovery = findViewById(R.id.tv_recovery);
         tvRecovery.setMovementMethod(LinkMovementMethod.getInstance());
         Spannable spans = (Spannable) tvRecovery.getText();
+
         ClickableSpan clickSpan = new ClickableSpan() {
 
             @Override
@@ -258,10 +266,12 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 startActivity(intent);
             }
         };
+
         spans.setSpan(clickSpan, 0, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     private void dynamicLinkRecovery() {
+
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
                 .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
@@ -270,6 +280,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
                         Uri deepLink;
                         if (pendingDynamicLinkData != null) {
+
                             deepLink = pendingDynamicLinkData.getLink();
 
                             Log.d(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), String.valueOf(deepLink));
@@ -284,6 +295,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                                 Intent intent = new Intent(LoginActivity.this, ResetPassActivity.class);
                                 startActivity(intent);
                                 finish();
+
                             } else {
                                 showSnackbar(findViewById(R.id.login_researcher), Snackbar.LENGTH_INDEFINITE, getString(R.string.DYNAMIC_LINK_INVALIDO), getString(R.string.SNACKBAR_SOLICITAR_RECUPERACION));
                             }
@@ -294,6 +306,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+
                         Log.w(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE), "getDynamicLink:onFailure", e);
                         crashlytics.log(getString(R.string.TAG_DYNAMIC_LINK_FIREBASE) + "getDynamicLink:onFailure" + e);
                     }
@@ -301,6 +314,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
     }
 
     private void getDeviationNotification() {
+
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null && bundle.containsKey(getString(R.string.NOTIFICACION_INTENT_ACTIVADO))) {
@@ -316,11 +330,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
             if (resultCode == RESULT_OK) {
 
-                assert data != null;
-                Bundle bundle = data.getExtras();
-
-                assert bundle != null;
-                showSnackbar(findViewById(R.id.login_researcher), Snackbar.LENGTH_INDEFINITE, bundle.getString(getString(R.string.INTENT_KEY_MSG_REGISTRO)), null);
+                Bundle bundle = Objects.requireNonNull(data, "Data cannot be null").getExtras();
+                showSnackbar(findViewById(R.id.login_researcher), Snackbar.LENGTH_INDEFINITE, Objects.requireNonNull(bundle, "Msg_registro cannot be null").getString(getString(R.string.INTENT_KEY_MSG_REGISTRO)), null);
             }
         }
 
@@ -333,14 +344,17 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         Snackbar snackbar = Snackbar.make(v, title, largo_snackbar);
 
         if (action != null) {
+
             snackbar.setAction(action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     Intent intent = new Intent(LoginActivity.this, RecoveryActivity.class);
                     startActivity(intent);
                 }
             });
         }
+
         snackbar.show();
 
     }
@@ -349,32 +363,37 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
         int errorCounter = 0;
 
-
         if (TextUtils.isEmpty(etEmail.getText())) {
+
             ilEmail.setErrorEnabled(true);
             ilEmail.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
+
         } else {
 
-
             if (Utils.isInvalidEmail(etEmail.getText())) {
+
                 ilEmail.setErrorEnabled(true);
                 ilEmail.setError(getString(R.string.VALIDACION_EMAIL));
                 errorCounter++;
+
             } else {
                 ilEmail.setErrorEnabled(false);
             }
         }
 
-
         if (TextUtils.isEmpty(etPassword.getText())) {
+
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_CAMPO_REQUERIDO));
             errorCounter++;
-        } else if (Objects.requireNonNull(etPassword.getText()).length() < 8) {
+
+        } else if (Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").length() < 8) {
+
             ilPassword.setErrorEnabled(true);
             ilPassword.setError(getString(R.string.VALIDACION_PASSWORD_LARGO));
             errorCounter++;
+
         } else {
             ilPassword.setErrorEnabled(false);
         }

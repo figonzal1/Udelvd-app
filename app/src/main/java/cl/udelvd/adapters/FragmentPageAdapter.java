@@ -22,7 +22,9 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
     private final Context context;
 
     public FragmentPageAdapter(@NonNull FragmentManager fm, Context context, String msgLogin) {
+
         super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
         mTabs[0] = context.getString(R.string.TAB_NAME_ENTREVISTADOS);
         mTabs[1] = context.getString(R.string.TAB_NAME_ESTADISTICAS);
         this.msgLogin = msgLogin;
@@ -33,6 +35,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
+
         Fragment f = new Fragment();
 
         switch (position) {
@@ -45,8 +48,11 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
                 f.setArguments(bundle);
 
                 break;
+
             case 1:
+
                 f = StatsFragment.newInstance();
+
                 break;
 
         }

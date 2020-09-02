@@ -18,16 +18,19 @@ public class EditActionViewModel extends AndroidViewModel {
     }
 
     public SingleLiveEvent<String> showMsgUpdate() {
+
         repository = ActionRepository.getInstance(getApplication());
         return repository.getResponseMsgUpdate();
     }
 
     public SingleLiveEvent<String> showMsgErrorUpdate() {
+
         repository = ActionRepository.getInstance(getApplication());
         return repository.getResponseMsgErrorUpdate();
     }
 
     public MutableLiveData<Boolean> isLoadingUpdate() {
+
         repository = ActionRepository.getInstance(getApplication());
         return repository.getIsLoading();
     }

@@ -20,16 +20,19 @@ public class EditProfileViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<Boolean> isLoading() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getIsLoading();
     }
 
     public SingleLiveEvent<Map<String, Object>> showMsgUpdate() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgUpdate();
     }
 
     public SingleLiveEvent<String> showMsgErrorUpdate() {
+
         researcherRepository = ResearcherRepository.getInstance(getApplication());
         return researcherRepository.getResponseMsgErrorUpdate();
     }

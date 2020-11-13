@@ -81,6 +81,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
     private void instantiateInterfaceResources() {
 
+        final SharedPreferences sharedPreferences = getSharedPreferences(getApplicationContext().getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+
         //Card View Animation
         MaterialCardView materialCardView = findViewById(R.id.cv_login);
         Animation cvAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.card_view_animation);
@@ -102,6 +104,10 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         ilPassword = findViewById(R.id.il_password_login);
 
         etEmail = findViewById(R.id.et_email_login);
+        String sharedEmail = sharedPreferences.getString("login_email", "");
+        if (!sharedEmail.isEmpty()) {
+            etEmail.setText(sharedEmail);
+        }
         etPassword = findViewById(R.id.et_password_login);
 
         progressBar = findViewById(R.id.progress_horizontal_login);
@@ -120,6 +126,10 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                     researcher.setEmail(Objects.requireNonNull(etEmail.getText()).toString().toLowerCase());
 
                     researcher.setPassword(Objects.requireNonNull(etPassword.getText()).toString());
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("login_email", etEmail.getText().toString());
+                    editor.apply();
 
                     ResearcherRepository.getInstance(getApplication()).loginResearcher(researcher);
                 }

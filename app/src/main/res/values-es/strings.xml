@@ -237,5 +237,6 @@
     <string name="tipos_entrevistas">Tipos entrevistas</string>
     <string name="extraordinary_interviews">Extraordinaria: Son entrevistas que contienen eventos diarios que ocurren de manera esporádica o poco común.</string>
     <string name="normal_interviews">Normales: Son entrevistas que contienen eventos diarios que ocurren en un día común y corriente.</string>
+    <string name="sin_seleccionar">Sin seleccionar</string>
 
 </resources>

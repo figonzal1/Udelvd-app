@@ -329,7 +329,6 @@
 
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/et_interviewee_genre"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
@@ -425,14 +424,12 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:hint="@string/NIVEL_EDUCACIONAL"
-                    app:endIconMode="dropdown_menu"
                     app:layout_constraintEnd_toStartOf="@+id/guia_der"
                     app:layout_constraintStart_toEndOf="@+id/iv_icon_educational_level"
                     app:layout_constraintTop_toBottomOf="@+id/tv_opcionals">
 
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/et_interviewee_educational_level"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
@@ -498,7 +495,6 @@
 
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/et_interviewee_coexistence_type"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
@@ -532,7 +528,6 @@
 
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/et_interviewee_profession"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:completionThreshold="1"

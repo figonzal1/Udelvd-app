@@ -598,6 +598,7 @@
     <string name="tipos_entrevistas">Interviews types</string>
     <string name="normal_interviews">Normal: These are interviews that contain daily events that occur on an ordinary day.</string>
     <string name="extraordinary_interviews">" Extraordinary: They are interviews that contain daily events that occur sporadically."</string>
+    <string name="sin_seleccionar">No selected</string>
 
 
 </resources>

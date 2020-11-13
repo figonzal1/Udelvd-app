@@ -70,12 +70,12 @@ public class ResearcherRepository {
     private final MutableLiveData<Boolean> isActivated = new MutableLiveData<>();
     private final SingleLiveEvent<String> responseMsgErrorReset = new SingleLiveEvent<>();
     //LIST
-    private List<Researcher> researcherList = new ArrayList<>();
-    private List<Researcher> researcherSgtPage = new ArrayList<>();
+    private final List<Researcher> researcherList = new ArrayList<>();
+    private final List<Researcher> researcherSgtPage = new ArrayList<>();
 
     //PROGRESS DIALOG
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private MutableLiveData<Integer> mutableNResearcher = new MutableLiveData<>();
+    private final MutableLiveData<Integer> mutableNResearcher = new MutableLiveData<>();
 
     private ResearcherRepository(Application application) {
         this.application = application;
@@ -142,11 +142,7 @@ public class ResearcherRepository {
                         inv.setIdRole(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
                         inv.setCreateTime(jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME)));
 
-                        if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
-                            inv.setActivated(false);
-                        } else {
-                            inv.setActivated(true);
-                        }
+                        inv.setActivated(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) != 0);
 
                         JSONObject jsonRelationshipsData = jsonInve.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
                                 .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
@@ -910,7 +906,7 @@ public class ResearcherRepository {
             @Override
             public void onResponse(String response) {
 
-                //Log.d("RESPONSE", response);
+                Log.d("RESPONSE", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -921,12 +917,7 @@ public class ResearcherRepository {
                     Researcher invResponse = new Researcher();
                     invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
 
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
-
-                        invResponse.setActivated(false);
-                    } else {
-                        invResponse.setActivated(true);
-                    }
+                    invResponse.setActivated(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) != 0);
 
                     if (researcher.getEmail().equals(invResponse.getEmail()) &&
                             (researcher.isActivated() == invResponse.isActivated())) {
@@ -1002,11 +993,9 @@ public class ResearcherRepository {
 
         isActivated.postValue(true);
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                7000,
+                15000,
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_RESEARCHER_ACTIVATION);
     }
 

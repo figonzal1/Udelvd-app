@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -200,145 +198,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
         tvSwitchFalls = findViewById(R.id.tv_switch_falls);
         tvSwitchRetire = findViewById(R.id.tv_switch_retire_value);
 
-        configEndIcons();
-
         editIntervieweeViewModel = new ViewModelProvider(this).get(EditIntervieweeViewModel.class);
-
-    }
-
-    private void configEndIcons() {
-
-        acCity.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!s.toString().isEmpty()) {
-
-                    ilCity.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                    ilCity.setEndIconDrawable(R.drawable.ic_close_white_24dp);
-                    ilCity.setEndIconOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            acCity.setText("");
-                        }
-                    });
-
-                } else {
-                    ilCity.setEndIconMode(TextInputLayout.END_ICON_DROPDOWN_MENU);
-                }
-            }
-        });
-
-        //OPTIONALS
-        acEducationalLevel.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!s.toString().isEmpty()) {
-
-                    ilEducationalLevel.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                    ilEducationalLevel.setEndIconDrawable(R.drawable.ic_close_white_24dp);
-                    ilEducationalLevel.setEndIconOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            acEducationalLevel.setText("");
-                        }
-                    });
-
-                } else {
-                    ilEducationalLevel.setEndIconMode(TextInputLayout.END_ICON_DROPDOWN_MENU);
-                }
-            }
-        });
-
-        acCoexistenceType.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!s.toString().isEmpty()) {
-
-                    ilCoexistenceType.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                    ilCoexistenceType.setEndIconDrawable(R.drawable.ic_close_white_24dp);
-                    ilCoexistenceType.setEndIconOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            acCoexistenceType.setText("");
-                        }
-                    });
-
-                } else {
-                    ilCoexistenceType.setEndIconMode(TextInputLayout.END_ICON_DROPDOWN_MENU);
-                }
-            }
-        });
-
-        acProfession.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!s.toString().isEmpty()) {
-
-                    ilProfession.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                    ilProfession.setEndIconDrawable(R.drawable.ic_close_white_24dp);
-                    ilProfession.setEndIconOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            acProfession.setText("");
-                        }
-                    });
-
-                } else {
-                    ilProfession.setEndIconMode(TextInputLayout.END_ICON_DROPDOWN_MENU);
-                }
-            }
-        });
 
     }
 
@@ -872,18 +732,24 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
                 String nombre = Objects.requireNonNull(searchEducationalLevelById(intervieweeIntent.getEducationalLevel().getId())).getName();
                 acEducationalLevel.setText(nombre, false);
+            } else {
+                acEducationalLevel.setText(educationalLevelList.get(0).getName(), false);
             }
 
             if (intervieweeIntent.getProfession() != null) {
 
                 String nombre = Objects.requireNonNull(searchProfessionById(intervieweeIntent.getProfession().getId())).getName();
                 acProfession.setText(nombre);
+            } else {
+                acProfession.setText(professionList.get(0).getName(), false);
             }
 
             if (intervieweeIntent.getCoexistenteType() != null) {
 
                 String nombre = Objects.requireNonNull(searchCoexistenceTypeById(intervieweeIntent.getCoexistenteType().getId())).getName();
                 acCoexistenceType.setText(nombre, false);
+            } else {
+                acCoexistenceType.setText(cohabitTypeList.get(0).getName(), false);
             }
 
             progressBar.setVisibility(View.GONE);
@@ -966,11 +832,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
                 interviewee.setnCohabiting3Months(Integer.parseInt(Objects.requireNonNull(etNCoexistence.getText()).toString()));
 
-                if (switchLegalRetire.isChecked()) {
-                    interviewee.setLegalRetired(true);
-                } else {
-                    interviewee.setLegalRetired(false);
-                }
+                interviewee.setLegalRetired(switchLegalRetire.isChecked());
 
                 if (switchFalls.isChecked()) {
 
@@ -981,7 +843,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                     interviewee.setFalls(false);
                 }
 
-                if (!acEducationalLevel.getText().toString().isEmpty()) {
+                if (!acEducationalLevel.getText().toString().isEmpty() && !acEducationalLevel.getText().toString().equals(educationalLevelList.get(0).getName())) {
 
                     int id_nivel_educacional = Objects.requireNonNull(searchEducationalLevelByName(acEducationalLevel.getText().toString())).getId();
                     EducationalLevel educationalLevel = new EducationalLevel();
@@ -990,7 +852,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
                 }
 
-                if (!acProfession.getText().toString().isEmpty()) {
+                if (!acProfession.getText().toString().isEmpty() && !acProfession.getText().toString().equals(professionList.get(0).getName())) {
 
                     Profession profession = new Profession();
                     profession.setName(acProfession.getText().toString());
@@ -998,7 +860,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
                 }
 
-                if (!acCoexistenceType.getText().toString().isEmpty()) {
+                if (!acCoexistenceType.getText().toString().isEmpty() && !acCoexistenceType.getText().toString().equals(cohabitTypeList.get(0).getName())) {
 
                     int id_tipo_convivencia = Objects.requireNonNull(searchCoexistenceTypeByName(acCoexistenceType.getText().toString()), "Ac coexistence cannot be null").getId();
                     CohabitType cohabitType = new CohabitType();

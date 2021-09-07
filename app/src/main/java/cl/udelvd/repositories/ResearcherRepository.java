@@ -315,7 +315,7 @@ public class ResearcherRepository {
                         Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.SERVER_ERROR) + errorObject);
 
                         //MAIL REPEATED
-                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG))) {
+                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_ALREADY_EXIST))) {
 
                             responseMsgErrorRegistry.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
                         } else {
@@ -490,7 +490,7 @@ public class ResearcherRepository {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
 
                         //PARSE AUTH ERROR API
-                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_AUTH_MSG))) {
+                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_DETAIL_WRONG_PSW))) {
 
                             responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_AUTH_MSG_VM));
                         } else {
@@ -504,9 +504,16 @@ public class ResearcherRepository {
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.SERVER_ERROR) + errorObject);
 
                         //MAIL NOT REGISTERED
-                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
+
+                        //TODO: EN EL SERVIDOR ENVIAR UN ERROR 403 NO 500
+                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_EMAIL_NOT_EXIST))) {
 
                             responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
+                        }
+                        //ACCOUNT NOT ACTIVATED
+                        //TODO: EN EL SERVIDOR ENVIAR UN ERROR 403 NO 500
+                        else if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_DETAIL_ACC_NO_ACTIVATED))) {
+                            responseMsgErrorLogin.postValue(application.getString(R.string.SNACKBAR_CUENTA_WAIT));
                         } else {
                             responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
                         }
@@ -750,7 +757,7 @@ public class ResearcherRepository {
 
                         Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.SERVER_ERROR) + errorObject);
 
-                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
+                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_EMAIL_NOT_EXIST))) {
 
                             responseMsgErrorRecovery.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
                         } else {

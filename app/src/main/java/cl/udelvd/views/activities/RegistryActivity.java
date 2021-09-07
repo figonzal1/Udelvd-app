@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -160,8 +161,8 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
                 if (activado != null) {
 
                     if (activado.equals("0")) {
-
-                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro + getString(R.string.SNACKBAR_ACTIVACION));
+                        Toast.makeText(this, msg_registro, Toast.LENGTH_LONG).show();
+                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), getString(R.string.SNACKBAR_CUENTA_WAIT));
 
                     } else if (activado.equals("1")) {
 

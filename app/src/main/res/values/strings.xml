@@ -105,14 +105,19 @@
     <string name="FORMATO_FECHA_HORA">yyyy-dd-MM HH:mm:ss</string>
     <string name="FORMATO_HORA" translatable="false">HH:mm</string>
     <string name="FORMATO_ENTREVISTA_N">Interview %d</string>
-    <string name="FORMATO_N_ENTREVISTA" tools:ignore="PluralsCandidate">%d interview</string>
-    <string name="FORMATO_N_ENTREVISTAS" tools:ignore="PluralsCandidate">%d interviews</string>
+    <plurals name="FORMATO_N_ENTREVISTA">
+        <item quantity="one">%d interview</item>
+        <item quantity="other">%d interviews</item>
+    </plurals>
     <string name="FORMATO_ENTREVISTA_FECHA">Interview day %s</string>
     <string name="FORMATO_EVENTO_N">Event %d</string>
-    <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d years</string>
+    <plurals name="FORMATO_FECHA_NAC">
+        <item quantity="one">%1$s - %2$d year</item>
+        <item quantity="other">%1$s - %2$d years</item>
+    </plurals>
     <string name="FORMATO_ACCION">Action %d</string>
-    <string name="FORMATO_LINK_DIRECTO">Direct link : %s</string>
-    <string name="FORMATO_FECHA_REGISTRO">Register date: %s</string>
+    <string name="FORMATO_LINK_DIRECTO">Direct link: %1$s</string>
+    <string name="FORMATO_FECHA_REGISTRO">Register date: %1$s</string>
 
     <!-- Keys for intent -->
     <string name="KEY_INVES_OBJECT" translatable="false">investigador</string>
@@ -248,23 +253,7 @@
 
     <!-- VOLLEY -->
     <string name="TAG_VOLLEY_INVES_REGISTRO" translatable="false">VOLLEY_ERR_REGIS_INVEST</string>
-    <string name="TIMEOUT_ERROR" translatable="false">TIMEOUT_ERROR</string>
-    <string name="NETWORK_ERROR" translatable="false">NETWORK_ERROR</string>
-    <string name="TIMEOUT_ERROR_MSG_VM">Server does not respond, try later</string>
-    <string name="SERVER_ERROR_MSG_VM">Ups! A problem has occurred</string>
-    <string name="NETWORK_ERROR_MSG_VM">You don\'t have internet connection</string>
-    <string name="AUTHENTICATION_ERROR" translatable="false">AUTHENTICATION_ERROR:</string>
-    <string name="AUTHENTICATION_ERROR_MSG_VM" translatable="false">Acceso no autorizado</string>
-    <string name="SERVER_ERROR" translatable="false">SERVER_ERROR:</string>
-    <string name="SERVER_ERROR_REGISTRO_MSG" translatable="false">Email already exists</string>
-    <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email already registered</string>
-    <string name="LOGIN_MSG_VM" translatable="false">mensaje_login</string>
-    <string name="LOGIN_MSG_VM_WELCOME">Welcome!</string>
     <string name="TAG_VOLLEY_ERROR_LOGIN" translatable="false">VOLLEY_ERROR_LOGIN</string>
-    <string name="SERVER_ERROR_AUTH_MSG" translatable="false">Please check your credentials</string>
-    <string name="SERVER_ERROR_AUTH_MSG_VM">Log in failed, check yout credentials</string>
-    <string name="SERVER_ERROR_REGISTRO_MSG_2" translatable="false">Email does not exist</string>
-    <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email not registered</string>
     <string name="TAG_VOLLEY_ERR_INV_UPDATE" translatable="false">VOLLEY_ERR_INV_UPDATE</string>
     <string name="TAG_VOLLEY_ERR_INV_RESET" translatable="false">VOLLEY_ERR_INV_RESET </string>
     <string name="TAG_VOLLEY_ERR_INV_ACTIVAR" translatable="false">VOLLEY_ERR_INV_ACTIVAR</string>
@@ -400,7 +389,6 @@
     <string name="TAG_FIREBASE_CHANNEL" translatable="false">FIREBASE_CHANNEL </string>
     <string name="FIREBASE_CHANNEL_CREATED" translatable="false">Channel created</string>
     <string name="FIREBASE_CHANNEL_NOT_CREATED" translatable="false">Channel NO created</string>
-    <string name="TAG_TOKEN_FIREBASE" translatable="false">TOKEN_FIREBASE </string>
     <string name="TAG_GOOGLE_PLAY" translatable="false">GOOGLE_PLAY </string>
     <string name="GOOGLE_PLAY_NO_SOPORTADO" translatable="false">Google play no soportado</string>
     <string name="GOOGLE_PLAY_ACTUALIZADO" translatable="false">Google play actualizado</string>
@@ -465,8 +453,7 @@
     <string name="SNACKBAR_REINTENTAR">Retry</string>
     <string name="SNACKBAR_SOLICITAR_RECUPERACION">Request new</string>
     <string name="SNACKBAR_INICIAR_SESION">Log in</string>
-    <string name="SNACKBAR_ACTIVACION">, your account is waiting for activation</string>
-    <string name="SNACKBAR_CUENTA_WAIT">Account Waiting for Activation</string>
+    <string name="SNACKBAR_CUENTA_WAIT">Account awaiting approval by administrator</string>
 
     <!-- XML -->
     <string name="ICONO_FECHA_ENTREVISTA">Interview date icon</string>
@@ -545,8 +532,14 @@
     <string name="GUION" translatable="false">-</string>
     <string name="CARGAR_MAS">Load more</string>
     <string name="EMOTICON_SPINNER">Dropdown menu emoticon</string>
-    <string name="MOSTRAR_ENTREVISTADOS" tools:ignore="PluralsCandidate">Displaying %d of %d interviewees</string>
-    <string name="MOSTRAR_INVESTIGADORES" tools:ignore="PluralsCandidate">Displaying %d of %d researchers</string>
+    <plurals name="MOSTRAR_ENTREVISTADOS">
+        <item quantity="one">Displaying %1$d of %2$d interviewee</item>
+        <item quantity="other">Displaying %1$d of %2$d interviewees</item>
+    </plurals>
+    <plurals name="MOSTRAR_INVESTIGADORES">
+        <item quantity="one">Displaying %1$d of %2$d researcher</item>
+        <item quantity="other">Displaying %1$d of %2$d researchers</item>
+    </plurals>
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">There are no registered researchers</string>
     <string name="MSG_LISTADO_ACCIONES_VACIO">No registered actions</string>
     <string name="HELPER_COHABITANTS">*Last 3 months</string>
@@ -560,7 +553,7 @@
     <string name="COPIADO_PORTAPAPELES">Copied to clipboard</string>
     <string name="DISTRIBUCION_EVENTOS">Event distribution</string>
     <string name="IR_VISUALIZACION">Go</string>
-    <string name="FORMAT_REGISTRADO_POR">Registered by: %s %s</string>
+    <string name="FORMAT_REGISTRADO_POR">Registered by: %1$s %2$s</string>
     <string name="TODOS">All</string>
     <string name="MI_CUENTA">My account</string>
     <string name="ACTIVANDO_CUENTA">Activating account</string>
@@ -586,6 +579,7 @@
     <string name="SLIDE_4_DESCRIPTION">Record daily activities of your interviewees</string>
     <string name="SLIDE_5_TITLE">Get \n statistics</string>
     <string name="SLIDE_5_DESCRIPTION">Data and indicators accessible online</string>
+
     <string name="skip_intro">Skip intro</string>
     <string name="PIN_PASS_FORMAT" translatable="false">Pin pass: %s</string>
     <string name="VALIDACION_FECHA_FUTURA">You cannot enter a future date</string>
@@ -597,8 +591,43 @@
     <string name="dot" translatable="false">•</string>
     <string name="tipos_entrevistas">Interviews types</string>
     <string name="normal_interviews">Normal: These are interviews that contain daily events that occur on an ordinary day.</string>
-    <string name="extraordinary_interviews">" Extraordinary: They are interviews that contain daily events that occur sporadically."</string>
+    <string name="extraordinary_interviews">Extraordinary: They are interviews that contain daily events that occur sporadically.</string>
     <string name="sin_seleccionar">No selected</string>
+    <string name="icon_add_action">Add action icon</string>
+    <string name="icon_add_event">Add event icon</string>
+    <string name="icon_add_interview">Add interview icon</string>
+    <string name="icon_add_inverviewee">Add inverviewee icon</string>
+    <string name="icon_edit_event">Edit event icon</string>
+    <string name="icon_delete_event">Delete event icon</string>
+
+    <string name="TAG_TOKEN_FIREBASE" translatable="false">"TOKEN_FIREBASE "</string>
+
+    <!-- SERVER ERROR -->
+    <string name="SERVER_ERROR" translatable="false">"SERVER_ERROR: "</string>
+
+    <!-- AUTH ERROR-->
+    <string name="AUTHENTICATION_ERROR" translatable="false">AUTHENTICATION_ERROR:</string>
+    <string name="JSON_ERROR_DETAIL_ACC_NO_ACTIVATED" translatable="false">Account deactivated</string>
+    <string name="JSON_ERROR_DETAIL_WRONG_PSW" translatable="false">Please check your credentials</string>
+    <string name="JSON_ERROR_EMAIL_NOT_EXIST" translatable="false">Email does not exist</string>
+    <string name="JSON_ERROR_ALREADY_EXIST" translatable="false">Email already exists</string>
+
+    <!-- TIMEOUT ERROR -->
+    <string name="TIMEOUT_ERROR" translatable="false">TIMEOUT_ERROR</string>
+
+    <!-- NETWORK ERROR -->
+    <string name="NETWORK_ERROR" translatable="false">NETWORK_ERROR</string>
+
+    <!-- FRONT END VOLLEY MESSAGES -->
+    <string name="SERVER_ERROR_MSG_VM">Whoops! A problem has occurred, the server was unable to process your request</string>
+    <string name="SERVER_ERROR_AUTH_MSG_VM">Log in failed, check your credentials</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email not registered</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email already registered</string>
+    <string name="TIMEOUT_ERROR_MSG_VM">Server does not respond, try later</string>
+    <string name="NETWORK_ERROR_MSG_VM">You don\'t have internet connection</string>
+    <string name="AUTHENTICATION_ERROR_MSG_VM">Unauthorized access</string>
+    <string name="LOGIN_MSG_VM" translatable="false">mensaje_login</string>
+    <string name="LOGIN_MSG_VM_WELCOME">Welcome!</string>
 
 
 </resources>

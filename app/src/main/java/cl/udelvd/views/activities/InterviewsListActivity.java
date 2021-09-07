@@ -27,7 +27,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -187,11 +186,7 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
 
                 interviewList = interviews;
 
-                if (interviews.size() == 1) {
-                    tvNInterviews.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), interviews.size()));
-                } else {
-                    tvNInterviews.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), interviews.size()));
-                }
+                tvNInterviews.setText(getResources().getQuantityString(R.plurals.FORMATO_N_ENTREVISTA, interviews.size(), interviews.size()));
 
                 progressBar.setVisibility(View.INVISIBLE);
                 rv.setVisibility(View.VISIBLE);

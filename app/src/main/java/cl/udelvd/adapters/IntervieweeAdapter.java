@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -96,15 +95,9 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.tvNameLastName.setText(String.format("%s %s", interviewee.getName(), interviewee.getLastName()));
 
             final int annos = Utils.calculateYearsOld(interviewee.getBirthDate());
-            holder.tvBirthDate.setText(String.format(context.getString(R.string.FORMATO_FECHA_NAC), Utils.dateToString(context.getApplicationContext(), false, interviewee.getBirthDate()), annos));
+            holder.tvBirthDate.setText(context.getResources().getQuantityString(R.plurals.FORMATO_FECHA_NAC, annos, Utils.dateToString(context.getApplicationContext(), false, interviewee.getBirthDate()), annos));
 
-            if (interviewee.getnInterviews() == 1) {
-
-                holder.tvNInterviewees.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTA), interviewee.getnInterviews()));
-
-            } else {
-                holder.tvNInterviewees.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTAS), interviewee.getnInterviews()));
-            }
+            holder.tvNInterviewees.setText(context.getResources().getQuantityString(R.plurals.FORMATO_N_ENTREVISTA, interviewee.getnInterviews(), interviewee.getnInterviews()));
 
             if (totalList) {
                 holder.tvResearcherCharge.setVisibility(View.VISIBLE);

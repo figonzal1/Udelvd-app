@@ -23,7 +23,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import cl.udelvd.R;
 import cl.udelvd.adapters.ResearcherAdapter;
@@ -144,7 +143,7 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
             }
 
             tvNResearchers.setVisibility(View.VISIBLE);
-            tvNResearchers.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), researcherAdapter.getResearcherList().size(), totalResearchers));
+            tvNResearchers.setText(getResources().getQuantityString(R.plurals.MOSTRAR_INVESTIGADORES, totalResearchers, researcherAdapter.getResearcherList().size(), totalResearchers));
 
             Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
             crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
@@ -167,7 +166,7 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
             }
 
             tvNResearchers.setVisibility(View.VISIBLE);
-            tvNResearchers.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), researcherAdapter.getResearcherList().size(), totalResearchers));
+            tvNResearchers.setText(getResources().getQuantityString(R.plurals.MOSTRAR_INVESTIGADORES, totalResearchers, researcherAdapter.getResearcherList().size(), totalResearchers));
 
             Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
             crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES) + getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");

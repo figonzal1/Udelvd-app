@@ -27,7 +27,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -146,11 +145,8 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
         tvNormal.setText(nNormals);
         tvExtraordinary.setText(nExtraordinaries);
 
-        if (nInterviews == 1) {
-            tvNInterviewee.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), nInterviews));
-        } else {
-            tvNInterviewee.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), nInterviews));
-        }
+        tvNInterviewee.setText(getResources().getQuantityString(R.plurals.FORMATO_N_ENTREVISTA, nInterviews, nInterviews));
+
 
         Utils.configIconInterviewee(interviewee, annos, ivPerson, getApplicationContext());
     }

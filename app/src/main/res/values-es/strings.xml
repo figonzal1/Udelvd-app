@@ -32,6 +32,10 @@
     <string name="FECHA_NACIMIENTO">Fecha nacimiento</string>
     <string name="FECHA_REGISTRO_ENTREVISTA">Fecha registro:</string>
     <string name="FORMATO_ENTREVISTA_N">Entrevista %d</string>
+    <plurals name="FORMATO_N_ENTREVISTA">
+        <item quantity="one">%d entrevista</item>
+        <item quantity="other">%d entrevistas</item>
+    </plurals>
     <string name="FORMATO_FECHA_HORA">yyyy-MM-dd HH:mm:ss</string>
     <string name="HORA_EVENTO">Hora evento</string>
     <string name="ICONO_ACCION_EVENTO">Icono acción evento</string>
@@ -114,7 +118,7 @@
     <string name="REGISTRO_CUENTA">Registro cuenta</string>
     <string name="SELECCIONAR_EMOTICON">Seleccionar emoticón</string>
     <string name="SERVER_ERROR_AUTH_MSG_VM">Login fallido, revisa tus datos</string>
-    <string name="SERVER_ERROR_MSG_VM">¡Ups! Ha ocurrido un problema</string>
+    <string name="SERVER_ERROR_MSG_VM">¡Ups! Ha ocurrido un problema, el servidor no ha podido procesar su solicitud</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email ya registrado</string>
     <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email no registrado</string>
     <string name="SEXO">Sexo</string>
@@ -150,15 +154,17 @@
     <string name="MENU_CONTACTENOS">Contáctenos</string>
     <string name="MENU_EMOTICONES">Emoticones</string>
     <string name="MENU_CONDICIONES">Condiciones y privacidad</string>
-    <string name="MOSTRAR_ENTREVISTADOS">Mostrando %d de %d entrevistados</string>
-    <string name="FORMATO_N_ENTREVISTA">%d entrevista</string>
-    <string name="FORMATO_FECHA_NAC">%s - %d años</string>
+    <plurals name="MOSTRAR_ENTREVISTADOS">
+        <item quantity="one">Mostrando %1$d de %2$d entrevistado</item>
+        <item quantity="other">Mostrando %1$d de %2$d entrevistados</item>
+    </plurals>
+    <plurals name="FORMATO_FECHA_NAC">
+        <item quantity="one">%1$s - %2$d año</item>
+        <item quantity="other">%1$s - %2$d años</item>
+    </plurals>
     <string name="FORMATO_ENTREVISTA_FECHA">Entrevista día %s</string>
     <string name="FORMATO_EVENTO_N">Evento %d</string>
-    <string name="CANAL_NOMBRE">Alertas de activaciones</string>
     <string name="CANAL_DESCRIPCION">Alertas de registro de nuevos investigadores</string>
-    <string name="SNACKBAR_CUENTA_WAIT">Cuenta en espera de activación</string>
-    <string name="SNACKBAR_ACTIVACION">, tu cuenta está en espera de activación</string>
     <string name="DIALOG_ACTIVAR">Activar</string>
     <string name="DIALOG_DESACTIVAR">Desactivar</string>
     <string name="DIALOG_DESACTIVACION_MENSAJE">La desactivación de cuenta prohibirá al investigador acceso al sistema , ¿Está seguro?</string>
@@ -169,12 +175,14 @@
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">No hay investigadores registrados</string>
     <string name="ROL_ADMINITRADOR">Administrador</string>
     <string name="ROL_INVESTIGADOR">Investigador</string>
-    <string name="FORMATO_N_ENTREVISTAS">%d entrevistas</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Listado Investigadores</string>
     <string name="HELPER_COHABITANTS">*Últimos 3 meses</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinaria</string>
-    <string name="MOSTRAR_INVESTIGADORES">Mostrando %d de %d investigadores</string>
+    <plurals name="MOSTRAR_INVESTIGADORES">
+        <item quantity="one">Mostrando %1$d de %2$d investigador</item>
+        <item quantity="other">Mostrando %1$d de %2$d investigadores</item>
+    </plurals>
     <string name="FORMATO_ACCION">Acción %d</string>
     <string name="MSG_LISTADO_ACCIONES_VACIO">No hay acciones registradas</string>
     <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Listado Acciones</string>
@@ -195,7 +203,7 @@
     <string name="FORMATO_LINK_DIRECTO">Link directo: %s</string>
     <string name="DISTRIBUCION_EVENTOS">Distribución de eventos</string>
     <string name="IR_VISUALIZACION">Ir</string>
-    <string name="FORMAT_REGISTRADO_POR">Registrado por: %s %s</string>
+    <string name="FORMAT_REGISTRADO_POR">Registrado por: %1$s %2$s</string>
     <string name="TODOS">Todos</string>
     <string name="MI_CUENTA">Mi cuenta</string>
     <string name="VALIDACION_CAMPO_REQUERIDO_CERO">No puede ser cero</string>
@@ -238,5 +246,14 @@
     <string name="extraordinary_interviews">Extraordinaria: Son entrevistas que contienen eventos diarios que ocurren de manera esporádica o poco común.</string>
     <string name="normal_interviews">Normales: Son entrevistas que contienen eventos diarios que ocurren en un día común y corriente.</string>
     <string name="sin_seleccionar">Sin seleccionar</string>
+    <string name="icon_edit_event">Icono editar evento</string>
+    <string name="icon_add_action">Icono agregar acción</string>
+    <string name="icon_add_event">Icono agregar evento</string>
+    <string name="icon_add_interview">Icono agregar entrevista</string>
+    <string name="icon_add_inverviewee">Icono agregar entrevistado</string>
+    <string name="icon_delete_event">Icono eliminar evento</string>
+    <string name="SNACKBAR_CUENTA_WAIT">Cuenta en espera de aprobación por el administrador</string>
+    <string name="AUTHENTICATION_ERROR_MSG_VM">Acceso no autorizado</string>
+    <string name="CANAL_NOMBRE">Alertas de activaciones</string>
 
 </resources>

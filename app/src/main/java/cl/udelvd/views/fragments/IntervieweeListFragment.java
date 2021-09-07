@@ -31,7 +31,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -249,7 +248,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
             }
 
             tvNInterviewees.setVisibility(View.VISIBLE);
-            tvNInterviewees.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
+            tvNInterviewees.setText(getResources().getQuantityString(R.plurals.MOSTRAR_ENTREVISTADOS, totalInterviewees, intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
 
             Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
             crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
@@ -270,7 +269,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
             }
 
             tvNInterviewees.setVisibility(View.VISIBLE);
-            tvNInterviewees.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
+            tvNInterviewees.setText(getResources().getQuantityString(R.plurals.MOSTRAR_ENTREVISTADOS, totalInterviewees, intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
 
             Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG) + "PAGINA");
         });

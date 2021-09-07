@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -63,58 +62,52 @@ public class CohabitTypeRepository {
 
         cohabitTypeList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE", response);
+            //Log.d("RESPONSE", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonData.length(); i++) {
-                        JSONObject jsonCivilState = jsonData.getJSONObject(i);
+                for (int i = 0; i < jsonData.length(); i++) {
+                    JSONObject jsonCivilState = jsonData.getJSONObject(i);
 
-                        int idCoexistenceType = jsonCivilState.getInt(application.getString(R.string.KEY_TIPO_CONVIVENCIA_ID));
+                    int idCoexistenceType = jsonCivilState.getInt(application.getString(R.string.KEY_TIPO_CONVIVENCIA_ID));
 
-                        JSONObject jsonAttributes = jsonCivilState.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-                        String civilStateName = jsonAttributes.getString(application.getString(R.string.KEY_TIPO_CONVIVENCIA_NOMBRE));
+                    JSONObject jsonAttributes = jsonCivilState.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    String civilStateName = jsonAttributes.getString(application.getString(R.string.KEY_TIPO_CONVIVENCIA_NOMBRE));
 
-                        CohabitType cohabitType = new CohabitType();
-                        cohabitType.setId(idCoexistenceType);
-                        cohabitType.setName(civilStateName);
+                    CohabitType cohabitType = new CohabitType();
+                    cohabitType.setId(idCoexistenceType);
+                    cohabitType.setName(civilStateName);
 
-                        cohabitTypeList.add(cohabitType);
-                    }
-
-                    coexistenceTypeMutableLiveData.postValue(cohabitTypeList);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "COHABIT TYPE LIST JSON ERROR PARSE");
-                    e.printStackTrace();
+                    cohabitTypeList.add(cohabitType);
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                coexistenceTypeMutableLiveData.postValue(cohabitTypeList);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV)
-                );
+            } catch (JSONException e) {
 
+                Log.d("JSON_ERROR", "COHABIT TYPE LIST JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_TIPO_CONVIV)
+            );
+
         };
 
 

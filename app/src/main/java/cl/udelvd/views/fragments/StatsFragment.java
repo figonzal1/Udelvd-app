@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -91,56 +90,47 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
 
     private void initViewModelObservers(final View v) {
 
-        statViewModel.isLoading().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        statViewModel.isLoading().observe(getViewLifecycleOwner(), aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.INVISIBLE);
 
-                } else {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                }
+            } else {
+                progressBar.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.VISIBLE);
             }
         });
 
-        statViewModel.loadStats().observe(getViewLifecycleOwner(), new Observer<List<Stat>>() {
-            @Override
-            public void onChanged(List<Stat> stats) {
+        statViewModel.loadStats().observe(getViewLifecycleOwner(), stats -> {
 
-                if (stats != null) {
+            if (stats != null) {
 
-                    statList = stats;
-                    statAdapter.updateList(statList);
-
-                    progressBar.setVisibility(View.INVISIBLE);
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS), getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS_MSG));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS) + getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS_MSG));
-                }
-
-            }
-        });
-
-        statViewModel.showMsgErrorList().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+                statList = stats;
+                statAdapter.updateList(statList);
 
                 progressBar.setVisibility(View.INVISIBLE);
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS), getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS) + getString(R.string.TAG_VIEW_MODEL_LISTA_ESTADISTICAS_MSG));
+            }
 
-                if (!isSnackBarShow) {
+        });
 
-                    rv.setVisibility(View.INVISIBLE);
-                    isSnackBarShow = true;
-                    showSnackbar(v.findViewById(R.id.stats_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                    statAdapter.notifyDataSetChanged();
-                }
+        statViewModel.showMsgErrorList().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            if (!isSnackBarShow) {
+
+                rv.setVisibility(View.INVISIBLE);
+                isSnackBarShow = true;
+                showSnackbar(v.findViewById(R.id.stats_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                statAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -152,19 +142,16 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    isSnackBarShow = false;
-                    if (snackbar != null) {
-                        snackbar.dismiss();
-                    }
-
-                    statViewModel.refreshStats();
+                isSnackBarShow = false;
+                if (snackbar != null) {
+                    snackbar.dismiss();
                 }
+
+                statViewModel.refreshStats();
             });
         }
 

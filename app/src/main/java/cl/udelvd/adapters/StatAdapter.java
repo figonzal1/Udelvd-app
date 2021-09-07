@@ -52,14 +52,11 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder
 
         holder.tvPinPass.setText(String.format(context.getString(R.string.PIN_PASS_FORMAT), stat.getPin_pass()));
 
-        holder.btnGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.btnGo.setOnClickListener(v -> {
 
-                Intent intent = new Intent(context, WebViewActivity.class);
-                intent.putExtra(context.getString(R.string.INTENT_LINK_GRAFICO), stat.getUrl());
-                context.startActivity(intent);
-            }
+            Intent intent = new Intent(context, WebViewActivity.class);
+            intent.putExtra(context.getString(R.string.INTENT_LINK_GRAFICO), stat.getUrl());
+            context.startActivity(intent);
         });
 
         //CONFIG BLUE LINK

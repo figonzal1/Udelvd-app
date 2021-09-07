@@ -10,10 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TimePicker;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,10 +27,8 @@ import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
@@ -59,14 +55,11 @@ public class Utils {
         //FIREBASE SECTION
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity,
-                new OnSuccessListener<InstanceIdResult>() {
-                    @Override
-                    public void onSuccess(InstanceIdResult instanceIdResult) {
-                        String token = instanceIdResult.getToken();
-                        Log.d(activity.getString(R.string.TAG_TOKEN_FIREBASE), token);
+                instanceIdResult -> {
+                    String token = instanceIdResult.getToken();
+                    Log.d(activity.getString(R.string.TAG_TOKEN_FIREBASE), token);
 
-                        FirebaseCrashlytics.getInstance().log(activity.getString(R.string.TAG_TOKEN_FIREBASE) + token);
-                    }
+                    FirebaseCrashlytics.getInstance().log(activity.getString(R.string.TAG_TOKEN_FIREBASE) + token);
                 });
     }
 
@@ -315,13 +308,7 @@ public class Utils {
             day = Integer.parseInt(fecha_split[2]);
         }
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-                editText.setText(String.format(Locale.US, "%d-%d-%d", year, month + 1, dayOfMonth));
-            }
-        }, year, month - 1, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, (view, year1, month1, dayOfMonth) -> editText.setText(String.format(Locale.US, "%d-%d-%d", year1, month1 + 1, dayOfMonth)), year, month - 1, day);
 
         //set the limit to the previous day
         Calendar today = Calendar.getInstance();
@@ -358,18 +345,15 @@ public class Utils {
             minute = Integer.parseInt(fecha_split[1]);
         }
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(context, (view, hourOfDay, minute1) -> {
 
-                if (minute <= 9) {
+            if (minute1 <= 9) {
 
-                    editText.setText(String.format(Locale.US, "%d:0%d", hourOfDay, minute));
+                editText.setText(String.format(Locale.US, "%d:0%d", hourOfDay, minute1));
 
-                } else {
+            } else {
 
-                    editText.setText(String.format(Locale.US, "%d:%d", hourOfDay, minute));
-                }
+                editText.setText(String.format(Locale.US, "%d:%d", hourOfDay, minute1));
             }
         }, hour, minute, true);
 

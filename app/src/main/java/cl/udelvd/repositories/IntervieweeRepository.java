@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -109,157 +108,151 @@ public class IntervieweeRepository {
 
     private void sendGetInterviewees(final int page, Researcher researcher, final boolean totalList) {
 
-        final Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        final Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE", response);
-                //Reiniciar listado cuando se pregunta por primera pagina
-                if (page == 1) {
-                    intervieweeList.clear();
-                } else {
-                    intervieweeSgtPage.clear();
-                }
+            //Log.d("RESPONSE", response);
+            //Reiniciar listado cuando se pregunta por primera pagina
+            if (page == 1) {
+                intervieweeList.clear();
+            } else {
+                intervieweeSgtPage.clear();
+            }
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    /*
-                    N INTERVIEWEES
-                     */
-                    JSONObject jsonNInterviewee = jsonObject.getJSONObject(application.getString(R.string.KEY_ENTREVISTADOS)).getJSONObject(application.getString(R.string.JSON_DATA));
+                /*
+                N INTERVIEWEES
+                 */
+                JSONObject jsonNInterviewee = jsonObject.getJSONObject(application.getString(R.string.KEY_ENTREVISTADOS)).getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    int n_entrevistados = jsonNInterviewee.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTADOS));
-                    mutableNInterviewees.postValue(n_entrevistados);
+                int n_entrevistados = jsonNInterviewee.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTADOS));
+                mutableNInterviewees.postValue(n_entrevistados);
 
-                    /*
-                    INTERVIEWEES LIST
-                     */
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                /*
+                INTERVIEWEES LIST
+                 */
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonData.length(); i++) {
+                for (int i = 0; i < jsonData.length(); i++) {
 
-                        JSONObject jsonInterviewee = jsonData.getJSONObject(i);
-                        JSONObject jsonIntervieweeAttributes = jsonInterviewee.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    JSONObject jsonInterviewee = jsonData.getJSONObject(i);
+                    JSONObject jsonIntervieweeAttributes = jsonInterviewee.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                        Interviewee interviewee = new Interviewee();
-                        interviewee.setId(jsonInterviewee.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
-                        interviewee.setName(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
-                        interviewee.setLastName(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
-                        interviewee.setGender(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
+                    Interviewee interviewee = new Interviewee();
+                    interviewee.setId(jsonInterviewee.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
+                    interviewee.setName(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
+                    interviewee.setLastName(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
+                    interviewee.setGender(jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                        Date birthDate = null;
-                        try {
-                            birthDate = Utils.stringToDate(application, false, jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
-                        } catch (ParseException e) {
+                    Date birthDate = null;
+                    try {
+                        birthDate = Utils.stringToDate(application, false, jsonIntervieweeAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                    } catch (ParseException e) {
 
-                            Log.d("STRING_TO_DATE", "Parse exception error");
-                            e.printStackTrace();
-                        }
-                        interviewee.setBirthDate(birthDate);
+                        Log.d("STRING_TO_DATE", "Parse exception error");
+                        e.printStackTrace();
+                    }
+                    interviewee.setBirthDate(birthDate);
 
-                        City city = new City();
-                        city.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_CIUDAD)));
-                        interviewee.setCity(city);
+                    City city = new City();
+                    city.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_CIUDAD)));
+                    interviewee.setCity(city);
 
-                        //LEGAL retired
-                        interviewee.setLegalRetired(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 1);
+                    //LEGAL retired
+                    interviewee.setLegalRetired(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 1);
 
-                        //FALSS
-                        if (jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 1) {
-                            interviewee.setFalls(true);
-                            interviewee.setNCaidas(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
-                        } else {
-                            interviewee.setFalls(false);
-                        }
-
-                        interviewee.setnCohabiting3Months(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
-
-                        //Foreign
-                        interviewee.setIdResearcher(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
-
-                        CivilState civilState = new CivilState();
-                        civilState.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL)));
-                        interviewee.setCivilState(civilState);
-
-                        //Foreign optionals
-                        if (jsonIntervieweeAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL)) && !jsonIntervieweeAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL))) {
-                            EducationalLevel educationalLevel = new EducationalLevel();
-                            educationalLevel.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL)));
-                            interviewee.setEducationalLevel(educationalLevel);
-                        }
-                        if (jsonIntervieweeAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)) && !jsonIntervieweeAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA))) {
-                            CohabitType cohabitType = new CohabitType();
-                            cohabitType.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)));
-                            interviewee.setCoexistenteType(cohabitType);
-                        }
-                        if (jsonIntervieweeAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION)) && !jsonIntervieweeAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION))) {
-                            Profession profession = new Profession();
-                            profession.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION)));
-                            interviewee.setProfession(profession);
-                        }
-
-                        JSONObject jsonRelationships = jsonInterviewee.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS));
-
-                        //N INTERVIEWS
-                        JSONObject jsonNInterviews = jsonRelationships.getJSONObject(application.getString(R.string.KEY_ENTREVISTA_OBJECT));
-                        interviewee.setnInterviews(
-                                jsonNInterviews.getJSONObject(application.getString(R.string.JSON_DATA))
-                                        .getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))
-                        );
-
-                        if (totalList) {
-                            //RESEARCHER
-                            JSONObject jsonResearcher = jsonRelationships.getJSONObject(application.getString(R.string.KEY_INVES));
-                            interviewee.setResearcherName(
-                                    jsonResearcher.getJSONObject(application.getString(R.string.JSON_DATA))
-                                            .getString(application.getString(R.string.KEY_INVES_NOMBRE))
-                            );
-                            interviewee.setLastNameResearcher(
-                                    jsonResearcher.getJSONObject(application.getString(R.string.JSON_DATA))
-                                            .getString(application.getString(R.string.KEY_INVES_APELLIDO))
-                            );
-                        }
-
-                        if (page == 1) {
-                            intervieweeList.add(interviewee);
-                        } else {
-                            intervieweeSgtPage.add(interviewee);
-                        }
+                    //FALSS
+                    if (jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 1) {
+                        interviewee.setFalls(true);
+                        interviewee.setNCaidas(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
+                    } else {
+                        interviewee.setFalls(false);
                     }
 
+                    interviewee.setnCohabiting3Months(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+
+                    //Foreign
+                    interviewee.setIdResearcher(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
+
+                    CivilState civilState = new CivilState();
+                    civilState.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL)));
+                    interviewee.setCivilState(civilState);
+
+                    //Foreign optionals
+                    if (jsonIntervieweeAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL)) && !jsonIntervieweeAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL))) {
+                        EducationalLevel educationalLevel = new EducationalLevel();
+                        educationalLevel.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL)));
+                        interviewee.setEducationalLevel(educationalLevel);
+                    }
+                    if (jsonIntervieweeAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)) && !jsonIntervieweeAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA))) {
+                        CohabitType cohabitType = new CohabitType();
+                        cohabitType.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA)));
+                        interviewee.setCoexistenteType(cohabitType);
+                    }
+                    if (jsonIntervieweeAttributes.has(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION)) && !jsonIntervieweeAttributes.isNull(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION))) {
+                        Profession profession = new Profession();
+                        profession.setId(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION)));
+                        interviewee.setProfession(profession);
+                    }
+
+                    JSONObject jsonRelationships = jsonInterviewee.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS));
+
+                    //N INTERVIEWS
+                    JSONObject jsonNInterviews = jsonRelationships.getJSONObject(application.getString(R.string.KEY_ENTREVISTA_OBJECT));
+                    interviewee.setnInterviews(
+                            jsonNInterviews.getJSONObject(application.getString(R.string.JSON_DATA))
+                                    .getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))
+                    );
+
+                    if (totalList) {
+                        //RESEARCHER
+                        JSONObject jsonResearcher = jsonRelationships.getJSONObject(application.getString(R.string.KEY_INVES));
+                        interviewee.setResearcherName(
+                                jsonResearcher.getJSONObject(application.getString(R.string.JSON_DATA))
+                                        .getString(application.getString(R.string.KEY_INVES_NOMBRE))
+                        );
+                        interviewee.setLastNameResearcher(
+                                jsonResearcher.getJSONObject(application.getString(R.string.JSON_DATA))
+                                        .getString(application.getString(R.string.KEY_INVES_APELLIDO))
+                        );
+                    }
 
                     if (page == 1) {
-                        //Log.d("CARGANDO_PAGINA", "1");
-                        intervieweesFirstPageLiveData.postValue(intervieweeList);
+                        intervieweeList.add(interviewee);
                     } else {
-                        //Log.d("CARGANDO_PAGINA", String.valueOf(page));
-                        intervieweesSgtPageLiveData.postValue(intervieweeSgtPage); //Enviar a ViewModel listado paginado
+                        intervieweeSgtPage.add(interviewee);
                     }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "GET INTERVIEWEES JSON ERROR PARSE");
-                    e.printStackTrace();
                 }
-            }
-        };
 
-        final Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+
+                if (page == 1) {
+                    //Log.d("CARGANDO_PAGINA", "1");
+                    intervieweesFirstPageLiveData.postValue(intervieweeList);
+                } else {
+                    //Log.d("CARGANDO_PAGINA", String.valueOf(page));
+                    intervieweesSgtPageLiveData.postValue(intervieweeSgtPage); //Enviar a ViewModel listado paginado
+                }
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADOS)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "GET INTERVIEWEES JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        final Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADOS)
+            );
         };
 
         String url;
@@ -308,76 +301,70 @@ public class IntervieweeRepository {
 
     private void sendPostInterviewee(final Interviewee interviewee) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
 
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                //GET RESPONSE
+                Interviewee entResponse = new Interviewee();
+                entResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
+                entResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
+
+                entResponse.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
+
+                entResponse.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
+
+                entResponse.setFalls(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) != 0);
+
+                Date birthDate = null;
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
+                    birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                } catch (ParseException e) {
 
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-
-                    //GET RESPONSE
-                    Interviewee entResponse = new Interviewee();
-                    entResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
-                    entResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
-
-                    entResponse.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
-
-                    entResponse.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
-
-                    entResponse.setFalls(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) != 0);
-
-                    Date birthDate = null;
-                    try {
-                        birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
-                    } catch (ParseException e) {
-
-                        Log.d("STRING_TO_DATE", "Parse exception error");
-                        e.printStackTrace();
-                    }
-                    entResponse.setBirthDate(birthDate);
-
-                    entResponse.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
-                    entResponse.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
-
-                    String create_time = jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME));
-
-                    Log.d("MEMORIA", interviewee.toString());
-                    Log.d("INTERNET", entResponse.toString());
-
-                    if (interviewee.equals(entResponse) && !create_time.isEmpty()) {
-                        responseMsgRegistry.postValue(application.getString(R.string.MSG_REGISTRO_ENTREVISTADO));
-                    }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "POST INTERVIEWEE JSON ERROR PARSE");
+                    Log.d("STRING_TO_DATE", "Parse exception error");
                     e.printStackTrace();
                 }
+                entResponse.setBirthDate(birthDate);
 
-            }
-        };
+                entResponse.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                entResponse.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                String create_time = jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME));
+
+                Log.d("MEMORIA", interviewee.toString());
+                Log.d("INTERNET", entResponse.toString());
+
+                if (interviewee.equals(entResponse) && !create_time.isEmpty()) {
+                    responseMsgRegistry.postValue(application.getString(R.string.MSG_REGISTRO_ENTREVISTADO));
+                }
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorRegistry,
-                        application.getString(R.string.TAG_VOLLEY_ERR_NUEVO_ENTREVISTADO)
-                );
+            } catch (JSONException e) {
 
+                Log.d("JSON_ERROR", "POST INTERVIEWEE JSON ERROR PARSE");
+                e.printStackTrace();
             }
+
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorRegistry,
+                    application.getString(R.string.TAG_VOLLEY_ERR_NUEVO_ENTREVISTADO)
+            );
+
         };
 
         String url = String.format(application.getString(R.string.URL_POST_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN));
@@ -462,111 +449,105 @@ public class IntervieweeRepository {
 
     private void sendGetInterviewee(final Interviewee interviewee) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d("RESPONSE", response);
+        Response.Listener<String> responseListener = response -> {
+            //Log.d("RESPONSE", response);
 
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                interviewee.setId(jsonData.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
+
+                interviewee.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
+                interviewee.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
+                interviewee.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
+
+                Date birthDate = null;
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
+                    birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                } catch (ParseException e) {
 
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-
-                    interviewee.setId(jsonData.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
-
-                    interviewee.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
-                    interviewee.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
-                    interviewee.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
-
-                    Date birthDate = null;
-                    try {
-                        birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
-                    } catch (ParseException e) {
-
-                        Log.d("STRING_TO_DATE", "Parse exception error");
-                        e.printStackTrace();
-                    }
-                    interviewee.setBirthDate(birthDate);
-
-                    interviewee.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
-
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
-                        interviewee.setFalls(false);
-                    } else {
-                        interviewee.setFalls(true);
-
-                        interviewee.setNCaidas(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
-                    }
-
-                    interviewee.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
-                    interviewee.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
-
-                    City city = new City();
-                    city.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_CIUDAD)));
-                    interviewee.setCity(city);
-
-                    CivilState civilState = new CivilState();
-                    civilState.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL)));
-                    interviewee.setCivilState(civilState);
-
-                    //OPTIONALS (manejar nulls como strings)
-                    String idEducationalLevel = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL));
-
-                    if (!idEducationalLevel.equals(application.getString(R.string.NULL))) {
-
-                        EducationalLevel educationalLevel = new EducationalLevel();
-                        educationalLevel.setId(Integer.parseInt(idEducationalLevel));
-
-                        interviewee.setEducationalLevel(educationalLevel);
-                    }
-
-                    String idCoexistanceType = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA));
-
-                    if (!idCoexistanceType.equals(application.getString(R.string.NULL))) {
-
-                        CohabitType cohabitType = new CohabitType();
-                        cohabitType.setId(Integer.parseInt(idCoexistanceType));
-
-                        interviewee.setCoexistenteType(cohabitType);
-                    }
-
-                    String idProfession = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION));
-
-                    if (!idProfession.equals(application.getString(R.string.NULL))) {
-
-                        Profession profession = new Profession();
-                        profession.setId(Integer.parseInt(idProfession));
-
-                        interviewee.setProfession(profession);
-                    }
-
-                    intervieweeMutableLiveData.postValue(interviewee);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "GET INTERVIEWEE JSON ERROR PARSE");
+                    Log.d("STRING_TO_DATE", "Parse exception error");
                     e.printStackTrace();
                 }
+                interviewee.setBirthDate(birthDate);
 
-            }
-        };
+                interviewee.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
+                    interviewee.setFalls(false);
+                } else {
+                    interviewee.setFalls(true);
+
+                    interviewee.setNCaidas(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
+                }
+
+                interviewee.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                interviewee.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
+
+                City city = new City();
+                city.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_CIUDAD)));
+                interviewee.setCity(city);
+
+                CivilState civilState = new CivilState();
+                civilState.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL)));
+                interviewee.setCivilState(civilState);
+
+                //OPTIONALS (manejar nulls como strings)
+                String idEducationalLevel = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_NIVEL_EDUCACIONAL));
+
+                if (!idEducationalLevel.equals(application.getString(R.string.NULL))) {
+
+                    EducationalLevel educationalLevel = new EducationalLevel();
+                    educationalLevel.setId(Integer.parseInt(idEducationalLevel));
+
+                    interviewee.setEducationalLevel(educationalLevel);
+                }
+
+                String idCoexistanceType = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_TIPO_CONVIVENCIA));
+
+                if (!idCoexistanceType.equals(application.getString(R.string.NULL))) {
+
+                    CohabitType cohabitType = new CohabitType();
+                    cohabitType.setId(Integer.parseInt(idCoexistanceType));
+
+                    interviewee.setCoexistenteType(cohabitType);
+                }
+
+                String idProfession = jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_ID_PROFESION));
+
+                if (!idProfession.equals(application.getString(R.string.NULL))) {
+
+                    Profession profession = new Profession();
+                    profession.setId(Integer.parseInt(idProfession));
+
+                    interviewee.setProfession(profession);
+                }
+
+                intervieweeMutableLiveData.postValue(interviewee);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorInterviewee,
-                        application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "GET INTERVIEWEE JSON ERROR PARSE");
+                e.printStackTrace();
             }
+
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorInterviewee,
+                    application.getString(R.string.TAG_VOLLEY_ERR_ENTREVISTADO)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_GET_ENTREVISTADO), application.getString(R.string.HEROKU_DOMAIN), interviewee.getId());
@@ -601,80 +582,74 @@ public class IntervieweeRepository {
 
     private void sendPutInterviewee(final Interviewee interviewee) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE", response);
+            //Log.d("RESPONSE", response);
 
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                Interviewee intervieweeInternet = new Interviewee();
+                intervieweeInternet.setId(jsonData.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
+
+                intervieweeInternet.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
+                intervieweeInternet.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
+                intervieweeInternet.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
+
+
+                Date birthDate = null;
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-
-                    Interviewee intervieweeInternet = new Interviewee();
-                    intervieweeInternet.setId(jsonData.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID)));
-
-                    intervieweeInternet.setName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_NOMBRE)));
-                    intervieweeInternet.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_APELLIDO)));
-                    intervieweeInternet.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
-
-
-                    Date birthDate = null;
-                    try {
-                        birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
-                    } catch (ParseException e) {
-                        Log.d("STRING_TO_DATE", "Parse exception error");
-                        e.printStackTrace();
-                    }
-                    intervieweeInternet.setBirthDate(birthDate);
-
-                    intervieweeInternet.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
-
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
-                        intervieweeInternet.setFalls(false);
-                    } else {
-                        intervieweeInternet.setFalls(true);
-
-                        intervieweeInternet.setNCaidas(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
-                    }
-
-                    intervieweeInternet.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
-                    intervieweeInternet.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
-
-                    Log.d("MEMORIA", interviewee.toString());
-                    Log.d("INTERNET", intervieweeInternet.toString());
-
-                    String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
-
-                    if (interviewee.equals(intervieweeInternet) && !update_time.isEmpty()) {
-                        responseMsgUpdate.postValue(application.getString(R.string.MSG_UPDATE_ENTREVISTADO));
-                    }
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "PUT INTERVIEWEE JSON ERROR PARSE");
+                    birthDate = Utils.stringToDate(application, false, jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC)));
+                } catch (ParseException e) {
+                    Log.d("STRING_TO_DATE", "Parse exception error");
                     e.printStackTrace();
                 }
+                intervieweeInternet.setBirthDate(birthDate);
 
-            }
-        };
+                intervieweeInternet.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
+                    intervieweeInternet.setFalls(false);
+                } else {
+                    intervieweeInternet.setFalls(true);
 
+                    intervieweeInternet.setNCaidas(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
+                }
+
+                intervieweeInternet.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                intervieweeInternet.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
+
+                Log.d("MEMORIA", interviewee.toString());
+                Log.d("INTERNET", intervieweeInternet.toString());
+
+                String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
+
+                if (interviewee.equals(intervieweeInternet) && !update_time.isEmpty()) {
+                    responseMsgUpdate.postValue(application.getString(R.string.MSG_UPDATE_ENTREVISTADO));
+                }
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorUpdate,
-                        application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ENTREVISTADO)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "PUT INTERVIEWEE JSON ERROR PARSE");
+                e.printStackTrace();
             }
+
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorUpdate,
+                    application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_ENTREVISTADO)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_PUT_ENTREVISTADOS), application.getString(R.string.HEROKU_DOMAIN), interviewee.getId());
@@ -757,42 +732,36 @@ public class IntervieweeRepository {
 
     private void sendDeleteInterviewee(Interviewee interviewee) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d("RESPONSE", response);
+        Response.Listener<String> responseListener = response -> {
+            //Log.d("RESPONSE", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    if (jsonData.length() == 0) {
-                        responseMsgDelete.postValue(application.getString(R.string.MSG_DELETE_ENTREVISTADO));
-                    }
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "DELETE INTERVIEWEE JSON ERROR PARSE");
-                    e.printStackTrace();
+                if (jsonData.length() == 0) {
+                    responseMsgDelete.postValue(application.getString(R.string.MSG_DELETE_ENTREVISTADO));
                 }
+                isLoading.postValue(false);
+
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "DELETE INTERVIEWEE JSON ERROR PARSE");
+                e.printStackTrace();
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        Response.ErrorListener errorListener = error -> {
 
-                isLoading.postValue(false);
+            isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorDelete,
-                        application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTADO)
-                );
-            }
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorDelete,
+                    application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTADO)
+            );
         };
 
         String url = String.format(Locale.US, application.getString(R.string.URL_DELETE_ENTREVISTADO), application.getString(R.string.HEROKU_DOMAIN), interviewee.getId());

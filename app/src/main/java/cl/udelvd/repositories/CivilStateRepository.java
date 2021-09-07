@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -62,57 +61,51 @@ public class CivilStateRepository {
 
         civilStateList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE", response);
+            //Log.d("RESPONSE", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonData.length(); i++) {
-                        JSONObject jsonEstadoCivil = jsonData.getJSONObject(i);
+                for (int i = 0; i < jsonData.length(); i++) {
+                    JSONObject jsonEstadoCivil = jsonData.getJSONObject(i);
 
-                        int idCivilState = jsonEstadoCivil.getInt(application.getString(R.string.KEY_ESTADO_CIVIL_ID));
+                    int idCivilState = jsonEstadoCivil.getInt(application.getString(R.string.KEY_ESTADO_CIVIL_ID));
 
-                        JSONObject jsonAttributes = jsonEstadoCivil.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-                        String civilStateName = jsonAttributes.getString(application.getString(R.string.KEY_ESTADO_CIVIL_NOMRE));
+                    JSONObject jsonAttributes = jsonEstadoCivil.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    String civilStateName = jsonAttributes.getString(application.getString(R.string.KEY_ESTADO_CIVIL_NOMRE));
 
-                        CivilState civilState = new CivilState();
-                        civilState.setId(idCivilState);
-                        civilState.setName(civilStateName);
+                    CivilState civilState = new CivilState();
+                    civilState.setId(idCivilState);
+                    civilState.setName(civilStateName);
 
-                        civilStateList.add(civilState);
-                    }
-
-                    civilStateMutable.postValue(civilStateList);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "CIVIL STATES JSON PARSE ERROR");
-                    e.printStackTrace();
+                    civilStateList.add(civilState);
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                civilStateMutable.postValue(civilStateList);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "CIVIL STATES JSON PARSE ERROR");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_EST_CIVIL)
+            );
         };
 
 

@@ -10,14 +10,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -212,350 +210,290 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
     private void setPickerBirthDate() {
 
-        etBirthDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Utils.iniciarDatePicker(etBirthDate, EditIntervieweeActivity.this, "interviewee");
-            }
-        });
+        etBirthDate.setOnClickListener(v -> Utils.iniciarDatePicker(etBirthDate, EditIntervieweeActivity.this, "interviewee"));
 
 
-        ilBirthDate.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Utils.iniciarDatePicker(etBirthDate, EditIntervieweeActivity.this, "interviewee");
-            }
-        });
+        ilBirthDate.setEndIconOnClickListener(v -> Utils.iniciarDatePicker(etBirthDate, EditIntervieweeActivity.this, "interviewee"));
     }
 
     private void setAutoCompleteCity() {
 
-        editIntervieweeViewModel.isLoadingCities().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        editIntervieweeViewModel.isLoadingCities().observe(this, aBoolean -> {
 
 
-                if (aBoolean) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+            if (aBoolean) {
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
 
-        editIntervieweeViewModel.loadCities().observe(this, new Observer<List<City>>() {
-            @Override
-            public void onChanged(List<City> cities) {
+        editIntervieweeViewModel.loadCities().observe(this, cities -> {
 
-                if (cities != null && cities.size() > 0) {
+            if (cities != null && cities.size() > 0) {
 
-                    cityList = cities;
-                    cityAdapter = new CityAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, cityList);
-                    acCity.setAdapter(cityAdapter);
+                cityList = cities;
+                cityAdapter = new CityAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, cityList);
+                acCity.setAdapter(cityAdapter);
 
-                    isAutoCompleteCityReady = true;
+                isAutoCompleteCityReady = true;
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-
-                    progressBar.setVisibility(View.GONE);
-
-                    cityAdapter.notifyDataSetChanged();
-
-                    setIntervieweeInfo();
-                }
-
-            }
-        });
-
-
-        editIntervieweeViewModel.showMsgErrorCityList().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+                Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
+                cityAdapter.notifyDataSetChanged();
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                setIntervieweeInfo();
             }
+
+        });
+
+
+        editIntervieweeViewModel.showMsgErrorCityList().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
     private void setAutoCompleteCivilState() {
 
-        editIntervieweeViewModel.isLoadingCivilState().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        editIntervieweeViewModel.isLoadingCivilState().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
 
-                    activateInputs(true);
-                }
+                activateInputs(true);
             }
         });
 
-        editIntervieweeViewModel.loadCivilState().observe(this, new Observer<List<CivilState>>() {
-            @Override
-            public void onChanged(List<CivilState> civilStates) {
+        editIntervieweeViewModel.loadCivilState().observe(this, civilStates -> {
 
-                if (civilStates != null && civilStates.size() > 0) {
+            if (civilStates != null && civilStates.size() > 0) {
 
-                    civilStateList = civilStates;
-                    civilStateAdapter = new CivilStateAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, civilStateList);
-                    acCivilState.setAdapter(civilStateAdapter);
+                civilStateList = civilStates;
+                civilStateAdapter = new CivilStateAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, civilStateList);
+                acCivilState.setAdapter(civilStateAdapter);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    civilStateAdapter.notifyDataSetChanged();
-
-                    progressBar.setVisibility(View.GONE);
-
-                    isAutoCompleteCivilStateReady = true;
-
-                    setIntervieweeInfo();
-                }
-            }
-        });
-
-        editIntervieweeViewModel.showMsgErrorListCivilState().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+                civilStateAdapter.notifyDataSetChanged();
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
+                isAutoCompleteCivilStateReady = true;
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                setIntervieweeInfo();
             }
+        });
+
+        editIntervieweeViewModel.showMsgErrorListCivilState().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
     private void setAutoCompleteEducationalLevel() {
 
-        editIntervieweeViewModel.isLoadingEducationalLevel().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        editIntervieweeViewModel.isLoadingEducationalLevel().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
 
-        editIntervieweeViewModel.loadEducationalLevel().observe(this, new Observer<List<EducationalLevel>>() {
-            @Override
-            public void onChanged(List<EducationalLevel> educationalLevels) {
+        editIntervieweeViewModel.loadEducationalLevel().observe(this, educationalLevels -> {
 
-                if (educationalLevels != null && educationalLevels.size() > 0) {
+            if (educationalLevels != null && educationalLevels.size() > 0) {
 
-                    educationalLevelList = educationalLevels;
-                    educationalLevelAdapter = new EducationalLevelAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, educationalLevelList);
-                    acEducationalLevel.setAdapter(educationalLevelAdapter);
+                educationalLevelList = educationalLevels;
+                educationalLevelAdapter = new EducationalLevelAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, educationalLevelList);
+                acEducationalLevel.setAdapter(educationalLevelAdapter);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    educationalLevelAdapter.notifyDataSetChanged();
+                educationalLevelAdapter.notifyDataSetChanged();
 
-                    isAutoCompleteEducationalLevelReady = true;
-
-                    progressBar.setVisibility(View.GONE);
-
-                    setIntervieweeInfo();
-                }
-
-            }
-        });
-
-        editIntervieweeViewModel.showMsgErrorEducationalLevel().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+                isAutoCompleteEducationalLevelReady = true;
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
+                setIntervieweeInfo();
             }
+
+        });
+
+        editIntervieweeViewModel.showMsgErrorEducationalLevel().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
         });
     }
 
     private void setAutoCompleteProfession() {
 
-        editIntervieweeViewModel.isLoadingProfessions().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        editIntervieweeViewModel.isLoadingProfessions().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
-        editIntervieweeViewModel.loadProfession().observe(this, new Observer<List<Profession>>() {
-            @Override
-            public void onChanged(List<Profession> professions) {
+        editIntervieweeViewModel.loadProfession().observe(this, professions -> {
 
-                if (professions != null && professions.size() > 0) {
+            if (professions != null && professions.size() > 0) {
 
-                    professionList = professions;
-                    professionAdapter = new ProfessionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, professionList);
-                    acProfession.setAdapter(professionAdapter);
+                professionList = professions;
+                professionAdapter = new ProfessionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, professionList);
+                acProfession.setAdapter(professionAdapter);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    professionAdapter.notifyDataSetChanged();
+                professionAdapter.notifyDataSetChanged();
 
-                    isAutoCompleteProfessionReady = true;
-
-                    progressBar.setVisibility(View.GONE);
-
-                    setIntervieweeInfo();
-                }
-
-            }
-        });
-
-        editIntervieweeViewModel.showMsgErrorListProfessions().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+                isAutoCompleteProfessionReady = true;
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
+                setIntervieweeInfo();
             }
+
+        });
+
+        editIntervieweeViewModel.showMsgErrorListProfessions().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
         });
     }
 
     private void setAutoCompleteCoexistenceType() {
 
-        editIntervieweeViewModel.isLoadingCoexistenceType().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        editIntervieweeViewModel.isLoadingCoexistenceType().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
-        editIntervieweeViewModel.loadCoexitenceType().observe(this, new Observer<List<CohabitType>>() {
-            @Override
-            public void onChanged(List<CohabitType> list) {
+        editIntervieweeViewModel.loadCoexitenceType().observe(this, list -> {
 
-                if (list != null && list.size() > 0) {
+            if (list != null && list.size() > 0) {
 
-                    cohabitTypeList = list;
-                    cohabitTypeAdapter = new CohabitTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, cohabitTypeList);
-                    acCoexistenceType.setAdapter(cohabitTypeAdapter);
+                cohabitTypeList = list;
+                cohabitTypeAdapter = new CohabitTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, cohabitTypeList);
+                acCoexistenceType.setAdapter(cohabitTypeAdapter);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                    cohabitTypeAdapter.notifyDataSetChanged();
-
-                    progressBar.setVisibility(View.GONE);
-
-                    isAutoCompleteCoexistenceTypeReady = true;
-
-                    setIntervieweeInfo();
-                }
-
-            }
-        });
-
-
-        editIntervieweeViewModel.showMsgErrorListCoexistenceType().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+                cohabitTypeAdapter.notifyDataSetChanged();
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
+                isAutoCompleteCoexistenceTypeReady = true;
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
+                setIntervieweeInfo();
             }
+
+        });
+
+
+        editIntervieweeViewModel.showMsgErrorListCoexistenceType().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
         });
     }
 
     private void setSwitchFalls() {
 
-        switchFalls.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switchFalls.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked) {
+            if (isChecked) {
 
-                    ilNFalls.setVisibility(View.VISIBLE);
-                    etNFalls.setVisibility(View.VISIBLE);
+                ilNFalls.setVisibility(View.VISIBLE);
+                etNFalls.setVisibility(View.VISIBLE);
 
-                    tvSwitchFalls.setText(getString(R.string.SI));
+                tvSwitchFalls.setText(getString(R.string.SI));
 
-                } else {
-                    ilNFalls.setVisibility(View.GONE);
-                    etNFalls.setVisibility(View.GONE);
+            } else {
+                ilNFalls.setVisibility(View.GONE);
+                etNFalls.setVisibility(View.GONE);
 
-                    tvSwitchFalls.setText(getString(R.string.NO));
-                }
+                tvSwitchFalls.setText(getString(R.string.NO));
             }
         });
 
@@ -563,15 +501,12 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
     private void setSwitchRetire() {
 
-        switchLegalRetire.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switchLegalRetire.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked) {
-                    tvSwitchRetire.setText(getString(R.string.SI));
-                } else {
-                    tvSwitchRetire.setText(getString(R.string.NO));
-                }
+            if (isChecked) {
+                tvSwitchRetire.setText(getString(R.string.SI));
+            } else {
+                tvSwitchRetire.setText(getString(R.string.NO));
             }
         });
     }
@@ -579,91 +514,75 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
     private void initViewModelInterviewee() {
 
 
-        editIntervieweeViewModel.isLoadingInterviewee().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        editIntervieweeViewModel.isLoadingInterviewee().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
-        editIntervieweeViewModel.loadInterviewee(intervieweeIntent).observe(this, new Observer<Interviewee>() {
-            @Override
-            public void onChanged(Interviewee intervieweeInternet) {
+        editIntervieweeViewModel.loadInterviewee(intervieweeIntent).observe(this, intervieweeInternet -> {
 
-                if (intervieweeInternet != null) {
+            if (intervieweeInternet != null) {
 
-                    intervieweeIntent = intervieweeInternet;
-
-                    progressBar.setVisibility(View.GONE);
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), intervieweeIntent.toString()));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), intervieweeIntent.toString()));
-
-                    isIntervieweeReady = true;
-
-                    setIntervieweeInfo();
-                }
-            }
-
-        });
-
-        editIntervieweeViewModel.showMsgErrorInterviewee().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+                intervieweeIntent = intervieweeInternet;
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), intervieweeIntent.toString()));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), intervieweeIntent.toString()));
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                isIntervieweeReady = true;
+
+                setIntervieweeInfo();
             }
         });
 
-        editIntervieweeViewModel.showMsgUpdate().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        editIntervieweeViewModel.showMsgErrorInterviewee().observe(this, s -> {
 
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+            }
 
-                if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTADO))) {
-                    Intent intent = getIntent();
-                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), s);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+            Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+        });
+
+        editIntervieweeViewModel.showMsgUpdate().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+            if (s.equals(getString(R.string.MSG_UPDATE_ENTREVISTADO))) {
+                Intent intent = getIntent();
+                intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), s);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
-        editIntervieweeViewModel.showMsgErrorUpdate().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        editIntervieweeViewModel.showMsgErrorUpdate().observe(this, s -> {
 
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_LONG, s, null);
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_edit_interviewee), Snackbar.LENGTH_LONG, s, null);
             }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
@@ -882,29 +801,26 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    isSnackBarShow = false;
-                    isAutoCompleteCityReady = false;
-                    isAutoCompleteCivilStateReady = false;
-                    isAutoCompleteProfessionReady = false;
-                    isAutoCompleteCoexistenceTypeReady = false;
-                    isAutoCompleteEducationalLevelReady = false;
-                    isIntervieweeReady = false;
+                isSnackBarShow = false;
+                isAutoCompleteCityReady = false;
+                isAutoCompleteCivilStateReady = false;
+                isAutoCompleteProfessionReady = false;
+                isAutoCompleteCoexistenceTypeReady = false;
+                isAutoCompleteEducationalLevelReady = false;
+                isIntervieweeReady = false;
 
 
-                    editIntervieweeViewModel.refreshCivilState();
-                    editIntervieweeViewModel.refreshCities();
-                    editIntervieweeViewModel.refreshEducationalLevel();
-                    editIntervieweeViewModel.refreshCoexistenceType();
-                    editIntervieweeViewModel.refreshProfession();
+                editIntervieweeViewModel.refreshCivilState();
+                editIntervieweeViewModel.refreshCities();
+                editIntervieweeViewModel.refreshEducationalLevel();
+                editIntervieweeViewModel.refreshCoexistenceType();
+                editIntervieweeViewModel.refreshProfession();
 
-                    editIntervieweeViewModel.refreshInterviewee(intervieweeIntent);
+                editIntervieweeViewModel.refreshInterviewee(intervieweeIntent);
 
-                    progressBar.setVisibility(View.VISIBLE);
-                }
+                progressBar.setVisibility(View.VISIBLE);
             });
         }
         snackbar.show();

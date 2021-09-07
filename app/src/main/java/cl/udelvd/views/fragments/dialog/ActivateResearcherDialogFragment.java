@@ -2,7 +2,6 @@ package cl.udelvd.views.fragments.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,50 +36,42 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
         if (activated) {
 
             builder.setMessage(getString(R.string.DIALOG_ACTIVACION_MENSAJE));
-            builder.setPositiveButton(getString(R.string.DIALOG_ACTIVAR), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
+            builder.setPositiveButton(getString(R.string.DIALOG_ACTIVAR), (dialog, id) -> {
 
-                    researcher.setActivated(true);
-                    switchMaterial.setChecked(true);
-                    switchMaterial.setText(getString(R.string.PERFIL_ACTIVADO));
+                researcher.setActivated(true);
+                switchMaterial.setChecked(true);
+                switchMaterial.setText(getString(R.string.PERFIL_ACTIVADO));
 
-                    listener.onDialogPositiveClick(researcher, researcher.isActivated());
+                listener.onDialogPositiveClick(researcher, researcher.isActivated());
 
-                    dialog.dismiss();
-                }
+                dialog.dismiss();
             });
 
-            builder.setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
+            builder.setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), (dialog, id) -> {
 
-                    switchMaterial.setChecked(false);
-                    switchMaterial.setText(getString(R.string.PERFIL_NO_ACTIVADO));
-                    dismiss();
-                }
+                switchMaterial.setChecked(false);
+                switchMaterial.setText(getString(R.string.PERFIL_NO_ACTIVADO));
+                dismiss();
             });
 
         } else {
 
             builder.setMessage(getString(R.string.DIALOG_DESACTIVACION_MENSAJE));
-            builder.setPositiveButton(getString(R.string.DIALOG_DESACTIVAR), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
+            builder.setPositiveButton(getString(R.string.DIALOG_DESACTIVAR), (dialog, id) -> {
 
-                    researcher.setActivated(false);
-                    switchMaterial.setChecked(false);
-                    switchMaterial.setText(getString(R.string.PERFIL_NO_ACTIVADO));
-                    listener.onDialogPositiveClick(researcher, researcher.isActivated());
+                researcher.setActivated(false);
+                switchMaterial.setChecked(false);
+                switchMaterial.setText(getString(R.string.PERFIL_NO_ACTIVADO));
+                listener.onDialogPositiveClick(researcher, researcher.isActivated());
 
-                    dialog.dismiss();
-                }
+                dialog.dismiss();
             });
 
-            builder.setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
+            builder.setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), (dialog, id) -> {
 
-                    switchMaterial.setChecked(true);
-                    switchMaterial.setText(getString(R.string.PERFIL_ACTIVADO));
-                    dismiss();
-                }
+                switchMaterial.setChecked(true);
+                switchMaterial.setText(getString(R.string.PERFIL_ACTIVADO));
+                dismiss();
             });
         }
         return builder.create();

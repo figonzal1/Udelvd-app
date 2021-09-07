@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -63,58 +62,52 @@ public class ProfessionRepository {
 
         professionList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d("Response", response);
+        Response.Listener<String> responseListener = response -> {
+            //Log.d("Response", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonData.length(); i++) {
-                        JSONObject jsonEducLevel = jsonData.getJSONObject(i);
+                for (int i = 0; i < jsonData.length(); i++) {
+                    JSONObject jsonEducLevel = jsonData.getJSONObject(i);
 
-                        int idNivel = jsonEducLevel.getInt(application.getString(R.string.KEY_PROFESION_ID));
+                    int idNivel = jsonEducLevel.getInt(application.getString(R.string.KEY_PROFESION_ID));
 
-                        JSONObject jsonAttributes = jsonEducLevel.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-                        String nombreNivel = jsonAttributes.getString(application.getString(R.string.KEY_PROFESION_NOMBRE));
+                    JSONObject jsonAttributes = jsonEducLevel.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    String nombreNivel = jsonAttributes.getString(application.getString(R.string.KEY_PROFESION_NOMBRE));
 
-                        Profession profession = new Profession();
-                        profession.setId(idNivel);
-                        profession.setName(nombreNivel);
+                    Profession profession = new Profession();
+                    profession.setId(idNivel);
+                    profession.setName(nombreNivel);
 
-                        professionList.add(profession);
-                    }
-
-                    professionMutableLiveData.postValue(professionList);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "PROFESION JSON ERROR PARSE");
-                    e.printStackTrace();
+                    professionList.add(profession);
                 }
 
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                professionMutableLiveData.postValue(professionList);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_PROFESION)
-                );
+            } catch (JSONException e) {
 
+                Log.d("JSON_ERROR", "PROFESION JSON ERROR PARSE");
+                e.printStackTrace();
             }
+
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_PROFESION)
+            );
+
         };
 
         String url = String.format(application.getString(R.string.URL_GET_PROFESIONES), application.getString(R.string.HEROKU_DOMAIN));

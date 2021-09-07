@@ -2,7 +2,6 @@ package cl.udelvd.views.fragments.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,20 +30,8 @@ public class DeleteIntervieweeDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setMessage(getString(R.string.DIALOG_MESSAGE_ENTREVISTADO))
-                .setPositiveButton(getString(R.string.DIALOG_POSITIVE_BTN), new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        listener.onDialogPositiveClick(interviewee);
-                    }
-                })
-                .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        dismiss();
-                    }
-                });
+                .setPositiveButton(getString(R.string.DIALOG_POSITIVE_BTN), (dialog, id) -> listener.onDialogPositiveClick(interviewee))
+                .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN), (dialog, id) -> dismiss());
         return builder.create();
     }
 

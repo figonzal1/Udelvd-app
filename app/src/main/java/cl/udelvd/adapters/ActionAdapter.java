@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -61,44 +60,38 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ActionView
         holder.tvSpanish.setText(action.getNameEs());
         holder.tvEnglish.setText(action.getNameEng());
 
-        holder.ivMenuAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.ivMenuAction.setOnClickListener(v -> {
 
-                PopupMenu popupMenu = new PopupMenu(context, holder.ivMenuAction);
-                popupMenu.inflate(R.menu.menu_holder_action);
+            PopupMenu popupMenu = new PopupMenu(context, holder.ivMenuAction);
+            popupMenu.inflate(R.menu.menu_holder_action);
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
+            popupMenu.setOnMenuItemClickListener(item -> {
 
-                        if (item.getItemId() == R.id.menu_edit_action) {
+                if (item.getItemId() == R.id.menu_edit_action) {
 
-                            Intent intent = new Intent(context, EditActionActivity.class);
+                    Intent intent = new Intent(context, EditActionActivity.class);
 
-                            Bundle bundle = new Bundle();
-                            bundle.putInt(context.getString(R.string.KEY_ACCION_ID_LARGO), action.getId());
-                            bundle.putString(context.getString(R.string.KEY_ACCION_NOMBRE_EN), action.getNameEng());
-                            bundle.putString(context.getString(R.string.KEY_ACCION_NOMBRE_ES), action.getNameEs());
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(context.getString(R.string.KEY_ACCION_ID_LARGO), action.getId());
+                    bundle.putString(context.getString(R.string.KEY_ACCION_NOMBRE_EN), action.getNameEng());
+                    bundle.putString(context.getString(R.string.KEY_ACCION_NOMBRE_ES), action.getNameEs());
 
-                            intent.putExtras(bundle);
-                            activity.startActivityForResult(intent, REQUEST_CODE_EDITAR_ACTION);
+                    intent.putExtras(bundle);
+                    activity.startActivityForResult(intent, REQUEST_CODE_EDITAR_ACTION);
 
-                            return true;
+                    return true;
 
-                        } else if (item.getItemId() == R.id.menu_delete_action) {
+                } else if (item.getItemId() == R.id.menu_delete_action) {
 
-                            DeleteActionDialogFragment dialog = new DeleteActionDialogFragment(action);
-                            dialog.show(fragmentManager, TAG_DELETE_DIALOG_ACTION);
+                    DeleteActionDialogFragment dialog = new DeleteActionDialogFragment(action);
+                    dialog.show(fragmentManager, TAG_DELETE_DIALOG_ACTION);
 
-                            return true;
-                        }
+                    return true;
+                }
 
-                        return false;
-                    }
-                });
-                popupMenu.show();
-            }
+                return false;
+            });
+            popupMenu.show();
         });
     }
 

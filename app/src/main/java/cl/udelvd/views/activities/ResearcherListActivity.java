@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -107,168 +106,144 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
 
     private void initViewModelList() {
 
-        researcherListViewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        researcherListViewModel.isLoading().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    tvEmptyResearchers.setVisibility(View.INVISIBLE);
-                    tvNResearchers.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                tvEmptyResearchers.setVisibility(View.INVISIBLE);
+                tvNResearchers.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.INVISIBLE);
 
-                } else {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        researcherListViewModel.showNInterviewees().observe(ResearcherListActivity.this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-
-                totalResearchers = integer;
-                researcherAdapter.setTotalResearcher(totalResearchers);
-            }
-        });
-
-        researcherListViewModel.loadFirstPage(1, researcher).observe(this, new Observer<List<Researcher>>() {
-            @Override
-            public void onChanged(List<Researcher> researchers) {
-
-                researcherList = researchers;
-                researcherAdapter.updateList(researcherList);
-                rv.setAdapter(researcherAdapter);
-
+            } else {
                 progressBar.setVisibility(View.INVISIBLE);
-
-                if (researcherList.size() == 0) {
-
-                    tvEmptyResearchers.setVisibility(View.VISIBLE);
-
-                } else {
-                    tvEmptyResearchers.setVisibility(View.INVISIBLE);
-                }
-
-                tvNResearchers.setVisibility(View.VISIBLE);
-                tvNResearchers.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), researcherAdapter.getResearcherList().size(), totalResearchers));
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-
+                rv.setVisibility(View.VISIBLE);
             }
         });
 
-        researcherListViewModel.showNextPage().observe(this, new Observer<List<Researcher>>() {
-            @Override
-            public void onChanged(List<Researcher> researchers) {
+        researcherListViewModel.showNInterviewees().observe(ResearcherListActivity.this, integer -> {
 
-                researcherAdapter.addInterviewee(researchers);
-                researcherAdapter.hideProgress();
-
-                researcherList = researcherAdapter.getResearcherList();
-
-                if (researcherList.size() == 0) {
-
-                    tvEmptyResearchers.setVisibility(View.VISIBLE);
-
-                } else {
-                    tvEmptyResearchers.setVisibility(View.INVISIBLE);
-                }
-
-                tvNResearchers.setVisibility(View.VISIBLE);
-                tvNResearchers.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), researcherAdapter.getResearcherList().size(), totalResearchers));
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES) + getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
-            }
+            totalResearchers = integer;
+            researcherAdapter.setTotalResearcher(totalResearchers);
         });
 
-        researcherListViewModel.showMsgErrorList().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        researcherListViewModel.loadFirstPage(1, researcher).observe(this, researchers -> {
 
-                progressBar.setVisibility(View.INVISIBLE);
+            researcherList = researchers;
+            researcherAdapter.updateList(researcherList);
+            rv.setAdapter(researcherAdapter);
 
-                if (!isSnackBarShow) {
+            progressBar.setVisibility(View.INVISIBLE);
 
-                    rv.setVisibility(View.INVISIBLE);
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.researchers_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                    researcherAdapter.notifyDataSetChanged();
-                }
+            if (researcherList.size() == 0) {
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                tvEmptyResearchers.setVisibility(View.VISIBLE);
+
+            } else {
+                tvEmptyResearchers.setVisibility(View.INVISIBLE);
             }
+
+            tvNResearchers.setVisibility(View.VISIBLE);
+            tvNResearchers.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), researcherAdapter.getResearcherList().size(), totalResearchers));
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+
         });
 
-        researcherListViewModel.activatingResearcher().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        researcherListViewModel.showNextPage().observe(this, researchers -> {
 
-                if (aBoolean) {
+            researcherAdapter.addInterviewee(researchers);
+            researcherAdapter.hideProgress();
 
-                    tvActivatedResearcher.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
-                    tvNResearchers.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.INVISIBLE);
+            researcherList = researcherAdapter.getResearcherList();
 
-                } else {
-                    tvActivatedResearcher.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                }
+            if (researcherList.size() == 0) {
+
+                tvEmptyResearchers.setVisibility(View.VISIBLE);
+
+            } else {
+                tvEmptyResearchers.setVisibility(View.INVISIBLE);
             }
+
+            tvNResearchers.setVisibility(View.VISIBLE);
+            tvNResearchers.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_INVESTIGADORES), researcherAdapter.getResearcherList().size(), totalResearchers));
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES), getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_INVESTIGADORES) + getString(R.string.VIEW_MODEL_LISTA_INVESTIGADORES_MSG) + "PAGINA");
         });
 
-        researcherListViewModel.showMsgActivation().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        researcherListViewModel.showMsgErrorList().observe(this, s -> {
 
-                progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (!isSnackBarShow) {
+
+                rv.setVisibility(View.INVISIBLE);
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.researchers_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                researcherAdapter.notifyDataSetChanged();
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTADO_INVESTIGADORES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+        });
+
+        researcherListViewModel.activatingResearcher().observe(this, aBoolean -> {
+
+            if (aBoolean) {
+
+                tvActivatedResearcher.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                tvNResearchers.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.INVISIBLE);
+
+            } else {
                 tvActivatedResearcher.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.VISIBLE);
+            }
+        });
 
-                if (s.equals(getString(R.string.MSG_INVEST_CUENTA_ACTIVADA)) || s.equals(getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA))) {
+        researcherListViewModel.showMsgActivation().observe(this, s -> {
 
-                    isSnackBarShow = true;
+            progressBar.setVisibility(View.INVISIBLE);
+            tvActivatedResearcher.setVisibility(View.INVISIBLE);
+
+            if (s.equals(getString(R.string.MSG_INVEST_CUENTA_ACTIVADA)) || s.equals(getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA))) {
+
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.researchers_list), Snackbar.LENGTH_LONG, s, null);
+                ResearcherRepository.getInstance(getApplication()).getResearchers(1, researcher);
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+        });
+
+        researcherListViewModel.showMsgErrorActivation().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+            tvActivatedResearcher.setVisibility(View.INVISIBLE);
+
+            if (!isSnackBarShow) {
+
+                isSnackBarShow = true;
+
+                if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
+                    rv.setVisibility(View.INVISIBLE);
+                    showSnackbar(findViewById(R.id.researchers_list), Snackbar.LENGTH_INDEFINITE, s, null);
+
+                } else {
                     showSnackbar(findViewById(R.id.researchers_list), Snackbar.LENGTH_LONG, s, null);
-                    ResearcherRepository.getInstance(getApplication()).getResearchers(1, researcher);
                 }
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                researcherAdapter.notifyDataSetChanged();
             }
-        });
 
-        researcherListViewModel.showMsgErrorActivation().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-                tvActivatedResearcher.setVisibility(View.INVISIBLE);
-
-                if (!isSnackBarShow) {
-
-                    isSnackBarShow = true;
-
-                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
-
-                        rv.setVisibility(View.INVISIBLE);
-                        showSnackbar(findViewById(R.id.researchers_list), Snackbar.LENGTH_INDEFINITE, s, null);
-
-                    } else {
-                        showSnackbar(findViewById(R.id.researchers_list), Snackbar.LENGTH_LONG, s, null);
-                    }
-
-                    researcherAdapter.notifyDataSetChanged();
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ACTIVACION_INVES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
@@ -302,21 +277,18 @@ public class ResearcherListActivity extends AppCompatActivity implements Snackba
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    isSnackBarShow = false;
+                isSnackBarShow = false;
 
-                    if (snackbar != null) {
-                        snackbar.dismiss();
-                    }
-
-                    researcherAdapter.resetPages();
-                    researcherListViewModel.refreshResearchers(researcher);
+                if (snackbar != null) {
+                    snackbar.dismiss();
                 }
+
+                researcherAdapter.resetPages();
+                researcherListViewModel.refreshResearchers(researcher);
             });
         }
         snackbar.show();

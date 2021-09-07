@@ -1,5 +1,7 @@
 package cl.udelvd.views.activities;
 
+import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
@@ -39,8 +40,6 @@ import cl.udelvd.utils.SnackbarInterface;
 import cl.udelvd.utils.Utils;
 import cl.udelvd.viewmodels.EventListViewModel;
 import cl.udelvd.views.fragments.dialog.DeleteDialogListener;
-
-import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class EventsActivity extends AppCompatActivity implements DeleteDialogListener, SnackbarInterface {
 
@@ -158,118 +157,103 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
 
     private void initViewModel() {
 
-        eventListViewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        eventListViewModel.isLoading().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    viewPager.setVisibility(View.INVISIBLE);
-                    cvInfo.setVisibility(View.INVISIBLE);
-
-                } else {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    viewPager.setVisibility(View.VISIBLE);
-                    cvInfo.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-
-        eventListViewModel.loadEvents(interview).observe(this, new Observer<List<Event>>() {
-            @Override
-            public void onChanged(List<Event> events) {
-
-                if (events != null) {
-
-                    eventList = events;
-                    progressBar.setVisibility(View.INVISIBLE);
-                    viewPager.setVisibility(View.VISIBLE);
-                    cvInfo.setVisibility(View.VISIBLE);
-
-                    if (eventList.size() == 0) {
-
-                        tvEmptyEvents.setVisibility(View.VISIBLE);
-
-                    } else {
-                        tvEmptyEvents.setVisibility(View.INVISIBLE);
-                        fragmentStatePageAdapter.updateList(eventList);
-                    }
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), getString(R.string.VIEW_MODEL_LISTADO_CARGADO)));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), getString(R.string.VIEW_MODEL_LISTADO_CARGADO)));
-            }
-        });
-
-
-        eventListViewModel.showMsgErrorList().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
                 viewPager.setVisibility(View.INVISIBLE);
                 cvInfo.setVisibility(View.INVISIBLE);
 
-                if (!isSnackBarShow) {
-
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                    fragmentStatePageAdapter.notifyDataSetChanged();
-
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            } else {
+                progressBar.setVisibility(View.INVISIBLE);
+                viewPager.setVisibility(View.VISIBLE);
+                cvInfo.setVisibility(View.VISIBLE);
             }
         });
 
 
-        eventListViewModel.showMsgDelete().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        eventListViewModel.loadEvents(interview).observe(this, events -> {
 
-                if (s.equals(getString(R.string.MSG_DELETE_EVENTO))) {
+            if (events != null) {
 
-                    isSnackBarShow = true;
+                eventList = events;
+                progressBar.setVisibility(View.INVISIBLE);
+                viewPager.setVisibility(View.VISIBLE);
+                cvInfo.setVisibility(View.VISIBLE);
+
+                if (eventList.size() == 0) {
+
+                    tvEmptyEvents.setVisibility(View.VISIBLE);
+
+                } else {
+                    tvEmptyEvents.setVisibility(View.INVISIBLE);
+                    fragmentStatePageAdapter.updateList(eventList);
+                }
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), getString(R.string.VIEW_MODEL_LISTADO_CARGADO)));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), getString(R.string.VIEW_MODEL_LISTADO_CARGADO)));
+        });
+
+
+        eventListViewModel.showMsgErrorList().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+            viewPager.setVisibility(View.INVISIBLE);
+            cvInfo.setVisibility(View.INVISIBLE);
+
+            if (!isSnackBarShow) {
+
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                fragmentStatePageAdapter.notifyDataSetChanged();
+
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_EVENTOS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+        });
+
+
+        eventListViewModel.showMsgDelete().observe(this, s -> {
+
+            if (s.equals(getString(R.string.MSG_DELETE_EVENTO))) {
+
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_LONG, s, null);
+                EventRepository.getInstance(getApplication()).getInterviewEvents(interview);
+
+                fragmentStatePageAdapter.notifyDataSetChanged();
+                Objects.requireNonNull(viewPager.getAdapter(), "View pager cannot be null").notifyDataSetChanged();
+
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+        });
+
+        eventListViewModel.showMsgErrorDelete().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+
+                isSnackBarShow = true;
+
+                if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
+                    showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_INDEFINITE, s, null);
+
+                } else {
                     showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_LONG, s, null);
-                    EventRepository.getInstance(getApplication()).getInterviewEvents(interview);
-
-                    fragmentStatePageAdapter.notifyDataSetChanged();
-                    Objects.requireNonNull(viewPager.getAdapter(), "View pager cannot be null").notifyDataSetChanged();
-
                 }
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                fragmentStatePageAdapter.notifyDataSetChanged();
             }
-        });
 
-        eventListViewModel.showMsgErrorDelete().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.GONE);
-
-                if (!isSnackBarShow) {
-
-                    isSnackBarShow = true;
-
-                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
-
-                        showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_INDEFINITE, s, null);
-
-                    } else {
-                        showSnackbar(findViewById(R.id.event_list), Snackbar.LENGTH_LONG, s, null);
-                    }
-
-                    fragmentStatePageAdapter.notifyDataSetChanged();
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_EVENTO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
@@ -277,14 +261,11 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
 
         FloatingActionButton fabNewEvent = findViewById(R.id.fb_crear_evento);
 
-        fabNewEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fabNewEvent.setOnClickListener(view -> {
 
-                Intent intent = new Intent(EventsActivity.this, NewEventActivity.class);
-                intent.putExtra(getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
-                startActivityForResult(intent, REQUEST_CODE_NEW_EVENT);
-            }
+            Intent intent = new Intent(EventsActivity.this, NewEventActivity.class);
+            intent.putExtra(getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
+            startActivityForResult(intent, REQUEST_CODE_NEW_EVENT);
         });
     }
 
@@ -332,21 +313,18 @@ public class EventsActivity extends AppCompatActivity implements DeleteDialogLis
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    viewPager.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                viewPager.setVisibility(View.INVISIBLE);
 
-                    isSnackBarShow = false;
+                isSnackBarShow = false;
 
-                    if (snackbar != null) {
-                        snackbar.dismiss();
-                    }
-
-                    eventListViewModel.refreshEvents(interview);
+                if (snackbar != null) {
+                    snackbar.dismiss();
                 }
+
+                eventListViewModel.refreshEvents(interview);
             });
         }
 

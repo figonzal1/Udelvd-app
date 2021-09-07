@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
@@ -60,18 +59,15 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
 
     private void btnResetPass() {
 
-        btnResetPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnResetPass.setOnClickListener(v -> {
 
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
-                email = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+            email = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
 
-                if (validateField() && !email.isEmpty()) {
-                    ResearcherRepository.getInstance(getApplication()).resetPassword(email, Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").toString());
-                }
-
+            if (validateField() && !email.isEmpty()) {
+                ResearcherRepository.getInstance(getApplication()).resetPassword(email, Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").toString());
             }
+
         });
     }
 
@@ -116,60 +112,51 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
 
     private void initViewModels() {
 
-        resetPassViewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        resetPassViewModel.isLoading().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    ilPassword.setEnabled(false);
-                    etPassword.setEnabled(false);
+                ilPassword.setEnabled(false);
+                etPassword.setEnabled(false);
 
-                    ilConfirmarPass.setEnabled(false);
-                    etConfirmarPass.setEnabled(false);
+                ilConfirmarPass.setEnabled(false);
+                etConfirmarPass.setEnabled(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-
-                    ilPassword.setEnabled(true);
-                    etPassword.setEnabled(true);
-
-                    ilConfirmarPass.setEnabled(true);
-                    etConfirmarPass.setEnabled(true);
-                }
-            }
-        });
-
-        resetPassViewModel.showMsgReset().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                if (s.equals(getString(R.string.MSG_PASSWORD_RESETEADA_VM_RESULT))) {
-
-                    Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RESET), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                    crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RESET) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-
-                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putBoolean(getString(R.string.SHARED_PREF_RESET_PASS), true).apply();
-
-                    showSnackbar(findViewById(R.id.reset_pass), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_INICIAR_SESION));
-                }
-            }
-        });
-
-        resetPassViewModel.showMsgErrorReset().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
+            } else {
                 progressBar.setVisibility(View.GONE);
 
-                Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RESET), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RESET) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                ilPassword.setEnabled(true);
+                etPassword.setEnabled(true);
 
-                showSnackbar(findViewById(R.id.reset_pass), Snackbar.LENGTH_LONG, s, null);
+                ilConfirmarPass.setEnabled(true);
+                etConfirmarPass.setEnabled(true);
             }
+        });
+
+        resetPassViewModel.showMsgReset().observe(this, s -> {
+
+            if (s.equals(getString(R.string.MSG_PASSWORD_RESETEADA_VM_RESULT))) {
+
+                Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RESET), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RESET) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+                sharedPreferences.edit().putBoolean(getString(R.string.SHARED_PREF_RESET_PASS), true).apply();
+
+                showSnackbar(findViewById(R.id.reset_pass), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_INICIAR_SESION));
+            }
+        });
+
+        resetPassViewModel.showMsgErrorReset().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RESET), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RESET) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            showSnackbar(findViewById(R.id.reset_pass), Snackbar.LENGTH_LONG, s, null);
         });
 
     }
@@ -196,14 +183,11 @@ public class ResetPassActivity extends AppCompatActivity implements SnackbarInte
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ResetPassActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
-                }
+            snackbar.setAction(action, v1 -> {
+                Intent intent = new Intent(ResetPassActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             });
         }
 

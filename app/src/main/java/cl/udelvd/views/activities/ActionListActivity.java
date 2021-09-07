@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -98,108 +97,93 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
 
     private void initViewModelList() {
 
-        actionListViewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        actionListViewModel.isLoading().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                tvEmptyAction.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.INVISIBLE);
+
+            } else {
+                progressBar.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.VISIBLE);
+            }
+        });
+
+        actionListViewModel.loadActions().observe(this, actions -> {
+
+            if (actions != null) {
+
+                actionList = actions;
+                actionAdapter.updateList(actionList);
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (actionList.size() == 0) {
+
+                    tvEmptyAction.setVisibility(View.VISIBLE);
+                } else {
                     tvEmptyAction.setVisibility(View.INVISIBLE);
+                }
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+            }
+        });
+
+        actionListViewModel.showMsgErrorList().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
+            if (!isSnackBarShow) {
+
+                rv.setVisibility(View.INVISIBLE);
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                actionAdapter.notifyDataSetChanged();
+            }
+        });
+
+        actionListViewModel.showMsgDelete().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (s.equals(getString(R.string.MSG_DELETE_ACCION))) {
+
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_LONG, s, null);
+                ActionRepository.getInstance(getApplication()).getActions();
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+        });
+
+        actionListViewModel.showMsgErrorDelete().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (!isSnackBarShow) {
+
+                isSnackBarShow = true;
+
+                if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
                     rv.setVisibility(View.INVISIBLE);
+                    showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_INDEFINITE, s, null);
 
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        actionListViewModel.loadActions().observe(this, new Observer<List<Action>>() {
-            @Override
-            public void onChanged(List<Action> actions) {
-
-                if (actions != null) {
-
-                    actionList = actions;
-                    actionAdapter.updateList(actionList);
-
-                    progressBar.setVisibility(View.INVISIBLE);
-
-                    if (actionList.size() == 0) {
-
-                        tvEmptyAction.setVisibility(View.VISIBLE);
-                    } else {
-                        tvEmptyAction.setVisibility(View.INVISIBLE);
-                    }
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                }
-            }
-        });
-
-        actionListViewModel.showMsgErrorList().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ACCIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
-                if (!isSnackBarShow) {
-
-                    rv.setVisibility(View.INVISIBLE);
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                    actionAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-
-        actionListViewModel.showMsgDelete().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (s.equals(getString(R.string.MSG_DELETE_ACCION))) {
-
-                    isSnackBarShow = true;
                     showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_LONG, s, null);
-                    ActionRepository.getInstance(getApplication()).getActions();
                 }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                actionAdapter.notifyDataSetChanged();
             }
-        });
 
-        actionListViewModel.showMsgErrorDelete().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (!isSnackBarShow) {
-
-                    isSnackBarShow = true;
-
-                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
-
-                        rv.setVisibility(View.INVISIBLE);
-                        showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_INDEFINITE, s, null);
-
-                    } else {
-                        showSnackbar(findViewById(R.id.action_list), Snackbar.LENGTH_LONG, s, null);
-                    }
-                    actionAdapter.notifyDataSetChanged();
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
@@ -207,13 +191,10 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
 
         FloatingActionButton fabNewAction = findViewById(R.id.fb_new_action);
 
-        fabNewAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fabNewAction.setOnClickListener(view -> {
 
-                Intent intent = new Intent(ActionListActivity.this, NewActionActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_NEW_ACTION);
-            }
+            Intent intent = new Intent(ActionListActivity.this, NewActionActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_NEW_ACTION);
         });
     }
 
@@ -224,20 +205,17 @@ public class ActionListActivity extends AppCompatActivity implements SnackbarInt
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    isSnackBarShow = false;
+                isSnackBarShow = false;
 
-                    if (snackbar != null) {
-                        snackbar.dismiss();
-                    }
-
-                    actionListViewModel.refreshActions();
+                if (snackbar != null) {
+                    snackbar.dismiss();
                 }
+
+                actionListViewModel.refreshActions();
             });
         }
 

@@ -1,5 +1,7 @@
 package cl.udelvd.views.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,8 +41,6 @@ import cl.udelvd.models.Researcher;
 import cl.udelvd.utils.SnackbarInterface;
 import cl.udelvd.viewmodels.IntervieweeListViewModel;
 import cl.udelvd.views.activities.NewIntervieweeActivity;
-
-import static android.app.Activity.RESULT_OK;
 
 
 public class IntervieweeListFragment extends Fragment implements SnackbarInterface, SearchView.OnQueryTextListener {
@@ -166,25 +164,22 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
                     crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
                 }
 
-                switchMaterial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                        if (isChecked) {
+                    if (isChecked) {
 
-                            switchMaterial.setText(getString(R.string.TODOS));
-                            crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.TODOS));
+                        switchMaterial.setText(getString(R.string.TODOS));
+                        crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.TODOS));
 
-                        } else {
-                            switchMaterial.setText(getString(R.string.MI_CUENTA));
-                            crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
-                        }
-
-                        listadoTotal = isChecked;
-                        intervieweeAdapter.setTotalList(listadoTotal);
-                        intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
-
+                    } else {
+                        switchMaterial.setText(getString(R.string.MI_CUENTA));
+                        crashlytics.setCustomKey("interviewee_list_switch", getString(R.string.MI_CUENTA));
                     }
+
+                    listadoTotal = isChecked;
+                    intervieweeAdapter.setTotalList(listadoTotal);
+                    intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
+
                 });
             } else {
                 switchMaterial.setVisibility(View.GONE);
@@ -207,171 +202,144 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
         FloatingActionButton fbCrearUsuario = v.findViewById(R.id.fb_new_interviewee);
 
-        fbCrearUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fbCrearUsuario.setOnClickListener(view -> {
 
-                Intent intent = new Intent(getActivity(), NewIntervieweeActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_NEW_INTERVIEWEE);
-            }
+            Intent intent = new Intent(getActivity(), NewIntervieweeActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_NEW_INTERVIEWEE);
         });
     }
 
     private void initViewModelObservers(final View v) {
 
-        intervieweeListViewModel.isLoading().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        intervieweeListViewModel.isLoading().observe(getViewLifecycleOwner(), aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    tvEmptyInterviewee.setVisibility(View.INVISIBLE);
-                    tvNInterviewees.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                tvEmptyInterviewee.setVisibility(View.INVISIBLE);
+                tvNInterviewees.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.INVISIBLE);
 
-                } else {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        intervieweeListViewModel.showNInterviewees().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-
-                totalInterviewees = integer;
-                intervieweeAdapter.setTotalInterviewee(totalInterviewees);
-            }
-        });
-
-
-        intervieweeListViewModel.loadFirstPage(1, researcher, listadoTotal).observe(this, new Observer<List<Interviewee>>() {
-            @Override
-            public void onChanged(List<Interviewee> listado) {
-
-                intervieweeList = listado;
-                intervieweeAdapter.updateList(intervieweeList);
-                rv.setAdapter(intervieweeAdapter);
-
+            } else {
                 progressBar.setVisibility(View.INVISIBLE);
-
-                if (intervieweeList.size() == 0) {
-                    tvEmptyInterviewee.setVisibility(View.VISIBLE);
-
-                } else {
-                    tvEmptyInterviewee.setVisibility(View.INVISIBLE);
-                }
-
-                tvNInterviewees.setVisibility(View.VISIBLE);
-                tvNInterviewees.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                rv.setVisibility(View.VISIBLE);
             }
         });
 
-        intervieweeListViewModel.showNextPage().observe(this, new Observer<List<Interviewee>>() {
-            @Override
-            public void onChanged(List<Interviewee> interviewees) {
+        intervieweeListViewModel.showNInterviewees().observe(getViewLifecycleOwner(), integer -> {
 
-                intervieweeAdapter.addInterviewees(interviewees);
+            totalInterviewees = integer;
+            intervieweeAdapter.setTotalInterviewee(totalInterviewees);
+        });
+
+
+        intervieweeListViewModel.loadFirstPage(1, researcher, listadoTotal).observe(this, listado -> {
+
+            intervieweeList = listado;
+            intervieweeAdapter.updateList(intervieweeList);
+            rv.setAdapter(intervieweeAdapter);
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (intervieweeList.size() == 0) {
+                tvEmptyInterviewee.setVisibility(View.VISIBLE);
+
+            } else {
+                tvEmptyInterviewee.setVisibility(View.INVISIBLE);
+            }
+
+            tvNInterviewees.setVisibility(View.VISIBLE);
+            tvNInterviewees.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+        });
+
+        intervieweeListViewModel.showNextPage().observe(this, interviewees -> {
+
+            intervieweeAdapter.addInterviewees(interviewees);
+            intervieweeAdapter.hideProgress();
+
+            intervieweeList = intervieweeAdapter.getIntervieweeList();
+
+            if (intervieweeList.size() == 0) {
+
+                tvEmptyInterviewee.setVisibility(View.VISIBLE);
+            } else {
+                tvEmptyInterviewee.setVisibility(View.INVISIBLE);
+            }
+
+            tvNInterviewees.setVisibility(View.VISIBLE);
+            tvNInterviewees.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG) + "PAGINA");
+        });
+
+        intervieweeListViewModel.showFilteredIntervieweeList().observe(requireActivity(), list -> {
+
+            intervieweeList = list;
+            intervieweeAdapter.filterList(intervieweeList);
+        });
+
+        intervieweeListViewModel.showMsgErrorList().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (intervieweeAdapter != null) {
+
                 intervieweeAdapter.hideProgress();
+                intervieweeAdapter.resetPages();
+            }
 
-                intervieweeList = intervieweeAdapter.getIntervieweeList();
+            if (!isSnackBarShow) {
 
-                if (intervieweeList.size() == 0) {
+                rv.setVisibility(View.INVISIBLE);
+                isSnackBarShow = true;
+                showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                intervieweeAdapter.notifyDataSetChanged();
 
-                    tvEmptyInterviewee.setVisibility(View.VISIBLE);
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+        });
+
+        intervieweeListViewModel.showMsgDelete().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
+
+                isSnackBarShow = true;
+                showSnackbar(v.findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, s, null);
+                intervieweeAdapter.resetPages();
+                intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+        });
+
+        intervieweeListViewModel.showMsgErrorDelete().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+
+                if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
+                    showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, null);
                 } else {
-                    tvEmptyInterviewee.setVisibility(View.INVISIBLE);
+
+                    showSnackbar(v, Snackbar.LENGTH_LONG, s, null);
                 }
 
-                tvNInterviewees.setVisibility(View.VISIBLE);
-                tvNInterviewees.setText(String.format(Locale.getDefault(), getString(R.string.MOSTRAR_ENTREVISTADOS), intervieweeAdapter.getIntervieweeList().size(), totalInterviewees));
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG) + "PAGINA");
+                intervieweeAdapter.notifyDataSetChanged();
             }
-        });
 
-        intervieweeListViewModel.showFilteredIntervieweeList().observe(requireActivity(), new Observer<List<Interviewee>>() {
-            @Override
-            public void onChanged(@Nullable List<Interviewee> list) {
-
-                intervieweeList = list;
-                intervieweeAdapter.filterList(intervieweeList);
-            }
-        });
-
-        intervieweeListViewModel.showMsgErrorList().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (intervieweeAdapter != null) {
-
-                    intervieweeAdapter.hideProgress();
-                    intervieweeAdapter.resetPages();
-                }
-
-                if (!isSnackBarShow) {
-
-                    rv.setVisibility(View.INVISIBLE);
-                    isSnackBarShow = true;
-                    showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                    intervieweeAdapter.notifyDataSetChanged();
-
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
-        });
-
-        intervieweeListViewModel.showMsgDelete().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTADO))) {
-
-                    isSnackBarShow = true;
-                    showSnackbar(v.findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, s, null);
-                    intervieweeAdapter.resetPages();
-                    intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-            }
-        });
-
-        intervieweeListViewModel.showMsgErrorDelete().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-
-                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
-
-                        showSnackbar(v, Snackbar.LENGTH_INDEFINITE, s, null);
-                    } else {
-
-                        showSnackbar(v, Snackbar.LENGTH_LONG, s, null);
-                    }
-
-                    intervieweeAdapter.notifyDataSetChanged();
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-            }
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
         });
     }
 
@@ -472,20 +440,17 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    isSnackBarShow = false;
+                progressBar.setVisibility(View.VISIBLE);
+                isSnackBarShow = false;
 
-                    if (snackbar != null) {
-                        snackbar.dismiss();
-                    }
-
-                    intervieweeAdapter.resetPages();
-                    intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
+                if (snackbar != null) {
+                    snackbar.dismiss();
                 }
+
+                intervieweeAdapter.resetPages();
+                intervieweeListViewModel.refreshIntervieweeList(researcher, listadoTotal);
             });
         }
 

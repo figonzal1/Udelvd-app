@@ -13,9 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -65,15 +62,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //Subscribte to notifications
         FirebaseMessaging.getInstance().subscribeToTopic(context.getString(R.string.TEMA_NOTIFICACION_REGISTRO))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
+                    if (task.isSuccessful()) {
 
-                            Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_OK));
-                            FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_OK));
-                        }
+                        Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_OK));
+                        FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_OK));
                     }
                 });
     }
@@ -81,21 +75,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static void deleteSuscriptionTheme(final Context context) {
 
         FirebaseMessaging.getInstance().unsubscribeFromTopic(context.getString(R.string.TEMA_NOTIFICACION_REGISTRO))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        //LOG ZONE
-                        Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_ELIMINADA));
-                        FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_ELIMINADA));
-                    }
+                .addOnCompleteListener(task -> {
+                    //LOG ZONE
+                    Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_ELIMINADA));
+                    FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_ELIMINADA));
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                .addOnFailureListener(e -> {
 
-                        Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_ERRONEA));
-                        FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_ERRONEA));
-                    }
+                    Log.d(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION), context.getString(R.string.SUSCRIPCION_ERRONEA));
+                    FirebaseCrashlytics.getInstance().log(context.getString(R.string.TAG_FIREBASE_SUSCRIPCION) + context.getString(R.string.SUSCRIPCION_ERRONEA));
                 });
     }
 

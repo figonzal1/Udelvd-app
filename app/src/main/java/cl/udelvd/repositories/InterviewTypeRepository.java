@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -63,55 +62,49 @@ public class InterviewTypeRepository {
 
         interviewTypeList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE_TIPO_ENTRE", response);
+            //Log.d("RESPONSE_TIPO_ENTRE", response);
 
-                try {
-                    JSONObject jsonObject;
-                    jsonObject = new JSONObject(response);
-                    JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+            try {
+                JSONObject jsonObject;
+                jsonObject = new JSONObject(response);
+                JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
 
-                        JSONObject jsonTipoEntrevista = jsonArray.getJSONObject(i);
+                    JSONObject jsonTipoEntrevista = jsonArray.getJSONObject(i);
 
-                        JSONObject jsonAttributes = jsonTipoEntrevista.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    JSONObject jsonAttributes = jsonTipoEntrevista.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                        InterviewType interviewType = new InterviewType();
-                        interviewType.setId(jsonTipoEntrevista.getInt(application.getString(R.string.KEY_TIPO_ENTREVISTA_ID)));
-                        interviewType.setName(jsonAttributes.getString(application.getString(R.string.KEY_TIPO_ENTREVISTA_NOMBRE)));
+                    InterviewType interviewType = new InterviewType();
+                    interviewType.setId(jsonTipoEntrevista.getInt(application.getString(R.string.KEY_TIPO_ENTREVISTA_ID)));
+                    interviewType.setName(jsonAttributes.getString(application.getString(R.string.KEY_TIPO_ENTREVISTA_NOMBRE)));
 
-                        interviewTypeList.add(interviewType);
-                    }
-
-                    interviewTypeMutable.postValue(interviewTypeList);
-
-                    isLoading.postValue(false);
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "INTERVIEW TYPE JSON ERROR PARSE");
-                    e.printStackTrace();
+                    interviewTypeList.add(interviewType);
                 }
+
+                interviewTypeMutable.postValue(interviewTypeList);
+
+                isLoading.postValue(false);
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "INTERVIEW TYPE JSON ERROR PARSE");
+                e.printStackTrace();
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        Response.ErrorListener errorListener = error -> {
 
-                isLoading.postValue(false);
+            isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR)
-                );
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_TIPO_ENTR)
+            );
 
-            }
         };
 
         String url = String.format(application.getString(R.string.URL_GET_TIPOS_ENTREVISTAS), application.getString(R.string.HEROKU_DOMAIN), Utils.getLanguage(application));

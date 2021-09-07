@@ -115,51 +115,42 @@ public class IntroActivity extends AppCompatActivity {
         });
 
         //NEXT BUTTON
-        ibNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        ibNext.setOnClickListener(v -> {
 
-                position = viewPager.getCurrentItem();
+            position = viewPager.getCurrentItem();
 
-                if (position < introItemList.size()) {
+            if (position < introItemList.size()) {
 
-                    position++;
-                    viewPager.setCurrentItem(position);
-                }
+                position++;
+                viewPager.setCurrentItem(position);
+            }
 
-                if (position == introItemList.size() - 1) {
+            if (position == introItemList.size() - 1) {
 
-                    startAnimationBtnGetStarted();
-                }
+                startAnimationBtnGetStarted();
             }
         });
 
         //GET STARTED BUTTON
-        btnGetStarted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnGetStarted.setOnClickListener(v -> {
 
-                editor.putBoolean(getString(R.string.SHARED_PREF_FIRST_LOAD), false);
-                editor.apply();
+            editor.putBoolean(getString(R.string.SHARED_PREF_FIRST_LOAD), false);
+            editor.apply();
 
-                Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         //SKIP BUTTON
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        skipButton.setOnClickListener(v -> {
 
-                editor.putBoolean(getString(R.string.SHARED_PREF_FIRST_LOAD), false);
-                editor.apply();
+            editor.putBoolean(getString(R.string.SHARED_PREF_FIRST_LOAD), false);
+            editor.apply();
 
-                Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         //CONFIG ANIMATIONS INSIDE VIEW PAGER

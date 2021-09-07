@@ -14,22 +14,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/colorSecondary"
         android:text="@string/comenzar"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95"
         tools:visibility="visible" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_intro"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/separator"
+        app:layout_constraintBottom_toTopOf="@+id/btn_start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -50,11 +47,12 @@
     <TextView
         android:id="@+id/tv_skip"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="32dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:fontFamily="@font/roboto"
+        android:gravity="center"
         android:padding="16dp"
         android:text="@string/saltar"
         android:textAllCaps="true"
@@ -84,7 +82,7 @@
     <ImageButton
         android:id="@+id/ib_next"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginEnd="32dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="16dp"

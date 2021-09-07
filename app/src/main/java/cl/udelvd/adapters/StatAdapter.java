@@ -27,7 +27,7 @@ import cl.udelvd.views.activities.WebViewActivity;
 public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder> {
 
     private List<Stat> statList;
-    private Context context;
+    private final Context context;
 
 
     public StatAdapter(List<Stat> statList, Context context) {
@@ -105,10 +105,10 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder
 
     static class StatViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvName;
-        private TextView tvLink;
-        private TextView tvPinPass;
-        private MaterialButton btnGo;
+        private final TextView tvName;
+        private final TextView tvLink;
+        private final TextView tvPinPass;
+        private final MaterialButton btnGo;
 
         StatViewHolder(@NonNull View itemView) {
             super(itemView);

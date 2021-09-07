@@ -44,16 +44,16 @@ public class ActionRepository {
     private final SingleLiveEvent<String> responseMsgErrorList = new SingleLiveEvent<>();
 
     //REGISTRY
-    private SingleLiveEvent<String> responseMsgErrorRegistry = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgRegistry = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorRegistry = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgRegistry = new SingleLiveEvent<>();
 
     //UPDATE
-    private SingleLiveEvent<String> responseMsgUpdate = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorUpdate = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgUpdate = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorUpdate = new SingleLiveEvent<>();
 
     //DELETE
-    private SingleLiveEvent<String> responseMsgDelete = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> responseMsgErrorDelete = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgDelete = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> responseMsgErrorDelete = new SingleLiveEvent<>();
 
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 

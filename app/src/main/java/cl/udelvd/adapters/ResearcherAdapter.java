@@ -37,7 +37,7 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<Researcher> researcherList;
     private Button btnLoadMore;
     private ProgressBar progressBar;
-    private Researcher researcher;
+    private final Researcher researcher;
     private int page = 1;
     private int totalResearchers;
 

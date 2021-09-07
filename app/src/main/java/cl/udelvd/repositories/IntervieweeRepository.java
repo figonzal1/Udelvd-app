@@ -163,11 +163,7 @@ public class IntervieweeRepository {
                         interviewee.setCity(city);
 
                         //LEGAL retired
-                        if (jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 1) {
-                            interviewee.setLegalRetired(true);
-                        } else {
-                            interviewee.setLegalRetired(false);
-                        }
+                        interviewee.setLegalRetired(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 1);
 
                         //FALSS
                         if (jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 1) {
@@ -331,19 +327,9 @@ public class IntervieweeRepository {
 
                     entResponse.setGender(jsonAttributes.getString(application.getString(R.string.KEY_ENTREVISTADO_SEXO)));
 
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
+                    entResponse.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
 
-                        entResponse.setLegalRetired(false);
-                    } else {
-                        entResponse.setLegalRetired(true);
-                    }
-
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
-
-                        entResponse.setFalls(false);
-                    } else {
-                        entResponse.setFalls(true);
-                    }
+                    entResponse.setFalls(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) != 0);
 
                     Date birthDate = null;
                     try {
@@ -503,11 +489,7 @@ public class IntervieweeRepository {
                     }
                     interviewee.setBirthDate(birthDate);
 
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
-                        interviewee.setLegalRetired(false);
-                    } else {
-                        interviewee.setLegalRetired(true);
-                    }
+                    interviewee.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
                         interviewee.setFalls(false);
@@ -648,11 +630,7 @@ public class IntervieweeRepository {
                     }
                     intervieweeInternet.setBirthDate(birthDate);
 
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) == 0) {
-                        intervieweeInternet.setLegalRetired(false);
-                    } else {
-                        intervieweeInternet.setLegalRetired(true);
-                    }
+                    intervieweeInternet.setLegalRetired(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_JUBILADO_LEGAL)) != 0);
 
                     if (jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS)) == 0) {
                         intervieweeInternet.setFalls(false);

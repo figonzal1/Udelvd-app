@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
         etEmail = findViewById(R.id.et_email_login);
         String sharedEmail = sharedPreferences.getString("login_email", "");
-        if (!sharedEmail.isEmpty()) {
+        if (sharedEmail != null && !sharedEmail.isEmpty()) {
             etEmail.setText(sharedEmail);
         }
         etPassword = findViewById(R.id.et_password_login);

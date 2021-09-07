@@ -57,8 +57,8 @@ public class Action {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Action action = (Action) o;
-        return getNameEs().toLowerCase().equals(action.getNameEs().toLowerCase()) &&
-                getNameEng().toLowerCase().equals(action.getNameEng().toLowerCase());
+        return getNameEs().equalsIgnoreCase(action.getNameEs()) &&
+                getNameEng().equalsIgnoreCase(action.getNameEng());
     }
 
     @Override

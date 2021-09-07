@@ -20,7 +20,11 @@
             android:parentActivityName=".views.activities.MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".views.activities.IntroActivity">
+        <activity
+            android:name=".views.activities.IntroActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

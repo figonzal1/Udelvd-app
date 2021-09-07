@@ -190,9 +190,9 @@ public class Interviewee {
                 isFalls() == that.isFalls() &&
                 nCohabiting3Months == that.nCohabiting3Months &&
                 getIdResearcher() == that.getIdResearcher() &&
-                getName().toLowerCase().equals(that.getName().toLowerCase()) &&
-                getLastName().toLowerCase().equals(that.getLastName().toLowerCase()) &&
-                getGender().toLowerCase().equals(that.getGender().toLowerCase()) &&
+                getName().equalsIgnoreCase(that.getName()) &&
+                getLastName().equalsIgnoreCase(that.getLastName()) &&
+                getGender().equalsIgnoreCase(that.getGender()) &&
                 getBirthDate().equals(that.getBirthDate());
     }
 

@@ -19,7 +19,7 @@ public class ActivateResearcherDialogFragment extends DialogFragment {
     private final Researcher researcher;
     private final boolean activated;
     private ActivateAccountDialogListener listener;
-    private SwitchMaterial switchMaterial;
+    private final SwitchMaterial switchMaterial;
 
     public ActivateResearcherDialogFragment(Researcher researcher, boolean activated, SwitchMaterial switchMaterial) {
 

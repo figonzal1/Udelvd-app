@@ -33,9 +33,9 @@ public class StatsRepository {
     private static StatsRepository instance;
     private final Application application;
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private List<Stat> statList = new ArrayList<>();
-    private MutableLiveData<List<Stat>> statsMutableLivedata = new MutableLiveData<>();
-    private SingleLiveEvent<String> responseMsgErrorList = new SingleLiveEvent<>();
+    private final List<Stat> statList = new ArrayList<>();
+    private final MutableLiveData<List<Stat>> statsMutableLivedata = new MutableLiveData<>();
+    private final SingleLiveEvent<String> responseMsgErrorList = new SingleLiveEvent<>();
 
 
     private StatsRepository(Application application) {

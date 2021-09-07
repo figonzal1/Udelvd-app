@@ -84,7 +84,7 @@ public class Event {
         if (this == o) return true;
         if (!(o instanceof Event)) return false;
         Event event = (Event) o;
-        return getJustification().toLowerCase().equals(event.getJustification().toLowerCase()) &&
+        return getJustification().equalsIgnoreCase(event.getJustification()) &&
                 getEventHour().equals(event.getEventHour());
     }
 

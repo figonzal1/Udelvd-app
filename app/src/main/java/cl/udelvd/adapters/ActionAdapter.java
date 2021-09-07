@@ -30,11 +30,11 @@ import cl.udelvd.views.fragments.dialog.DeleteActionDialogFragment;
 public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ActionViewHolder> {
 
     private List<Action> actionsList;
-    private Context context;
-    private Activity activity;
-    private FragmentManager fragmentManager;
-    private String TAG_DELETE_DIALOG_ACTION = "DeleteAccion";
-    private int REQUEST_CODE_EDITAR_ACTION;
+    private final Context context;
+    private final Activity activity;
+    private final FragmentManager fragmentManager;
+    private final String TAG_DELETE_DIALOG_ACTION = "DeleteAccion";
+    private final int REQUEST_CODE_EDITAR_ACTION;
 
     public ActionAdapter(List<Action> actionsList, Context context, Activity activity, FragmentManager fragmentManager, int requestCode) {
         this.actionsList = actionsList;
@@ -122,9 +122,9 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ActionView
     static class ActionViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView ivMenuAction;
-        private TextView tvAction;
-        private TextView tvEnglish;
-        private TextView tvSpanish;
+        private final TextView tvAction;
+        private final TextView tvEnglish;
+        private final TextView tvSpanish;
 
         ActionViewHolder(@NonNull View itemView) {
             super(itemView);

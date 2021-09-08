@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -63,57 +62,51 @@ public class EducationaLevelRepository {
 
         educationalLevelList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d("Response", response);
+        Response.Listener<String> responseListener = response -> {
+            //Log.d("Response", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonData.length(); i++) {
-                        JSONObject jsonEducationalLevel = jsonData.getJSONObject(i);
+                for (int i = 0; i < jsonData.length(); i++) {
+                    JSONObject jsonEducationalLevel = jsonData.getJSONObject(i);
 
-                        int id_nivel = jsonEducationalLevel.getInt(application.getString(R.string.KEY_NIVEL_EDUC_ID));
+                    int id_nivel = jsonEducationalLevel.getInt(application.getString(R.string.KEY_NIVEL_EDUC_ID));
 
-                        JSONObject jsonAttributes = jsonEducationalLevel.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-                        String nombreNivel = jsonAttributes.getString(application.getString(R.string.KEY_NIVEL_EDUC_NOMBRE));
+                    JSONObject jsonAttributes = jsonEducationalLevel.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    String nombreNivel = jsonAttributes.getString(application.getString(R.string.KEY_NIVEL_EDUC_NOMBRE));
 
-                        EducationalLevel educationalLevel = new EducationalLevel();
-                        educationalLevel.setId(id_nivel);
-                        educationalLevel.setName(nombreNivel);
+                    EducationalLevel educationalLevel = new EducationalLevel();
+                    educationalLevel.setId(id_nivel);
+                    educationalLevel.setName(nombreNivel);
 
-                        educationalLevelList.add(educationalLevel);
-                    }
-
-                    educationaLevelMutableLiveData.postValue(educationalLevelList);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "EDUCATIONAL LIST JSON ERROR PARSE");
-                    e.printStackTrace();
+                    educationalLevelList.add(educationalLevel);
                 }
 
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                educationaLevelMutableLiveData.postValue(educationalLevelList);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_NIVEL_EDUC)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "EDUCATIONAL LIST JSON ERROR PARSE");
+                e.printStackTrace();
             }
+
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_NIVEL_EDUC)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_GET_NIVELES_EDUCACIONALES), application.getString(R.string.HEROKU_DOMAIN), Utils.getLanguage(application));

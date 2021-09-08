@@ -10,13 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -25,7 +23,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -107,91 +104,85 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
     private void initViewModel() {
 
 
-        editProfileViewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        editProfileViewModel.isLoading().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    ilName.setEnabled(false);
-                    etName.setEnabled(false);
+                ilName.setEnabled(false);
+                etName.setEnabled(false);
 
-                    etLastName.setEnabled(false);
-                    ilLastName.setEnabled(false);
+                etLastName.setEnabled(false);
+                ilLastName.setEnabled(false);
 
-                    ilPassword.setEnabled(false);
-                    etPassword.setEnabled(false);
+                ilPassword.setEnabled(false);
+                etPassword.setEnabled(false);
 
-                    ilConfirmacionPassword.setEnabled(false);
-                    etConfirmacionPassword.setEnabled(false);
+                ilConfirmacionPassword.setEnabled(false);
+                etConfirmacionPassword.setEnabled(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
 
-                    ilName.setEnabled(true);
-                    etName.setEnabled(true);
+                ilName.setEnabled(true);
+                etName.setEnabled(true);
 
-                    etLastName.setEnabled(true);
-                    ilLastName.setEnabled(true);
+                etLastName.setEnabled(true);
+                ilLastName.setEnabled(true);
 
-                    ilPassword.setEnabled(true);
-                    etPassword.setEnabled(true);
+                ilPassword.setEnabled(true);
+                etPassword.setEnabled(true);
 
-                    ilConfirmacionPassword.setEnabled(true);
-                    etConfirmacionPassword.setEnabled(true);
-                }
+                ilConfirmacionPassword.setEnabled(true);
+                etConfirmacionPassword.setEnabled(true);
             }
         });
 
 
-        editProfileViewModel.showMsgUpdate().observe(this, new Observer<Map<String, Object>>() {
-            @Override
-            public void onChanged(Map<String, Object> stringObjectMap) {
+        editProfileViewModel.showMsgUpdate().observe(this, stringObjectMap -> {
 
-                if (stringObjectMap != null) {
+            if (stringObjectMap != null) {
 
-                    Researcher researcher = (Researcher) stringObjectMap.get(getString(R.string.KEY_INVES_OBJECT));
+                Researcher researcher = (Researcher) stringObjectMap.get(getString(R.string.KEY_INVES_OBJECT));
 
-                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
 
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                    if (researcher != null) {
+                if (researcher != null) {
 
-                        Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), getString(R.string.VIEW_MODEL_MSG_RESPONSE) + researcher.toString());
-                        crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL) + getString(R.string.VIEW_MODEL_MSG_RESPONSE) + researcher.toString());
+                    Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), getString(R.string.VIEW_MODEL_MSG_RESPONSE) + researcher.toString());
+                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL) + getString(R.string.VIEW_MODEL_MSG_RESPONSE) + researcher.toString());
 
-                        //Guardar en sharedPref investigador con datos actualizados
-                        editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE), researcher.getName());
-                        editor.putString(getString(R.string.SHARED_PREF_INVES_APELLIDO), researcher.getLastName());
-                        editor.putString(getString(R.string.SHARED_PREF_INVES_EMAIL), researcher.getEmail());
+                    //Guardar en sharedPref investigador con datos actualizados
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_NOMBRE), researcher.getName());
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_APELLIDO), researcher.getLastName());
+                    editor.putString(getString(R.string.SHARED_PREF_INVES_EMAIL), researcher.getEmail());
 
 
-                        if (switchCompat.isChecked()) {
-                            //Actualizar password en sharedPref
-                            editor.putString(getString(R.string.SHARED_PREF_INVES_PASSWORD), Objects.requireNonNull(etPassword.getText()).toString());
-                        }
-                        editor.apply();
+                    if (switchCompat.isChecked()) {
+                        //Actualizar password en sharedPref
+                        editor.putString(getString(R.string.SHARED_PREF_INVES_PASSWORD), Objects.requireNonNull(etPassword.getText()).toString());
+                    }
+                    editor.apply();
 
-                        String msgUpdate = (String) stringObjectMap.get(getString(R.string.UPDATE_MSG_VM));
+                    String msgUpdate = (String) stringObjectMap.get(getString(R.string.UPDATE_MSG_VM));
 
-                        progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
 
-                        if (msgUpdate != null) {
+                    if (msgUpdate != null) {
 
-                            Log.d(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE), msgUpdate);
+                        Log.d(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE), msgUpdate);
 
-                            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE) + msgUpdate);
+                        crashlytics.log(getString(R.string.TAG_VIEW_MODEL_INVEST_UPDATE) + msgUpdate);
 
-                            if (msgUpdate.equals(getString(R.string.UPDATE_MSG_VM_SAVE))) {
+                        if (msgUpdate.equals(getString(R.string.UPDATE_MSG_VM_SAVE))) {
 
-                                Intent intent = getIntent();
-                                intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), msgUpdate);
-                                setResult(RESULT_OK, intent);
-                                finish();
-                            }
+                            Intent intent = getIntent();
+                            intent.putExtra(getString(R.string.INTENT_KEY_MSG_ACTUALIZACION), msgUpdate);
+                            setResult(RESULT_OK, intent);
+                            finish();
                         }
                     }
                 }
@@ -199,20 +190,17 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
         });
 
 
-        editProfileViewModel.showMsgErrorUpdate().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        editProfileViewModel.showMsgErrorUpdate().observe(this, s -> {
 
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_edit_profile), Snackbar.LENGTH_LONG, s, null);
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_edit_profile), Snackbar.LENGTH_LONG, s, null);
             }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_EDITAR_PERFIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
@@ -244,15 +232,12 @@ public class EditProfileActivity extends AppCompatActivity implements SnackbarIn
 
         switchCompat = findViewById(R.id.switch_password_on);
 
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked) {
-                    clPasswordOptional.setVisibility(View.VISIBLE);
-                } else {
-                    clPasswordOptional.setVisibility(View.GONE);
-                }
+            if (isChecked) {
+                clPasswordOptional.setVisibility(View.VISIBLE);
+            } else {
+                clPasswordOptional.setVisibility(View.GONE);
             }
         });
     }

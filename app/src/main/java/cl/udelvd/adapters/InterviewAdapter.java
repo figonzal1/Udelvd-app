@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -73,100 +72,91 @@ public class InterviewAdapter extends RecyclerView.Adapter<InterviewAdapter.Inte
 
         final int annos = Utils.calculateYearsOld(interviewee.getBirthDate());
 
-        holder.cardViewInterView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.cardViewInterView.setOnClickListener(v -> {
 
-                Intent intent = new Intent(activity, EventsActivity.class);
+            Intent intent = new Intent(activity, EventsActivity.class);
 
-                Bundle bundle = new Bundle();
-                bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
-                bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), interview.getIdInterviewee());
+            Bundle bundle = new Bundle();
+            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
+            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), interview.getIdInterviewee());
 
-                bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA), fechaEntrevista);
+            bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA), fechaEntrevista);
 
-                bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
-                bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
-                bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
-                bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
+            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
+            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
+            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
+            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
 
-                //PASS DATA TO NEXT PERSON CARD VIEW
-                bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
-                bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
-                bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS))));
+            //PASS DATA TO NEXT PERSON CARD VIEW
+            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
+            bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
+            bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS))));
 
-                intent.putExtras(bundle);
-                activity.startActivity(intent);
-            }
+            intent.putExtras(bundle);
+            activity.startActivity(intent);
         });
 
-        holder.ivInterviewMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.ivInterviewMenu.setOnClickListener(v -> {
 
-                PopupMenu popupMenu = new PopupMenu(activity, holder.ivInterviewMenu);
-                popupMenu.inflate(R.menu.menu_holder_interview);
+            PopupMenu popupMenu = new PopupMenu(activity, holder.ivInterviewMenu);
+            popupMenu.inflate(R.menu.menu_holder_interview);
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
+            popupMenu.setOnMenuItemClickListener(item -> {
 
-                        //SEE EVENTS FROM INTERVIEW
-                        if (item.getItemId() == R.id.menu_see_events) {
+                //SEE EVENTS FROM INTERVIEW
+                if (item.getItemId() == R.id.menu_see_events) {
 
-                            Intent intent = new Intent(activity, EventsActivity.class);
+                    Intent intent = new Intent(activity, EventsActivity.class);
 
-                            Bundle bundle = new Bundle();
-                            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
-                            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), interview.getIdInterviewee());
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
+                    bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), interview.getIdInterviewee());
 
-                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA), fechaEntrevista);
+                    bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_FECHA_ENTREVISTA), fechaEntrevista);
 
-                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
-                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
-                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
-                            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
+                    bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
+                    bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
+                    bundle.putString(activity.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
+                    bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
 
-                            //PASS DATA TO NEXT PERSON CARD VIEW
-                            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
-                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
-                            bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS))));
+                    //PASS DATA TO NEXT PERSON CARD VIEW
+                    bundle.putInt(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), Objects.requireNonNull(params.get(activity.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))));
+                    bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_NORMALES))));
+                    bundle.putString(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), String.valueOf(params.get(activity.getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS))));
 
-                            intent.putExtras(bundle);
-                            activity.startActivity(intent);
+                    intent.putExtras(bundle);
+                    activity.startActivity(intent);
 
-                            return true;
-                        }
+                    return true;
+                }
 
-                        //EDIT INTERVIEW
-                        else if (item.getItemId() == R.id.menu_edit_interview) {
+                //EDIT INTERVIEW
+                else if (item.getItemId() == R.id.menu_edit_interview) {
 
-                            Intent intent = new Intent(activity, EditInterviewActivity.class);
+                    Intent intent = new Intent(activity, EditInterviewActivity.class);
 
-                            Bundle bundle = new Bundle();
-                            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
-                            bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), interview.getIdInterviewee());
-                            intent.putExtras(bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_LARGO), interview.getId());
+                    bundle.putInt(activity.getString(R.string.KEY_ENTREVISTA_ID_ENTREVISTADO), interview.getIdInterviewee());
+                    intent.putExtras(bundle);
 
-                            activity.startActivityForResult(intent, REQUEST_CODE_EDIT_INTERVIEW);
+                    activity.startActivityForResult(intent, REQUEST_CODE_EDIT_INTERVIEW);
 
-                            return true;
-                        }
+                    return true;
+                }
 
-                        //DELETE INTERVIEW
-                        else if (item.getItemId() == R.id.menu_delete_interview) {
+                //DELETE INTERVIEW
+                else if (item.getItemId() == R.id.menu_delete_interview) {
 
-                            DeleteInterviewDialogFragment dialog = new DeleteInterviewDialogFragment(interview);
-                            dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
+                    DeleteInterviewDialogFragment dialog = new DeleteInterviewDialogFragment(interview);
+                    dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
 
-                            return true;
-                        }
-                        return false;
-                    }
-                });
+                    return true;
+                }
+                return false;
+            });
 
-                popupMenu.show();
-            }
+            popupMenu.show();
         });
 
     }

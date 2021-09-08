@@ -1,5 +1,7 @@
 package cl.udelvd.views.fragments;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,8 +26,6 @@ import cl.udelvd.utils.Utils;
 import cl.udelvd.views.activities.EditEventActivity;
 import cl.udelvd.views.fragments.dialog.DeleteDialogListener;
 import cl.udelvd.views.fragments.dialog.DeleteEventDialogFragment;
-
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 public class EventItemFragment extends Fragment {
@@ -115,24 +115,18 @@ public class EventItemFragment extends Fragment {
                 .into(ivEmoticon);
 
 
-        fbEditarEvento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        fbEditarEvento.setOnClickListener(v -> {
 
-                Intent intent = new Intent(activity.getApplicationContext(), EditEventActivity.class);
-                intent.putExtra(getString(R.string.KEY_EVENTO_ID_ENTREVISTA), event.getInterview().getId());
-                intent.putExtra(getString(R.string.KEY_EVENTO_ID_LARGO), event.getId());
-                activity.startActivityForResult(intent, REQUEST_CODE_EDIT_EVENT);
-            }
+            Intent intent = new Intent(activity.getApplicationContext(), EditEventActivity.class);
+            intent.putExtra(getString(R.string.KEY_EVENTO_ID_ENTREVISTA), event.getInterview().getId());
+            intent.putExtra(getString(R.string.KEY_EVENTO_ID_LARGO), event.getId());
+            activity.startActivityForResult(intent, REQUEST_CODE_EDIT_EVENT);
         });
 
-        fbEliminarEvento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        fbEliminarEvento.setOnClickListener(v -> {
 
-                DeleteEventDialogFragment dialog = new DeleteEventDialogFragment(listener, event);
-                dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
-            }
+            DeleteEventDialogFragment dialog = new DeleteEventDialogFragment(listener, event);
+            dialog.show(fragmentManager, TAG_DELETE_DIALOG_NAME);
         });
     }
 

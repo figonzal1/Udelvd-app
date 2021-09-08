@@ -37,7 +37,7 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<Researcher> researcherList;
     private Button btnLoadMore;
     private ProgressBar progressBar;
-    private Researcher researcher;
+    private final Researcher researcher;
     private int page = 1;
     private int totalResearchers;
 
@@ -100,22 +100,19 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 holder.switchActivate.setText(context.getString(R.string.PERFIL_NO_ACTIVADO));
             }
 
-            holder.switchActivate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            holder.switchActivate.setOnClickListener(v -> {
 
-                    if (holder.switchActivate.isChecked()) {
+                if (holder.switchActivate.isChecked()) {
 
-                        ActivateResearcherDialogFragment dialogFragment = new ActivateResearcherDialogFragment(researcher, true, holder.switchActivate);
-                        dialogFragment.setCancelable(false);
-                        dialogFragment.show(fragmentManager, TAG_ACTIVATE_RESEARCHER);
+                    ActivateResearcherDialogFragment dialogFragment = new ActivateResearcherDialogFragment(researcher, true, holder.switchActivate);
+                    dialogFragment.setCancelable(false);
+                    dialogFragment.show(fragmentManager, TAG_ACTIVATE_RESEARCHER);
 
-                    } else {
+                } else {
 
-                        ActivateResearcherDialogFragment dialogFragment = new ActivateResearcherDialogFragment(researcher, false, holder.switchActivate);
-                        dialogFragment.setCancelable(false);
-                        dialogFragment.show(fragmentManager, TAG_ACTIVATE_RESEARCHER);
-                    }
+                    ActivateResearcherDialogFragment dialogFragment = new ActivateResearcherDialogFragment(researcher, false, holder.switchActivate);
+                    dialogFragment.setCancelable(false);
+                    dialogFragment.show(fragmentManager, TAG_ACTIVATE_RESEARCHER);
                 }
             });
 
@@ -135,20 +132,17 @@ public class ResearcherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 btnLoadMore.setVisibility(View.GONE);
             }
 
-            btnLoadMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            btnLoadMore.setOnClickListener(v -> {
 
-                    page += 1;
+                page += 1;
 
-                    if (researcherListViewModel != null) {
-                        researcherListViewModel.loadNextPage(page, researcher);
-                    }
-
-                    progressBar.setVisibility(View.VISIBLE);
-
-                    btnLoadMore.setVisibility(View.GONE);
+                if (researcherListViewModel != null) {
+                    researcherListViewModel.loadNextPage(page, researcher);
                 }
+
+                progressBar.setVisibility(View.VISIBLE);
+
+                btnLoadMore.setVisibility(View.GONE);
             });
         }
 

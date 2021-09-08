@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -90,77 +89,71 @@ public class EventRepository {
     private void sendGetInterviewEvents(Interview interview) {
         eventList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d("RESPONSE", response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+        Response.Listener<String> responseListener = response -> {
+            //Log.d("RESPONSE", response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonData.length(); i++) {
-                        JSONObject jsonEvent = jsonData.getJSONObject(i);
+                for (int i = 0; i < jsonData.length(); i++) {
+                    JSONObject jsonEvent = jsonData.getJSONObject(i);
 
-                        JSONObject jsonAttributes = jsonEvent.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    JSONObject jsonAttributes = jsonEvent.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                        Event event = new Event();
-                        event.setId(jsonEvent.getInt(application.getString(R.string.KEY_EVENTO_ID)));
+                    Event event = new Event();
+                    event.setId(jsonEvent.getInt(application.getString(R.string.KEY_EVENTO_ID)));
 
-                        Interview e = new Interview();
-                        e.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_LARGO)));
-                        event.setInterview(e);
+                    Interview e = new Interview();
+                    e.setId(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTA_ID_LARGO)));
+                    event.setInterview(e);
 
-                        event.setJustification(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
+                    event.setJustification(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(application.getString(R.string.FORMATO_HORA), Locale.US);
-                        event.setEventHour(simpleDateFormat.parse(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(application.getString(R.string.FORMATO_HORA), Locale.US);
+                    event.setEventHour(simpleDateFormat.parse(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
 
-                        JSONObject jsonRelationships = jsonEvent.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS));
+                    JSONObject jsonRelationships = jsonEvent.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS));
 
-                        JSONObject jsonActionData = jsonRelationships.getJSONObject(application.getString(R.string.KEY_ACCION_OBJECT)).getJSONObject(application.getString(R.string.JSON_DATA));
-                        Action action = new Action();
-                        action.setId(jsonActionData.getInt(application.getString(R.string.KEY_ACCION_ID)));
-                        action.setName(jsonActionData.getString(application.getString(R.string.KEY_ACCION_NOMBRE)));
-                        event.setAction(action);
+                    JSONObject jsonActionData = jsonRelationships.getJSONObject(application.getString(R.string.KEY_ACCION_OBJECT)).getJSONObject(application.getString(R.string.JSON_DATA));
+                    Action action = new Action();
+                    action.setId(jsonActionData.getInt(application.getString(R.string.KEY_ACCION_ID)));
+                    action.setName(jsonActionData.getString(application.getString(R.string.KEY_ACCION_NOMBRE)));
+                    event.setAction(action);
 
-                        JSONObject jsonEmoticonData = jsonRelationships
-                                .getJSONObject(application.getString(R.string.KEY_EMOTICON_OBJECT))
-                                .getJSONObject(application.getString(R.string.JSON_DATA));
-                        Emoticon emoticon = new Emoticon();
-                        emoticon.setId(jsonEmoticonData.getInt(application.getString(R.string.KEY_EMOTICON_ID)));
-                        emoticon.setDescription(jsonEmoticonData.getString(application.getString(R.string.KEY_EMOTICON_DESCRIPCION)));
-                        emoticon.setUrl(jsonEmoticonData.getString(application.getString(R.string.KEY_EMOTICON_URL)));
-                        event.setEmoticon(emoticon);
+                    JSONObject jsonEmoticonData = jsonRelationships
+                            .getJSONObject(application.getString(R.string.KEY_EMOTICON_OBJECT))
+                            .getJSONObject(application.getString(R.string.JSON_DATA));
+                    Emoticon emoticon = new Emoticon();
+                    emoticon.setId(jsonEmoticonData.getInt(application.getString(R.string.KEY_EMOTICON_ID)));
+                    emoticon.setDescription(jsonEmoticonData.getString(application.getString(R.string.KEY_EMOTICON_DESCRIPCION)));
+                    emoticon.setUrl(jsonEmoticonData.getString(application.getString(R.string.KEY_EMOTICON_URL)));
+                    event.setEmoticon(emoticon);
 
-                        eventList.add(event);
-                    }
-
-                    eventsMutableLiveData.postValue(eventList);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException | ParseException e) {
-
-                    Log.d("JSON_ERROR", "GET INTERVIEW EVENTS JSON ERROR PARSE");
-                    e.printStackTrace();
+                    eventList.add(event);
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                eventsMutableLiveData.postValue(eventList);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseErrorMsgList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS)
-                );
+            } catch (JSONException | ParseException e) {
+
+                Log.d("JSON_ERROR", "GET INTERVIEW EVENTS JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseErrorMsgList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_EVENTOS)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_GET_EVENTO), application.getString(R.string.HEROKU_DOMAIN), interview.getId(), Utils.getLanguage(application));
@@ -195,63 +188,57 @@ public class EventRepository {
 
     private void sendPostEvent(final Event event) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE_CREATE", response);
+            //Log.d("RESPONSE_CREATE", response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                JSONObject jsonAttribute = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                Event eventInternet = new Event();
+
+                eventInternet.setJustification(jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
+
+                Date eventHour = null;
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-
-                    JSONObject jsonAttribute = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-
-                    Event eventInternet = new Event();
-
-                    eventInternet.setJustification(jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
-
-                    Date eventHour = null;
-                    try {
-                        eventHour = Utils.stringToDate(application, true, jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO)));
-                    } catch (ParseException e) {
-                        Log.d("STRING_TO_DATE", "Parse exception error");
-                        e.printStackTrace();
-                    }
-                    eventInternet.setEventHour(eventHour);
-
-                    Log.d("MEMORIA", event.toString());
-                    Log.d("INTERNET", event.toString());
-
-                    String createTime = jsonAttribute.getString(application.getString(R.string.KEY_CREATE_TIME));
-
-                    if (event.equals(eventInternet) && !createTime.isEmpty()) {
-                        responseMsgRegistry.postValue(application.getString(R.string.MSG_REGISTRO_EVENTO));
-                    }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "POST EVENT JSON ERROR PARSE");
+                    eventHour = Utils.stringToDate(application, true, jsonAttribute.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO)));
+                } catch (ParseException e) {
+                    Log.d("STRING_TO_DATE", "Parse exception error");
                     e.printStackTrace();
                 }
-            }
-        };
+                eventInternet.setEventHour(eventHour);
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                Log.d("MEMORIA", event.toString());
+                Log.d("INTERNET", event.toString());
+
+                String createTime = jsonAttribute.getString(application.getString(R.string.KEY_CREATE_TIME));
+
+                if (event.equals(eventInternet) && !createTime.isEmpty()) {
+                    responseMsgRegistry.postValue(application.getString(R.string.MSG_REGISTRO_EVENTO));
+                }
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseErrorMsgRegistry,
-                        application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "POST EVENT JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseErrorMsgRegistry,
+                    application.getString(R.string.TAG_VOLLEY_ERR_CREAR_EVENTO)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_POST_EVENTO), application.getString(R.string.HEROKU_DOMAIN), event.getInterview().getId());
@@ -301,68 +288,62 @@ public class EventRepository {
 
     private void sendGetEvent(Event eventIntent) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
+
+            try {
+
+                JSONObject jsonObject = new JSONObject(response);
+
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                Event event = new Event();
+                event.setId(jsonData.getInt(application.getString(R.string.KEY_EVENTO_ID)));
+
+                event.setJustification(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
 
                 try {
+                    event.setEventHour(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+                } catch (ParseException e) {
 
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-
-                    Event event = new Event();
-                    event.setId(jsonData.getInt(application.getString(R.string.KEY_EVENTO_ID)));
-
-                    event.setJustification(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
-
-                    try {
-                        event.setEventHour(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
-                    } catch (ParseException e) {
-
-                        Log.d("STRING_TO_DATE", "Parse exception error");
-                        e.printStackTrace();
-                    }
-
-                    Action action = new Action();
-                    action.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_ACCION)));
-                    event.setAction(action);
-
-                    Emoticon emoticon = new Emoticon();
-                    emoticon.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_EMOTICON)));
-                    event.setEmoticon(emoticon);
-
-                    Interview interview = new Interview();
-                    interview.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_ENTREVISTA)));
-                    event.setInterview(interview);
-
-                    eventMutableLiveData.postValue(event);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "EVENT LIST JSON ERROR PARSE");
+                    Log.d("STRING_TO_DATE", "Parse exception error");
                     e.printStackTrace();
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                Action action = new Action();
+                action.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_ACCION)));
+                event.setAction(action);
+
+                Emoticon emoticon = new Emoticon();
+                emoticon.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_EMOTICON)));
+                event.setEmoticon(emoticon);
+
+                Interview interview = new Interview();
+                interview.setId(jsonAttributes.getInt(application.getString(R.string.KEY_EVENTO_ID_ENTREVISTA)));
+                event.setInterview(interview);
+
+                eventMutableLiveData.postValue(event);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseErrorMsgEvent,
-                        application.getString(R.string.TAG_VOLLEY_ERR_EVENTO)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "EVENT LIST JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseErrorMsgEvent,
+                    application.getString(R.string.TAG_VOLLEY_ERR_EVENTO)
+            );
         };
 
         String url = String.format(Locale.US, application.getString(R.string.URL_GET_EVENTO_ESPECIFICO), application.getString(R.string.HEROKU_DOMAIN), eventIntent.getInterview().getId(), eventIntent.getId());
@@ -397,58 +378,52 @@ public class EventRepository {
 
     private void sendPutEvent(final Event event) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
+
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+
+                Event eventInternet = new Event();
+                eventInternet.setId(jsonData.getInt(application.getString(R.string.KEY_EVENTO_ID)));
 
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-
-                    Event eventInternet = new Event();
-                    eventInternet.setId(jsonData.getInt(application.getString(R.string.KEY_EVENTO_ID)));
-
-                    try {
-                        eventInternet.setEventHour(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
-                    } catch (ParseException e) {
-                        Log.d("STRING_TO_DATE", "Parse exception error");
-                        e.printStackTrace();
-                    }
-                    eventInternet.setJustification(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
-
-                    String updateTime = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
-
-                    if (event.equals(eventInternet) && !updateTime.isEmpty()) {
-
-                        responseMsgUpdate.postValue(application.getString(R.string.MSG_UPDATE_EVENTO));
-                    }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "PUT EVENT JSON ERROR PARSE");
+                    eventInternet.setEventHour(Utils.stringToDate(application, true, jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_HORA_EVENTO))));
+                } catch (ParseException e) {
+                    Log.d("STRING_TO_DATE", "Parse exception error");
                     e.printStackTrace();
                 }
-            }
-        };
+                eventInternet.setJustification(jsonAttributes.getString(application.getString(R.string.KEY_EVENTO_JUSTIFICACION)));
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                String updateTime = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
+
+                if (event.equals(eventInternet) && !updateTime.isEmpty()) {
+
+                    responseMsgUpdate.postValue(application.getString(R.string.MSG_UPDATE_EVENTO));
+                }
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseErrorMsgUpdate,
-                        application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "PUT EVENT JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseErrorMsgUpdate,
+                    application.getString(R.string.TAG_VOLLEY_ERR_EDITAR_EVENTO)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_PUT_EVENTO), application.getString(R.string.HEROKU_DOMAIN), event.getInterview().getId(), event.getId());
@@ -497,41 +472,35 @@ public class EventRepository {
 
     private void sendDeleteEvent(Event event) {
 
-        Response.Listener<String> resposeListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d("RESPONSe", response);
+        Response.Listener<String> resposeListener = response -> {
+            //Log.d("RESPONSe", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    if (jsonData.length() == 0) {
-                        responseMsgDelete.postValue(application.getString(R.string.MSG_DELETE_EVENTO));
-                    }
-                    isLoading.postValue(false);
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "DELETE EVENT JSON ERROR PARSE");
-                    e.printStackTrace();
+                if (jsonData.length() == 0) {
+                    responseMsgDelete.postValue(application.getString(R.string.MSG_DELETE_EVENTO));
                 }
+                isLoading.postValue(false);
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "DELETE EVENT JSON ERROR PARSE");
+                e.printStackTrace();
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        Response.ErrorListener errorListener = error -> {
 
-                isLoading.postValue(false);
+            isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseErrorMsgDelete,
-                        application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA)
-                );
-            }
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseErrorMsgDelete,
+                    application.getString(R.string.TAG_VOLLEY_ERR_ELIMINAR_ENTREVISTA)
+            );
         };
 
         String url = String.format(Locale.US, application.getString(R.string.URL_DELETE_EVENTO), application.getString(R.string.HEROKU_DOMAIN), event.getInterview().getId(), event.getId());

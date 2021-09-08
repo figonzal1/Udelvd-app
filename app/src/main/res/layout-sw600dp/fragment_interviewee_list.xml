@@ -22,6 +22,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:textColor="@color/colorOnPrimary"
+            android:textSize="18sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/barrier"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +41,7 @@
             android:paddingBottom="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/colorOnPrimary"
-            android:textSize="12sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/barrier"
             app:layout_constraintEnd_toStartOf="@+id/switch_list"
             app:layout_constraintStart_toStartOf="@+id/rv_interviewee_list"
@@ -116,8 +117,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_add_white_24dp"
         android:contentDescription="@string/icon_add_inverviewee"
+        android:src="@drawable/ic_add_white_24dp"
         app:fabSize="normal" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

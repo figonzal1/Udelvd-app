@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -65,54 +64,48 @@ public class EmoticonRepository {
 
         emoticonList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE",response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            //Log.d("RESPONSE",response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonEmoticon = jsonArray.getJSONObject(i);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonEmoticon = jsonArray.getJSONObject(i);
 
-                        JSONObject jsonAttribute = jsonEmoticon.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    JSONObject jsonAttribute = jsonEmoticon.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                        Emoticon emoticon = new Emoticon();
-                        emoticon.setId(jsonEmoticon.getInt(application.getString(R.string.KEY_EMOTICON_ID)));
-                        emoticon.setUrl(jsonAttribute.getString(application.getString(R.string.KEY_EMOTICON_URL)));
-                        emoticon.setDescription(jsonAttribute.getString(application.getString(R.string.KEY_EMOTICON_DESCRIPCION)));
+                    Emoticon emoticon = new Emoticon();
+                    emoticon.setId(jsonEmoticon.getInt(application.getString(R.string.KEY_EMOTICON_ID)));
+                    emoticon.setUrl(jsonAttribute.getString(application.getString(R.string.KEY_EMOTICON_URL)));
+                    emoticon.setDescription(jsonAttribute.getString(application.getString(R.string.KEY_EMOTICON_DESCRIPCION)));
 
-                        emoticonList.add(emoticon);
-                    }
-
-                    emoticonMutableLiveData.postValue(emoticonList);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "EMOTICON LIST JSON ERROR PARSE");
-                    e.printStackTrace();
+                    emoticonList.add(emoticon);
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                emoticonMutableLiveData.postValue(emoticonList);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "EMOTICON LIST JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_EMOTICON)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_GET_EMOTICONES), application.getString(R.string.HEROKU_DOMAIN), Utils.getLanguage(application));

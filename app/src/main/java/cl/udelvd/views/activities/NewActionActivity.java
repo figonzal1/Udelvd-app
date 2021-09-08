@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -55,66 +54,57 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
     }
 
     private void initViewModel() {
-        newActionViewModel.isLoadingRegistry().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newActionViewModel.isLoadingRegistry().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    ilActionES.setEnabled(false);
-                    ilActionEN.setEnabled(false);
+                ilActionES.setEnabled(false);
+                ilActionEN.setEnabled(false);
 
-                    etActionES.setEnabled(false);
-                    etActionEN.setEnabled(false);
+                etActionES.setEnabled(false);
+                etActionEN.setEnabled(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
 
-                    ilActionES.setEnabled(true);
-                    ilActionEN.setEnabled(true);
+                ilActionES.setEnabled(true);
+                ilActionEN.setEnabled(true);
 
-                    etActionES.setEnabled(true);
-                    etActionEN.setEnabled(true);
-                }
+                etActionES.setEnabled(true);
+                etActionEN.setEnabled(true);
             }
         });
 
-        newActionViewModel.showMsgRegistry().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        newActionViewModel.showMsgRegistry().observe(this, s -> {
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
-                if (s.equals(getString(R.string.MSG_REGISTRO_ACCION))) {
-
-                    progressBar.setVisibility(View.GONE);
-
-                    Intent intent = getIntent();
-                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
-                    setResult(RESULT_OK, intent);
-
-                    finish();
-                }
-            }
-        });
-
-        newActionViewModel.showMsgErrorRegistry().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+            if (s.equals(getString(R.string.MSG_REGISTRO_ACCION))) {
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_action), Snackbar.LENGTH_INDEFINITE, s, null);
-                }
+                Intent intent = getIntent();
+                intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
+                setResult(RESULT_OK, intent);
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                finish();
             }
+        });
+
+        newActionViewModel.showMsgErrorRegistry().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_action), Snackbar.LENGTH_INDEFINITE, s, null);
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVA_ACCION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
 
     }
@@ -203,13 +193,10 @@ public class NewActionActivity extends AppCompatActivity implements SnackbarInte
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    isSnackBarShow = false;
-                }
+                progressBar.setVisibility(View.VISIBLE);
+                isSnackBarShow = false;
             });
         }
 

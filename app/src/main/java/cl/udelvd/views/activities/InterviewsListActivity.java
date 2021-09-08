@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +27,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -164,135 +162,116 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
 
     private void initViewModelObservers() {
 
-        interviewListViewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        interviewListViewModel.isLoading().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    tvEmptyInterviews.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.INVISIBLE);
-                    cvInfo.setVisibility(View.INVISIBLE);
-
-                } else {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                    cvInfo.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-
-        interviewListViewModel.loadInterviews(interviewee).observe(this, new Observer<List<Interview>>() {
-            @Override
-            public void onChanged(List<Interview> interviews) {
-
-                if (interviews != null) {
-
-                    interviewList = interviews;
-
-                    if (interviews.size() == 1) {
-                        tvNInterviews.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTA), interviews.size()));
-                    } else {
-                        tvNInterviews.setText(String.format(Locale.US, getString(R.string.FORMATO_N_ENTREVISTAS), interviews.size()));
-                    }
-
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                    cvInfo.setVisibility(View.VISIBLE);
-
-                    if (interviewList.size() == 0) {
-                        tvEmptyInterviews.setVisibility(View.VISIBLE);
-                    } else {
-                        tvEmptyInterviews.setVisibility(View.INVISIBLE);
-                    }
-
-                    Map<String, Integer> types = countTypes(interviews);
-                    tvNormalInterview.setText(String.valueOf(types.get(getString(R.string.INTENT_KEY_NORMALES))));
-                    tvExtraordinaryInterview.setText(String.valueOf(types.get(getString(R.string.INTENT_KEY_EXTRAORDINARIAS))));
-
-                    params = new HashMap<>();
-                    params.put(getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), interviews.size());
-                    params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), types.get(getString(R.string.INTENT_KEY_NORMALES)));
-                    params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), types.get(getString(R.string.INTENT_KEY_EXTRAORDINARIAS)));
-
-                    interviewAdapter.setParams(params);
-                    interviewAdapter.updateList(interviewList);
-                    rv.setAdapter(interviewAdapter);
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), interviews.toString()));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), interviews.toString()));
-                }
-            }
-        });
-
-
-        interviewListViewModel.showMsgErrorList().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                tvEmptyInterviews.setVisibility(View.INVISIBLE);
                 rv.setVisibility(View.INVISIBLE);
                 cvInfo.setVisibility(View.INVISIBLE);
 
-                if (!isSnackBarShow) {
-
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                    interviewAdapter.notifyDataSetChanged();
-
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            } else {
+                progressBar.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.VISIBLE);
+                cvInfo.setVisibility(View.VISIBLE);
             }
         });
 
 
-        interviewListViewModel.mostrarMsgDelete().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        interviewListViewModel.loadInterviews(interviewee).observe(this, interviews -> {
+
+            if (interviews != null) {
+
+                interviewList = interviews;
+
+                tvNInterviews.setText(getResources().getQuantityString(R.plurals.FORMATO_N_ENTREVISTA, interviews.size(), interviews.size()));
 
                 progressBar.setVisibility(View.INVISIBLE);
+                rv.setVisibility(View.VISIBLE);
+                cvInfo.setVisibility(View.VISIBLE);
 
-                if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTA))) {
+                if (interviewList.size() == 0) {
+                    tvEmptyInterviews.setVisibility(View.VISIBLE);
+                } else {
+                    tvEmptyInterviews.setVisibility(View.INVISIBLE);
+                }
 
-                    isSnackBarShow = true;
+                Map<String, Integer> types = countTypes(interviews);
+                tvNormalInterview.setText(String.valueOf(types.get(getString(R.string.INTENT_KEY_NORMALES))));
+                tvExtraordinaryInterview.setText(String.valueOf(types.get(getString(R.string.INTENT_KEY_EXTRAORDINARIAS))));
+
+                params = new HashMap<>();
+                params.put(getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS), interviews.size());
+                params.put(getString(R.string.KEY_ENTREVISTA_N_NORMALES), types.get(getString(R.string.INTENT_KEY_NORMALES)));
+                params.put(getString(R.string.KEY_ENTREVISTA_N_EXTRAORDINARIAS), types.get(getString(R.string.INTENT_KEY_EXTRAORDINARIAS)));
+
+                interviewAdapter.setParams(params);
+                interviewAdapter.updateList(interviewList);
+                rv.setAdapter(interviewAdapter);
+
+                Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), interviews.toString()));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), interviews.toString()));
+            }
+        });
+
+
+        interviewListViewModel.showMsgErrorList().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+            rv.setVisibility(View.INVISIBLE);
+            cvInfo.setVisibility(View.INVISIBLE);
+
+            if (!isSnackBarShow) {
+
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                interviewAdapter.notifyDataSetChanged();
+
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTAS) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+        });
+
+
+        interviewListViewModel.mostrarMsgDelete().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (s.equals(getString(R.string.MSG_DELETE_ENTREVISTA))) {
+
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, s, null);
+                InterviewRepository.getInstance(getApplication()).getPersonalInterviews(interviewee);
+
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+        });
+
+
+        interviewListViewModel.showMsgErrorDelete().observe(this, s -> {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (!isSnackBarShow) {
+
+                if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
+
+                    showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_INDEFINITE, s, null);
+
+                } else {
                     showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, s, null);
-                    InterviewRepository.getInstance(getApplication()).getPersonalInterviews(interviewee);
-
                 }
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+                interviewAdapter.notifyDataSetChanged();
             }
-        });
 
-
-        interviewListViewModel.showMsgErrorDelete().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (!isSnackBarShow) {
-
-                    if (!s.equals(getString(R.string.SERVER_ERROR_MSG_VM))) {
-
-                        showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_INDEFINITE, s, null);
-
-                    } else {
-                        showSnackbar(findViewById(R.id.interviewees_list), Snackbar.LENGTH_LONG, s, null);
-                    }
-
-                    interviewAdapter.notifyDataSetChanged();
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
@@ -300,14 +279,11 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
 
         FloatingActionButton fabNewInterviews = findViewById(R.id.fb_new_interview);
 
-        fabNewInterviews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fabNewInterviews.setOnClickListener(view -> {
 
-                Intent intent = new Intent(InterviewsListActivity.this, NewInterviewActivity.class);
-                intent.putExtra(getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
-                startActivityForResult(intent, REQUEST_CODE_NEW_INTERVIEW);
-            }
+            Intent intent = new Intent(InterviewsListActivity.this, NewInterviewActivity.class);
+            intent.putExtra(getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
+            startActivityForResult(intent, REQUEST_CODE_NEW_INTERVIEW);
         });
     }
 
@@ -348,20 +324,17 @@ public class InterviewsListActivity extends AppCompatActivity implements DeleteD
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    isSnackBarShow = false;
+                isSnackBarShow = false;
 
-                    if (snackbar != null) {
-                        snackbar.dismiss();
-                    }
-
-                    interviewListViewModel.refreshInterviews(interviewee);
+                if (snackbar != null) {
+                    snackbar.dismiss();
                 }
+
+                interviewListViewModel.refreshInterviews(interviewee);
             });
         }
 

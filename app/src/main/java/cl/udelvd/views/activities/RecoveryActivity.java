@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
@@ -17,7 +16,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -54,80 +52,68 @@ public class RecoveryActivity extends AppCompatActivity implements SnackbarInter
 
     private void btnRecoveryAccount() {
 
-        btnRecoveryAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnRecoveryAccount.setOnClickListener(v -> {
 
-                if (validateField()) {
+            if (validateField()) {
 
-                    Researcher researcher = new Researcher();
-                    researcher.setEmail(Objects.requireNonNull(etEmail.getText(), "Et email cannot be null").toString());
+                Researcher researcher = new Researcher();
+                researcher.setEmail(Objects.requireNonNull(etEmail.getText(), "Et email cannot be null").toString());
 
-                    ResearcherRepository.getInstance(getApplication()).recoveryAccount(researcher);
-                }
+                ResearcherRepository.getInstance(getApplication()).recoveryAccount(researcher);
             }
         });
     }
 
     private void initViewModels() {
 
-        recoveryViewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        recoveryViewModel.isLoading().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    ilEmail.setEnabled(false);
+                progressBar.setVisibility(View.VISIBLE);
+                ilEmail.setEnabled(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    ilEmail.setEnabled(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                ilEmail.setEnabled(true);
             }
         });
 
-        recoveryViewModel.showMsgRecovery().observe(this, new Observer<Map<String, String>>() {
-            @Override
-            public void onChanged(Map<String, String> stringStringMap) {
+        recoveryViewModel.showMsgRecovery().observe(this, stringStringMap -> {
 
-                String email = stringStringMap.get(getString(R.string.KEY_INVES_EMAIL));
-                String msgRecovery = stringStringMap.get(getString(R.string.MSG_RECOVERY));
+            String email = stringStringMap.get(getString(R.string.KEY_INVES_EMAIL));
+            String msgRecovery = stringStringMap.get(getString(R.string.MSG_RECOVERY));
 
-                Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), stringStringMap.toString()));
-                crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), stringStringMap.toString()));
+            Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), stringStringMap.toString()));
+            crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), stringStringMap.toString()));
 
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-                if (msgRecovery != null && msgRecovery.equals(getString(R.string.RECOVERY_MSG_VM_RESPONSE))) {
+            if (msgRecovery != null && msgRecovery.equals(getString(R.string.RECOVERY_MSG_VM_RESPONSE))) {
 
-                    showSnackbar(findViewById(R.id.researcher_recovery), Snackbar.LENGTH_INDEFINITE, msgRecovery, null);
+                showSnackbar(findViewById(R.id.researcher_recovery), Snackbar.LENGTH_INDEFINITE, msgRecovery, null);
 
-                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
-                    String sharedEmail = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+                String sharedEmail = sharedPreferences.getString(getString(R.string.SHARED_PREF_INVES_EMAIL), "");
 
-                    if (sharedEmail != null && (!sharedEmail.equals(email) || sharedEmail.isEmpty())) {
+                if (sharedEmail != null && (!sharedEmail.equals(email) || sharedEmail.isEmpty())) {
 
-                        sharedPreferences.edit().putString(getString(R.string.SHARED_PREF_INVES_EMAIL), email).apply();
-                        Log.d("SHARED_EMAIL", "guardando email desde recuperacion en shared pref");
-                    }
-
-                    sharedPreferences.edit().putBoolean(getString(R.string.SHARED_PREF_RESET_PASS), false).apply();
+                    sharedPreferences.edit().putString(getString(R.string.SHARED_PREF_INVES_EMAIL), email).apply();
+                    Log.d("SHARED_EMAIL", "guardando email desde recuperacion en shared pref");
                 }
+
+                sharedPreferences.edit().putBoolean(getString(R.string.SHARED_PREF_RESET_PASS), false).apply();
             }
         });
 
-        recoveryViewModel.showMsgErrorRecovery().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        recoveryViewModel.showMsgErrorRecovery().observe(this, s -> {
 
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-                Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            Log.d(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
 
-                showSnackbar(findViewById(R.id.researcher_recovery), Snackbar.LENGTH_INDEFINITE, s, null);
-            }
+            showSnackbar(findViewById(R.id.researcher_recovery), Snackbar.LENGTH_INDEFINITE, s, null);
         });
     }
 

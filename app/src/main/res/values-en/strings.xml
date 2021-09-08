@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">A day in the life of …</string>
     <string name="ACCION">Action</string>
     <string name="ACTIVADA">Activated</string>
@@ -31,6 +31,10 @@
     <string name="FECHA_NACIMIENTO">Birthdate</string>
     <string name="FECHA_REGISTRO_ENTREVISTA">Registry date</string>
     <string name="FORMATO_ENTREVISTA_N">Interview %d</string>
+    <plurals name="FORMATO_N_ENTREVISTA">
+        <item quantity="one">%d interview</item>
+        <item quantity="other">%d interviews</item>
+    </plurals>
     <string name="FORMATO_FECHA_HORA">yyyy-dd-MM HH:mm:ss</string>
     <string name="HORA_EVENTO">Event hour</string>
     <string name="ICONO_ACCION_EVENTO">Event action icon</string>
@@ -113,10 +117,9 @@
     <string name="REGISTRAR">Register</string>
     <string name="REGISTRO_CUENTA">Register account</string>
     <string name="SELECCIONAR_EMOTICON">Select emoticon</string>
-    <string name="SERVER_ERROR_AUTH_MSG_VM">Log in failed, check yout credentials</string>
-    <string name="SERVER_ERROR_MSG_VM">Ups! A problem has occurred</string>
-    <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email already registered</string>
-    <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email not registered</string>
+    <string name="SERVER_ERROR_AUTH_MSG_VM">Log in failed, check your credentials</string>
+    <string name="SERVER_ERROR_MSG_VM">Whoops! A problem has occurred, the server was unable to process your request</string>
+
     <string name="SEXO">Gender</string>
     <string name="SEXO_FEMENINO">Female</string>
     <string name="SEXO_MASCULINO">Male</string>
@@ -150,15 +153,19 @@
     <string name="MENU_CONDICIONES">Conditions and privacy</string>
     <string name="MENU_CONTACTENOS">Contact us</string>
     <string name="MENU_EMOTICONES">Emoticons</string>
-    <string name="MOSTRAR_ENTREVISTADOS" tools:ignore="PluralsCandidate">Displaying %d of %d interviewees</string>
-    <string name="FORMATO_N_ENTREVISTA" tools:ignore="PluralsCandidate">%d interview</string>
-    <string name="FORMATO_FECHA_NAC" tools:ignore="PluralsCandidate">%s - %d years</string>
+    <plurals name="MOSTRAR_ENTREVISTADOS">
+        <item quantity="one">Displaying %1$d of %2$d interviewee</item>
+        <item quantity="other">Displaying %1$d of %2$d interviewees</item>
+    </plurals>
+    <plurals name="FORMATO_FECHA_NAC">
+        <item quantity="one">%1$s - %2$d year</item>
+        <item quantity="other">%1$s - %2$d years</item>
+    </plurals>
     <string name="FORMATO_ENTREVISTA_FECHA">Interview day %s</string>
     <string name="FORMATO_EVENTO_N">Event %d</string>
     <string name="CANAL_NOMBRE">Activations alert</string>
     <string name="CANAL_DESCRIPCION">Registration alerts for new researchers</string>
-    <string name="SNACKBAR_CUENTA_WAIT">Account Waiting for Activation</string>
-    <string name="SNACKBAR_ACTIVACION">, your account is waiting for activation</string>
+    <string name="SNACKBAR_CUENTA_WAIT">Account awaiting approval by administrator</string>
     <string name="DIALOG_ACTIVAR">Activate</string>
     <string name="DIALOG_DESACTIVAR">Deactivate</string>
     <string name="DIALOG_DESACTIVACION_MENSAJE">Account deactivation will prohibit the researcher from accessing the system, are you sure?</string>
@@ -169,12 +176,14 @@
     <string name="MSG_LISTADO_INVESTIGADORES_VACIO">There are no registered researchers</string>
     <string name="ROL_ADMINITRADOR">Administrator</string>
     <string name="ROL_INVESTIGADOR">Researcher</string>
-    <string name="FORMATO_N_ENTREVISTAS" tools:ignore="PluralsCandidate">%d interviews</string>
     <string name="TITULO_TOOLBAR_LISTADO_INVESTIGADORES">Researchers list</string>
     <string name="HELPER_COHABITANTS">*Last 3 months</string>
     <string name="NORMAL">Normal</string>
     <string name="EXTRAORDINARIA">Extraordinary</string>
-    <string name="MOSTRAR_INVESTIGADORES" tools:ignore="PluralsCandidate">Displaying %d of %d researchers</string>
+    <plurals name="MOSTRAR_INVESTIGADORES">
+        <item quantity="one">Displaying %1$d of %2$d researcher</item>
+        <item quantity="other">Displaying %1$d of %2$d researchers</item>
+    </plurals>
     <string name="FORMATO_ACCION">Action %d</string>
     <string name="MSG_LISTADO_ACCIONES_VACIO">No registered actions</string>
     <string name="TITULO_TOOLBAR_LISTADO_ACCIONES">Actions List</string>
@@ -195,7 +204,7 @@
     <string name="FORMATO_LINK_DIRECTO">Direct link : %s</string>
     <string name="DISTRIBUCION_EVENTOS">Event distribution</string>
     <string name="IR_VISUALIZACION">Go</string>
-    <string name="FORMAT_REGISTRADO_POR">Registered by: %s %s</string>
+    <string name="FORMAT_REGISTRADO_POR">Registered by: %1$s %2$s</string>
     <string name="TODOS">All</string>
     <string name="MI_CUENTA">My account</string>
     <string name="VALIDACION_CAMPO_REQUERIDO_CERO">It can\'t be zero</string>
@@ -236,6 +245,15 @@
     <string name="ICONO_HELP">Help icon</string>
     <string name="tipos_entrevistas">Interviews types</string>
     <string name="normal_interviews">Normal: These are interviews that contain daily events that occur on an ordinary day.</string>
-    <string name="extraordinary_interviews">" Extraordinary: They are interviews that contain daily events that occur sporadically."</string>
+    <string name="extraordinary_interviews">Extraordinary: They are interviews that contain daily events that occur sporadically.</string>
     <string name="sin_seleccionar">No selected</string>
+    <string name="icon_add_action">Add action icon</string>
+    <string name="icon_add_event">Add event icon</string>
+    <string name="icon_add_interview">Add interview icon</string>
+    <string name="icon_add_inverviewee">Add inverviewee icon</string>
+    <string name="icon_edit_event">Edit event icon</string>
+    <string name="icon_delete_event">Delete event icon</string>
+    <string name="AUTHENTICATION_ERROR_MSG_VM">Unauthorized access</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_VM_2">Email not registered</string>
+    <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email already registered</string>
 </resources>

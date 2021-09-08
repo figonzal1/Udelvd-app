@@ -189,95 +189,92 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
     private void navigationListener() {
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
 
-                if (menuItem.getItemId() == R.id.menu_profile) {
+            if (menuItem.getItemId() == R.id.menu_profile) {
 
-                    navigationView.setCheckedItem(R.id.menu_profile);
+                navigationView.setCheckedItem(R.id.menu_profile);
 
-                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                    startActivityForResult(intent, PROFILE_ACTIVITY_CODE);
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivityForResult(intent, PROFILE_ACTIVITY_CODE);
 
-                    return true;
+                return true;
 
-                } else if (menuItem.getItemId() == R.id.menu_interviewees) {
+            } else if (menuItem.getItemId() == R.id.menu_interviewees) {
 
-                    Objects.requireNonNull(tabLayout.getTabAt(0), "get tab 0 cannot be null").select();
-                    drawerLayout.closeDrawer(GravityCompat.START, true);
+                Objects.requireNonNull(tabLayout.getTabAt(0), "get tab 0 cannot be null").select();
+                drawerLayout.closeDrawer(GravityCompat.START, true);
 
-                    return true;
+                return true;
 
-                } else if (menuItem.getItemId() == R.id.menu_stats) {
+            } else if (menuItem.getItemId() == R.id.menu_stats) {
 
-                    Objects.requireNonNull(tabLayout.getTabAt(1), "get tab 1 cannot be null").select();
-                    drawerLayout.closeDrawer(GravityCompat.START, true);
+                Objects.requireNonNull(tabLayout.getTabAt(1), "get tab 1 cannot be null").select();
+                drawerLayout.closeDrawer(GravityCompat.START, true);
 
-                    return true;
-                }
-
-                if (menuItem.getItemId() == R.id.menu_actions) {
-
-                    navigationView.setCheckedItem(R.id.menu_actions);
-
-                    Intent intent = new Intent(MainActivity.this, ActionListActivity.class);
-                    startActivity(intent);
-
-                    return true;
-
-                } else if (menuItem.getItemId() == R.id.menu_emoticons) {
-
-                    return true;
-
-                } else if (menuItem.getItemId() == R.id.menu_researchers) {
-
-                    navigationView.setCheckedItem(R.id.menu_researchers);
-
-                    Intent intent = new Intent(MainActivity.this, ResearcherListActivity.class);
-                    startActivity(intent);
-
-                    return true;
-                }
-
-                if (menuItem.getItemId() == R.id.menu_contact) {
-
-                    navigationView.setCheckedItem(R.id.menu_contact);
-
-                    Intent intent = new Intent(MainActivity.this, ContactActivity.class);
-                    startActivity(intent);
-
-                    return true;
-                }
-
-
-                if (menuItem.getItemId() == R.id.menu_logout) {
-
-                    String token = sharedPreferences.getString(getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
-
-                    if (token != null && !token.isEmpty()) {
-
-                        crashlytics.setCustomKey(getString(R.string.SHARED_PREF_TOKEN_LOGIN), token);
-
-
-                        Log.d(getString(R.string.TAG_TOKEN_LOGOUT), String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
-                        crashlytics.log(getString(R.string.TAG_TOKEN_LOGOUT) + String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
-
-                        sharedPreferences.edit().remove(getString(R.string.SHARED_PREF_TOKEN_LOGIN)).apply();
-
-                        if (researchRole.equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
-                            MyFirebaseMessagingService.deleteSuscriptionTheme(getApplicationContext());
-                        }
-
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                        return true;
-                    }
-                }
-                return false;
+                return true;
             }
+
+            if (menuItem.getItemId() == R.id.menu_actions) {
+
+                navigationView.setCheckedItem(R.id.menu_actions);
+
+                Intent intent = new Intent(MainActivity.this, ActionListActivity.class);
+                startActivity(intent);
+
+                return true;
+
+            } else if (menuItem.getItemId() == R.id.menu_emoticons) {
+
+                return true;
+
+            } else if (menuItem.getItemId() == R.id.menu_researchers) {
+
+                navigationView.setCheckedItem(R.id.menu_researchers);
+
+                Intent intent = new Intent(MainActivity.this, ResearcherListActivity.class);
+                startActivity(intent);
+
+                return true;
+            }
+
+            if (menuItem.getItemId() == R.id.menu_contact) {
+
+                navigationView.setCheckedItem(R.id.menu_contact);
+
+                Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+                startActivity(intent);
+
+                return true;
+            }
+
+
+            if (menuItem.getItemId() == R.id.menu_logout) {
+
+                String token = sharedPreferences.getString(getString(R.string.SHARED_PREF_TOKEN_LOGIN), "");
+
+                if (token != null && !token.isEmpty()) {
+
+                    crashlytics.setCustomKey(getString(R.string.SHARED_PREF_TOKEN_LOGIN), token);
+
+
+                    Log.d(getString(R.string.TAG_TOKEN_LOGOUT), String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
+                    crashlytics.log(getString(R.string.TAG_TOKEN_LOGOUT) + String.format("%s %s", getString(R.string.TOKEN_LOGOUT_MSG), token));
+
+                    sharedPreferences.edit().remove(getString(R.string.SHARED_PREF_TOKEN_LOGIN)).apply();
+
+                    if (researchRole.equals(getString(R.string.ROL_ADMIN_KEY_MASTER))) {
+                        MyFirebaseMessagingService.deleteSuscriptionTheme(getApplicationContext());
+                    }
+
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                    return true;
+                }
+            }
+            return false;
         });
     }
 

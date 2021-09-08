@@ -14,7 +14,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -102,93 +101,87 @@ public class ResearcherRepository {
 
     private void sendGetResearchers(final int page, final Researcher researcher) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE", response);
+            //Log.d("RESPONSE", response);
 
-                //Reiniciar listado cuando se pregunta por primera pagina
-                if (page == 1) {
-                    researcherList.clear();
-                } else {
-                    researcherSgtPage.clear();
-                }
+            //Reiniciar listado cuando se pregunta por primera pagina
+            if (page == 1) {
+                researcherList.clear();
+            } else {
+                researcherSgtPage.clear();
+            }
 
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    /*
-                    N INVESTIGADORES
-                     */
-                    JSONObject jsonInterviewee = jsonObject.getJSONObject(application.getString(R.string.KEY_INVES)).getJSONObject(application.getString(R.string.JSON_DATA));
+                /*
+                N INVESTIGADORES
+                 */
+                JSONObject jsonInterviewee = jsonObject.getJSONObject(application.getString(R.string.KEY_INVES)).getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    int nInterviewees = jsonInterviewee.getInt(application.getString(R.string.KEY_INVES_N_INVESTIGADORES));
-                    mutableNResearcher.postValue(nInterviewees);
+                int nInterviewees = jsonInterviewee.getInt(application.getString(R.string.KEY_INVES_N_INVESTIGADORES));
+                mutableNResearcher.postValue(nInterviewees);
 
-                    JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
 
-                        JSONObject jsonInve = jsonArray.getJSONObject(i);
-                        JSONObject jsonAttributes = jsonInve.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    JSONObject jsonInve = jsonArray.getJSONObject(i);
+                    JSONObject jsonAttributes = jsonInve.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                        Researcher inv = new Researcher();
-                        inv.setId(jsonInve.getInt(application.getString(R.string.KEY_INVES_ID)));
-                        inv.setName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
-                        inv.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
-                        inv.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
-                        inv.setIdRole(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
-                        inv.setCreateTime(jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME)));
+                    Researcher inv = new Researcher();
+                    inv.setId(jsonInve.getInt(application.getString(R.string.KEY_INVES_ID)));
+                    inv.setName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                    inv.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                    inv.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                    inv.setIdRole(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
+                    inv.setCreateTime(jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME)));
 
-                        inv.setActivated(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) != 0);
+                    inv.setActivated(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) != 0);
 
-                        JSONObject jsonRelationshipsData = jsonInve.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
-                                .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
-                                .getJSONObject(application.getString(R.string.JSON_DATA));
-                        inv.setIdRole(jsonRelationshipsData.getInt(application.getString(R.string.KEY_ROL_ID)));
-                        inv.setRolName(jsonRelationshipsData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
-
-                        if (page == 1) {
-                            researcherList.add(inv);
-                        } else {
-                            researcherSgtPage.add(inv);
-                        }
-
-                    }
+                    JSONObject jsonRelationshipsData = jsonInve.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                            .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                            .getJSONObject(application.getString(R.string.JSON_DATA));
+                    inv.setIdRole(jsonRelationshipsData.getInt(application.getString(R.string.KEY_ROL_ID)));
+                    inv.setRolName(jsonRelationshipsData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
 
                     if (page == 1) {
-                        //Log.d("CARGANDO_PAGINA", "1");
-                        researcherFirstPageLiveData.postValue(researcherList);
+                        researcherList.add(inv);
                     } else {
-                        //Log.d("CARGANDO_PAGINA", String.valueOf(page));
-                        researcherSgtPageLiveData.postValue(researcherSgtPage); //Enviar a ViewModel listado paginado
+                        researcherSgtPage.add(inv);
                     }
 
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "GET RESEARCHERS PARSE ERROR");
-                    e.printStackTrace();
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                if (page == 1) {
+                    //Log.d("CARGANDO_PAGINA", "1");
+                    researcherFirstPageLiveData.postValue(researcherList);
+                } else {
+                    //Log.d("CARGANDO_PAGINA", String.valueOf(page));
+                    researcherSgtPageLiveData.postValue(researcherSgtPage); //Enviar a ViewModel listado paginado
+                }
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "GET RESEARCHERS PARSE ERROR");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_INV_LISTA)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_GET_INVESTIGADORES), application.getString(R.string.HEROKU_DOMAIN), page, researcher.getId());
@@ -226,121 +219,115 @@ public class ResearcherRepository {
 
     private void sendPostRegistry(final Researcher researcher) {
 
-        final Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        final Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE",response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            //Log.d("RESPONSE",response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                    //GET RESPONSE
-                    Researcher invResponse = new Researcher();
-                    invResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
-                    invResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
-                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                //GET RESPONSE
+                Researcher invResponse = new Researcher();
+                invResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                invResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
 
-                    //GET ROL RESEARCHER
-                    JSONObject jsonObjectRolData = jsonData
-                            .getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
-                            .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
-                            .getJSONObject(application.getString(R.string.JSON_DATA));
+                //GET ROL RESEARCHER
+                JSONObject jsonObjectRolData = jsonData
+                        .getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                        .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                        .getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    invResponse.setRolName(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
+                invResponse.setRolName(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
 
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+                if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
 
-                        invResponse.setActivated(false);
+                    invResponse.setActivated(false);
 
-                    } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
+                } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
 
-                        invResponse.setActivated(true);
-                    }
-
-                    Log.d("MEMORIA", researcher.toString());
-                    Log.d("INTERNET", invResponse.toString());
-
-                    if (researcher.equals(invResponse)) {
-
-                        Map<String, String> map = new HashMap<>();
-
-                        map.put(application.getString(R.string.INTENT_KEY_MSG_REGISTRO), application.getString(R.string.MSG_INVEST_REGISTRADO));
-                        map.put(application.getString(R.string.INTENT_KEY_INVES_ACTIVADO), String.valueOf(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO))));
-
-                        responseMsgRegistry.postValue(map);
-                    }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "REGISTRY JSON ERROR PARSE");
-                    e.printStackTrace();
+                    invResponse.setActivated(true);
                 }
-            }
-        };
 
-        final Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                Log.d("MEMORIA", researcher.toString());
+                Log.d("INTERNET", invResponse.toString());
+
+                if (researcher.equals(invResponse)) {
+
+                    Map<String, String> map = new HashMap<>();
+
+                    map.put(application.getString(R.string.INTENT_KEY_MSG_REGISTRO), application.getString(R.string.MSG_INVEST_REGISTRADO));
+                    map.put(application.getString(R.string.INTENT_KEY_INVES_ACTIVADO), String.valueOf(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO))));
+
+                    responseMsgRegistry.postValue(map);
+                }
 
                 isLoading.postValue(false);
 
-                //TIMEOUT ERROR
-                if (error instanceof TimeoutError) {
+            } catch (JSONException e) {
 
-                    Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorRegistry.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
+                Log.d("JSON_ERROR", "REGISTRY JSON ERROR PARSE");
+                e.printStackTrace();
+            }
+        };
 
-                //NETWORK ERROR
-                else if (error instanceof NetworkError) {
+        final Response.ErrorListener errorListener = error -> {
 
-                    Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorRegistry.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
+            isLoading.postValue(false);
 
-                //SERVER ERROR
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+            //TIMEOUT ERROR
+            if (error instanceof TimeoutError) {
 
-                    String json = new String(error.networkResponse.data);
+                Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.TIMEOUT_ERROR));
+                responseMsgErrorRegistry.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+            }
 
-                    JSONObject errorObject;
+            //NETWORK ERROR
+            else if (error instanceof NetworkError) {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.NETWORK_ERROR));
+                responseMsgErrorRegistry.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+            }
 
-                        //AUTH ERROR
-                        if (error instanceof AuthFailureError) {
+            //SERVER ERROR
+            else if (error.networkResponse != null && error.networkResponse.data != null) {
 
-                            Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                            responseMsgErrorRegistry.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                        }
+                String json = new String(error.networkResponse.data);
 
-                        //SERVER ERROR
-                        else if (error instanceof ServerError) {
+                JSONObject errorObject;
 
-                            Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.SERVER_ERROR) + errorObject);
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
 
-                            //MAIL REPEATED
-                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG))) {
+                    //AUTH ERROR
+                    if (error instanceof AuthFailureError) {
 
-                                responseMsgErrorRegistry.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
-                            } else {
-                                responseMsgErrorRegistry.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                            }
-                        }
-
-                    } catch (JSONException e) {
-
-                        //SEND ERROR TO UI
-                        responseMsgErrorRegistry.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                        e.printStackTrace();
+                        Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorRegistry.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
+
+                    //SERVER ERROR
+                    else if (error instanceof ServerError) {
+
+                        Log.d(application.getString(R.string.TAG_VOLLEY_INVES_REGISTRO), application.getString(R.string.SERVER_ERROR) + errorObject);
+
+                        //MAIL REPEATED
+                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_ALREADY_EXIST))) {
+
+                            responseMsgErrorRegistry.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM));
+                        } else {
+                            responseMsgErrorRegistry.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                        }
+                    }
+
+                } catch (JSONException e) {
+
+                    //SEND ERROR TO UI
+                    responseMsgErrorRegistry.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    e.printStackTrace();
                 }
             }
         };
@@ -391,151 +378,152 @@ public class ResearcherRepository {
 
     private void sendPostLogin(final Researcher researcherForm) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d("RESPONSE", response);
+        Response.Listener<String> responseListener = response -> {
+            //Log.d("RESPONSE", response);
 
-                try {
+            try {
 
-                    JSONObject jsonObject = new JSONObject(response);
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-                    JSONObject jsonLogin = jsonObject.getJSONObject(application.getString(R.string.JSON_LOGIN));
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                JSONObject jsonLogin = jsonObject.getJSONObject(application.getString(R.string.JSON_LOGIN));
 
-                    String status = jsonLogin.getString(application.getString(R.string.JSON_LOGIN_STATUS));
+                String status = jsonLogin.getString(application.getString(R.string.JSON_LOGIN_STATUS));
 
-                    //GER RESPONSE
-                    Researcher invResponse = new Researcher();
-                    invResponse.setId(jsonData.getInt(application.getString(R.string.KEY_INVES_ID)));
+                //GER RESPONSE
+                Researcher invResponse = new Researcher();
+                invResponse.setId(jsonData.getInt(application.getString(R.string.KEY_INVES_ID)));
 
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
-                    invResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
-                    invResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
-                    invResponse.setCreateTime(jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME)));
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                invResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                invResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                invResponse.setCreateTime(jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME)));
 
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+                if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
 
-                        invResponse.setActivated(false);
+                    invResponse.setActivated(false);
 
-                    } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
+                } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
 
-                        invResponse.setActivated(true);
-                    }
-
-                    invResponse.setIdRole(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
-
-                    //Buscar en JSON nombre del rol
-                    JSONObject jsonObjectRolData = jsonData.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
-                            .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
-                            .getJSONObject(application.getString(R.string.JSON_DATA));
-                    invResponse.setRolName(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
-
-                    /*
-                    ACTIVATION CHECKING
-                     */
-                    if (status.equals(application.getString(R.string.JSON_LOGIN_STATUS_RESPONSE)) && invResponse.isActivated()) {
-
-                        String token = jsonLogin.getString(application.getString(R.string.JSON_TOKEN));
-                        Log.d(application.getString(R.string.TAG_TOKEN_LOGIN), token);
-
-                        //SAVE TOKEN
-                        SharedPreferences sharedPreferences = application.getSharedPreferences(
-                                application.getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
-
-                        //SAVE TOKEN IN SHARED PREF
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), token);
-                        editor.apply();
-
-
-                        //Enviar investigador y mensaje para toast
-                        Map<String, Object> result = new HashMap<>();
-                        result.put(application.getString(R.string.KEY_INVES_OBJECT), invResponse);
-                        result.put(application.getString(R.string.LOGIN_MSG_VM), application.getString(R.string.LOGIN_MSG_VM_WELCOME));
-
-                        responseMsgLogin.postValue(result);
-
-                    } else {
-                        responseMsgErrorLogin.postValue(application.getString(R.string.SNACKBAR_CUENTA_WAIT));
-                    }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "LOGIN JSON ERROR PARSE");
-                    e.printStackTrace();
+                    invResponse.setActivated(true);
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                invResponse.setIdRole(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
+
+                //Buscar en JSON nombre del rol
+                JSONObject jsonObjectRolData = jsonData.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                        .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                        .getJSONObject(application.getString(R.string.JSON_DATA));
+                invResponse.setRolName(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
+
+                /*
+                ACTIVATION CHECKING
+                 */
+                if (status.equals(application.getString(R.string.JSON_LOGIN_STATUS_RESPONSE)) && invResponse.isActivated()) {
+
+                    String token = jsonLogin.getString(application.getString(R.string.JSON_TOKEN));
+                    Log.d(application.getString(R.string.TAG_TOKEN_LOGIN), token);
+
+                    //SAVE TOKEN
+                    SharedPreferences sharedPreferences = application.getSharedPreferences(
+                            application.getString(R.string.SHARED_PREF_MASTER_KEY), Context.MODE_PRIVATE);
+
+                    //SAVE TOKEN IN SHARED PREF
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(application.getString(R.string.SHARED_PREF_TOKEN_LOGIN), token);
+                    editor.apply();
+
+
+                    //Enviar investigador y mensaje para toast
+                    Map<String, Object> result = new HashMap<>();
+                    result.put(application.getString(R.string.KEY_INVES_OBJECT), invResponse);
+                    result.put(application.getString(R.string.LOGIN_MSG_VM), application.getString(R.string.LOGIN_MSG_VM_WELCOME));
+
+                    responseMsgLogin.postValue(result);
+
+                } else {
+                    responseMsgErrorLogin.postValue(application.getString(R.string.SNACKBAR_CUENTA_WAIT));
+                }
 
                 isLoading.postValue(false);
 
-                //TIMEOUT ERROR
-                if (error instanceof TimeoutError) {
+            } catch (JSONException e) {
 
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
+                Log.d("JSON_ERROR", "LOGIN JSON ERROR PARSE");
+                e.printStackTrace();
+            }
+        };
 
-                //INTERNET ERROR
-                else if (error instanceof NetworkError) {
+        Response.ErrorListener errorListener = error -> {
 
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorLogin.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
+            isLoading.postValue(false);
 
-                //SERVER ERROR
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+            //TIMEOUT ERROR
+            if (error instanceof TimeoutError) {
 
-                    String json = new String(error.networkResponse.data);
+                Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.TIMEOUT_ERROR));
+                responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+            }
 
-                    JSONObject errorObject;
+            //INTERNET ERROR
+            else if (error instanceof NetworkError) {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.NETWORK_ERROR));
+                responseMsgErrorLogin.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+            }
 
-                        //AUTH ERROR
-                        if (error instanceof AuthFailureError) {
+            //SERVER ERROR
+            else if (error.networkResponse != null && error.networkResponse.data != null) {
 
-                            Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                String json = new String(error.networkResponse.data);
 
-                            //PARSE AUTH ERROR API
-                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_AUTH_MSG))) {
+                JSONObject errorObject;
 
-                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_AUTH_MSG_VM));
-                            } else {
-                                responseMsgErrorLogin.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                            }
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+
+                    //AUTH ERROR
+                    if (error instanceof AuthFailureError) {
+
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+
+                        //PARSE AUTH ERROR API
+                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_DETAIL_WRONG_PSW))) {
+
+                            responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_AUTH_MSG_VM));
+                        } else {
+                            responseMsgErrorLogin.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                         }
-
-                        //SERVER ERROR
-                        else if (error instanceof ServerError) {
-
-                            Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.SERVER_ERROR) + errorObject);
-
-                            //MAIL NOT REGISTERED
-                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
-
-                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
-                            } else {
-                                responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                            }
-                        }
-
-                    } catch (JSONException e) {
-
-                        //Send error to UI
-                        responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                        e.printStackTrace();
                     }
+
+                    //SERVER ERROR
+                    else if (error instanceof ServerError) {
+
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERROR_LOGIN), application.getString(R.string.SERVER_ERROR) + errorObject);
+
+                        //MAIL NOT REGISTERED
+
+                        //TODO: EN EL SERVIDOR ENVIAR UN ERROR 403 NO 500
+                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_EMAIL_NOT_EXIST))) {
+
+                            responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
+                        }
+                        //ACCOUNT NOT ACTIVATED
+                        //TODO: EN EL SERVIDOR ENVIAR UN ERROR 403 NO 500
+                        else if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_DETAIL_ACC_NO_ACTIVATED))) {
+                            responseMsgErrorLogin.postValue(application.getString(R.string.SNACKBAR_CUENTA_WAIT));
+                        } else {
+                            responseMsgErrorLogin.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                        }
+                    }
+
+                } catch (JSONException e) {
+
+                    //Send error to UI
+                    responseMsgErrorLogin.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    e.printStackTrace();
                 }
             }
         };
@@ -576,80 +564,74 @@ public class ResearcherRepository {
 
     private void sendPutUpdate(final Researcher researcherForm) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE", response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+            //Log.d("RESPONSE", response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    //Investigador actualizado
-                    Researcher invResponse = new Researcher();
-                    invResponse.setId(jsonData.getInt(application.getString(R.string.KEY_INVES_ID)));
+                //Investigador actualizado
+                Researcher invResponse = new Researcher();
+                invResponse.setId(jsonData.getInt(application.getString(R.string.KEY_INVES_ID)));
 
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                    invResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
-                    invResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
-                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
-                    invResponse.setIdRole(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
+                invResponse.setName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_NOMBRE)));
+                invResponse.setLastName(jsonAttributes.getString(application.getString(R.string.KEY_INVES_APELLIDO)));
+                invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                invResponse.setIdRole(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ID_ROL)));
 
-                    if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
+                if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 0) {
 
-                        invResponse.setActivated(false);
+                    invResponse.setActivated(false);
 
-                    } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
+                } else if (jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) == 1) {
 
-                        invResponse.setActivated(true);
-                    }
-
-                    //Buscar en JSON nombre del rol
-                    JSONObject jsonObjectRolData = jsonData.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
-                            .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
-                            .getJSONObject(application.getString(R.string.JSON_DATA));
-                    invResponse.setRolName(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
-
-                    String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
-
-                    Log.d("MEMORIA", researcherForm.toString());
-                    Log.d("INTERNET", invResponse.toString());
-
-                    if (researcherForm.equals(invResponse) && !update_time.isEmpty()) {
-
-                        //Enviar investigador y mensaje para toast
-                        Map<String, Object> result = new HashMap<>();
-                        result.put(application.getString(R.string.KEY_INVES_OBJECT), invResponse);
-                        result.put(application.getString(R.string.UPDATE_MSG_VM), application.getString(R.string.UPDATE_MSG_VM_SAVE));
-
-                        responseMsgUpdate.postValue(result);
-                    }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "UPDATE JSON ERROR PARSE");
-                    e.printStackTrace();
+                    invResponse.setActivated(true);
                 }
 
-            }
-        };
+                //Buscar en JSON nombre del rol
+                JSONObject jsonObjectRolData = jsonData.getJSONObject(application.getString(R.string.JSON_RELATIONSHIPS))
+                        .getJSONObject(application.getString(R.string.KEY_ROL_OBJECT))
+                        .getJSONObject(application.getString(R.string.JSON_DATA));
+                invResponse.setRolName(jsonObjectRolData.getString(application.getString(R.string.KEY_ROL_NOMBRE)));
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                String update_time = jsonAttributes.getString(application.getString(R.string.KEY_UPDATE_TIME));
+
+                Log.d("MEMORIA", researcherForm.toString());
+                Log.d("INTERNET", invResponse.toString());
+
+                if (researcherForm.equals(invResponse) && !update_time.isEmpty()) {
+
+                    //Enviar investigador y mensaje para toast
+                    Map<String, Object> result = new HashMap<>();
+                    result.put(application.getString(R.string.KEY_INVES_OBJECT), invResponse);
+                    result.put(application.getString(R.string.UPDATE_MSG_VM), application.getString(R.string.UPDATE_MSG_VM_SAVE));
+
+                    responseMsgUpdate.postValue(result);
+                }
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorUpdate,
-                        application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "UPDATE JSON ERROR PARSE");
+                e.printStackTrace();
             }
+
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorUpdate,
+                    application.getString(R.string.TAG_VOLLEY_ERR_INV_UPDATE)
+            );
         };
 
 
@@ -698,101 +680,95 @@ public class ResearcherRepository {
 
     private void sendPostRecovery(Researcher researcher) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE", response);
+            //Log.d("RESPONSE", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
 
-                    String email = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES)).getString(application.getString(R.string.KEY_INVES_EMAIL));
+                String email = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES)).getString(application.getString(R.string.KEY_INVES_EMAIL));
 
-                    JSONObject jsonRecovery = jsonObject.getJSONObject(application.getString(R.string.JSON_RECOVERY));
+                JSONObject jsonRecovery = jsonObject.getJSONObject(application.getString(R.string.JSON_RECOVERY));
 
-                    String status = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_STATUS));
-                    String dybamicLink = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_DL));
+                String status = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_STATUS));
+                String dybamicLink = jsonRecovery.getString(application.getString(R.string.JSON_RECOVERY_DL));
 
-                    if (status.equals(application.getString(R.string.RECOVERY_MSG_VM))) {
+                if (status.equals(application.getString(R.string.RECOVERY_MSG_VM))) {
 
-                        Map<String, String> map = new HashMap<>();
+                    Map<String, String> map = new HashMap<>();
 
-                        map.put(application.getString(R.string.KEY_INVES_EMAIL), email);
-                        map.put(application.getString(R.string.MSG_RECOVERY), application.getString(R.string.RECOVERY_MSG_VM_RESPONSE));
-                        responseMsgRecovery.postValue(map);
+                    map.put(application.getString(R.string.KEY_INVES_EMAIL), email);
+                    map.put(application.getString(R.string.MSG_RECOVERY), application.getString(R.string.RECOVERY_MSG_VM_RESPONSE));
+                    responseMsgRecovery.postValue(map);
 
-                        Log.d(application.getString(R.string.TAG_DYNAMIC_LINK_JSON), dybamicLink);
-                    }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "RECOVERY JSON ERROR PARSE");
-                    e.printStackTrace();
+                    Log.d(application.getString(R.string.TAG_DYNAMIC_LINK_JSON), dybamicLink);
                 }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
                 isLoading.postValue(false);
 
-                //TIMEOUT ERROR
-                if (error instanceof TimeoutError) {
+            } catch (JSONException e) {
 
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.TIMEOUT_ERROR));
-                    responseMsgErrorRecovery.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                }
+                Log.d("JSON_ERROR", "RECOVERY JSON ERROR PARSE");
+                e.printStackTrace();
+            }
+        };
 
-                //NETWORK ERROR
-                else if (error instanceof NetworkError) {
+        Response.ErrorListener errorListener = error -> {
 
-                    Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.NETWORK_ERROR));
-                    responseMsgErrorRecovery.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
-                }
+            isLoading.postValue(false);
 
-                //SERVER ERROR
-                else if (error.networkResponse != null && error.networkResponse.data != null) {
+            //TIMEOUT ERROR
+            if (error instanceof TimeoutError) {
 
-                    String json = new String(error.networkResponse.data);
+                Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.TIMEOUT_ERROR));
+                responseMsgErrorRecovery.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+            }
 
-                    JSONObject errorObject;
+            //NETWORK ERROR
+            else if (error instanceof NetworkError) {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
+                Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.NETWORK_ERROR));
+                responseMsgErrorRecovery.postValue(application.getString(R.string.NETWORK_ERROR_MSG_VM));
+            }
 
-                        //AUTH ERROR
-                        if (error instanceof AuthFailureError) {
+            //SERVER ERROR
+            else if (error.networkResponse != null && error.networkResponse.data != null) {
 
-                            Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
-                            responseMsgErrorRecovery.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
-                        }
+                String json = new String(error.networkResponse.data);
 
-                        //SERVER ERROR
-                        else if (error instanceof ServerError) {
+                JSONObject errorObject;
 
-                            Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.SERVER_ERROR) + errorObject);
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    errorObject = jsonObject.getJSONObject(application.getString(R.string.JSON_ERROR));
 
-                            if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_2))) {
+                    //AUTH ERROR
+                    if (error instanceof AuthFailureError) {
 
-                                responseMsgErrorRecovery.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
-                            } else {
-                                responseMsgErrorRecovery.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
-                            }
-                        }
-                    } catch (JSONException e) {
-
-                        //Send error to UI
-                        responseMsgErrorRecovery.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
-                        e.printStackTrace();
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.AUTHENTICATION_ERROR) + errorObject);
+                        responseMsgErrorRecovery.postValue(application.getString(R.string.AUTHENTICATION_ERROR_MSG_VM));
                     }
+
+                    //SERVER ERROR
+                    else if (error instanceof ServerError) {
+
+                        Log.d(application.getString(R.string.TAG_VOLLEY_ERR_INV_RECUPERAR), application.getString(R.string.SERVER_ERROR) + errorObject);
+
+                        if (errorObject.get(application.getString(R.string.JSON_ERROR_DETAIL)).equals(application.getString(R.string.JSON_ERROR_EMAIL_NOT_EXIST))) {
+
+                            responseMsgErrorRecovery.postValue(application.getString(R.string.SERVER_ERROR_REGISTRO_MSG_VM_2));
+                        } else {
+                            responseMsgErrorRecovery.postValue(application.getString(R.string.SERVER_ERROR_MSG_VM));
+                        }
+                    }
+                } catch (JSONException e) {
+
+                    //Send error to UI
+                    responseMsgErrorRecovery.postValue(application.getString(R.string.TIMEOUT_ERROR_MSG_VM));
+                    e.printStackTrace();
                 }
             }
         };
@@ -826,45 +802,39 @@ public class ResearcherRepository {
 
     private void sendPostResetPassword(final String email, final String password) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonReset = jsonObject.getJSONObject(application.getString(R.string.JSON_RESET));
+                JSONObject jsonReset = jsonObject.getJSONObject(application.getString(R.string.JSON_RESET));
 
-                    String status = jsonReset.getString(application.getString(R.string.JSON_RESET_STATUS));
+                String status = jsonReset.getString(application.getString(R.string.JSON_RESET_STATUS));
 
-                    if (status.equals(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM))) {
+                if (status.equals(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM))) {
 
-                        responseMsgReset.postValue(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM_RESULT));
-                    }
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "PASSWORD RESET JSON ERROR PARSE");
-                    e.printStackTrace();
+                    responseMsgReset.postValue(application.getString(R.string.MSG_PASSWORD_RESETEADA_VM_RESULT));
                 }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorReset,
-                        application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "PASSWORD RESET JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorReset,
+                    application.getString(R.string.TAG_VOLLEY_ERR_INV_RESET)
+            );
         };
 
         String url = String.format(application.getString(R.string.URL_PUT_RESETEAR_PASSWORD), application.getString(R.string.HEROKU_DOMAIN));
@@ -902,57 +872,51 @@ public class ResearcherRepository {
 
     private void sendPatchActivate(final Researcher researcher) {
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                Log.d("RESPONSE", response);
+            Log.d("RESPONSE", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
-                    JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                JSONObject jsonData = jsonObject.getJSONObject(application.getString(R.string.JSON_DATA));
+                JSONObject jsonAttributes = jsonData.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                    Researcher invResponse = new Researcher();
-                    invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
+                Researcher invResponse = new Researcher();
+                invResponse.setEmail(jsonAttributes.getString(application.getString(R.string.KEY_INVES_EMAIL)));
 
-                    invResponse.setActivated(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) != 0);
+                invResponse.setActivated(jsonAttributes.getInt(application.getString(R.string.KEY_INVES_ACTIVADO)) != 0);
 
-                    if (researcher.getEmail().equals(invResponse.getEmail()) &&
-                            (researcher.isActivated() == invResponse.isActivated())) {
+                if (researcher.getEmail().equals(invResponse.getEmail()) &&
+                        (researcher.isActivated() == invResponse.isActivated())) {
 
-                        if (researcher.isActivated()) {
+                    if (researcher.isActivated()) {
 
-                            responseMsgActivation.postValue(application.getString(R.string.MSG_INVEST_CUENTA_ACTIVADA));
-                        } else {
-                            responseMsgActivation.postValue(application.getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA));
-                        }
+                        responseMsgActivation.postValue(application.getString(R.string.MSG_INVEST_CUENTA_ACTIVADA));
+                    } else {
+                        responseMsgActivation.postValue(application.getString(R.string.MSG_INVEST_CUENTA_DESACTIVADA));
                     }
-
-                    isActivated.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "ACTIVATION JSON ERROR PARSE");
-                    e.printStackTrace();
                 }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
                 isActivated.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorActivation,
-                        application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "ACTIVATION JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isActivated.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorActivation,
+                    application.getString(R.string.TAG_VOLLEY_ERR_INV_ACTIVAR)
+            );
         };
 
         String url = String.format(Locale.getDefault(), application.getString(R.string.URL_PATCH_INVESTIGADORES_ACTIVAR), application.getString(R.string.HEROKU_DOMAIN), researcher.getId());

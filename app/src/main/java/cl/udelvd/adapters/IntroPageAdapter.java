@@ -18,8 +18,8 @@ import cl.udelvd.models.IntroItem;
 
 public class IntroPageAdapter extends PagerAdapter {
 
-    private Context context;
-    private List<IntroItem> introItemList;
+    private final Context context;
+    private final List<IntroItem> introItemList;
 
     public IntroPageAdapter(Context context, List<IntroItem> introItemList) {
         this.context = context;

@@ -4,12 +4,9 @@ import androidx.annotation.NonNull;
 
 public class IntroItem {
 
-    private String title;
-    private String description;
-    private int idResource;
-
-    public IntroItem() {
-    }
+    private final String title;
+    private final String description;
+    private final int idResource;
 
     public IntroItem(String title, String description, int idResource) {
         this.title = title;
@@ -21,24 +18,12 @@ public class IntroItem {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public int getIdResource() {
         return idResource;
-    }
-
-    public void setIdResource(int idResource) {
-        this.idResource = idResource;
     }
 
     @NonNull

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -97,15 +95,9 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.tvNameLastName.setText(String.format("%s %s", interviewee.getName(), interviewee.getLastName()));
 
             final int annos = Utils.calculateYearsOld(interviewee.getBirthDate());
-            holder.tvBirthDate.setText(String.format(context.getString(R.string.FORMATO_FECHA_NAC), Utils.dateToString(context.getApplicationContext(), false, interviewee.getBirthDate()), annos));
+            holder.tvBirthDate.setText(context.getResources().getQuantityString(R.plurals.FORMATO_FECHA_NAC, annos, Utils.dateToString(context.getApplicationContext(), false, interviewee.getBirthDate()), annos));
 
-            if (interviewee.getnInterviews() == 1) {
-
-                holder.tvNInterviewees.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTA), interviewee.getnInterviews()));
-
-            } else {
-                holder.tvNInterviewees.setText(String.format(Locale.US, context.getString(R.string.FORMATO_N_ENTREVISTAS), interviewee.getnInterviews()));
-            }
+            holder.tvNInterviewees.setText(context.getResources().getQuantityString(R.plurals.FORMATO_N_ENTREVISTA, interviewee.getnInterviews(), interviewee.getnInterviews()));
 
             if (totalList) {
                 holder.tvResearcherCharge.setVisibility(View.VISIBLE);
@@ -114,80 +106,71 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             Utils.configIconInterviewee(interviewee, annos, holder.ivIconPerson, context);
 
-            holder.cardViewInterviewee.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            holder.cardViewInterviewee.setOnClickListener(v -> {
 
-                    Intent intent = new Intent(context, InterviewsListActivity.class);
+                Intent intent = new Intent(context, InterviewsListActivity.class);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
-                    bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
-                    bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
-                    bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), Utils.dateToString(context, false, interviewee.getBirthDate()));
-                    bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
-                    bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
-                    intent.putExtras(bundle);
+                Bundle bundle = new Bundle();
+                bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), Utils.dateToString(context, false, interviewee.getBirthDate()));
+                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
+                bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
+                intent.putExtras(bundle);
 
-                    context.startActivity(intent, bundle);
-                }
+                context.startActivity(intent, bundle);
             });
 
-            holder.ivMenuInterviewee.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            holder.ivMenuInterviewee.setOnClickListener(v -> {
 
-                    PopupMenu popupMenu = new PopupMenu(context, holder.ivMenuInterviewee);
-                    popupMenu.inflate(R.menu.menu_holder_interviewee);
+                PopupMenu popupMenu = new PopupMenu(context, holder.ivMenuInterviewee);
+                popupMenu.inflate(R.menu.menu_holder_interviewee);
 
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
+                popupMenu.setOnMenuItemClickListener(item -> {
 
-                            //EDIT INTERVIEWEE
-                            if (item.getItemId() == R.id.menu_edit_interviewee) {
+                    //EDIT INTERVIEWEE
+                    if (item.getItemId() == R.id.menu_edit_interviewee) {
 
-                                Intent intent = new Intent(context, EditIntervieweeActivity.class);
-                                intent.putExtra(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
-                                intervieweeListFragment.startActivityForResult(intent, REQUEST_CODE_EDIT_INTERVIEWEE);
+                        Intent intent = new Intent(context, EditIntervieweeActivity.class);
+                        intent.putExtra(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
+                        intervieweeListFragment.startActivityForResult(intent, REQUEST_CODE_EDIT_INTERVIEWEE);
 
-                                return true;
+                        return true;
 
-                            }
+                    }
 
-                            //SEE INTERVIEWS
-                            else if (item.getItemId() == R.id.menu_see_interviews) {
+                    //SEE INTERVIEWS
+                    else if (item.getItemId() == R.id.menu_see_interviews) {
 
-                                Intent intent = new Intent(context, InterviewsListActivity.class);
+                        Intent intent = new Intent(context, InterviewsListActivity.class);
 
-                                Bundle bundle = new Bundle();
-                                bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
-                                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
-                                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
-                                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), Utils.dateToString(context, false, interviewee.getBirthDate()));
-                                bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
-                                bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
-                                intent.putExtras(bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ID_LARGO), interviewee.getId());
+                        bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_NOMBRE_LARGO), interviewee.getName());
+                        bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_APELLIDO_LARGO), interviewee.getLastName());
+                        bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_FECHA_NAC), Utils.dateToString(context, false, interviewee.getBirthDate()));
+                        bundle.putString(context.getString(R.string.KEY_ENTREVISTADO_SEXO_LARGO), interviewee.getGender());
+                        bundle.putInt(context.getString(R.string.KEY_ENTREVISTADO_ANNOS), annos);
+                        intent.putExtras(bundle);
 
-                                context.startActivity(intent);
+                        context.startActivity(intent);
 
-                                return true;
-                            }
+                        return true;
+                    }
 
-                            //DELETE INTERVIEWEE
-                            else if (item.getItemId() == R.id.menu_delete_interviewee) {
+                    //DELETE INTERVIEWEE
+                    else if (item.getItemId() == R.id.menu_delete_interviewee) {
 
-                                DeleteIntervieweeDialogFragment dialog = new DeleteIntervieweeDialogFragment(interviewee);
-                                dialog.show(fragmentManager, TAG_DELETE_DIALOG_INTERVIEWEE);
+                        DeleteIntervieweeDialogFragment dialog = new DeleteIntervieweeDialogFragment(interviewee);
+                        dialog.show(fragmentManager, TAG_DELETE_DIALOG_INTERVIEWEE);
 
-                                return true;
-                            }
-                            return false;
-                        }
-                    });
+                        return true;
+                    }
+                    return false;
+                });
 
-                    popupMenu.show();
-                }
+                popupMenu.show();
             });
         } else if (getItemViewType(position) == PROGRESS_PAGINATION) {
 
@@ -206,19 +189,16 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 btnLoadMore.setVisibility(View.GONE);
             }
 
-            btnLoadMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    page += 1;
+            btnLoadMore.setOnClickListener(v -> {
+                page += 1;
 
-                    if (intervieweeListViewModel != null) {
-                        intervieweeListViewModel.loadNextPage(page, researcher, totalList);
-                    }
-
-                    progressBar.setVisibility(View.VISIBLE);
-
-                    btnLoadMore.setVisibility(View.GONE);
+                if (intervieweeListViewModel != null) {
+                    intervieweeListViewModel.loadNextPage(page, researcher, totalList);
                 }
+
+                progressBar.setVisibility(View.VISIBLE);
+
+                btnLoadMore.setVisibility(View.GONE);
             });
         }
 

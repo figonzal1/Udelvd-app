@@ -8,10 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -19,7 +19,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import java.util.Map;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -68,27 +67,24 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
     private void botonRegistry() {
         Button btnRegistry = findViewById(R.id.btn_registry);
 
-        btnRegistry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnRegistry.setOnClickListener(view -> {
 
-                if (validateField()) {
+            if (validateField()) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    Researcher researcher = new Researcher();
-                    researcher.setName(Objects.requireNonNull(etName.getText(), "Et name cannot be null").toString());
-                    researcher.setLastName(Objects.requireNonNull(etLastName.getText(), "Et last name cannot be null").toString());
+                Researcher researcher = new Researcher();
+                researcher.setName(Objects.requireNonNull(etName.getText(), "Et name cannot be null").toString());
+                researcher.setLastName(Objects.requireNonNull(etLastName.getText(), "Et last name cannot be null").toString());
 
-                    researcher.setEmail(Objects.requireNonNull(etEmail.getText(), "Et email cannot be null").toString());
-                    researcher.setPassword(Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").toString());
-                    researcher.setRolName(getString(R.string.ROL_INVESTIG_KEY_MASTER));
-                    researcher.setActivated(false);
+                researcher.setEmail(Objects.requireNonNull(etEmail.getText(), "Et email cannot be null").toString());
+                researcher.setPassword(Objects.requireNonNull(etPassword.getText(), "Et password cannot be null").toString());
+                researcher.setRolName(getString(R.string.ROL_INVESTIG_KEY_MASTER));
+                researcher.setActivated(false);
 
-                    ResearcherRepository.getInstance(getApplication()).registryResearcher(researcher);
-                }
-
+                ResearcherRepository.getInstance(getApplication()).registryResearcher(researcher);
             }
+
         });
     }
 
@@ -113,88 +109,79 @@ public class RegistryActivity extends AppCompatActivity implements SnackbarInter
 
     private void initViewModel() {
 
-        registryViewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        registryViewModel.isLoading().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    ilName.setEnabled(false);
-                    etName.setEnabled(false);
+                ilName.setEnabled(false);
+                etName.setEnabled(false);
 
-                    ilLastName.setEnabled(false);
-                    etLastName.setEnabled(false);
+                ilLastName.setEnabled(false);
+                etLastName.setEnabled(false);
 
-                    ilEmail.setEnabled(false);
-                    etEmail.setEnabled(false);
+                ilEmail.setEnabled(false);
+                etEmail.setEnabled(false);
 
-                    ilPassword.setEnabled(false);
-                    ilConfirmacionPassword.setEnabled(false);
+                ilPassword.setEnabled(false);
+                ilConfirmacionPassword.setEnabled(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
 
-                    ilName.setEnabled(true);
-                    etName.setEnabled(true);
+                ilName.setEnabled(true);
+                etName.setEnabled(true);
 
-                    ilLastName.setEnabled(true);
-                    etLastName.setEnabled(true);
+                ilLastName.setEnabled(true);
+                etLastName.setEnabled(true);
 
-                    ilEmail.setEnabled(true);
-                    etEmail.setEnabled(true);
+                ilEmail.setEnabled(true);
+                etEmail.setEnabled(true);
 
-                    ilPassword.setEnabled(true);
-                    ilConfirmacionPassword.setEnabled(true);
-                }
+                ilPassword.setEnabled(true);
+                ilConfirmacionPassword.setEnabled(true);
             }
         });
 
-        registryViewModel.showMsgRegistry().observe(this, new Observer<Map<String, String>>() {
-            @Override
-            public void onChanged(Map<String, String> stringStringMap) {
+        registryViewModel.showMsgRegistry().observe(this, stringStringMap -> {
 
-                String msg_registro = stringStringMap.get(getString(R.string.INTENT_KEY_MSG_REGISTRO));
-                String activado = stringStringMap.get(getString(R.string.INTENT_KEY_INVES_ACTIVADO));
+            String msg_registro = stringStringMap.get(getString(R.string.INTENT_KEY_MSG_REGISTRO));
+            String activado = stringStringMap.get(getString(R.string.INTENT_KEY_INVES_ACTIVADO));
 
-                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), msg_registro));
-                crashlytics.log(getString(R.string.TAG_VM_INVES_REGISTRO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), msg_registro));
+            Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), msg_registro));
+            crashlytics.log(getString(R.string.TAG_VM_INVES_REGISTRO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), msg_registro));
 
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-                if (msg_registro != null && msg_registro.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
+            if (msg_registro != null && msg_registro.equals(getString(R.string.MSG_INVEST_REGISTRADO))) {
 
-                    Intent intent = getIntent();
+                Intent intent = getIntent();
 
-                    if (activado != null) {
+                if (activado != null) {
 
-                        if (activado.equals("0")) {
+                    if (activado.equals("0")) {
+                        Toast.makeText(this, msg_registro, Toast.LENGTH_LONG).show();
+                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), getString(R.string.SNACKBAR_CUENTA_WAIT));
 
-                            intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro + getString(R.string.SNACKBAR_ACTIVACION));
+                    } else if (activado.equals("1")) {
 
-                        } else if (activado.equals("1")) {
-
-                            intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro);
-                        }
+                        intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), msg_registro);
                     }
-
-                    setResult(RESULT_OK, intent);
-                    finish();
                 }
+
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
-        registryViewModel.showMsgErrorRegistry().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        registryViewModel.showMsgErrorRegistry().observe(this, s -> {
 
-                progressBar.setVisibility(View.GONE);
-                showSnackbar(findViewById(R.id.registry_researcher), Snackbar.LENGTH_LONG, s, null);
+            progressBar.setVisibility(View.GONE);
+            showSnackbar(findViewById(R.id.registry_researcher), Snackbar.LENGTH_LONG, s, null);
 
-                Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VM_INVES_REGISTRO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-            }
+            Log.d(getString(R.string.TAG_VM_INVES_REGISTRO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VM_INVES_REGISTRO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
 
     }

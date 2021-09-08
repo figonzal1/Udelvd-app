@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -33,9 +32,9 @@ public class StatsRepository {
     private static StatsRepository instance;
     private final Application application;
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private List<Stat> statList = new ArrayList<>();
-    private MutableLiveData<List<Stat>> statsMutableLivedata = new MutableLiveData<>();
-    private SingleLiveEvent<String> responseMsgErrorList = new SingleLiveEvent<>();
+    private final List<Stat> statList = new ArrayList<>();
+    private final MutableLiveData<List<Stat>> statsMutableLivedata = new MutableLiveData<>();
+    private final SingleLiveEvent<String> responseMsgErrorList = new SingleLiveEvent<>();
 
 
     private StatsRepository(Application application) {
@@ -69,67 +68,61 @@ public class StatsRepository {
 
         statList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Response.Listener<String> responseListener = response -> {
 
-                //Log.d("RESPONSE", response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            //Log.d("RESPONSE", response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonArray = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
 
-                        JSONObject jsonStat = jsonArray.getJSONObject(i);
-                        JSONObject jsonAttributes = jsonStat.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    JSONObject jsonStat = jsonArray.getJSONObject(i);
+                    JSONObject jsonAttributes = jsonStat.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
 
-                        Stat stat = new Stat();
-                        stat.setId(jsonStat.getInt(application.getString(R.string.KEY_STAT_ID)));
+                    Stat stat = new Stat();
+                    stat.setId(jsonStat.getInt(application.getString(R.string.KEY_STAT_ID)));
 
-                        String lang = Utils.getLanguage(application);
+                    String lang = Utils.getLanguage(application);
 
-                        if (lang.equals(application.getString(R.string.ESPANOL))) {
+                    if (lang.equals(application.getString(R.string.ESPANOL))) {
 
-                            stat.setName(jsonAttributes.getString(application.getString(R.string.KEY_STAT_NAME_ES)));
+                        stat.setName(jsonAttributes.getString(application.getString(R.string.KEY_STAT_NAME_ES)));
 
-                        } else if (lang.equals(application.getString(R.string.INGLES))) {
+                    } else if (lang.equals(application.getString(R.string.INGLES))) {
 
-                            stat.setName(jsonAttributes.getString(application.getString(R.string.KEY_STAT_NAME_EN)));
-                        }
-
-                        stat.setUrl(jsonAttributes.getString(application.getString(R.string.KEY_STAT_URL)));
-                        stat.setPin_pass(jsonAttributes.getString(application.getString(R.string.KEY_STAT_PIN_PASS)));
-
-                        statList.add(stat);
+                        stat.setName(jsonAttributes.getString(application.getString(R.string.KEY_STAT_NAME_EN)));
                     }
 
-                    statsMutableLivedata.postValue(statList);
+                    stat.setUrl(jsonAttributes.getString(application.getString(R.string.KEY_STAT_URL)));
+                    stat.setPin_pass(jsonAttributes.getString(application.getString(R.string.KEY_STAT_PIN_PASS)));
 
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "STATS JSON ERROR PARSE");
-                    e.printStackTrace();
+                    statList.add(stat);
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                statsMutableLivedata.postValue(statList);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_ESTADISTICAS)
-                );
+            } catch (JSONException e) {
 
+                Log.d("JSON_ERROR", "STATS JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_ESTADISTICAS)
+            );
+
         };
 
         String url = String.format(application.getString(R.string.URL_GET_ESTADISTICAS), application.getString(R.string.HEROKU_DOMAIN));

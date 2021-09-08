@@ -11,14 +11,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -191,58 +189,49 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
     private void viewModelInterviewee() {
 
 
-        newIntervieweeViewModel.isLoadingInterviewee().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newIntervieweeViewModel.isLoadingInterviewee().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
 
-        newIntervieweeViewModel.showMsgRegistry().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        newIntervieweeViewModel.showMsgRegistry().observe(this, s -> {
 
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
 
-                if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTADO))) {
+            if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTADO))) {
 
-                    Intent intent = getIntent();
-                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+                Intent intent = getIntent();
+                intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
 
-        newIntervieweeViewModel.showMsgErrorRegistry().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        newIntervieweeViewModel.showMsgErrorRegistry().observe(this, s -> {
 
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_LONG, s, null);
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_LONG, s, null);
             }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NUEVO_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
 
     }
@@ -250,291 +239,246 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
     private void viewModelCivilState() {
 
 
-        newIntervieweeViewModel.isLoadingCivilStates().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newIntervieweeViewModel.isLoadingCivilStates().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
 
-        newIntervieweeViewModel.loadCivilStates().observe(this, new Observer<List<CivilState>>() {
-            @Override
-            public void onChanged(List<CivilState> civilStates) {
+        newIntervieweeViewModel.loadCivilStates().observe(this, civilStates -> {
 
-                if (civilStates != null && civilStates.size() > 0) {
+            if (civilStates != null && civilStates.size() > 0) {
 
-                    civilStateList = civilStates;
-                    civilStateAdapter = new CivilStateAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, civilStateList);
-                    acCivilState.setAdapter(civilStateAdapter);
+                civilStateList = civilStates;
+                civilStateAdapter = new CivilStateAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, civilStateList);
+                acCivilState.setAdapter(civilStateAdapter);
 
-                    civilStateAdapter.notifyDataSetChanged();
-
-                    progressBar.setVisibility(View.GONE);
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-            }
-        });
-
-
-        newIntervieweeViewModel.showMsgErrorListCivilStates().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+                civilStateAdapter.notifyDataSetChanged();
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
             }
+        });
+
+
+        newIntervieweeViewModel.showMsgErrorListCivilStates().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ESTADO_CIVIL) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
     private void viewModelCity() {
 
 
-        newIntervieweeViewModel.isLoadingCities().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newIntervieweeViewModel.isLoadingCities().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
 
-        newIntervieweeViewModel.loadCities().observe(this, new Observer<List<City>>() {
-            @Override
-            public void onChanged(List<City> cities) {
+        newIntervieweeViewModel.loadCities().observe(this, cities -> {
 
-                if (cities != null && cities.size() > 0) {
+            if (cities != null && cities.size() > 0) {
 
-                    cityList = cities;
-                    cityAdapter = new CityAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, cityList);
-                    acCity.setAdapter(cityAdapter);
+                cityList = cities;
+                cityAdapter = new CityAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, cityList);
+                acCity.setAdapter(cityAdapter);
 
-                    cityAdapter.notifyDataSetChanged();
+                cityAdapter.notifyDataSetChanged();
 
-                    progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-
+                Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
             }
+
         });
 
-        newIntervieweeViewModel.showMsgErrorListCity().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        newIntervieweeViewModel.showMsgErrorListCity().observe(this, s -> {
 
-                if (!isSnackBarShow) {
+            if (!isSnackBarShow) {
 
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
             }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_CIUDAD), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_CIUDAD) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
     private void viewModelEducationalLevel() {
 
 
-        newIntervieweeViewModel.isLoadingEducationalLevels().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newIntervieweeViewModel.isLoadingEducationalLevels().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
 
-        newIntervieweeViewModel.loadEducationalLevels().observe(this, new Observer<List<EducationalLevel>>() {
-            @Override
-            public void onChanged(List<EducationalLevel> educationalLevels) {
+        newIntervieweeViewModel.loadEducationalLevels().observe(this, educationalLevels -> {
 
-                if (educationalLevels != null && educationalLevels.size() > 0) {
+            if (educationalLevels != null && educationalLevels.size() > 0) {
 
-                    educationalLevelList = educationalLevels;
-                    educacionalLevelAdapter = new EducationalLevelAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, educationalLevelList);
-                    acEducationalLevel.setAdapter(educacionalLevelAdapter);
-                    acEducationalLevel.setText(educationalLevelList.get(0).getName(), false);
+                educationalLevelList = educationalLevels;
+                educacionalLevelAdapter = new EducationalLevelAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, educationalLevelList);
+                acEducationalLevel.setAdapter(educacionalLevelAdapter);
+                acEducationalLevel.setText(educationalLevelList.get(0).getName(), false);
 
-                    educacionalLevelAdapter.notifyDataSetChanged();
+                educacionalLevelAdapter.notifyDataSetChanged();
 
-                    progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-
+                Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
             }
+
         });
 
-        newIntervieweeViewModel.showMsgErrorListEducationalLevels().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        newIntervieweeViewModel.showMsgErrorListEducationalLevels().observe(this, s -> {
 
-                if (!isSnackBarShow) {
+            if (!isSnackBarShow) {
 
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
             }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NIVEL_EDUCACION) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
     private void viewModelCoexistenceType() {
 
 
-        newIntervieweeViewModel.isLoadingCoexistenceTypes().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newIntervieweeViewModel.isLoadingCoexistenceTypes().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
 
-        newIntervieweeViewModel.loadCoexistenceTypes().observe(this, new Observer<List<CohabitType>>() {
-            @Override
-            public void onChanged(List<CohabitType> list) {
+        newIntervieweeViewModel.loadCoexistenceTypes().observe(this, list -> {
 
-                if (list != null && list.size() > 0) {
+            if (list != null && list.size() > 0) {
 
-                    coexistenceTypeList = list;
-                    coexistenceTypeAdapter = new CohabitTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, coexistenceTypeList);
-                    acCoexistenceType.setAdapter(coexistenceTypeAdapter);
-                    acCoexistenceType.setText(coexistenceTypeList.get(0).getName(), false);
+                coexistenceTypeList = list;
+                coexistenceTypeAdapter = new CohabitTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, coexistenceTypeList);
+                acCoexistenceType.setAdapter(coexistenceTypeAdapter);
+                acCoexistenceType.setText(coexistenceTypeList.get(0).getName(), false);
 
-                    coexistenceTypeAdapter.notifyDataSetChanged();
+                coexistenceTypeAdapter.notifyDataSetChanged();
 
-                    progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
-
+                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
             }
+
         });
 
 
-        newIntervieweeViewModel.showMsgErrorListCoexistenceTypes().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        newIntervieweeViewModel.showMsgErrorListCoexistenceTypes().observe(this, s -> {
 
-                if (!isSnackBarShow) {
+            if (!isSnackBarShow) {
 
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
             }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_CONVIVENCIA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+
         });
     }
 
     private void viewModelProfession() {
 
-        newIntervieweeViewModel.isLoadingProfession().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newIntervieweeViewModel.isLoadingProfession().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
-                    activateInputs(false);
+                progressBar.setVisibility(View.VISIBLE);
+                activateInputs(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    activateInputs(true);
-                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                activateInputs(true);
             }
         });
 
 
-        newIntervieweeViewModel.loadProfession().observe(this, new Observer<List<Profession>>() {
-            @Override
-            public void onChanged(List<Profession> professions) {
+        newIntervieweeViewModel.loadProfession().observe(this, professions -> {
 
-                if (professions != null && professions.size() > 0) {
+            if (professions != null && professions.size() > 0) {
 
-                    professionList = professions;
-                    professionAdapter = new ProfessionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, professionList);
-                    acProfession.setAdapter(professionAdapter);
-                    acProfession.setText(professionList.get(0).getName(), false);
+                professionList = professions;
+                professionAdapter = new ProfessionAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, professionList);
+                acProfession.setAdapter(professionAdapter);
+                acProfession.setText(professionList.get(0).getName(), false);
 
-                    professionAdapter.notifyDataSetChanged();
+                professionAdapter.notifyDataSetChanged();
 
-                    progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
 
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
-                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + getString(R.string.VIEW_MODEL_LISTADO_CARGADO));
             }
         });
 
 
-        newIntervieweeViewModel.showMsgErrorListProfession().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        newIntervieweeViewModel.showMsgErrorListProfession().observe(this, s -> {
 
-                if (!isSnackBarShow) {
+            if (!isSnackBarShow) {
 
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_interviewee), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
 
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
             }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_PROFESIONES), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_PROFESIONES) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
@@ -547,42 +491,28 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
     private void setPickerBirthDate() {
 
-        etBirthDate.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Utils.iniciarDatePicker(etBirthDate, NewIntervieweeActivity.this, "interviewee");
-            }
-        });
+        etBirthDate.setOnClickListener(v -> Utils.iniciarDatePicker(etBirthDate, NewIntervieweeActivity.this, "interviewee"));
 
 
-        ilBirthDate.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.iniciarDatePicker(etBirthDate, NewIntervieweeActivity.this, "interviewee");
-            }
-        });
+        ilBirthDate.setEndIconOnClickListener(v -> Utils.iniciarDatePicker(etBirthDate, NewIntervieweeActivity.this, "interviewee"));
     }
 
     private void setFalls() {
 
-        switchFalls.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switchFalls.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked) {
+            if (isChecked) {
 
-                    ilNFalls.setVisibility(View.VISIBLE);
-                    etNFalls.setVisibility(View.VISIBLE);
+                ilNFalls.setVisibility(View.VISIBLE);
+                etNFalls.setVisibility(View.VISIBLE);
 
-                    tvFallsValue.setText(R.string.SI);
+                tvFallsValue.setText(R.string.SI);
 
-                } else {
-                    ilNFalls.setVisibility(View.GONE);
-                    etNFalls.setVisibility(View.GONE);
+            } else {
+                ilNFalls.setVisibility(View.GONE);
+                etNFalls.setVisibility(View.GONE);
 
-                    tvFallsValue.setText(R.string.NO);
-                }
+                tvFallsValue.setText(R.string.NO);
             }
         });
 
@@ -590,15 +520,12 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
     private void setRetire() {
 
-        switchLegalRetire.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switchLegalRetire.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked) {
-                    tvRetireValue.setText(getString(R.string.SI));
-                } else {
-                    tvRetireValue.setText(getString(R.string.NO));
-                }
+            if (isChecked) {
+                tvRetireValue.setText(getString(R.string.SI));
+            } else {
+                tvRetireValue.setText(getString(R.string.NO));
             }
         });
     }
@@ -729,20 +656,17 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    newIntervieweeViewModel.refreshCivilStates();
-                    newIntervieweeViewModel.refreshCities();
-                    newIntervieweeViewModel.refreshEducationalLevels();
-                    newIntervieweeViewModel.refreshCoexistenceTypes();
-                    newIntervieweeViewModel.refreshProfession();
+                newIntervieweeViewModel.refreshCivilStates();
+                newIntervieweeViewModel.refreshCities();
+                newIntervieweeViewModel.refreshEducationalLevels();
+                newIntervieweeViewModel.refreshCoexistenceTypes();
+                newIntervieweeViewModel.refreshProfession();
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    isSnackBarShow = false;
-                }
+                isSnackBarShow = false;
             });
         }
 

@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -63,55 +62,49 @@ public class CityRepository {
 
         cityList.clear();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d("RESPONSE", response);
+        Response.Listener<String> responseListener = response -> {
+            //Log.d("RESPONSE", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
+                JSONArray jsonData = jsonObject.getJSONArray(application.getString(R.string.JSON_DATA));
 
-                    for (int i = 0; i < jsonData.length(); i++) {
-                        JSONObject jsonCity = jsonData.getJSONObject(i);
+                for (int i = 0; i < jsonData.length(); i++) {
+                    JSONObject jsonCity = jsonData.getJSONObject(i);
 
-                        int idCity = jsonCity.getInt(application.getString(R.string.KEY_CIUDAD_ID));
-                        JSONObject jsonAttributes = jsonCity.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
-                        String cityName = jsonAttributes.getString(application.getString(R.string.KEY_CIUDAD_NOMBRE));
+                    int idCity = jsonCity.getInt(application.getString(R.string.KEY_CIUDAD_ID));
+                    JSONObject jsonAttributes = jsonCity.getJSONObject(application.getString(R.string.JSON_ATTRIBUTES));
+                    String cityName = jsonAttributes.getString(application.getString(R.string.KEY_CIUDAD_NOMBRE));
 
-                        City city = new City();
-                        city.setId(idCity);
-                        city.setName(cityName);
+                    City city = new City();
+                    city.setId(idCity);
+                    city.setName(cityName);
 
-                        cityList.add(city);
-                    }
-
-                    citiesMutableLiveData.postValue(cityList);
-
-                    isLoading.postValue(false);
-
-                } catch (JSONException e) {
-
-                    Log.d("JSON_ERROR", "CITIES JSON ERROR PARSE");
-                    e.printStackTrace();
+                    cityList.add(city);
                 }
-            }
-        };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                citiesMutableLiveData.postValue(cityList);
 
                 isLoading.postValue(false);
 
-                Utils.deadAPIHandler(
-                        error,
-                        application,
-                        responseMsgErrorList,
-                        application.getString(R.string.TAG_VOLLEY_ERR_CIUDAD)
-                );
+            } catch (JSONException e) {
+
+                Log.d("JSON_ERROR", "CITIES JSON ERROR PARSE");
+                e.printStackTrace();
             }
+        };
+
+        Response.ErrorListener errorListener = error -> {
+
+            isLoading.postValue(false);
+
+            Utils.deadAPIHandler(
+                    error,
+                    application,
+                    responseMsgErrorList,
+                    application.getString(R.string.TAG_VOLLEY_ERR_CIUDAD)
+            );
         };
 
 

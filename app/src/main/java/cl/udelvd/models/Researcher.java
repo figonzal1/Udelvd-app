@@ -114,8 +114,8 @@ public class Researcher {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Researcher that = (Researcher) o;
-        return getName().toLowerCase().equals(that.getName().toLowerCase()) &&
-                getLastName().toLowerCase().equals(that.getLastName().toLowerCase()) &&
+        return getName().equalsIgnoreCase(that.getName()) &&
+                getLastName().equalsIgnoreCase(that.getLastName()) &&
                 getEmail().equals(that.getEmail()) &&
                 Objects.equals(getRolName(), that.getRolName());
     }

@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -103,156 +102,126 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
 
     private void setAutoCompleteInterviewTypes() {
 
-        newInterviewViewModel.isLoadingInterviewTypes().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newInterviewViewModel.isLoadingInterviewTypes().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    ilInterviewType.setEnabled(false);
-                    acInterviewType.setEnabled(false);
+                ilInterviewType.setEnabled(false);
+                acInterviewType.setEnabled(false);
 
-                    ilInterviewDate.setEnabled(false);
-                    etInterviewDate.setEnabled(false);
+                ilInterviewDate.setEnabled(false);
+                etInterviewDate.setEnabled(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
 
-                    ilInterviewType.setEnabled(true);
-                    acInterviewType.setEnabled(true);
+                ilInterviewType.setEnabled(true);
+                acInterviewType.setEnabled(true);
 
-                    ilInterviewDate.setEnabled(true);
-                    etInterviewDate.setEnabled(true);
-                }
+                ilInterviewDate.setEnabled(true);
+                etInterviewDate.setEnabled(true);
             }
         });
 
 
-        newInterviewViewModel.loadInterviewTypes().observe(this, new Observer<List<InterviewType>>() {
-            @Override
-            public void onChanged(List<InterviewType> interviewTypes) {
+        newInterviewViewModel.loadInterviewTypes().observe(this, interviewTypes -> {
 
-                if (interviewTypes != null && interviewTypes.size() > 0) {
-
-                    progressBar.setVisibility(View.GONE);
-
-                    interviewTypeList = interviewTypes;
-                    interviewTypeAdapter = new InterviewTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, interviewTypeList);
-                    acInterviewType.setAdapter(interviewTypeAdapter);
-
-                    Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-                    crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
-
-                    interviewTypeAdapter.notifyDataSetChanged();
-                }
-
-            }
-        });
-
-
-        newInterviewViewModel.showMsgErrorInterviewTypes().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+            if (interviewTypes != null && interviewTypes.size() > 0) {
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
+                interviewTypeList = interviewTypes;
+                interviewTypeAdapter = new InterviewTypeAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, interviewTypeList);
+                acInterviewType.setAdapter(interviewTypeAdapter);
 
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_interview), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
-                }
+                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
+                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                interviewTypeAdapter.notifyDataSetChanged();
             }
+
+        });
+
+
+        newInterviewViewModel.showMsgErrorInterviewTypes().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_interview), Snackbar.LENGTH_INDEFINITE, s, getString(R.string.SNACKBAR_REINTENTAR));
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_TIPO_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
     private void initViewModelInterview() {
 
-        newInterviewViewModel.isLoadingRegistryInterviews().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+        newInterviewViewModel.isLoadingRegistryInterviews().observe(this, aBoolean -> {
 
-                if (aBoolean) {
+            if (aBoolean) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    ilInterviewType.setEnabled(false);
-                    acInterviewType.setEnabled(false);
+                ilInterviewType.setEnabled(false);
+                acInterviewType.setEnabled(false);
 
-                    ilInterviewDate.setEnabled(false);
-                    etInterviewDate.setEnabled(false);
+                ilInterviewDate.setEnabled(false);
+                etInterviewDate.setEnabled(false);
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
 
-                    ilInterviewType.setEnabled(true);
-                    acInterviewType.setEnabled(true);
+                ilInterviewType.setEnabled(true);
+                acInterviewType.setEnabled(true);
 
-                    ilInterviewDate.setEnabled(true);
-                    etInterviewDate.setEnabled(true);
-                }
+                ilInterviewDate.setEnabled(true);
+                etInterviewDate.setEnabled(true);
             }
         });
 
-        newInterviewViewModel.showMsgRegistry().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        newInterviewViewModel.showMsgRegistry().observe(this, s -> {
 
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
 
-                if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTA))) {
-
-                    progressBar.setVisibility(View.GONE);
-
-                    Intent intent = getIntent();
-                    intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            }
-        });
-
-        newInterviewViewModel.showMsgErrorRegistry().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+            if (s.equals(getString(R.string.MSG_REGISTRO_ENTREVISTA))) {
 
                 progressBar.setVisibility(View.GONE);
 
-                if (!isSnackBarShow) {
-
-                    isSnackBarShow = true;
-                    showSnackbar(findViewById(R.id.form_new_interview), Snackbar.LENGTH_LONG, s, null);
-                }
-
-                Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
-                crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+                Intent intent = getIntent();
+                intent.putExtra(getString(R.string.INTENT_KEY_MSG_REGISTRO), s);
+                setResult(RESULT_OK, intent);
+                finish();
             }
+        });
+
+        newInterviewViewModel.showMsgErrorRegistry().observe(this, s -> {
+
+            progressBar.setVisibility(View.GONE);
+
+            if (!isSnackBarShow) {
+
+                isSnackBarShow = true;
+                showSnackbar(findViewById(R.id.form_new_interview), Snackbar.LENGTH_LONG, s, null);
+            }
+
+            Log.d(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA), String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
+            crashlytics.log(getString(R.string.TAG_VIEW_MODEL_NEW_ENTREVISTA) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
     }
 
     private void setPickerBirthDate() {
 
-        etInterviewDate.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Utils.iniciarDatePicker(etInterviewDate, NewInterviewActivity.this, "interview");
-            }
-        });
+        etInterviewDate.setOnClickListener(v -> Utils.iniciarDatePicker(etInterviewDate, NewInterviewActivity.this, "interview"));
 
 
-        ilInterviewDate.setEndIconOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Utils.iniciarDatePicker(etInterviewDate, NewInterviewActivity.this, "interview");
-            }
-        });
+        ilInterviewDate.setEndIconOnClickListener(v -> Utils.iniciarDatePicker(etInterviewDate, NewInterviewActivity.this, "interview"));
 
     }
 
@@ -267,6 +236,8 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
 
         } else {
 
+            ilInterviewDate.setErrorEnabled(false);
+            /*
             try {
                 if (Utils.isFutureDate(getApplicationContext(), etInterviewDate.getText().toString())) {
 
@@ -281,7 +252,7 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
 
                 Log.d("FUTURE_DATE", "Date parse error");
                 e.printStackTrace();
-            }
+            }*/
         }
 
         if (Objects.requireNonNull(acInterviewType.getText(), "Ac interview type cannot be null").toString().isEmpty()) {
@@ -304,16 +275,13 @@ public class NewInterviewActivity extends AppCompatActivity implements SnackbarI
 
         if (action != null) {
 
-            snackbar.setAction(action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            snackbar.setAction(action, v1 -> {
 
-                    newInterviewViewModel.refreshInterviewTypes();
+                newInterviewViewModel.refreshInterviewTypes();
 
-                    progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    isSnackBarShow = false;
-                }
+                isSnackBarShow = false;
             });
         }
 

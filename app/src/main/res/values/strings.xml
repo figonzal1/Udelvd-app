@@ -508,7 +508,8 @@
     <string name="CUENTA_OLVIDADA">Did you forget your account?</string>
     <string name="INICIAR_SESION">Log in</string>
     <string name="LOGO_APLICACION">App logo</string>
-    <string name="NO_TIENES_CUENTA">You don\'t have account? Sign up</string>
+    <string name="NO_TIENES_CUENTA">You don\'t have account?</string>
+    <string name="REGISTRATE">Sign up</string>
     <string name="LOGO_REGISTRO">Registration logo</string>
     <string name="ICONO_TIPO_CONVIVENCIA">Interviewee cohabit type icon</string>
     <string name="ESTADO_CUENTA">Account state</string>
@@ -628,6 +629,7 @@
     <string name="AUTHENTICATION_ERROR_MSG_VM">Unauthorized access</string>
     <string name="LOGIN_MSG_VM" translatable="false">mensaje_login</string>
     <string name="LOGIN_MSG_VM_WELCOME">Welcome!</string>
+    <string name="SPEECH_TO_TEXT_NOT_AVAILABLE">Feature not available in emulator</string>
 
 
 </resources>

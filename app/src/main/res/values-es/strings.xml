@@ -105,7 +105,7 @@
     <string name="NOMBRE">Nombre</string>
     <string name="NOMBRE_PERSONA">Nombre Persona</string>
     <string name="TV_NORMALES">Normales</string>
-    <string name="NO_TIENES_CUENTA">¿No tienes cuenta? Regístrate</string>
+    <string name="NO_TIENES_CUENTA">¿No tienes cuenta?</string>
     <string name="NUEVA_PASS_INTRUCCIONES">Por favor, ingrese una nueva contraseña</string>
     <string name="OLVIDAR_CONTRASEÑA">¿Olvidaste tu contraseña?</string>
     <string name="OPCIONALES">Opcionales</string>
@@ -255,5 +255,7 @@
     <string name="SNACKBAR_CUENTA_WAIT">Cuenta en espera de aprobación por el administrador</string>
     <string name="AUTHENTICATION_ERROR_MSG_VM">Acceso no autorizado</string>
     <string name="CANAL_NOMBRE">Alertas de activaciones</string>
+    <string name="SPEECH_TO_TEXT_NOT_AVAILABLE">Función no disponible en emulador</string>
+    <string name="REGISTRATE">Regístrate</string>
 
 </resources>

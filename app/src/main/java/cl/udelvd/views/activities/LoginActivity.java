@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -229,8 +227,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
             }
         };
         spanned.setSpan(clickSpan, 0, spanned.length(), 0);
-        spanned.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.colorSecondary, getTheme())), 0, spanned.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
         tvRegistryLink.setText(spanned, TextView.BufferType.SPANNABLE);
     }
 
@@ -239,6 +235,7 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
         TextView tvRecovery = findViewById(R.id.tv_recovery);
         tvRecovery.setMovementMethod(LinkMovementMethod.getInstance());
+
         SpannableStringBuilder spans = new SpannableStringBuilder(tvRecovery.getText());
 
         ClickableSpan clickSpan = new ClickableSpan() {
@@ -251,7 +248,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
             }
         };
 
-        spans.setSpan(clickSpan, 0, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans.setSpan(clickSpan, 0, spans.length(), 0);
+        tvRecovery.setText(spans);
     }
 
     private void dynamicLinkRecovery() {

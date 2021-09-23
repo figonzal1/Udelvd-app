@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/layout-sw600dp/activity_login.xml" value="0.41025641025641024" />
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/layout/activity_event_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/layout/activity_interview_list.xml" value="0.36102564102564105" />
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/layout/activity_login.xml" value="0.36102564102564105" />
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/layout/activity_registry.xml" value="0.36102564102564105" />
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/layout/drawer_header.xml" value="0.36666666666666664" />
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/layout/pagination_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/figon/GithubProjects/Udelvd-app/app/src/main/res/menu/menu_drawer.xml" value="0.36666666666666664" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

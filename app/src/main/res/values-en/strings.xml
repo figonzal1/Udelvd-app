@@ -258,4 +258,5 @@
     <string name="SERVER_ERROR_REGISTRO_MSG_VM">Email already registered</string>
     <string name="SPEECH_TO_TEXT_NOT_AVAILABLE">Feature not available in emulator</string>
     <string name="REGISTRATE">Sign up</string>
+    <string name="APP_VERSION">Version %s</string>
 </resources>

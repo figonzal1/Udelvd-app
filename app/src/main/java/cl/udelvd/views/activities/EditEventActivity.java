@@ -1,5 +1,6 @@
 package cl.udelvd.views.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -308,11 +309,16 @@ public class EditEventActivity extends AppCompatActivity implements SnackbarInte
 
     private void configSpeechIntent() {
         ilJustification.setEndIconOnClickListener(v -> {
+            try {
 
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+            } catch (ActivityNotFoundException e) {
+                Log.e("SPEECH", "No activity handler for speech to text");
+                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.SPEECH_TO_TEXT_NOT_AVAILABLE), Toast.LENGTH_LONG).show();
+            }
         });
     }
 

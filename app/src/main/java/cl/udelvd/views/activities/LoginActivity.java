@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -30,7 +30,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 
-import java.util.Locale;
 import java.util.Objects;
 
 import cl.udelvd.R;
@@ -62,8 +61,6 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         crashlytics = FirebaseCrashlytics.getInstance();
 
         instantiateInterfaceResources();
-
-        initViewModels();
 
         configRegistryLink();
 
@@ -129,6 +126,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
         });
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        initViewModels();
     }
 
     private void initViewModels() {
@@ -214,10 +213,10 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
 
     private void configRegistryLink() {
 
-        TextView tvRegistry = findViewById(R.id.tv_registry_researcher);
-        tvRegistry.setMovementMethod(LinkMovementMethod.getInstance());
-        Spannable spans = (Spannable) tvRegistry.getText();
+        TextView tvRegistryLink = findViewById(R.id.tv_registry_researcher_link);
+        tvRegistryLink.setMovementMethod(LinkMovementMethod.getInstance());
 
+        SpannableStringBuilder spanned = new SpannableStringBuilder(tvRegistryLink.getText());
         ClickableSpan clickSpan = new ClickableSpan() {
 
             @Override
@@ -227,27 +226,17 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
                 startActivityForResult(intent, REGISTRY_RESEARCHER_CODE);
             }
         };
-
-
-        if (Locale.getDefault().getLanguage().equals(getString(R.string.INGLES))) {
-
-            String registro = tvRegistry.getText().toString();
-            int index = registro.indexOf("Sign up");
-            spans.setSpan(clickSpan, index, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        } else if (Locale.getDefault().getLanguage().equals(getString(R.string.ESPANOL))) {
-
-            String registro = tvRegistry.getText().toString();
-            int index = registro.indexOf("Regístrate");
-            spans.setSpan(clickSpan, index, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
+        spanned.setSpan(clickSpan, 0, spanned.length(), 0);
+        tvRegistryLink.setText(spanned, TextView.BufferType.SPANNABLE);
     }
+
 
     private void configRecoveryLink() {
 
         TextView tvRecovery = findViewById(R.id.tv_recovery);
         tvRecovery.setMovementMethod(LinkMovementMethod.getInstance());
-        Spannable spans = (Spannable) tvRecovery.getText();
+
+        SpannableStringBuilder spans = new SpannableStringBuilder(tvRecovery.getText());
 
         ClickableSpan clickSpan = new ClickableSpan() {
 
@@ -259,7 +248,8 @@ public class LoginActivity extends AppCompatActivity implements SnackbarInterfac
             }
         };
 
-        spans.setSpan(clickSpan, 0, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans.setSpan(clickSpan, 0, spans.length(), 0);
+        tvRecovery.setText(spans);
     }
 
     private void dynamicLinkRecovery() {

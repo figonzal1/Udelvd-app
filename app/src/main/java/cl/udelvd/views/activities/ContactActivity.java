@@ -4,7 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.MenuItem;
@@ -32,7 +32,7 @@ public class ContactActivity extends AppCompatActivity {
         tvEmail = findViewById(R.id.tv_contact_email_value);
         tvEmail.setMovementMethod(LinkMovementMethod.getInstance());
 
-        Spannable spans = (Spannable) tvEmail.getText();
+        SpannableStringBuilder spans = new SpannableStringBuilder(tvEmail.getText());
         ClickableSpan clickSpan = new ClickableSpan() {
 
             @Override
@@ -50,7 +50,8 @@ public class ContactActivity extends AppCompatActivity {
             }
         };
 
-        spans.setSpan(clickSpan, 0, spans.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans.setSpan(clickSpan, 0, spans.length(), 0);
+        tvEmail.setText(spans);
     }
 
     @Override

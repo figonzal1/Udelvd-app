@@ -23,6 +23,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.Objects;
 
+import cl.udelvd.BuildConfig;
 import cl.udelvd.R;
 import cl.udelvd.adapters.FragmentPageAdapter;
 import cl.udelvd.models.Interviewee;
@@ -91,6 +92,13 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
         setViewPagerTabsDrawer();
 
         newResearcherNotification();
+
+        setTextViewAppVersion();
+    }
+
+    private void setTextViewAppVersion() {
+        TextView tvVersionApp = findViewById(R.id.app_version);
+        tvVersionApp.setText(String.format(getString(R.string.APP_VERSION), BuildConfig.VERSION_NAME));
     }
 
     private void newResearcherNotification() {

@@ -170,7 +170,7 @@ public class IntervieweeRepository {
                         interviewee.setFalls(false);
                     }
 
-                    interviewee.setnCohabiting3Months(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                    interviewee.setNCohabiting3Months(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
 
                     //Foreign
                     interviewee.setIdResearcher(jsonIntervieweeAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
@@ -200,7 +200,7 @@ public class IntervieweeRepository {
 
                     //N INTERVIEWS
                     JSONObject jsonNInterviews = jsonRelationships.getJSONObject(application.getString(R.string.KEY_ENTREVISTA_OBJECT));
-                    interviewee.setnInterviews(
+                    interviewee.setNInterviews(
                             jsonNInterviews.getJSONObject(application.getString(R.string.JSON_DATA))
                                     .getInt(application.getString(R.string.KEY_ENTREVISTADO_N_ENTREVISTAS))
                     );
@@ -326,7 +326,7 @@ public class IntervieweeRepository {
                 }
                 entResponse.setBirthDate(birthDate);
 
-                entResponse.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                entResponse.setNCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
                 entResponse.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
 
                 String create_time = jsonAttributes.getString(application.getString(R.string.KEY_CREATE_TIME));
@@ -391,7 +391,7 @@ public class IntervieweeRepository {
                     params.put(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS), String.valueOf(0));
                 }
 
-                params.put(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES), String.valueOf(interviewee.getNConvivientes3Meses()));
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES), String.valueOf(interviewee.getNCohabiting3Months()));
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR), String.valueOf(interviewee.getIdResearcher()));
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL), String.valueOf(interviewee.getCivilState().getId()));
 
@@ -476,7 +476,7 @@ public class IntervieweeRepository {
                     interviewee.setNCaidas(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
                 }
 
-                interviewee.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                interviewee.setNCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
                 interviewee.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
 
                 City city = new City();
@@ -609,7 +609,7 @@ public class IntervieweeRepository {
                     intervieweeInternet.setNCaidas(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CAIDAS)));
                 }
 
-                intervieweeInternet.setnCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
+                intervieweeInternet.setNCohabiting3Months(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES)));
                 intervieweeInternet.setIdResearcher(jsonAttributes.getInt(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR)));
 
                 Log.d("MEMORIA", interviewee.toString());
@@ -673,7 +673,7 @@ public class IntervieweeRepository {
                     params.put(application.getString(R.string.KEY_ENTREVISTADO_CAIDAS), String.valueOf(0));
                 }
 
-                params.put(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES), String.valueOf(interviewee.getNConvivientes3Meses()));
+                params.put(application.getString(R.string.KEY_ENTREVISTADO_N_CONVI_3_MESES), String.valueOf(interviewee.getNCohabiting3Months()));
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_INVESTIGADOR), String.valueOf(interviewee.getIdResearcher()));
                 params.put(application.getString(R.string.KEY_ENTREVISTADO_ID_ESTADO_CIVIL), String.valueOf(interviewee.getCivilState().getId()));
 

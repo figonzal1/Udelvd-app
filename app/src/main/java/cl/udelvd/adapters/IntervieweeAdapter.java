@@ -97,7 +97,7 @@ public class IntervieweeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final int annos = Utils.calculateYearsOld(interviewee.getBirthDate());
             holder.tvBirthDate.setText(context.getResources().getQuantityString(R.plurals.FORMATO_FECHA_NAC, annos, Utils.dateToString(context.getApplicationContext(), false, interviewee.getBirthDate()), annos));
 
-            holder.tvNInterviewees.setText(context.getResources().getQuantityString(R.plurals.FORMATO_N_ENTREVISTA, interviewee.getnInterviews(), interviewee.getnInterviews()));
+            holder.tvNInterviewees.setText(context.getResources().getQuantityString(R.plurals.FORMATO_N_ENTREVISTA, interviewee.getNInterviews(), interviewee.getNInterviews()));
 
             if (totalList) {
                 holder.tvResearcherCharge.setVisibility(View.VISIBLE);

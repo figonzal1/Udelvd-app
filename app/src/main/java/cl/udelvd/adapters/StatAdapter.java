@@ -50,7 +50,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.StatViewHolder
 
         holder.tvName.setText(stat.getName());
 
-        holder.tvPinPass.setText(String.format(context.getString(R.string.PIN_PASS_FORMAT), stat.getPin_pass()));
+        holder.tvPinPass.setText(String.format(context.getString(R.string.PIN_PASS_FORMAT), stat.getPinPass()));
 
         holder.btnGo.setOnClickListener(v -> {
 

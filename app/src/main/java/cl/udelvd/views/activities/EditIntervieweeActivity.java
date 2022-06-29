@@ -617,7 +617,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
             String civilStateName = Objects.requireNonNull(searchCivilStateById(intervieweeIntent.getCivilState().getId())).getName();
             acCivilState.setText(civilStateName, false);
 
-            etNCoexistence.setText(String.valueOf(intervieweeIntent.getNConvivientes3Meses()));
+            etNCoexistence.setText(String.valueOf(intervieweeIntent.getNCohabiting3Months()));
 
             //LEGAL RETIREE
             if (intervieweeIntent.isLegalRetired()) {
@@ -749,7 +749,7 @@ public class EditIntervieweeActivity extends AppCompatActivity implements Snackb
                 civilState.setId(idCivilState);
                 interviewee.setCivilState(civilState);
 
-                interviewee.setnCohabiting3Months(Integer.parseInt(Objects.requireNonNull(etNCoexistence.getText()).toString()));
+                interviewee.setNCohabiting3Months(Integer.parseInt(Objects.requireNonNull(etNCoexistence.getText()).toString()));
 
                 interviewee.setLegalRetired(switchLegalRetire.isChecked());
 

@@ -740,7 +740,7 @@ public class NewIntervieweeActivity extends AppCompatActivity implements Snackba
                 civilState.setId(Objects.requireNonNull(searchCivilStateByName(acCivilState.getText().toString()), "Ac civil state cannot be null").getId());
                 interviewee.setCivilState(civilState);
 
-                interviewee.setnCohabiting3Months(Integer.parseInt(Objects.requireNonNull(etNCoexistence.getText(), "Cohabit type cannot be null").toString()));
+                interviewee.setNCohabiting3Months(Integer.parseInt(Objects.requireNonNull(etNCoexistence.getText(), "Cohabit type cannot be null").toString()));
 
                 interviewee.setLegalRetired(switchLegalRetire.isChecked());
                 interviewee.setFalls(switchFalls.isChecked());

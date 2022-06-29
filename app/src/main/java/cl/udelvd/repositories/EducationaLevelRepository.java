@@ -130,8 +130,6 @@ public class EducationaLevelRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(request,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_EDUCATIONAL_LEVEL);
     }
 

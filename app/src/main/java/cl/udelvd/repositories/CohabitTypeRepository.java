@@ -133,8 +133,6 @@ public class CohabitTypeRepository {
 
         isLoading.postValue(true);
 
-        //VolleySingleton.getInstance(application).addToRequestQueue(request,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_COEXISTANCE_TYPE);
     }
 

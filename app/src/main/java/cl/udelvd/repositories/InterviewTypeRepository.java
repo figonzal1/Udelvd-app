@@ -129,8 +129,6 @@ public class InterviewTypeRepository {
 
         isLoading.postValue(true);
 
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INTERVIEW_TYPE);
     }
 

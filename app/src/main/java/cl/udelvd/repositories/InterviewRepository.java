@@ -170,8 +170,6 @@ public class InterviewRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_INTERVIEWS);
     }
 
@@ -272,8 +270,6 @@ public class InterviewRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NEW_INTERVIEW);
 
     }
@@ -360,8 +356,6 @@ public class InterviewRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_INTERVIEW);
 
     }
@@ -454,8 +448,6 @@ public class InterviewRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_UPDATE_INTERVIEW);
     }
 
@@ -516,8 +508,6 @@ public class InterviewRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_DELETE_INTERVIEW);
     }
 

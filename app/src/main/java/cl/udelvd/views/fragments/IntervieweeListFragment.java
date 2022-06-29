@@ -232,7 +232,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
         });
 
 
-        intervieweeListViewModel.loadFirstPage(1, researcher, listadoTotal).observe(this, listado -> {
+        intervieweeListViewModel.loadFirstPage(1, researcher, listadoTotal).observe(getViewLifecycleOwner(), listado -> {
 
             intervieweeList = listado;
             intervieweeAdapter.updateList(intervieweeList);
@@ -254,7 +254,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
             crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG));
         });
 
-        intervieweeListViewModel.showNextPage().observe(this, interviewees -> {
+        intervieweeListViewModel.showNextPage().observe(getViewLifecycleOwner(), interviewees -> {
 
             intervieweeAdapter.addInterviewees(interviewees);
             intervieweeAdapter.hideProgress();
@@ -280,7 +280,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
             intervieweeAdapter.filterList(intervieweeList);
         });
 
-        intervieweeListViewModel.showMsgErrorList().observe(this, s -> {
+        intervieweeListViewModel.showMsgErrorList().observe(getViewLifecycleOwner(), s -> {
 
             progressBar.setVisibility(View.INVISIBLE);
 
@@ -303,7 +303,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
             crashlytics.log(getString(R.string.TAG_VIEW_MODEL_LISTA_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE_ERROR), s));
         });
 
-        intervieweeListViewModel.showMsgDelete().observe(this, s -> {
+        intervieweeListViewModel.showMsgDelete().observe(getViewLifecycleOwner(), s -> {
 
             progressBar.setVisibility(View.INVISIBLE);
 
@@ -319,7 +319,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
             crashlytics.log(getString(R.string.TAG_VIEW_MODEL_ELIMINAR_ENTREVISTADO) + String.format("%s %s", getString(R.string.VIEW_MODEL_MSG_RESPONSE), s));
         });
 
-        intervieweeListViewModel.showMsgErrorDelete().observe(this, s -> {
+        intervieweeListViewModel.showMsgErrorDelete().observe(getViewLifecycleOwner(), s -> {
 
             progressBar.setVisibility(View.INVISIBLE);
 

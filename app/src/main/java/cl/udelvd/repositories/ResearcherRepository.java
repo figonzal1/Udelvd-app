@@ -208,8 +208,6 @@ public class ResearcherRepository {
             isLoading.postValue(true);
         }
 
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_RESEARCHER_LIST);
     }
 
@@ -367,8 +365,6 @@ public class ResearcherRepository {
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        //VolleySingleton.getInstance(application).addToRequestQueue(request,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_RESEARCHER_REGISTRY);
     }
 
@@ -553,8 +549,6 @@ public class ResearcherRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(request,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_RESEARCHER_LOGIN);
     }
 
@@ -669,8 +663,6 @@ public class ResearcherRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(request,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_RESEARCHER_UPDATE);
     }
 
@@ -791,8 +783,6 @@ public class ResearcherRepository {
                 7000,
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_RESEARCHER_RECOVERY);
     }
 
@@ -861,8 +851,6 @@ public class ResearcherRepository {
             }
         };
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_RESEARCHER_RESET);
     }
 

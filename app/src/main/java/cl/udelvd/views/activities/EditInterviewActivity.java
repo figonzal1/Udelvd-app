@@ -347,21 +347,6 @@ public class EditInterviewActivity extends AppCompatActivity implements Snackbar
         } else {
 
             ilInterviewDate.setErrorEnabled(false);
-            /* try {
-                if (Utils.isFutureDate(getApplicationContext(), etInterviewDate.getText().toString())) {
-
-                    ilInterviewDate.setErrorEnabled(true);
-                    ilInterviewDate.setError(getString(R.string.VALIDACION_FECHA_FUTURA));
-                    errorCounter++;
-
-                } else {
-                    ilInterviewDate.setErrorEnabled(false);
-                }
-            } catch (ParseException e) {
-
-                Log.d("FUTURE_DATE", "Date parse error");
-                e.printStackTrace();
-            }*/
         }
 
         if (acInterviewType.getText().toString().isEmpty()) {

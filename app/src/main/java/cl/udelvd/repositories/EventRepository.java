@@ -176,8 +176,6 @@ public class EventRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_INTERVIEW_EVENTS);
 
     }
@@ -274,8 +272,6 @@ public class EventRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_NEW_EVENTS);
     }
 
@@ -367,8 +363,6 @@ public class EventRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_GET_EVENT);
     }
 
@@ -461,8 +455,6 @@ public class EventRepository {
 
         isLoading.postValue(true);
 
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_UPDATE_EVENT);
     }
 
@@ -523,8 +515,6 @@ public class EventRepository {
 
         isLoading.postValue(true);
 
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_DELETE_EVENT);
     }
 

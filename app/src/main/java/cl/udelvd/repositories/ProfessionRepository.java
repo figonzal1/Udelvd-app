@@ -132,8 +132,6 @@ public class ProfessionRepository {
 
         isLoading.postValue(true);
 
-        //VolleySingleton.getInstance(application).addToRequestQueue(request,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_PROFESSION);
     }
 

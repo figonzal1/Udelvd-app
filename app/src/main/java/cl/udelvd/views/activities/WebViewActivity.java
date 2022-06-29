@@ -49,22 +49,6 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        /*final ProgressBar progressBar = findViewById(R.id.progressBar);
-
-        web_view.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int progress) {
-                progressBar.setProgress(0);
-                progressBar.setVisibility(View.VISIBLE);
-                WebViewActivity.this.setProgress(progress * 1000);
-
-                progressBar.incrementProgressBy(progress);
-
-                if (progress == 100) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            }
-        });*/
     }
 
     @Override

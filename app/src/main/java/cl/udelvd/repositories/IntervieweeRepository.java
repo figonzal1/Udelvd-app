@@ -285,12 +285,6 @@ public class IntervieweeRepository {
         if (page == 1) {
             isLoading.postValue(true);
         }
-        /*request.setRetryPolicy(new DefaultRetryPolicy(
-                2500,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
-        //VolleySingleton.getInstance(application).addToRequestQueue(request,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
 
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INTERVIEWEE_LIST);
     }
@@ -435,8 +429,6 @@ public class IntervieweeRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(request,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(request, TAG_INTERVIEWEE_REGISTRY);
     }
 
@@ -571,8 +563,6 @@ public class IntervieweeRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INTERVIEWEE);
     }
 
@@ -721,8 +711,6 @@ public class IntervieweeRepository {
         };
 
         isLoading.postValue(true);
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INTERVIEWEE_UPDATE);
     }
 
@@ -785,8 +773,6 @@ public class IntervieweeRepository {
 
         isLoading.postValue(true);
 
-        //VolleySingleton.getInstance(application).addToRequestQueue(stringRequest,
-        //        new HurlStack(null, SSLConection.getSocketFactory(application.getApplicationContext())));
         VolleySingleton.getInstance(application).addToRequestQueue(stringRequest, TAG_INTERVIEWEE_DELETE);
     }
 

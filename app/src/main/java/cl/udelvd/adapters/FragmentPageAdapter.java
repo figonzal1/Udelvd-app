@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import cl.udelvd.R;
 import cl.udelvd.views.fragments.IntervieweeListFragment;
-import cl.udelvd.views.fragments.StatsFragment;
+import cl.udelvd.views.fragments.NewStatsFragment;
 
 /**
  * Page Adapter used when paging is fixed (Main activity)
@@ -49,10 +49,13 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
 
                 break;
 
-            case 1:
+            /*case 1:
 
                 f = StatsFragment.newInstance();
 
+                break;*/
+            case 1:
+                f = NewStatsFragment.newInstance();
                 break;
 
         }

@@ -57,6 +57,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -74,11 +78,21 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.0"
     implementation "androidx.lifecycle:lifecycle-livedata:2.5.0"
 
+    //Life cycle components KOTLIN
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+
     //Material Design
     implementation 'com.google.android.material:material:1.6.1'
 
     //Volley HTTTP
     implementation 'com.android.volley:volley:1.2.1'
+
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
     //JWT
     implementation 'com.auth0.android:jwtdecode:2.0.0'
@@ -86,6 +100,9 @@ dependencies {
     //GLIDE
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+
+    //Charts
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
 
     //Firebase
     implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'

@@ -4,18 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.NewStatsFragment">
+    tools:context=".refactor.stats_feature.ui.NewStatsFragment">
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/general_stats"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/n_interviewee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="N° entrevistados: XX.XX" />
+
+            <TextView
+                android:id="@+id/n_events"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/n_interviewee"
+                app:layout_constraintStart_toStartOf="@+id/n_interviewee"
+                app:layout_constraintTop_toBottomOf="@+id/n_interviewee"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="N° eventos: XX.XX" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
         android:id="@+id/gender_pie_chart"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/general_stats" />
 
     <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
         android:id="@+id/emoticon_events_pie_chart"

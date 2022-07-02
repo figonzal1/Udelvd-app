@@ -118,7 +118,7 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
 
         });
 
-        statViewModel.showMsgErrorList().observe(this, s -> {
+        statViewModel.showMsgErrorList().observe(getViewLifecycleOwner(), s -> {
 
             progressBar.setVisibility(View.INVISIBLE);
 

@@ -2,6 +2,7 @@ package cl.udelvd.refactor.stats_feature.data.remote
 
 import androidx.annotation.Keep
 import cl.udelvd.refactor.stats_feature.data.remote.dto.GeneralStatsDTO
+import cl.udelvd.refactor.stats_feature.data.remote.dto.IntervieweeGenreDTO
 import com.google.gson.annotations.SerializedName
 
 @Keep
@@ -19,8 +20,8 @@ data class DataResult(
 @Keep
 data class AttributesResult(
     val general: GeneralStatsDTO,
-    /*@SerializedName("entrevistados_por_genero")
-    val entrevistados_por_genero: IntervieweeGenre,
-    val eventos_por_emoticon: EmoticonEventsDTO,*/
+
+    @SerializedName("entrevistados_por_genero")
+    val intervieweeByGenre: IntervieweeGenreDTO
 )
 

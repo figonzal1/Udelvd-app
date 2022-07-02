@@ -3,7 +3,6 @@ package cl.udelvd.refactor.stats_feature.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cl.udelvd.refactor.StatusAPI
-import cl.udelvd.refactor.stats_feature.data.remote.DataResult
 import cl.udelvd.refactor.stats_feature.domain.use_case.GetStatsUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +44,7 @@ class StatsViewModel(
                     is StatusAPI.Success -> {
                         _statsState.value = statsState.value.copy(
                             isLoading = false,
-                            stats = it.data as List<DataResult>
+                            stats = it.data
                         )
                     }
                 }

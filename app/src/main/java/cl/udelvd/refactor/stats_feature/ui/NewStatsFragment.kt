@@ -14,6 +14,8 @@ import cl.udelvd.R
 import cl.udelvd.databinding.FragmentNewStatsBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
+import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -45,13 +47,14 @@ class NewStatsFragment : Fragment() {
             ""
         )
 
-
         val aaChartModelGender = AAChartModel()
             .chartType(AAChartType.Pie)
             .title("Pie chart por genero")
             .colorsTheme(arrayOf("#0c9674", "#7dffc0", "#d11b5f", "#facd32", "#ffffa0"))
             .dataLabelsEnabled(true)
             .tooltipEnabled(true)
+            .zoomType(AAChartZoomType.XY)
+            .legendEnabled(true)
 
         /*
         val aaChartModelEmoticonEvents = AAChartModel()
@@ -75,7 +78,6 @@ class NewStatsFragment : Fragment() {
                 )
             )*/
 
-        binding.genderPieChart.aa_drawChartWithChartModel(aaChartModelGender)
         //binding.emoticonEventsPieChart.aa_drawChartWithChartModel(aaChartModelEmoticonEvents)
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -91,16 +93,35 @@ class NewStatsFragment : Fragment() {
 
                 //Stats state
                 launch {
-                    viewModel.statsState.collect {
+                    viewModel.statsState.collect { statsState ->
 
                         when {
-                            it.isLoading -> {}
-                            else -> {
-                                val generalData = it.stats.first().attributes.general
+                            statsState.isLoading -> {}
+                            else -> statsState.stats?.let {
+
+                                val generalData = it.general
 
                                 binding.nInterviewee.text =
                                     "N° entrevistados: ${generalData.nInterviewees}"
                                 binding.nEvents.text = "N° eventos: ${generalData.nEvents}"
+
+                                val genders = it.intervieweeByGenre
+
+                                aaChartModelGender.series(
+                                    arrayOf(
+                                        AASeriesElement()
+                                            .name("Eventos por género")
+                                            .data(
+                                                arrayOf(
+                                                    arrayOf("Hombres", genders.totalMen),
+                                                    arrayOf("Mujer", genders.totalWomen),
+                                                    arrayOf("Otro", genders.totalOther)
+                                                )
+                                            )
+                                    )
+                                )
+
+                                binding.genderPieChart.aa_drawChartWithChartModel(aaChartModelGender)
                             }
                         }
                     }

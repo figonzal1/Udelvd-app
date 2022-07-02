@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import cl.udelvd.R
 import cl.udelvd.databinding.FragmentNewStatsBinding
+import cl.udelvd.refactor.stats_feature.data.remote.dto.EventsByEmotionsDTO
+import cl.udelvd.refactor.stats_feature.data.remote.dto.IntervieweeGenreDTO
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
@@ -47,39 +49,6 @@ class NewStatsFragment : Fragment() {
             ""
         )
 
-        val aaChartModelGender = AAChartModel()
-            .chartType(AAChartType.Pie)
-            .title("Pie chart por genero")
-            .colorsTheme(arrayOf("#0c9674", "#7dffc0", "#d11b5f", "#facd32", "#ffffa0"))
-            .dataLabelsEnabled(true)
-            .tooltipEnabled(true)
-            .zoomType(AAChartZoomType.XY)
-            .legendEnabled(true)
-
-        /*
-        val aaChartModelEmoticonEvents = AAChartModel()
-            .chartType(AAChartType.Pie)
-            .title("Emoticones por evento")
-            .colorsTheme(arrayOf("#0c9674", "#7dffc0", "#d11b5f", "#facd32", "#ffffa0"))
-            .dataLabelsEnabled(true)
-            .tooltipEnabled(true)
-            .series(
-                arrayOf(
-                    AASeriesElement()
-                        .name("Emoticone por evento")
-                        .data(
-                            arrayOf(
-                                arrayOf("Feliz", 56),
-                                arrayOf("Tristeza", 120),
-                                arrayOf("Miedo", 6),
-                                arrayOf("Enojo", 23)
-                            )
-                        )
-                )
-            )*/
-
-        //binding.emoticonEventsPieChart.aa_drawChartWithChartModel(aaChartModelEmoticonEvents)
-
         viewLifecycleOwner.lifecycleScope.launch {
 
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -105,23 +74,9 @@ class NewStatsFragment : Fragment() {
                                     "N° entrevistados: ${generalData.nInterviewees}"
                                 binding.nEvents.text = "N° eventos: ${generalData.nEvents}"
 
-                                val genders = it.intervieweeByGenre
+                                setGenderChart(it.intervieweeByGenre)
 
-                                aaChartModelGender.series(
-                                    arrayOf(
-                                        AASeriesElement()
-                                            .name("Eventos por género")
-                                            .data(
-                                                arrayOf(
-                                                    arrayOf("Hombres", genders.totalMen),
-                                                    arrayOf("Mujer", genders.totalWomen),
-                                                    arrayOf("Otro", genders.totalOther)
-                                                )
-                                            )
-                                    )
-                                )
-
-                                binding.genderPieChart.aa_drawChartWithChartModel(aaChartModelGender)
+                                setEmoticonEvents(it.eventsByEmotions)
                             }
                         }
                     }
@@ -131,6 +86,60 @@ class NewStatsFragment : Fragment() {
         viewModel.getStats("Bearer $token")
 
         return binding.root
+    }
+
+    private fun setEmoticonEvents(eventsByEmotions: EventsByEmotionsDTO) {
+
+        val aaChartModelEmoticonEvents = AAChartModel()
+            .chartType(AAChartType.Pie)
+            .title("Emoticones por evento")
+            .colorsTheme(arrayOf("#0c9674", "#7dffc0", "#d11b5f", "#facd32", "#ffffa0"))
+            .dataLabelsEnabled(true)
+            .tooltipEnabled(true)
+            .series(
+                arrayOf(
+                    AASeriesElement()
+                        .name("Valor")
+                        .data(
+                            arrayOf(
+                                arrayOf("Felicidad", eventsByEmotions.happy),
+                                arrayOf("Tristeza", eventsByEmotions.sad),
+                                arrayOf("Miedo", eventsByEmotions.fear),
+                                arrayOf("Enojo", eventsByEmotions.angry)
+                            )
+                        )
+                )
+            )
+
+        binding.emoticonEventsPieChart.aa_drawChartWithChartModel(aaChartModelEmoticonEvents)
+
+    }
+
+    private fun setGenderChart(intervieweeByGenre: IntervieweeGenreDTO) {
+
+        val aaChartModelGender = AAChartModel()
+            .chartType(AAChartType.Pie)
+            .title("Pie chart por genero")
+            .colorsTheme(arrayOf("#0c9674", "#7dffc0", "#d11b5f", "#facd32", "#ffffa0"))
+            .dataLabelsEnabled(true)
+            .tooltipEnabled(true)
+            .zoomType(AAChartZoomType.XY)
+            .legendEnabled(true)
+            .series(
+                arrayOf(
+                    AASeriesElement()
+                        .name("Valor")
+                        .data(
+                            arrayOf(
+                                arrayOf("Hombres", intervieweeByGenre.totalMen),
+                                arrayOf("Mujer", intervieweeByGenre.totalWomen),
+                                arrayOf("Otro", intervieweeByGenre.totalOther)
+                            )
+                        )
+                )
+            )
+
+        binding.genderPieChart.aa_drawChartWithChartModel(aaChartModelGender)
     }
 
     override fun onDestroyView() {

@@ -12,6 +12,15 @@ interface StatsAPI {
     @GET("/estadisticas/")
     suspend fun getStats(): Response<StatsResult>
 
+    @GET("/estadisticas/emoticon/{id_emoticon}/genero/{nombre}")
+    suspend fun getStatsByEmoticonAndGenre(
+        @Path("id_emoticon") idEmoticon: Int,
+        @Path("nombre") genreLetter: String
+    ): Response<StatsResult>
+
     @GET("/estadisticas/emoticon/{id_emoticon}")
-    suspend fun getStats(@Path("id_emoticon") idEmoticon: Int): Response<StatsResult>
+    suspend fun getStatsByEmoticon(@Path("id_emoticon") idEmoticon: Int): Response<StatsResult>
+
+    @GET("/estadisticas/genero/{nombre}")
+    suspend fun getStatsByGenre(@Path("nombre") genreLetter: String): Response<StatsResult>
 }

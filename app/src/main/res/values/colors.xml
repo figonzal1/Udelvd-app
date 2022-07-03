@@ -21,4 +21,6 @@
     <color name="tab_indicator_default">#40000000</color>
     <color name="tab_indicator_selected">#99FFFFFF</color>
     <color name="tab_indicator_event_selected">#8bc34a</color>
+
+    <color name="grey_badges">#996A6A6A</color>
 </resources>

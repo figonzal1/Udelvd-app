@@ -6,5 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface StatsRepository {
 
-    fun getStats(authToken: String, idSelectedEmoticon: Int): Flow<StatusAPI<AttributesResult>>
+    fun getStats(
+        authToken: String,
+        idSelectedEmoticon: Int,
+        genreLetter: String
+    ): Flow<StatusAPI<AttributesResult>>
 }

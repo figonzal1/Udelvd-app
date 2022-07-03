@@ -4,13 +4,18 @@ class StatsRemoteDataSource(
     private val statsAPI: StatsAPI
 ) {
 
-    suspend fun getStats(authToken: String, idSelectedEmoticon: Int): AttributesResult? {
+    suspend fun getStats(
+        authToken: String,
+        idSelectedEmoticon: Int,
+        genreLetter: String
+    ): AttributesResult? = when {
 
-        val call = when {
-            idSelectedEmoticon != -1 -> statsAPI.getStats(idSelectedEmoticon)
-            else -> statsAPI.getStats()
+        idSelectedEmoticon != -1 && genreLetter != "" -> {
+            statsAPI.getStatsByEmoticonAndGenre(idSelectedEmoticon, genreLetter)
         }
+        idSelectedEmoticon != -1 -> statsAPI.getStatsByEmoticon(idSelectedEmoticon)
+        genreLetter != "" -> statsAPI.getStatsByGenre(genreLetter)
+        else -> statsAPI.getStats()
 
-        return call.body()?.data?.first()?.attributes
-    }
+    }.body()?.data?.first()?.attributes
 }

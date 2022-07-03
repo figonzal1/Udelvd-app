@@ -21,11 +21,11 @@ class StatsViewModel(
     val errorState = _errorState.receiveAsFlow()
 
 
-    fun getStats(authToken: String) {
+    fun getStats(authToken: String, idSelectedEmoticon: Int = -1) {
 
         viewModelScope.launch {
 
-            getStatsUseCase(authToken).collect {
+            getStatsUseCase(authToken, idSelectedEmoticon).collect {
 
                 when (it) {
                     is StatusAPI.Loading -> {

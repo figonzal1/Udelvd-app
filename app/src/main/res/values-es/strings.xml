@@ -258,5 +258,9 @@
     <string name="SPEECH_TO_TEXT_NOT_AVAILABLE">Función no disponible en emulador</string>
     <string name="REGISTRATE">Regístrate</string>
     <string name="APP_VERSION">Versión %s</string>
+    <string name="happiness">felicidad</string>
+    <string name="anger">enojo</string>
+    <string name="fear">miedo</string>
+    <string name="sadness">tristeza</string>
 
 </resources>

@@ -16,13 +16,16 @@ class StatsRepositoryImpl(
     private val statsRemoteDataSource: StatsRemoteDataSource
 ) : StatsRepository {
 
-    override fun getStats(authToken: String): Flow<StatusAPI<AttributesResult>> = flow {
+    override fun getStats(
+        authToken: String,
+        idSelectedEmoticon: Int
+    ): Flow<StatusAPI<AttributesResult>> = flow {
 
         emit(StatusAPI.Loading())
 
         try {
 
-            val stats = statsRemoteDataSource.getStats(authToken)
+            val stats = statsRemoteDataSource.getStats(authToken, idSelectedEmoticon)
 
             stats?.let {
                 emit(StatusAPI.Success(it))

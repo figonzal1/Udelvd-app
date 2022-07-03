@@ -28,7 +28,6 @@ import com.auth0.android.jwt.JWT;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
@@ -44,6 +43,7 @@ import java.util.Objects;
 import cl.udelvd.R;
 import cl.udelvd.models.Interviewee;
 import cl.udelvd.views.activities.LoginActivity;
+import timber.log.Timber;
 
 public class Utils {
 
@@ -53,14 +53,18 @@ public class Utils {
     public static void checkFirebaseServices(final Activity activity) {
 
         //FIREBASE SECTION
-        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity,
-                instanceIdResult -> {
-                    String token = instanceIdResult.getToken();
-                    Log.d(activity.getString(R.string.TAG_TOKEN_FIREBASE), token);
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(activity, task -> {
 
-                    FirebaseCrashlytics.getInstance().log(activity.getString(R.string.TAG_TOKEN_FIREBASE) + token);
-                });
+            if (!task.isSuccessful()) {
+                Timber.w("Fetching FCM registration token failed");
+                return;
+            }
+
+            String token = task.getResult();
+
+            Timber.d("%s: %s", activity.getString(R.string.TAG_TOKEN_FIREBASE), token);
+            FirebaseCrashlytics.getInstance().log(activity.getString(R.string.TAG_TOKEN_FIREBASE) + token);
+        });
     }
 
     /**

@@ -5,28 +5,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.*
 import cl.udelvd.R
 import cl.udelvd.databinding.FragmentNewStatsBinding
+import cl.udelvd.models.Emoticon
 import cl.udelvd.refactor.stats_feature.data.remote.dto.EventsByEmotionsDTO
 import cl.udelvd.refactor.stats_feature.data.remote.dto.IntervieweeGenreDTO
+import cl.udelvd.viewmodels.NewEventViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class NewStatsFragment : Fragment() {
 
+
     private lateinit var viewModel: StatsViewModel
+    private var newEventViewModel: NewEventViewModel? = null
 
     private var _binding: FragmentNewStatsBinding? = null
     private val binding get() = _binding!!
+
+    private var token: String? = null
+
+    //EMOTICONES
+    private var idSelectedEmoticon: Int = -1
+    private var emoticonsList: MutableList<Emoticon> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,11 +49,26 @@ class NewStatsFragment : Fragment() {
             ViewModelFactory(requireActivity().application)
         )[StatsViewModel::class.java]
 
+        newEventViewModel = ViewModelProvider(this)[NewEventViewModel::class.java]
+
+        newEventViewModel!!.loadEmoticons().observe(viewLifecycleOwner) { emoticons ->
+
+            if (emoticons != null && emoticons.size > 0) {
+                emoticonsList = emoticons
+
+                Timber.d(
+                    getString(R.string.TAG_VIEW_MODEL_EMOTICON),
+                    getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG)
+                )
+            }
+
+        }
+
         val sharedPreferences = requireContext().getSharedPreferences(
             getString(R.string.SHARED_PREF_MASTER_KEY),
             Context.MODE_PRIVATE
         )
-        val token = sharedPreferences.getString(
+        token = sharedPreferences.getString(
             getString(R.string.SHARED_PREF_TOKEN_LOGIN),
             ""
         )
@@ -83,7 +107,9 @@ class NewStatsFragment : Fragment() {
                 }
             }
         }
-        viewModel.getStats("Bearer $token")
+        viewModel.getStats("Bearer $token", idSelectedEmoticon)
+
+        configFilterBottomSheet()
 
         return binding.root
     }
@@ -140,6 +166,40 @@ class NewStatsFragment : Fragment() {
             )
 
         binding.genderPieChart.aa_drawChartWithChartModel(aaChartModelGender)
+    }
+
+    private fun configFilterBottomSheet() {
+
+        val behavior = BottomSheetBehavior.from(binding.include.filterBottomSheet)
+
+        behavior.isHideable = false
+
+        with(binding.include) {
+
+
+            tvName.text = "Felipe González"
+
+            emoticonRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                idSelectedEmoticon = findEmoticonId(checkedId)
+            }
+
+            btnFilter.setOnClickListener {
+                viewModel.getStats("Bearer $token", idSelectedEmoticon)
+
+                Toast.makeText(requireContext(), "Filter btn clicked", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    private fun findEmoticonId(checkedId: Int): Int {
+        return when (checkedId) {
+            R.id.radio_happy -> emoticonsList.find { it.description!!.contains(getString(R.string.happiness)) }!!.id
+            R.id.radio_angry -> emoticonsList.find { it.description!!.contains(getString(R.string.anger)) }!!.id
+            R.id.radio_fear -> emoticonsList.find { it.description!!.contains(getString(R.string.fear)) }!!.id
+            R.id.radio_sad -> emoticonsList.find { it.description!!.contains(getString(R.string.sadness)) }!!.id
+            else -> -1
+        }
     }
 
     override fun onDestroyView() {

@@ -23,12 +23,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class NewStatsFragment : Fragment() {
+class StatsFragment : Fragment() {
 
 
     private var isRefresh: Boolean = false
-    private lateinit var viewModel: StatsViewModel
-    private var newEventViewModel: NewEventViewModel? = null
+    private lateinit var statsViewModel: StatsViewModel
+    private var emoticonViewModel: NewEventViewModel? = null
 
     private var _binding: FragmentNewStatsBinding? = null
     private val binding get() = _binding!!
@@ -45,15 +45,34 @@ class NewStatsFragment : Fragment() {
     ): View {
         _binding = FragmentNewStatsBinding.inflate(inflater, container, false)
 
+        initViewModels()
 
-        viewModel = ViewModelProvider(
+        val sharedPreferences = requireContext().getSharedPreferences(
+            getString(R.string.SHARED_PREF_MASTER_KEY),
+            Context.MODE_PRIVATE
+        )
+        token = sharedPreferences.getString(
+            getString(R.string.SHARED_PREF_TOKEN_LOGIN),
+            ""
+        )
+
+        processStatsData()
+
+        configFilterBottomSheet()
+
+        return binding.root
+    }
+
+    private fun initViewModels() {
+        statsViewModel = ViewModelProvider(
             requireActivity(),
             ViewModelFactory(requireActivity().application)
         )[StatsViewModel::class.java]
 
-        newEventViewModel = ViewModelProvider(this)[NewEventViewModel::class.java]
+        emoticonViewModel = ViewModelProvider(this)[NewEventViewModel::class.java]
 
-        newEventViewModel!!.loadEmoticons().observe(viewLifecycleOwner) { emoticons ->
+        //LOAD EMOTICONS
+        emoticonViewModel!!.loadEmoticons().observe(viewLifecycleOwner) { emoticons ->
 
             if (emoticons != null && emoticons.size > 0) {
                 emoticonsList = emoticons
@@ -65,40 +84,39 @@ class NewStatsFragment : Fragment() {
             }
 
         }
+    }
 
-        val sharedPreferences = requireContext().getSharedPreferences(
-            getString(R.string.SHARED_PREF_MASTER_KEY),
-            Context.MODE_PRIVATE
-        )
-        token = sharedPreferences.getString(
-            getString(R.string.SHARED_PREF_TOKEN_LOGIN),
-            ""
-        )
-
+    private fun processStatsData() {
         viewLifecycleOwner.lifecycleScope.launch {
 
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
 
                 //Error state
                 launch {
-                    viewModel.errorState.collect {
+                    statsViewModel.errorState.collect {
                         Timber.d("Error stats: $it")
                     }
                 }
 
                 //Stats state
                 launch {
-                    viewModel.statsState.collect { statsState ->
+                    statsViewModel.statsState.collect { statsState ->
 
                         when {
                             statsState.isLoading -> {}
                             else -> statsState.stats?.let {
 
-                                val generalData = it.general
+                                it.general.apply {
 
-                                binding.nInterviewee.text =
-                                    "N° entrevistados: ${generalData.nInterviewees}"
-                                binding.nEvents.text = "N° eventos: ${generalData.nEvents}"
+                                    binding.nInterviewee.text = String.format(
+                                        getString(R.string.n_entrevistados),
+                                        nInterviewees
+                                    )
+                                    binding.nEvents.text =
+                                        String.format(getString(R.string.n_eventos), nEvents)
+                                }
+
+                                Timber.e(it.events.toString())
 
                                 setGenderChart(it.intervieweeByGenre)
 
@@ -111,11 +129,8 @@ class NewStatsFragment : Fragment() {
                 }
             }
         }
-
-        configFilterBottomSheet()
-
-        return binding.root
     }
+
 
     private fun setEmoticonEvents(eventsByEmotions: EventsByEmotionsDTO) {
 
@@ -128,10 +143,22 @@ class NewStatsFragment : Fragment() {
                                 .name("Valor")
                                 .data(
                                     arrayOf(
-                                        arrayOf("Felicidad", eventsByEmotions.happy),
-                                        arrayOf("Tristeza", eventsByEmotions.sad),
-                                        arrayOf("Miedo", eventsByEmotions.fear),
-                                        arrayOf("Enojo", eventsByEmotions.angry)
+                                        arrayOf(
+                                            getString(R.string.happiness),
+                                            eventsByEmotions.happy
+                                        ),
+                                        arrayOf(
+                                            getString(R.string.sadness),
+                                            eventsByEmotions.sad
+                                        ),
+                                        arrayOf(
+                                            getString(R.string.fear),
+                                            eventsByEmotions.fear
+                                        ),
+                                        arrayOf(
+                                            getString(R.string.anger),
+                                            eventsByEmotions.angry
+                                        )
                                     )
                                 )
                         ),
@@ -151,10 +178,22 @@ class NewStatsFragment : Fragment() {
                                     .name("Valor")
                                     .data(
                                         arrayOf(
-                                            arrayOf("Felicidad", eventsByEmotions.happy),
-                                            arrayOf("Tristeza", eventsByEmotions.sad),
-                                            arrayOf("Miedo", eventsByEmotions.fear),
-                                            arrayOf("Enojo", eventsByEmotions.angry)
+                                            arrayOf(
+                                                getString(R.string.happiness),
+                                                eventsByEmotions.happy
+                                            ),
+                                            arrayOf(
+                                                getString(R.string.sadness),
+                                                eventsByEmotions.sad
+                                            ),
+                                            arrayOf(
+                                                getString(R.string.fear),
+                                                eventsByEmotions.fear
+                                            ),
+                                            arrayOf(
+                                                getString(R.string.anger),
+                                                eventsByEmotions.angry
+                                            )
                                         )
                                     )
                             )
@@ -176,9 +215,18 @@ class NewStatsFragment : Fragment() {
                                 .name("Valor")
                                 .data(
                                     arrayOf(
-                                        arrayOf("Hombres", intervieweeByGenre.totalMen),
-                                        arrayOf("Mujer", intervieweeByGenre.totalWomen),
-                                        arrayOf("Otro", intervieweeByGenre.totalOther)
+                                        arrayOf(
+                                            getString(R.string.SEXO_MASCULINO),
+                                            intervieweeByGenre.totalMen
+                                        ),
+                                        arrayOf(
+                                            getString(R.string.SEXO_FEMENINO),
+                                            intervieweeByGenre.totalWomen
+                                        ),
+                                        arrayOf(
+                                            getString(R.string.SEXO_OTRO),
+                                            intervieweeByGenre.totalOther
+                                        )
                                     )
                                 )
                         ),
@@ -189,7 +237,15 @@ class NewStatsFragment : Fragment() {
                     val aaChartModelGender = AAChartModel()
                         .chartType(AAChartType.Pie)
                         .title("Pie chart por genero")
-                        .colorsTheme(arrayOf("#0c9674", "#7dffc0", "#d11b5f", "#facd32", "#ffffa0"))
+                        .colorsTheme(
+                            arrayOf(
+                                "#0c9674",
+                                "#7dffc0",
+                                "#d11b5f",
+                                "#facd32",
+                                "#ffffa0"
+                            )
+                        )
                         .dataLabelsEnabled(true)
                         .tooltipEnabled(true)
                         .zoomType(AAChartZoomType.XY)
@@ -200,9 +256,18 @@ class NewStatsFragment : Fragment() {
                                     .name("Valor")
                                     .data(
                                         arrayOf(
-                                            arrayOf("Hombres", intervieweeByGenre.totalMen),
-                                            arrayOf("Mujer", intervieweeByGenre.totalWomen),
-                                            arrayOf("Otro", intervieweeByGenre.totalOther)
+                                            arrayOf(
+                                                getString(R.string.SEXO_MASCULINO),
+                                                intervieweeByGenre.totalMen
+                                            ),
+                                            arrayOf(
+                                                getString(R.string.SEXO_FEMENINO),
+                                                intervieweeByGenre.totalWomen
+                                            ),
+                                            arrayOf(
+                                                getString(R.string.SEXO_OTRO),
+                                                intervieweeByGenre.totalOther
+                                            )
                                         )
                                     )
                             )
@@ -223,9 +288,6 @@ class NewStatsFragment : Fragment() {
 
         with(binding.include) {
 
-
-            tvName.text = "Felipe González"
-
             emoticonRadioGroup.setOnCheckedChangeListener { _, checkedId ->
                 idSelectedEmoticon = findEmoticonId(checkedId)
             }
@@ -239,7 +301,7 @@ class NewStatsFragment : Fragment() {
                     else -> ""
                 }
 
-                viewModel.getStats("Bearer $token", idSelectedEmoticon, genreLetter)
+                statsViewModel.getStats("Bearer $token", idSelectedEmoticon, genreLetter)
 
                 Toast.makeText(requireContext(), "Filter btn clicked", Toast.LENGTH_SHORT)
                     .show()
@@ -266,15 +328,18 @@ class NewStatsFragment : Fragment() {
      */
     private fun setSpinnerGenre() {
         val genreArray = arrayOf(
-            "All",
+            getString(R.string.SEXO_ALL),
             getString(R.string.SEXO_MASCULINO),
             getString(R.string.SEXO_FEMENINO),
             getString(R.string.SEXO_OTRO)
         )
         val adapterSexo =
             ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genreArray)
-        binding.include.etIntervieweeGenre.setAdapter<ArrayAdapter<String>>(adapterSexo)
-        binding.include.etIntervieweeGenre.setText(genreArray[0], false)
+
+        binding.include.etIntervieweeGenre.apply {
+            setAdapter<ArrayAdapter<String>>(adapterSexo)
+            setText(genreArray[0], false)
+        }
 
     }
 
@@ -285,6 +350,6 @@ class NewStatsFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = NewStatsFragment()
+        fun newInstance() = StatsFragment()
     }
 }

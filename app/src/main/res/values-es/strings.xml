@@ -262,5 +262,10 @@
     <string name="anger">enojo</string>
     <string name="fear">miedo</string>
     <string name="sadness">tristeza</string>
+    <string name="SEXO_ALL">Todos</string>
+    <string name="n_entrevistados">N° entrevistados: %s</string>
+    <string name="n_eventos">N° eventos: %s</string>
+    <string name="search_filters">Filtros de búsqueda</string>
+    <string name="filter">Filtrar</string>
 
 </resources>

@@ -263,4 +263,9 @@
     <string name="anger">anger</string>
     <string name="fear">fear</string>
     <string name="sadness">sadness</string>
+    <string name="SEXO_ALL">All</string>
+    <string name="n_entrevistados">N° interviewee: %s</string>
+    <string name="n_eventos">N° events: %s</string>
+    <string name="search_filters">Search filters</string>
+    <string name="filter">Filter</string>
 </resources>

@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import cl.udelvd.R;
-import cl.udelvd.refactor.stats_feature.ui.NewStatsFragment;
+import cl.udelvd.refactor.stats_feature.ui.StatsFragment;
 import cl.udelvd.views.fragments.IntervieweeListFragment;
 
 /**
@@ -55,7 +55,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
 
                 break;*/
             case 1:
-                f = NewStatsFragment.newInstance();
+                f = StatsFragment.newInstance();
                 break;
 
         }

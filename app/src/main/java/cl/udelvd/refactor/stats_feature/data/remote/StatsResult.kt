@@ -1,6 +1,7 @@
 package cl.udelvd.refactor.stats_feature.data.remote
 
 import androidx.annotation.Keep
+import cl.udelvd.refactor.stats_feature.data.remote.dto.EventDTO
 import cl.udelvd.refactor.stats_feature.data.remote.dto.EventsByEmotionsDTO
 import cl.udelvd.refactor.stats_feature.data.remote.dto.GeneralStatsDTO
 import cl.udelvd.refactor.stats_feature.data.remote.dto.IntervieweeGenreDTO
@@ -27,5 +28,8 @@ data class AttributesResult(
 
     @SerializedName("eventos_por_emoticon")
     val eventsByEmotions: EventsByEmotionsDTO,
+
+    @SerializedName("eventos_para_estadisticas")
+    val events: List<EventDTO>
 )
 

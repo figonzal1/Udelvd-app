@@ -28,8 +28,8 @@ import cl.udelvd.models.Stat;
 import cl.udelvd.utils.SnackbarInterface;
 import cl.udelvd.viewmodels.StatViewModel;
 
-
-public class StatsFragment extends Fragment implements SnackbarInterface {
+@Deprecated()
+public class OldStatsFragment extends Fragment implements SnackbarInterface {
 
     private RecyclerView rv;
     private StatViewModel statViewModel;
@@ -42,11 +42,11 @@ public class StatsFragment extends Fragment implements SnackbarInterface {
 
     private FirebaseCrashlytics crashlytics;
 
-    public StatsFragment() {
+    public OldStatsFragment() {
     }
 
-    public static StatsFragment newInstance() {
-        return new StatsFragment();
+    public static OldStatsFragment newInstance() {
+        return new OldStatsFragment();
     }
 
     @Override

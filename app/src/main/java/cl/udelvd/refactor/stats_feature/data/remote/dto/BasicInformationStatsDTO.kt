@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 @Keep
-data class GeneralStatsDTO(
+data class BasicInformationStatsDTO(
     @SerializedName("n_entrevistados")
     val nInterviewees: Int,
 

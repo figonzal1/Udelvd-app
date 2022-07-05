@@ -8,7 +8,7 @@ class StatsRemoteDataSource(
         authToken: String,
         idSelectedEmoticon: Int,
         genreLetter: String
-    ): AttributesResult? = when {
+    ): StatsAttributesResult? = when {
 
         idSelectedEmoticon != -1 && genreLetter != "" -> {
             statsAPI.getStatsByEmoticonAndGenre(idSelectedEmoticon, genreLetter)

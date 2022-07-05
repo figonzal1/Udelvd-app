@@ -1,8 +1,8 @@
 package cl.udelvd.refactor.stats_feature.ui
 
-import cl.udelvd.refactor.stats_feature.data.remote.AttributesResult
+import cl.udelvd.refactor.stats_feature.data.remote.StatsAttributesResult
 
 data class StatsState(
-    val stats: AttributesResult? = null,
+    val stats: StatsAttributesResult? = null,
     val isLoading: Boolean = true
 )

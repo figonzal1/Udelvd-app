@@ -73,12 +73,22 @@
                 android:id="@+id/emoticon_events_pie_chart"
                 android:layout_width="0dp"
                 android:layout_height="350dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gender_pie_chart" />
+
+            <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                android:id="@+id/events_chart"
+                android:layout_width="0dp"
+                android:layout_height="900dp"
                 android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gender_pie_chart" />
+                app:layout_constraintTop_toBottomOf="@+id/emoticon_events_pie_chart" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

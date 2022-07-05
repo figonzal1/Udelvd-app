@@ -60,6 +60,76 @@ class StatsFragment : Fragment() {
 
         configFilterBottomSheet()
 
+        /*
+        val aaChartModelEmoticonEvents = AAChartModel()
+            .chartType(AAChartType.Bubble)
+            .title("Emoticones por evento")
+            .dataLabelsEnabled(true)
+            .tooltipEnabled(true)
+            .yAxisMax(23f)
+            .yAxisMin(0f)
+            .yAxisTitle("Hora")
+            .series(
+                arrayOf(
+                    AASeriesElement()
+                        .name("OnePLus")
+                        .data(
+                            arrayOf(
+                                20, //Accion 1
+                                23 //Accion 2
+                            )
+                        ),
+                    AASeriesElement()
+                        .name("Samsung")
+                        .data(
+                            arrayOf(2.3, 2, 4)
+                        ),
+                    AASeriesElement()
+                        .name("Apple")
+                        .data(
+                            arrayOf(5, 5.8, 4, 1)
+                        ),
+                    AASeriesElement()
+                        .name("Huawei")
+                        .data(
+                            arrayOf()
+                        )
+                )
+            )
+
+        val options = aaChartModelEmoticonEvents.aa_toAAOptions()
+
+        val hora1 = LocalTime.of(15, 30)
+        val hora2 = LocalTime.of(6, 23)
+
+        options.yAxis?.apply {
+            this.max = 24f
+            this.min = 0f
+            this.labels = AALabels().rotation(-90f)
+            this.tickInterval(1)
+        }
+
+        options.xAxis?.apply {
+            this.labels = AALabels().rotation(-90f)
+            this.categories(
+                arrayOf(
+                    "Accion1",
+                    "Accion2",
+                    "Accion3",
+                    "Accion4",
+                    "Accion5",
+                    "Accion6",
+                    "Accion7",
+                    "Accion8",
+                    "Accion9",
+                    "Accion10",
+                    "Accion11"
+                )
+            )
+        }
+        //options.plotOptions?.series?.pointInterval(24 * 3600 * 1000 )
+        binding.eventsChart.aa_drawChartWithChartOptions(options)*/
+
         return binding.root
     }
 
@@ -106,7 +176,7 @@ class StatsFragment : Fragment() {
                             statsState.isLoading -> {}
                             else -> statsState.stats?.let {
 
-                                it.general.apply {
+                                it.basicInformation.apply {
 
                                     binding.nInterviewee.text = String.format(
                                         getString(R.string.n_entrevistados),
@@ -127,8 +197,26 @@ class StatsFragment : Fragment() {
                         }
                     }
                 }
+
+                //IntervieweeWithEvents state
+                launch {
+                    statsViewModel.intervieweeState.collect {
+
+                        when {
+                            it.isLoading -> {}
+                            it.interviewee.isNotEmpty() -> {
+
+                                it.interviewee.forEach {
+                                    println(it)
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        statsViewModel.getIntervieweeWithEvents("Bearer $token")
     }
 
 

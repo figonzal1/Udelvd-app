@@ -1,7 +1,7 @@
 package cl.udelvd.refactor.stats_feature.data.repository
 
 import cl.udelvd.refactor.StatusAPI
-import cl.udelvd.refactor.stats_feature.data.remote.AttributesResult
+import cl.udelvd.refactor.stats_feature.data.remote.StatsAttributesResult
 import cl.udelvd.refactor.stats_feature.data.remote.StatsRemoteDataSource
 import cl.udelvd.refactor.stats_feature.domain.repository.StatsRepository
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ class StatsRepositoryImpl(
         authToken: String,
         idSelectedEmoticon: Int,
         genreLetter: String
-    ): Flow<StatusAPI<AttributesResult>> = flow {
+    ): Flow<StatusAPI<StatsAttributesResult>> = flow {
 
         emit(StatusAPI.Loading())
 

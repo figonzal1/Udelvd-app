@@ -5,14 +5,21 @@ import com.google.gson.annotations.SerializedName
 
 @Keep
 data class EventDTO(
-    val nombre: String,
-    val apellido: String,
-    val accion: String,
+
+    @SerializedName("nombre")
+    val name: String,
+
+    @SerializedName("apellido")
+    val lastName: String,
+
+    @SerializedName("accion")
+    val action: String,
 
     @SerializedName("hora_evento")
-    val horaEvento: String,
+    val eventHour: String,
 
-    val justificacion: String,
+    @SerializedName("justificacion")
+    val justification: String,
 
     @SerializedName("url")
     val emoticonUrl: String

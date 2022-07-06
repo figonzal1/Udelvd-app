@@ -245,6 +245,9 @@ class StatsFragment : Fragment() {
         statsViewModel.getIntervieweeWithEvents("Bearer $token")
     }
 
+    /**
+     * function tha build AlertDialog for interviewee
+     */
     private fun configIntervieweeFilterDialog(
         intervieweeList: List<Interviewee>,
         selectedItems: List<String>
@@ -292,6 +295,9 @@ class StatsFragment : Fragment() {
             .show()
     }
 
+    /**
+     * Main config for bottom sheet
+     */
     private fun configFilterBottomSheet() {
 
         setSpinnerGenre()

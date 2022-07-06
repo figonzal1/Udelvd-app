@@ -28,11 +28,21 @@ class StatsViewModel(
     val errorState = _errorState.receiveAsFlow()
 
 
-    fun getStats(authToken: String, idSelectedEmoticon: Int = -1, genreLetter: String = "") {
+    fun getStats(
+        authToken: String,
+        idSelectedEmoticon: Int = -1,
+        genreLetter: String = "",
+        filterInterviewees: List<Interviewee>
+    ) {
 
         viewModelScope.launch {
 
-            getStatsUseCase(authToken, idSelectedEmoticon, genreLetter).collect {
+            getStatsUseCase(
+                authToken,
+                idSelectedEmoticon,
+                genreLetter,
+                filterInterviewees
+            ).collect {
 
                 when (it) {
                     is StatusAPI.Loading -> {

@@ -268,4 +268,8 @@
     <string name="n_eventos">N° events: %s</string>
     <string name="search_filters">Search filters</string>
     <string name="filter">Filter</string>
+    <string name="interviewees">Interviewees</string>
+    <string name="title_dialog_selected_interviewee">Selected Interviewee</string>
+    <string name="interviewee_filter_icon">Interviewee filter icon</string>
+    <string name="DIALOG_NEUTRAL_BTN_CLEAR">CLEAR ALL</string>
 </resources>

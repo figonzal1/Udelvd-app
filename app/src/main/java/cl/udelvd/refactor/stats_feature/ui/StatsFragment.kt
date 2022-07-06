@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import cl.udelvd.R
 import cl.udelvd.databinding.FragmentNewStatsBinding
 import cl.udelvd.models.Emoticon
+import cl.udelvd.refactor.interviewee_feature.domain.model.Interviewee
 import cl.udelvd.refactor.stats_feature.data.remote.dto.EventsByEmotionsDTO
 import cl.udelvd.refactor.stats_feature.data.remote.dto.IntervieweeGenreDTO
 import cl.udelvd.viewmodels.NewEventViewModel
@@ -25,7 +27,6 @@ import timber.log.Timber
 
 class StatsFragment : Fragment() {
 
-
     private var isRefresh: Boolean = false
     private lateinit var statsViewModel: StatsViewModel
     private var emoticonViewModel: NewEventViewModel? = null
@@ -38,6 +39,11 @@ class StatsFragment : Fragment() {
     //EMOTICONES
     private var idSelectedEmoticon: Int = -1
     private var emoticonsList: MutableList<Emoticon> = arrayListOf()
+
+    //Entrevistados
+    private lateinit var selectedInterviewees: MutableList<Interviewee>
+    private var listItems: Array<String> = arrayOf()
+    private lateinit var checkedItems: BooleanArray
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -186,11 +192,9 @@ class StatsFragment : Fragment() {
                                         String.format(getString(R.string.n_eventos), nEvents)
                                 }
 
-                                Timber.e(it.events.toString())
-
                                 setGenderChart(it.intervieweeByGenre)
 
-                                setEmoticonEvents(it.eventsByEmotions)
+                                setEmoticonEventsChart(it.eventsByEmotions)
 
                                 isRefresh = true
                             }
@@ -200,14 +204,36 @@ class StatsFragment : Fragment() {
 
                 //IntervieweeWithEvents state
                 launch {
-                    statsViewModel.intervieweeState.collect {
+                    statsViewModel.intervieweeState.collect { state ->
 
                         when {
-                            it.isLoading -> {}
-                            it.interviewee.isNotEmpty() -> {
+                            state.isLoading -> {
+                                binding.include.tvIntervieweeFilter.isEnabled = false
+                                binding.include.ivIntervieweeFilter.isEnabled = false
+                            }
+                            state.interviewee.isNotEmpty() -> {
 
-                                it.interviewee.forEach {
-                                    println(it)
+                                listItems = state.interviewee.map {
+                                    "${it.name} ${it.lastName}"
+                                }.toTypedArray()
+                                checkedItems = BooleanArray(state.interviewee.size)
+
+                                with(binding.include) {
+                                    tvIntervieweeFilter.isEnabled = true
+                                    ivIntervieweeFilter.isEnabled = true
+
+                                    ivIntervieweeFilter.setOnClickListener {
+                                        configIntervieweeFilterDialog(
+                                            state.interviewee,
+                                            listItems.toList()
+                                        )
+                                    }
+                                    tvIntervieweeFilter.setOnClickListener {
+                                        configIntervieweeFilterDialog(
+                                            state.interviewee,
+                                            listItems.toList()
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -219,8 +245,123 @@ class StatsFragment : Fragment() {
         statsViewModel.getIntervieweeWithEvents("Bearer $token")
     }
 
+    private fun configIntervieweeFilterDialog(
+        intervieweeList: List<Interviewee>,
+        selectedItems: List<String>
+    ) {
 
-    private fun setEmoticonEvents(eventsByEmotions: EventsByEmotionsDTO) {
+        AlertDialog.Builder(requireActivity())
+            .setTitle(getString(R.string.title_dialog_selected_interviewee))
+            .setCancelable(false)
+            .setMultiChoiceItems(
+                listItems, checkedItems
+            ) { _, which, isChecked ->
+                checkedItems[which] = isChecked
+            }.setPositiveButton(
+                "OK"
+            ) { _, _ ->
+                binding.include.tvIntervieweeFilter.text = ""
+
+                selectedInterviewees = mutableListOf()
+
+                for (i in checkedItems.indices) {
+                    if (checkedItems[i]) {
+
+                        binding.include.tvIntervieweeFilter.text =
+                            "${binding.include.tvIntervieweeFilter.text} ${selectedItems[i]}, "
+
+                        intervieweeList.find {
+                            "${it.name} ${it.lastName}" == selectedItems[i]
+                        }?.let { interviewee ->
+                            selectedInterviewees.add(interviewee)
+                        }
+                    }
+                }
+            }
+            .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setNeutralButton(getString(R.string.DIALOG_NEUTRAL_BTN_CLEAR)) { _, _ ->
+                for (i in checkedItems.indices) {
+                    checkedItems[i] = false
+                }
+                binding.include.tvIntervieweeFilter.text =
+                    getString(R.string.interviewees)
+                selectedInterviewees.clear()
+            }.create()
+            .show()
+    }
+
+    private fun configFilterBottomSheet() {
+
+        setSpinnerGenre()
+
+        val behavior = BottomSheetBehavior.from(binding.include.filterBottomSheet)
+
+        behavior.isHideable = false
+
+        with(binding.include) {
+
+            emoticonRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                idSelectedEmoticon = findEmoticonId(checkedId)
+            }
+
+            btnFilter.setOnClickListener {
+
+                val genreLetter = when {
+                    etIntervieweeGenre.text.toString() == getString(R.string.SEXO_MASCULINO) -> "m"
+                    etIntervieweeGenre.text.toString() == getString(R.string.SEXO_FEMENINO) -> "f"
+                    etIntervieweeGenre.text.toString() == getString(R.string.SEXO_OTRO) -> "o"
+                    else -> ""
+                }
+
+
+                statsViewModel.getStats(
+                    "Bearer $token",
+                    idSelectedEmoticon,
+                    genreLetter,
+                    selectedInterviewees
+                )
+
+                Toast.makeText(requireContext(), "Filter btn clicked", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * Configuration for emoticon radioGroup
+     */
+    private fun findEmoticonId(checkedId: Int): Int {
+        return when (checkedId) {
+            R.id.radio_happy -> emoticonsList.find { it.description!!.contains(getString(R.string.happiness)) }!!.id
+            R.id.radio_angry -> emoticonsList.find { it.description!!.contains(getString(R.string.anger)) }!!.id
+            R.id.radio_fear -> emoticonsList.find { it.description!!.contains(getString(R.string.fear)) }!!.id
+            R.id.radio_sad -> emoticonsList.find { it.description!!.contains(getString(R.string.sadness)) }!!.id
+            else -> -1
+        }
+    }
+
+    /**
+     * Configuration for genre spinner
+     */
+    private fun setSpinnerGenre() {
+        val genreArray = arrayOf(
+            getString(R.string.SEXO_ALL),
+            getString(R.string.SEXO_MASCULINO),
+            getString(R.string.SEXO_FEMENINO),
+            getString(R.string.SEXO_OTRO)
+        )
+        val adapterSexo =
+            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genreArray)
+
+        binding.include.etIntervieweeGenre.apply {
+            setAdapter<ArrayAdapter<String>>(adapterSexo)
+            setText(genreArray[0], false)
+        }
+
+    }
+
+    private fun setEmoticonEventsChart(eventsByEmotions: EventsByEmotionsDTO) {
 
         with(binding) {
             when {
@@ -257,7 +398,15 @@ class StatsFragment : Fragment() {
                     val aaChartModelEmoticonEvents = AAChartModel()
                         .chartType(AAChartType.Pie)
                         .title("Emoticones por evento")
-                        .colorsTheme(arrayOf("#0c9674", "#7dffc0", "#d11b5f", "#facd32", "#ffffa0"))
+                        .colorsTheme(
+                            arrayOf(
+                                "#0c9674",
+                                "#7dffc0",
+                                "#d11b5f",
+                                "#facd32",
+                                "#ffffa0"
+                            )
+                        )
                         .dataLabelsEnabled(true)
                         .tooltipEnabled(true)
                         .series(
@@ -364,71 +513,6 @@ class StatsFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun configFilterBottomSheet() {
-
-        setSpinnerGenre()
-
-        val behavior = BottomSheetBehavior.from(binding.include.filterBottomSheet)
-
-        behavior.isHideable = false
-
-        with(binding.include) {
-
-            emoticonRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-                idSelectedEmoticon = findEmoticonId(checkedId)
-            }
-
-            btnFilter.setOnClickListener {
-
-                val genreLetter = when {
-                    etIntervieweeGenre.text.toString() == getString(R.string.SEXO_MASCULINO) -> "m"
-                    etIntervieweeGenre.text.toString() == getString(R.string.SEXO_FEMENINO) -> "f"
-                    etIntervieweeGenre.text.toString() == getString(R.string.SEXO_OTRO) -> "o"
-                    else -> ""
-                }
-
-                statsViewModel.getStats("Bearer $token", idSelectedEmoticon, genreLetter)
-
-                Toast.makeText(requireContext(), "Filter btn clicked", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-
-    }
-
-    /**
-     * Configuration for emoticon radioGroup
-     */
-    private fun findEmoticonId(checkedId: Int): Int {
-        return when (checkedId) {
-            R.id.radio_happy -> emoticonsList.find { it.description!!.contains(getString(R.string.happiness)) }!!.id
-            R.id.radio_angry -> emoticonsList.find { it.description!!.contains(getString(R.string.anger)) }!!.id
-            R.id.radio_fear -> emoticonsList.find { it.description!!.contains(getString(R.string.fear)) }!!.id
-            R.id.radio_sad -> emoticonsList.find { it.description!!.contains(getString(R.string.sadness)) }!!.id
-            else -> -1
-        }
-    }
-
-    /**
-     * Configuration for genre spinner
-     */
-    private fun setSpinnerGenre() {
-        val genreArray = arrayOf(
-            getString(R.string.SEXO_ALL),
-            getString(R.string.SEXO_MASCULINO),
-            getString(R.string.SEXO_FEMENINO),
-            getString(R.string.SEXO_OTRO)
-        )
-        val adapterSexo =
-            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genreArray)
-
-        binding.include.etIntervieweeGenre.apply {
-            setAdapter<ArrayAdapter<String>>(adapterSexo)
-            setText(genreArray[0], false)
-        }
-
     }
 
     override fun onDestroyView() {

@@ -1,6 +1,7 @@
 package cl.udelvd.refactor.stats_feature.data.repository
 
 import cl.udelvd.refactor.StatusAPI
+import cl.udelvd.refactor.interviewee_feature.domain.model.Interviewee
 import cl.udelvd.refactor.stats_feature.data.remote.StatsAttributesResult
 import cl.udelvd.refactor.stats_feature.data.remote.StatsRemoteDataSource
 import cl.udelvd.refactor.stats_feature.domain.repository.StatsRepository
@@ -19,14 +20,20 @@ class StatsRepositoryImpl(
     override fun getStats(
         authToken: String,
         idSelectedEmoticon: Int,
-        genreLetter: String
+        genreLetter: String,
+        filterInterviewees: List<Interviewee>
     ): Flow<StatusAPI<StatsAttributesResult>> = flow {
 
         emit(StatusAPI.Loading())
 
         try {
 
-            val stats = statsRemoteDataSource.getStats(authToken, idSelectedEmoticon, genreLetter)
+            val stats = statsRemoteDataSource.getStats(
+                authToken,
+                idSelectedEmoticon,
+                genreLetter,
+                filterInterviewees
+            )
 
             stats?.let {
                 emit(StatusAPI.Success(it))

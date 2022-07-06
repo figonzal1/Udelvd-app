@@ -406,6 +406,7 @@
     <string name="DIALOG_MESSAGE_ENTREVISTA">Are you sure that you want to delete this interview?</string>
     <string name="DIALOG_POSITIVE_BTN">Delete</string>
     <string name="DIALOG_NEGATIVE_BTN">Cancel</string>
+    <string name="DIALOG_NEUTRAL_BTN_CLEAR">CLEAR ALL</string>
     <string name="DIALOG_MESSAGE_ENTREVISTADO">Are you sure that you want to delete this interviewee?</string>
     <string name="DIALOG_MESSAGE_EVENTO">Are you sure that you want to delete this event?</string>
     <string name="DIALOG_ACTIVACION_MENSAJE">Account activation will grant the researcher access to the system, are you sure?</string>
@@ -640,6 +641,9 @@
     <string name="n_eventos">N° events: %s</string>
     <string name="search_filters">Search filters</string>
     <string name="filter">Filter</string>
+    <string name="interviewees">Interviewees</string>
+    <string name="interviewee_filter_icon">Interviewee filter icon</string>
+    <string name="title_dialog_selected_interviewee">Selected Interviewee</string>
 
 
 </resources>

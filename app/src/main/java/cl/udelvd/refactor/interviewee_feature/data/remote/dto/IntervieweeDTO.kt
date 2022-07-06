@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class IntervieweeDTO(
 
+    val id: String,
+
     @SerializedName("nombre")
     val name: String,
 
@@ -17,8 +19,9 @@ data class IntervieweeDTO(
     val nEvents: Int
 ) {
     fun toDomain() = Interviewee(
-        name = name,
-        lastName = lastName,
+        id = id.toInt(),
+        name = name.trim(),
+        lastName = lastName.trim(),
         nEvents = nEvents
     )
 }

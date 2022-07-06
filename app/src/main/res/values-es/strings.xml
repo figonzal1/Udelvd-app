@@ -267,5 +267,9 @@
     <string name="n_eventos">N° eventos: %s</string>
     <string name="search_filters">Filtros de búsqueda</string>
     <string name="filter">Filtrar</string>
+    <string name="interviewees">Entrevistados</string>
+    <string name="title_dialog_selected_interviewee">Selecciona entrevistados</string>
+    <string name="interviewee_filter_icon">Icono de filtro de entrevistador</string>
+    <string name="DIALOG_NEUTRAL_BTN_CLEAR">LIMPIAR</string>
 
 </resources>

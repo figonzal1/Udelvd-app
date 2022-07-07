@@ -62,7 +62,11 @@ class StatsFragment : Fragment() {
             ""
         )
 
+        processIntervieweeList()
+
         processStatsData()
+
+        processProjects()
 
         configFilterBottomSheet()
 
@@ -139,6 +143,71 @@ class StatsFragment : Fragment() {
         return binding.root
     }
 
+    private fun processProjects() {
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            statsViewModel.projectState
+                .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
+                .collect {
+
+                    when {
+                        it.isLoading -> {}
+                        it.projectList.isNotEmpty() -> {
+                            //configProjectFilterDialog()
+                        }
+                    }
+                }
+        }
+    }
+
+    /*private fun configProjectFilterDialog() {
+        AlertDialog.Builder(requireActivity())
+            .setTitle("Select a project")
+            .setMultiChoiceItems()
+    }*/
+
+    private fun processIntervieweeList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            statsViewModel.intervieweeState
+                .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
+                .collect { state ->
+
+                    when {
+                        state.isLoading -> {
+                            binding.include.tvIntervieweeFilter.isEnabled = false
+                            binding.include.ivIntervieweeFilter.isEnabled = false
+                        }
+                        state.interviewee.isNotEmpty() -> {
+
+                            listItems = state.interviewee.map {
+                                "${it.name} ${it.lastName}"
+                            }.toTypedArray()
+                            checkedItems = BooleanArray(state.interviewee.size)
+
+                            with(binding.include) {
+                                tvIntervieweeFilter.isEnabled = true
+                                ivIntervieweeFilter.isEnabled = true
+
+                                ivIntervieweeFilter.setOnClickListener {
+                                    configIntervieweeFilterDialog(
+                                        state.interviewee,
+                                        listItems.toList()
+                                    )
+                                }
+                                tvIntervieweeFilter.setOnClickListener {
+                                    configIntervieweeFilterDialog(
+                                        state.interviewee,
+                                        listItems.toList()
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
     private fun initViewModels() {
         statsViewModel = ViewModelProvider(
             requireActivity(),
@@ -197,44 +266,6 @@ class StatsFragment : Fragment() {
                                 setEmoticonEventsChart(it.eventsByEmotions)
 
                                 isRefresh = true
-                            }
-                        }
-                    }
-                }
-
-                //IntervieweeWithEvents state
-                launch {
-                    statsViewModel.intervieweeState.collect { state ->
-
-                        when {
-                            state.isLoading -> {
-                                binding.include.tvIntervieweeFilter.isEnabled = false
-                                binding.include.ivIntervieweeFilter.isEnabled = false
-                            }
-                            state.interviewee.isNotEmpty() -> {
-
-                                listItems = state.interviewee.map {
-                                    "${it.name} ${it.lastName}"
-                                }.toTypedArray()
-                                checkedItems = BooleanArray(state.interviewee.size)
-
-                                with(binding.include) {
-                                    tvIntervieweeFilter.isEnabled = true
-                                    ivIntervieweeFilter.isEnabled = true
-
-                                    ivIntervieweeFilter.setOnClickListener {
-                                        configIntervieweeFilterDialog(
-                                            state.interviewee,
-                                            listItems.toList()
-                                        )
-                                    }
-                                    tvIntervieweeFilter.setOnClickListener {
-                                        configIntervieweeFilterDialog(
-                                            state.interviewee,
-                                            listItems.toList()
-                                        )
-                                    }
-                                }
                             }
                         }
                     }

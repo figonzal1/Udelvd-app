@@ -8,7 +8,7 @@
         android:id="@+id/filter_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:behavior_peekHeight="1130dp"
+        app:behavior_peekHeight="30dp"
         app:cardElevation="8dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -123,7 +123,7 @@
                 android:lines="1"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="Proyectos"
+                android:text="@string/proyectos"
                 android:textAppearance="?attr/textAppearanceSubtitle1"
                 app:layout_constraintEnd_toStartOf="@+id/iv_interviewee_filter"
                 app:layout_constraintStart_toStartOf="@+id/tv_name"
@@ -144,7 +144,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Project filter icon"
+                android:contentDescription="@string/project_filter_icon"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_project_filter"

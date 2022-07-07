@@ -14,6 +14,7 @@ import cl.udelvd.R
 import cl.udelvd.databinding.FragmentNewStatsBinding
 import cl.udelvd.models.Emoticon
 import cl.udelvd.refactor.interviewee_feature.domain.model.Interviewee
+import cl.udelvd.refactor.project_feature.domain.model.Project
 import cl.udelvd.refactor.stats_feature.data.remote.dto.EventsByEmotionsDTO
 import cl.udelvd.refactor.stats_feature.data.remote.dto.IntervieweeGenreDTO
 import cl.udelvd.viewmodels.NewEventViewModel
@@ -42,8 +43,14 @@ class StatsFragment : Fragment() {
 
     //Entrevistados
     private var selectedInterviewees: MutableList<Interviewee> = mutableListOf()
-    private var listItems: Array<String> = arrayOf()
-    private lateinit var checkedItems: BooleanArray
+    private var listIntervieweeItems: Array<String> = arrayOf()
+    private lateinit var checkedIntervieweesItems: BooleanArray
+
+    //Proyectos
+    private var selectedProjects: MutableList<Project> = mutableListOf()
+    private var listProjectItems: Array<String> = arrayOf()
+    private lateinit var checkedProjectItems: BooleanArray
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -148,23 +155,43 @@ class StatsFragment : Fragment() {
 
             statsViewModel.projectState
                 .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
-                .collect {
+                .collect { state ->
 
                     when {
-                        it.isLoading -> {}
-                        it.projectList.isNotEmpty() -> {
-                            //configProjectFilterDialog()
+                        state.isLoading -> {
+                            with(binding.include) {
+                                tvProjectFilter.isEnabled = false
+                                ivProjectFilter.isEnabled = false
+                            }
+                        }
+                        state.projectList.isNotEmpty() -> {
+                            listProjectItems = state.projectList.map {
+                                it.name
+                            }.toTypedArray()
+                            checkedProjectItems = BooleanArray(state.projectList.size)
+
+                            with(binding.include) {
+                                tvProjectFilter.isEnabled = true
+                                ivProjectFilter.isEnabled = true
+
+                                ivProjectFilter.setOnClickListener {
+                                    configProjectFilterDialog(
+                                        state.projectList,
+                                        listProjectItems.toList()
+                                    )
+                                }
+                                tvProjectFilter.setOnClickListener {
+                                    configProjectFilterDialog(
+                                        state.projectList,
+                                        listProjectItems.toList()
+                                    )
+                                }
+                            }
                         }
                     }
                 }
         }
     }
-
-    /*private fun configProjectFilterDialog() {
-        AlertDialog.Builder(requireActivity())
-            .setTitle("Select a project")
-            .setMultiChoiceItems()
-    }*/
 
     private fun processIntervieweeList() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -175,15 +202,17 @@ class StatsFragment : Fragment() {
 
                     when {
                         state.isLoading -> {
-                            binding.include.tvIntervieweeFilter.isEnabled = false
-                            binding.include.ivIntervieweeFilter.isEnabled = false
+                            with(binding.include) {
+                                tvIntervieweeFilter.isEnabled = false
+                                ivIntervieweeFilter.isEnabled = false
+                            }
                         }
                         state.interviewee.isNotEmpty() -> {
 
-                            listItems = state.interviewee.map {
+                            listIntervieweeItems = state.interviewee.map {
                                 "${it.name} ${it.lastName}"
                             }.toTypedArray()
-                            checkedItems = BooleanArray(state.interviewee.size)
+                            checkedIntervieweesItems = BooleanArray(state.interviewee.size)
 
                             with(binding.include) {
                                 tvIntervieweeFilter.isEnabled = true
@@ -192,13 +221,13 @@ class StatsFragment : Fragment() {
                                 ivIntervieweeFilter.setOnClickListener {
                                     configIntervieweeFilterDialog(
                                         state.interviewee,
-                                        listItems.toList()
+                                        listIntervieweeItems.toList()
                                     )
                                 }
                                 tvIntervieweeFilter.setOnClickListener {
                                     configIntervieweeFilterDialog(
                                         state.interviewee,
-                                        listItems.toList()
+                                        listIntervieweeItems.toList()
                                     )
                                 }
                             }
@@ -276,6 +305,50 @@ class StatsFragment : Fragment() {
         statsViewModel.getIntervieweeWithEvents("Bearer $token")
     }
 
+    private fun configProjectFilterDialog(
+        projectList: List<Project>,
+        selectedItems: List<String>
+    ) {
+        AlertDialog.Builder(requireActivity())
+            .setTitle(getString(R.string.select_project))
+            .setCancelable(false)
+            .setMultiChoiceItems(listProjectItems, checkedProjectItems) { _, which, isChecked ->
+                checkedProjectItems[which] = isChecked
+            }.setPositiveButton(
+                getString(R.string.ok)
+            ) { _, _ ->
+                binding.include.tvProjectFilter.text = ""
+
+                selectedProjects = mutableListOf()
+
+                for (i in checkedProjectItems.indices) {
+                    if (checkedProjectItems[i]) {
+
+                        binding.include.tvProjectFilter.text =
+                            "${binding.include.tvProjectFilter.text} ${selectedItems[i]}, "
+
+                        projectList.find {
+                            it.name == selectedItems[i]
+                        }?.let { project ->
+                            selectedProjects.add(project)
+                        }
+                    }
+                }
+            }
+            .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setNeutralButton(getString(R.string.DIALOG_NEUTRAL_BTN_CLEAR)) { _, _ ->
+                for (i in checkedIntervieweesItems.indices) {
+                    checkedIntervieweesItems[i] = false
+                }
+                binding.include.tvIntervieweeFilter.text =
+                    getString(R.string.interviewees)
+                selectedInterviewees.clear()
+            }.create()
+            .show()
+    }
+
     /**
      * function tha build AlertDialog for interviewee
      */
@@ -288,18 +361,18 @@ class StatsFragment : Fragment() {
             .setTitle(getString(R.string.title_dialog_selected_interviewee))
             .setCancelable(false)
             .setMultiChoiceItems(
-                listItems, checkedItems
+                listIntervieweeItems, checkedIntervieweesItems
             ) { _, which, isChecked ->
-                checkedItems[which] = isChecked
+                checkedIntervieweesItems[which] = isChecked
             }.setPositiveButton(
-                "OK"
+                getString(R.string.ok)
             ) { _, _ ->
                 binding.include.tvIntervieweeFilter.text = ""
 
                 selectedInterviewees = mutableListOf()
 
-                for (i in checkedItems.indices) {
-                    if (checkedItems[i]) {
+                for (i in checkedIntervieweesItems.indices) {
+                    if (checkedIntervieweesItems[i]) {
 
                         binding.include.tvIntervieweeFilter.text =
                             "${binding.include.tvIntervieweeFilter.text} ${selectedItems[i]}, "
@@ -316,8 +389,8 @@ class StatsFragment : Fragment() {
                 dialog.dismiss()
             }
             .setNeutralButton(getString(R.string.DIALOG_NEUTRAL_BTN_CLEAR)) { _, _ ->
-                for (i in checkedItems.indices) {
-                    checkedItems[i] = false
+                for (i in checkedIntervieweesItems.indices) {
+                    checkedIntervieweesItems[i] = false
                 }
                 binding.include.tvIntervieweeFilter.text =
                     getString(R.string.interviewees)
@@ -352,7 +425,6 @@ class StatsFragment : Fragment() {
                     else -> ""
                 }
 
-
                 statsViewModel.getStats(
                     "Bearer $token",
                     idSelectedEmoticon,
@@ -360,15 +432,16 @@ class StatsFragment : Fragment() {
                     selectedInterviewees
                 )
 
-                Toast.makeText(requireContext(), "Filter btn clicked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Filter btn clicked", Toast.LENGTH_SHORT)
+                    .show()
             }
 
             btnClear.setOnClickListener {
 
                 //INTERVIEWEES
                 tvIntervieweeFilter.text = getString(R.string.interviewees)
-                for (i in checkedItems.indices) {
-                    checkedItems[i] = false
+                for (i in checkedIntervieweesItems.indices) {
+                    checkedIntervieweesItems[i] = false
                 }
                 selectedInterviewees.clear()
 
@@ -376,7 +449,10 @@ class StatsFragment : Fragment() {
                 emoticonRadioGroup.clearCheck()
 
                 //GENDER
-                etIntervieweeGenre.setText(etIntervieweeGenre.adapter.getItem(0).toString(), false)
+                etIntervieweeGenre.setText(
+                    etIntervieweeGenre.adapter.getItem(0).toString(),
+                    false
+                )
 
             }
         }

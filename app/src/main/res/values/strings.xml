@@ -645,6 +645,10 @@
     <string name="interviewee_filter_icon">Interviewee filter icon</string>
     <string name="title_dialog_selected_interviewee">Selected Interviewee</string>
     <string name="clear_all">Clear all</string>
+    <string name="proyectos">Projects</string>
+    <string name="project_filter_icon">Project filter icon</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="select_project">Select a project</string>
 
 
 </resources>

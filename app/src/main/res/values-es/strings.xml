@@ -271,5 +271,9 @@
     <string name="title_dialog_selected_interviewee">Selecciona entrevistados</string>
     <string name="interviewee_filter_icon">Icono de filtro de entrevistador</string>
     <string name="DIALOG_NEUTRAL_BTN_CLEAR">LIMPIAR</string>
+    <string name="clear_all">Limpiar</string>
+    <string name="proyectos">Proyectos</string>
+    <string name="project_filter_icon">Icono filtro proyectos</string>
+    <string name="select_project">Selecciona un proyecto</string>
 
 </resources>

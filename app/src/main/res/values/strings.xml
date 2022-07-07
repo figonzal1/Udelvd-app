@@ -644,6 +644,7 @@
     <string name="interviewees">Interviewees</string>
     <string name="interviewee_filter_icon">Interviewee filter icon</string>
     <string name="title_dialog_selected_interviewee">Selected Interviewee</string>
+    <string name="clear_all">Clear all</string>
 
 
 </resources>

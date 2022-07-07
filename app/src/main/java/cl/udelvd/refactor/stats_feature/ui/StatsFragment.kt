@@ -41,7 +41,7 @@ class StatsFragment : Fragment() {
     private var emoticonsList: MutableList<Emoticon> = arrayListOf()
 
     //Entrevistados
-    private lateinit var selectedInterviewees: MutableList<Interviewee>
+    private var selectedInterviewees: MutableList<Interviewee> = mutableListOf()
     private var listItems: Array<String> = arrayOf()
     private lateinit var checkedItems: BooleanArray
 
@@ -361,6 +361,23 @@ class StatsFragment : Fragment() {
                 )
 
                 Toast.makeText(requireContext(), "Filter btn clicked", Toast.LENGTH_SHORT).show()
+            }
+
+            btnClear.setOnClickListener {
+
+                //INTERVIEWEES
+                tvIntervieweeFilter.text = getString(R.string.interviewees)
+                for (i in checkedItems.indices) {
+                    checkedItems[i] = false
+                }
+                selectedInterviewees.clear()
+
+                //EMOTICONS
+                emoticonRadioGroup.clearCheck()
+
+                //GENDER
+                etIntervieweeGenre.setText(etIntervieweeGenre.adapter.getItem(0).toString(), false)
+
             }
         }
     }

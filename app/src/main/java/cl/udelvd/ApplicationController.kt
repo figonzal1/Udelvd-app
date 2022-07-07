@@ -2,6 +2,7 @@ package cl.udelvd
 
 import android.app.Application
 import cl.udelvd.refactor.interviewee_feature.data.remote.IntervieweeAPI
+import cl.udelvd.refactor.project_feature.data.remote.ProjectAPI
 import cl.udelvd.refactor.stats_feature.data.remote.StatsAPI
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -33,6 +34,7 @@ class ApplicationController : Application() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-    val statsApi = udelvdAPIService.create(StatsAPI::class.java)
-    val intervieweesApi = udelvdAPIService.create(IntervieweeAPI::class.java)
+    val statsApi: StatsAPI = udelvdAPIService.create(StatsAPI::class.java)
+    val intervieweesApi: IntervieweeAPI = udelvdAPIService.create(IntervieweeAPI::class.java)
+    val projectApi: ProjectAPI = udelvdAPIService.create(ProjectAPI::class.java)
 }

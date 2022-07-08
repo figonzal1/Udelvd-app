@@ -4,6 +4,5 @@ class ProjectRemoteDataSource(
     private val projectAPI: ProjectAPI
 ) {
 
-    suspend fun getProjects(authToken: String) =
-        projectAPI.getProjects(authToken).body()?.attributes
+    suspend fun getProjects(authToken: String) = projectAPI.getProjects(authToken).body()?.data
 }

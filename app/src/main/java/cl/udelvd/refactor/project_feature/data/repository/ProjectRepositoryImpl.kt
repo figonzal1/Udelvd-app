@@ -21,7 +21,8 @@ class ProjectRepositoryImpl(
 
         try {
 
-            val projects = projectRemoteDataSource.getProjects(authToken)?.map { it.toDomain() }
+            val projects =
+                projectRemoteDataSource.getProjects(authToken)?.map { it.attributes.toDomain() }
 
             when {
                 !projects.isNullOrEmpty() -> emit(StatusAPI.Success(projects))

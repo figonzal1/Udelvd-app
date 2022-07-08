@@ -2,6 +2,7 @@ package cl.udelvd.refactor.stats_feature.data.repository
 
 import cl.udelvd.refactor.StatusAPI
 import cl.udelvd.refactor.interviewee_feature.domain.model.Interviewee
+import cl.udelvd.refactor.project_feature.domain.model.Project
 import cl.udelvd.refactor.stats_feature.data.remote.StatsAttributesResult
 import cl.udelvd.refactor.stats_feature.data.remote.StatsRemoteDataSource
 import cl.udelvd.refactor.stats_feature.domain.repository.StatsRepository
@@ -21,7 +22,8 @@ class StatsRepositoryImpl(
         authToken: String,
         idSelectedEmoticon: Int,
         genreLetter: String,
-        filterInterviewees: List<Interviewee>
+        selectedProjects: List<Project>,
+        selectedInterviewees: List<Interviewee>
     ): Flow<StatusAPI<StatsAttributesResult>> = flow {
 
         emit(StatusAPI.Loading())
@@ -32,7 +34,8 @@ class StatsRepositoryImpl(
                 authToken,
                 idSelectedEmoticon,
                 genreLetter,
-                filterInterviewees
+                selectedProjects,
+                selectedInterviewees
             )
 
             stats?.let {

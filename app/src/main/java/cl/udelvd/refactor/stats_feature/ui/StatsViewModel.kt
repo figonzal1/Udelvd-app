@@ -39,7 +39,8 @@ class StatsViewModel(
         authToken: String,
         idSelectedEmoticon: Int = -1,
         genreLetter: String = "",
-        filterInterviewees: List<Interviewee>
+        selectedProjects: List<Project>,
+        selectedInterviewees: List<Interviewee>
     ) {
 
         viewModelScope.launch {
@@ -48,7 +49,8 @@ class StatsViewModel(
                 authToken,
                 idSelectedEmoticon,
                 genreLetter,
-                filterInterviewees
+                selectedProjects,
+                selectedInterviewees
             ).collect {
 
                 when (it) {
@@ -76,10 +78,10 @@ class StatsViewModel(
         }
     }
 
-    fun getIntervieweeWithEvents(authToken: String) {
+    fun getIntervieweeWithEvents(authToken: String, selectedProjects: MutableList<Project>) {
         viewModelScope.launch {
 
-            getIntervieweeWithEventsUseCase(authToken).collect {
+            getIntervieweeWithEventsUseCase(authToken, selectedProjects).collect {
 
                 when (it) {
 

@@ -197,6 +197,9 @@ class StatsFragment : Fragment() {
                             with(binding.include) {
                                 tvIntervieweeFilter.isEnabled = false
                                 ivIntervieweeFilter.isEnabled = false
+
+                                pbInterviewees.visibility = View.VISIBLE
+                                ivIntervieweeFilter.visibility = View.GONE
                             }
                         }
                         state.interviewee.isNotEmpty() -> {
@@ -209,6 +212,9 @@ class StatsFragment : Fragment() {
                             with(binding.include) {
                                 tvIntervieweeFilter.isEnabled = true
                                 ivIntervieweeFilter.isEnabled = true
+
+                                ivIntervieweeFilter.visibility = View.VISIBLE
+                                pbInterviewees.visibility = View.GONE
 
                                 ivIntervieweeFilter.setOnClickListener {
                                     configIntervieweeFilterDialog(
@@ -227,7 +233,7 @@ class StatsFragment : Fragment() {
                     }
                 }
         }
-        statsViewModel.getIntervieweeWithEvents("Bearer $token")
+        statsViewModel.getIntervieweeWithEvents("Bearer $token", selectedProjects)
     }
 
     private fun processProjects() {
@@ -242,6 +248,9 @@ class StatsFragment : Fragment() {
                             with(binding.include) {
                                 tvProjectFilter.isEnabled = false
                                 ivProjectFilter.isEnabled = false
+
+                                ivProjectFilter.visibility = View.GONE
+                                pbProjects.visibility = View.VISIBLE
                             }
                         }
                         state.projectList.isNotEmpty() -> {
@@ -253,6 +262,9 @@ class StatsFragment : Fragment() {
                             with(binding.include) {
                                 tvProjectFilter.isEnabled = true
                                 ivProjectFilter.isEnabled = true
+
+                                ivProjectFilter.visibility = View.VISIBLE
+                                pbProjects.visibility = View.GONE
 
                                 ivProjectFilter.setOnClickListener {
                                     configProjectFilterDialog(
@@ -337,6 +349,7 @@ class StatsFragment : Fragment() {
                     "Bearer $token",
                     idSelectedEmoticon,
                     genreLetter,
+                    selectedProjects,
                     selectedInterviewees
                 )
             }
@@ -358,6 +371,14 @@ class StatsFragment : Fragment() {
                     etIntervieweeGenre.adapter.getItem(0).toString(),
                     false
                 )
+
+                //CLEAR Projects
+                for (i in checkedProjectItems.indices) {
+                    checkedProjectItems[i] = false
+                }
+                binding.include.tvProjectFilter.text =
+                    getString(R.string.proyectos)
+                selectedProjects.clear()
 
             }
         }
@@ -425,6 +446,21 @@ class StatsFragment : Fragment() {
                         }
                     }
                 }
+
+                //REMOVE last comma
+                binding.include.tvProjectFilter.apply {
+                    text = text.dropLast(2)
+                }
+
+                //CLEAN INTERVIEWEES SELECTION
+                for (i in checkedIntervieweesItems.indices) {
+                    checkedIntervieweesItems[i] = false
+                }
+                binding.include.tvIntervieweeFilter.text =
+                    getString(R.string.interviewees)
+                selectedInterviewees.clear()
+
+                statsViewModel.getIntervieweeWithEvents("Bearer $token", selectedProjects)
             }
             .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN)) { dialog, _ ->
                 dialog.dismiss()
@@ -436,6 +472,8 @@ class StatsFragment : Fragment() {
                 binding.include.tvProjectFilter.text =
                     getString(R.string.proyectos)
                 selectedProjects.clear()
+
+                statsViewModel.getIntervieweeWithEvents("Bearer $token", selectedProjects)
             }.create()
             .show()
     }
@@ -474,6 +512,9 @@ class StatsFragment : Fragment() {
                             selectedInterviewees.add(interviewee)
                         }
                     }
+                }
+                binding.include.tvIntervieweeFilter.apply {
+                    text = text.dropLast(2)
                 }
             }
             .setNegativeButton(getString(R.string.DIALOG_NEGATIVE_BTN)) { dialog, _ ->

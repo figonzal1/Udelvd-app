@@ -1,9 +1,10 @@
 package cl.udelvd.refactor.project_feature.domain.model
 
 import androidx.annotation.Keep
+import cl.udelvd.refactor.core.domain.model.Domain
 
 @Keep
 data class Project(
-    val id: Int,
+    override val id: Int,
     val name: String
-)
+) : Domain

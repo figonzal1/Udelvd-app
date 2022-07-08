@@ -50,5 +50,9 @@ interface StatsAPI {
         @Path(value = "ids", encoded = true) ids: String
     ): Response<RootResult<StatsDataResult>>
 
+    @GET("/estadisticas/proyectos/{ids}")
+    suspend fun getStatsByProjects(
+        @Path(value = "ids", encoded = true) ids: String
+    ): Response<RootResult<StatsDataResult>>
 
 }

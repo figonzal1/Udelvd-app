@@ -10,6 +10,53 @@ interface StatsAPI {
     @GET("/estadisticas/")
     suspend fun getStats(): Response<RootResult<StatsDataResult>>
 
+    @GET("/estadisticas/emoticon/{id_emoticon}/genero/{nombre}/entrevistados/{ids_entrevistados}/proyectos/{ids_proyectos}")
+    suspend fun getStatsByEmoticonAndGenreAndIntervieweesAndProjects(
+        @Path("id_emoticon") idSelectedEmoticon: Int,
+        @Path("nombre") genreLetter: String,
+        @Path(value = "ids_proyectos") projectsIds: String,
+        @Path(value = "ids_entrevistados") intervieweeIds: String
+    ): Response<RootResult<StatsDataResult>>
+
+    @GET("/estadisticas/emoticon/{id_emoticon}/genero/{nombre}/proyectos/{ids_proyectos}")
+    fun getStatsByEmoticonAndGenreAndProjects(
+        @Path("id_emoticon") idSelectedEmoticon: Int,
+        @Path("nombre") genreLetter: String,
+        @Path(value = "ids_proyectos") projectsIds: String
+    ): Response<RootResult<StatsDataResult>>
+
+    @GET("/estadisticas/emoticon/{id_emoticon}/entrevistados/{ids_entrevistados}/proyectos/{ids_proyectos}")
+    fun getStatsByEmoticonAndIntervieweesAndProjects(
+        @Path("id_emoticon") idSelectedEmoticon: Int,
+        @Path(value = "ids_proyectos") projectsIds: String,
+        @Path(value = "ids_entrevistados") intervieweeIds: String
+    ): Response<RootResult<StatsDataResult>>
+
+    @GET("/estadisticas/genero/{nombre}/entrevistados/{ids_entrevistados}/proyectos/{ids_proyectos}")
+    fun getStatsByGenreAndIntervieweesAndProjects(
+        @Path("nombre") genreLetter: String,
+        @Path(value = "ids_proyectos") projectsIds: String,
+        @Path(value = "ids_entrevistados") intervieweeIds: String
+    ): Response<RootResult<StatsDataResult>>
+
+    @GET("/estadisticas/emoticon/{id_emoticon}/proyectos/{ids_proyectos}")
+    fun getStatsByEmoticonAndProjects(
+        @Path("id_emoticon") idSelectedEmoticon: Int,
+        @Path(value = "ids_proyectos") projectsIds: String
+    ): Response<RootResult<StatsDataResult>>
+
+    @GET("/estadisticas/genero/{nombre}/proyectos/{ids_proyectos}")
+    fun getStatsByGenreAndProjects(
+        @Path("nombre") genreLetter: String,
+        @Path(value = "ids_proyectos") projectsIds: String
+    ): Response<RootResult<StatsDataResult>>
+
+    @GET("/estadisticas/entrevistados/{ids_entrevistados}/proyectos/{ids_proyectos}")
+    fun getStatsByIntervieweesAndProjects(
+        @Path(value = "ids_proyectos") projectIds: String,
+        @Path(value = "ids_entrevistados") intervieweeIds: String
+    ): Response<RootResult<StatsDataResult>>
+
     @GET("/estadisticas/emoticon/{id_emoticon}/genero/{nombre}/entrevistados/{ids}")
     suspend fun getStatsByEmoticonAndGenreAndInterviewees(
         @Path("id_emoticon") idEmoticon: Int,

@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cl.udelvd.ApplicationController
+import cl.udelvd.refactor.emoticons_feature.data.remote.EmoticonRemoteDataSource
+import cl.udelvd.refactor.emoticons_feature.data.repository.EmoticonRepositoryImpl
+import cl.udelvd.refactor.emoticons_feature.domain.use_case.GetEmoticonByLanguage
 import cl.udelvd.refactor.interviewee_feature.data.remote.IntervieweeRemoteDataSource
 import cl.udelvd.refactor.interviewee_feature.data.repository.IntervieweeRepositoryImpl
 import cl.udelvd.refactor.interviewee_feature.domain.use_case.GetIntervieweeWithEventsUseCase
@@ -32,6 +35,9 @@ class ViewModelFactory(
         val projectApi = app.projectApi
         val projectRemoteDataSource = ProjectRemoteDataSource(projectApi)
 
+        val emoticonApi = app.emoticonApi
+        val emoticonRemoteDataSource = EmoticonRemoteDataSource(emoticonApi)
+
         when {
             modelClass.isAssignableFrom(StatsViewModel::class.java) -> {
                 return StatsViewModel(
@@ -39,7 +45,8 @@ class ViewModelFactory(
                     GetIntervieweeWithEventsUseCase(
                         IntervieweeRepositoryImpl(intervieweeRemoteDataSource)
                     ),
-                    GetProjectUseCase(ProjectRepositoryImpl(projectRemoteDataSource))
+                    GetProjectUseCase(ProjectRepositoryImpl(projectRemoteDataSource)),
+                    GetEmoticonByLanguage(EmoticonRepositoryImpl(emoticonRemoteDataSource))
                 ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class")

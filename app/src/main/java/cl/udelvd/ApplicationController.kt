@@ -1,6 +1,7 @@
 package cl.udelvd
 
 import android.app.Application
+import cl.udelvd.refactor.emoticons_feature.data.remote.EmoticonsAPI
 import cl.udelvd.refactor.interviewee_feature.data.remote.IntervieweeAPI
 import cl.udelvd.refactor.project_feature.data.remote.ProjectAPI
 import cl.udelvd.refactor.stats_feature.data.remote.StatsAPI
@@ -37,4 +38,5 @@ class ApplicationController : Application() {
     val statsApi: StatsAPI = udelvdAPIService.create(StatsAPI::class.java)
     val intervieweesApi: IntervieweeAPI = udelvdAPIService.create(IntervieweeAPI::class.java)
     val projectApi: ProjectAPI = udelvdAPIService.create(ProjectAPI::class.java)
+    val emoticonApi: EmoticonsAPI = udelvdAPIService.create(EmoticonsAPI::class.java)
 }

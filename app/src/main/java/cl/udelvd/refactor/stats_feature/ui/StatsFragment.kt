@@ -8,15 +8,18 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import cl.udelvd.R
 import cl.udelvd.databinding.FragmentNewStatsBinding
-import cl.udelvd.models.Emoticon
+import cl.udelvd.refactor.emoticons_feature.domain.model.Emoticon
 import cl.udelvd.refactor.interviewee_feature.domain.model.Interviewee
 import cl.udelvd.refactor.project_feature.domain.model.Project
 import cl.udelvd.refactor.stats_feature.data.remote.dto.EventsByEmotionsDTO
 import cl.udelvd.refactor.stats_feature.data.remote.dto.IntervieweeGenreDTO
-import cl.udelvd.viewmodels.NewEventViewModel
+import cl.udelvd.utils.Utils
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
@@ -29,7 +32,6 @@ class StatsFragment : Fragment() {
 
     private var isRefresh: Boolean = false
     private lateinit var statsViewModel: StatsViewModel
-    private var emoticonViewModel: NewEventViewModel? = null
 
     private var _binding: FragmentNewStatsBinding? = null
     private val binding get() = _binding!!
@@ -38,7 +40,7 @@ class StatsFragment : Fragment() {
 
     //EMOTICONES
     private var idSelectedEmoticon: Int = -1
-    private var emoticonsList: MutableList<Emoticon> = arrayListOf()
+    private var emoticonList: List<Emoticon> = arrayListOf()
 
     //Entrevistados
     private var selectedInterviewees: MutableList<Interviewee> = mutableListOf()
@@ -57,7 +59,10 @@ class StatsFragment : Fragment() {
     ): View {
         _binding = FragmentNewStatsBinding.inflate(inflater, container, false)
 
-        initViewModels()
+        statsViewModel = ViewModelProvider(
+            requireActivity(),
+            ViewModelFactory(requireActivity().application)
+        )[StatsViewModel::class.java]
 
         val sharedPreferences = requireContext().getSharedPreferences(
             getString(R.string.SHARED_PREF_MASTER_KEY),
@@ -71,6 +76,8 @@ class StatsFragment : Fragment() {
         processErrorStates()
 
         processIntervieweeList()
+
+        processEmoticonsList()
 
         processProjects()
 
@@ -151,27 +158,57 @@ class StatsFragment : Fragment() {
         return binding.root
     }
 
-    private fun initViewModels() {
-        statsViewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelFactory(requireActivity().application)
-        )[StatsViewModel::class.java]
+    private fun processEmoticonsList() {
+        viewLifecycleOwner.lifecycleScope.launch {
 
-        emoticonViewModel = ViewModelProvider(this)[NewEventViewModel::class.java]
+            statsViewModel.emoticonState
+                .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
+                .collect {
 
-        //LOAD EMOTICONS
-        emoticonViewModel!!.loadEmoticons().observe(viewLifecycleOwner) { emoticons ->
+                    when {
+                        it.isLoading -> {
 
-            if (emoticons != null && emoticons.size > 0) {
-                emoticonsList = emoticons
+                            with(binding.include) {
 
-                Timber.d(
-                    getString(R.string.TAG_VIEW_MODEL_EMOTICON),
-                    getString(R.string.VIEW_MODEL_LISTA_ENTREVISTADO_MSG)
-                )
-            }
+                                //Show progress bar
+                                pbEmoticons.visibility = View.VISIBLE
 
+                                //HIDE EMOJIS
+                                View.GONE.apply {
+                                    ivAfraid.visibility = this
+                                    ivHappy.visibility = this
+                                    ivAngry.visibility = this
+                                    ivSad.visibility = this
+
+                                    emoticonRadioGroup.visibility = this
+                                }
+                            }
+                        }
+                        !it.isLoading && it.emoticonList.isNotEmpty() -> {
+
+                            with(binding.include) {
+
+                                //Show progress bar
+                                pbEmoticons.visibility = View.GONE
+
+                                //HIDE EMOJIS
+                                View.VISIBLE.apply {
+                                    ivAfraid.visibility = this
+                                    ivHappy.visibility = this
+                                    ivAngry.visibility = this
+                                    ivSad.visibility = this
+
+                                    emoticonRadioGroup.visibility = this
+                                }
+
+                                emoticonList = it.emoticonList.toMutableList()
+                            }
+                        }
+                    }
+                }
         }
+
+        statsViewModel.getEmoticons("Bearer $token", Utils.getLanguage(requireContext()))
     }
 
     private fun processErrorStates() {
@@ -202,7 +239,7 @@ class StatsFragment : Fragment() {
                                 ivIntervieweeFilter.visibility = View.GONE
                             }
                         }
-                        state.interviewee.isNotEmpty() -> {
+                        !state.isLoading && state.interviewee.isNotEmpty() -> {
 
                             listIntervieweeItems = state.interviewee.map {
                                 "${it.name} ${it.lastName}"
@@ -253,7 +290,7 @@ class StatsFragment : Fragment() {
                                 pbProjects.visibility = View.VISIBLE
                             }
                         }
-                        state.projectList.isNotEmpty() -> {
+                        !state.isLoading && state.projectList.isNotEmpty() -> {
                             listProjectItems = state.projectList.map {
                                 it.name
                             }.toTypedArray()
@@ -295,8 +332,12 @@ class StatsFragment : Fragment() {
                 .collect { statsState ->
 
                     when {
-                        statsState.isLoading -> {}
+                        statsState.isLoading -> {
+                            binding.generalStats.visibility = View.GONE
+                        }
                         else -> statsState.stats?.let {
+
+                            binding.generalStats.visibility = View.VISIBLE
 
                             it.basicInformation.apply {
 
@@ -389,10 +430,10 @@ class StatsFragment : Fragment() {
      */
     private fun findEmoticonId(checkedId: Int): Int {
         return when (checkedId) {
-            R.id.radio_happy -> emoticonsList.find { it.description!!.contains(getString(R.string.happiness)) }!!.id
-            R.id.radio_angry -> emoticonsList.find { it.description!!.contains(getString(R.string.anger)) }!!.id
-            R.id.radio_fear -> emoticonsList.find { it.description!!.contains(getString(R.string.fear)) }!!.id
-            R.id.radio_sad -> emoticonsList.find { it.description!!.contains(getString(R.string.sadness)) }!!.id
+            R.id.radio_happy -> emoticonList.find { it.description.contains(getString(R.string.happiness)) }!!.id
+            R.id.radio_angry -> emoticonList.find { it.description.contains(getString(R.string.anger)) }!!.id
+            R.id.radio_fear -> emoticonList.find { it.description.contains(getString(R.string.fear)) }!!.id
+            R.id.radio_sad -> emoticonList.find { it.description.contains(getString(R.string.sadness)) }!!.id
             else -> -1
         }
     }

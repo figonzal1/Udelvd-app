@@ -2,11 +2,10 @@ package cl.udelvd.refactor.stats_feature.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -72,6 +71,8 @@ class StatsFragment : Fragment() {
             getString(R.string.SHARED_PREF_TOKEN_LOGIN),
             ""
         )
+
+        configMenuProvider()
 
         processErrorStates()
 
@@ -156,6 +157,22 @@ class StatsFragment : Fragment() {
         binding.eventsChart.aa_drawChartWithChartOptions(options)*/
 
         return binding.root
+    }
+
+    private fun configMenuProvider() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_stats_fragment, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+
+                when (menuItem.itemId) {
+                    R.id.menu_refresh -> refreshBottomSheetData()
+                }
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun processEmoticonsList() {
@@ -380,6 +397,10 @@ class StatsFragment : Fragment() {
 
         with(binding.include) {
 
+            ivRefreshData.setOnClickListener {
+                refreshBottomSheetData()
+            }
+
             emoticonRadioGroup.setOnCheckedChangeListener { _, checkedId ->
                 idSelectedEmoticon = findEmoticonId(checkedId)
             }
@@ -430,6 +451,12 @@ class StatsFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun refreshBottomSheetData() {
+        statsViewModel.getEmoticons("Bearer $token", Utils.getLanguage(requireContext()))
+        statsViewModel.getIntervieweeWithEvents("Bearer $token", selectedProjects)
+        statsViewModel.getProjects("Bearer $token")
     }
 
     /**

@@ -345,7 +345,7 @@ public class IntervieweeListFragment extends Fragment implements SnackbarInterfa
     @Override
     public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull MenuInflater inflater) {
 
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_interviewee_list_fragment, menu);
         MenuItem menuItem = menu.findItem(R.id.menu_search);
 
         SearchView searchView = (SearchView) menuItem.getActionView();

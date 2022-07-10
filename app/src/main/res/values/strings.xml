@@ -650,6 +650,7 @@
     <string name="ok" translatable="false">OK</string>
     <string name="select_project">Select a project</string>
     <string name="to_show_charts_please_open_bottom_menu_and_press_filter_button">To show charts, please open bottom menu and press filter button</string>
+    <string name="stats_fragment_error_msg">Failed to load data, please refresh</string>
 
 
 </resources>

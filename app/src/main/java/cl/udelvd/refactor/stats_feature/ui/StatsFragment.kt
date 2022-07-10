@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -24,8 +25,8 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class StatsFragment : Fragment() {
 
@@ -233,8 +234,13 @@ class StatsFragment : Fragment() {
 
             statsViewModel.errorState
                 .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
-                .collect {
-                    Timber.d("Show error: $it")
+                .collectLatest {
+
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.stats_fragment_error_msg),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
         }
     }
@@ -402,7 +408,10 @@ class StatsFragment : Fragment() {
             }
 
             emoticonRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-                idSelectedEmoticon = findEmoticonId(checkedId)
+
+                if (binding.include.emoticonRadioGroup.isEnabled) {
+                    idSelectedEmoticon = findEmoticonId(checkedId)
+                }
             }
 
             btnFilter.setOnClickListener {

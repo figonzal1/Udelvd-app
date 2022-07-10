@@ -30,8 +30,13 @@ class ProjectRepositoryImpl(
 
         } catch (e: HttpException) {
             Timber.e(e.message())
+
+            emit(StatusAPI.Error("http exception"))
+
         } catch (e: IOException) {
             Timber.e(e.message)
+
+            emit(StatusAPI.Error("io exception"))
         }
     }.flowOn(Dispatchers.IO)
 }

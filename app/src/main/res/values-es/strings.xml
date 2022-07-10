@@ -275,5 +275,7 @@
     <string name="proyectos">Proyectos</string>
     <string name="project_filter_icon">Icono filtro proyectos</string>
     <string name="select_project">Selecciona un proyecto</string>
+    <string name="stats_fragment_error_msg">Error al cargar datos, por favor revisa tu conexion</string>
+    <string name="to_show_charts_please_open_bottom_menu_and_press_filter_button">Para mostrar los gráficos, por favor abre el menú inferior y presiona el botón de filtrar</string>
 
 </resources>

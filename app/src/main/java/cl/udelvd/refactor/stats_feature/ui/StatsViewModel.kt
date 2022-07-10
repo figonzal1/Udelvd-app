@@ -38,7 +38,7 @@ class StatsViewModel(
     private val _emoticonState = MutableStateFlow(EmoticonState())
     val emoticonState = _emoticonState.asStateFlow()
 
-    private val _errorState = Channel<String>()
+    private val _errorState = Channel<String>(1)
     val errorState = _errorState.receiveAsFlow()
 
 
@@ -74,7 +74,7 @@ class StatsViewModel(
                     }
                     is StatusAPI.Error -> {
 
-                        _errorState.send("Error al cargar los stats")
+                        _errorState.send("$it - stats")
 
                         _statsState.value = statsState.value.copy(
                             isLoading = false
@@ -104,7 +104,7 @@ class StatsViewModel(
                         )
                     }
                     is StatusAPI.Error -> {
-                        _errorState.send("Error al cargar los entrevistados")
+                        _errorState.send("$it - interviewees")
 
                         _intervieweeState.value = intervieweeState.value.copy(
                             isLoading = false
@@ -122,7 +122,7 @@ class StatsViewModel(
 
                 when (it) {
                     is StatusAPI.Error -> {
-                        _errorState.send("Error al cargar proyectos")
+                        _errorState.send("$it - projects")
 
                         _projectState.value = _projectState.value.copy(isLoading = false)
                     }
@@ -146,7 +146,7 @@ class StatsViewModel(
 
                 when (it) {
                     is StatusAPI.Error -> {
-                        _errorState.send("Error al cargar emoticones")
+                        _errorState.send("$it - emoticons")
 
                         _emoticonState.value = emoticonState.value.copy(
                             isLoading = false

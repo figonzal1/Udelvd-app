@@ -30,7 +30,7 @@ class StatsRepositoryImpl(
 
         try {
 
-            val stats = statsRemoteDataSource.getStats(
+            val stats: StatsAttributesResult? = statsRemoteDataSource.getStats(
                 authToken,
                 idSelectedEmoticon,
                 genreLetter,
@@ -38,14 +38,18 @@ class StatsRepositoryImpl(
                 selectedInterviewees
             )
 
-            stats?.let {
-                emit(StatusAPI.Success(it))
+            if (stats != null) {
+                emit(StatusAPI.Success(stats))
             }
 
         } catch (e: HttpException) {
             Timber.e(e.message())
+
+            emit(StatusAPI.Error("http exception"))
         } catch (e: IOException) {
             Timber.e(e.message)
+
+            emit(StatusAPI.Error("io exception"))
         }
     }.flowOn(Dispatchers.IO)
 }

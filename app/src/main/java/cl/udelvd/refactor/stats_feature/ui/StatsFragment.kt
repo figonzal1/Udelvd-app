@@ -333,27 +333,34 @@ class StatsFragment : Fragment() {
 
                     when {
                         statsState.isLoading -> {
-                            binding.generalStats.visibility = View.GONE
+                            binding.progressBarStats.visibility = View.VISIBLE
+                            binding.tvStatsMessage.visibility = View.GONE
+                            binding.ivBottomMenu.visibility = View.GONE
+
                         }
-                        else -> statsState.stats?.let {
+                        !statsState.isLoading && statsState.stats != null -> {
 
-                            binding.generalStats.visibility = View.VISIBLE
+                            with(statsState.stats) {
 
-                            it.basicInformation.apply {
+                                binding.generalStats.visibility = View.VISIBLE
+                                binding.progressBarStats.visibility = View.GONE
 
-                                binding.nInterviewee.text = String.format(
-                                    getString(R.string.n_entrevistados),
-                                    nInterviewees
-                                )
-                                binding.nEvents.text =
-                                    String.format(getString(R.string.n_eventos), nEvents)
+                                basicInformation.apply {
+
+                                    binding.nInterviewee.text = String.format(
+                                        getString(R.string.n_entrevistados),
+                                        nInterviewees
+                                    )
+                                    binding.nEvents.text =
+                                        String.format(getString(R.string.n_eventos), nEvents)
+                                }
+
+                                setGenderChart(intervieweeByGenre)
+
+                                setEmoticonEventsChart(eventsByEmotions)
+
+                                isRefresh = true
                             }
-
-                            setGenderChart(it.intervieweeByGenre)
-
-                            setEmoticonEventsChart(it.eventsByEmotions)
-
-                            isRefresh = true
                         }
                     }
                 }
@@ -575,6 +582,9 @@ class StatsFragment : Fragment() {
     private fun setEmoticonEventsChart(eventsByEmotions: EventsByEmotionsDTO) {
 
         with(binding) {
+
+            emoticonEventsPieChart.visibility = View.VISIBLE
+
             when {
                 isRefresh -> {
                     emoticonEventsPieChart.aa_onlyRefreshTheChartDataWithChartOptionsSeriesArray(
@@ -655,6 +665,9 @@ class StatsFragment : Fragment() {
     private fun setGenderChart(intervieweeByGenre: IntervieweeGenreDTO) {
 
         with(binding) {
+
+            genderPieChart.visibility = View.VISIBLE
+
             when {
                 isRefresh -> {
                     genderPieChart.aa_onlyRefreshTheChartDataWithChartOptionsSeriesArray(

@@ -2,7 +2,7 @@
     <string name="app_name">A day in the life of …</string>
 
     <!-- PRODUCTION-->
-    <string name="HEROKU_DOMAIN" translatable="false">https://undiaenlavidade.cl/</string>
+    <string name="HEROKU_DOMAIN" translatable="false">http://192.168.1.161/</string>
 
     <!-- DEV -->
     <!--<string name="HEROKU_DOMAIN" translatable="false">http://192.168.0.2/</string>-->

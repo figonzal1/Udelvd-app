@@ -3,11 +3,10 @@
 buildscript {
     repositories {
         google()
-        jcenter()
-        
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:7.0.4'
 
         // Check that you have the Google Services Gradle plugin v4.3.2 or later
         // (if not, add it).

@@ -10,14 +10,13 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import cl.udelvd.R;
 import cl.udelvd.views.fragments.IntervieweeListFragment;
-import cl.udelvd.views.fragments.StatsFragment;
 
 /**
  * Page Adapter used when paging is fixed (Main activity)
  */
 public class FragmentPageAdapter extends FragmentPagerAdapter {
 
-    private final String[] mTabs = new String[2];
+    private final String[] mTabs = new String[1];
     private final String msgLogin;
     private final Context context;
 
@@ -26,7 +25,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
         super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         mTabs[0] = context.getString(R.string.TAB_NAME_ENTREVISTADOS);
-        mTabs[1] = context.getString(R.string.TAB_NAME_ESTADISTICAS);
+        //mTabs[1] = context.getString(R.string.TAB_NAME_ESTADISTICAS);
         this.msgLogin = msgLogin;
         this.context = context;
     }
@@ -49,12 +48,12 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
 
                 break;
 
-            case 1:
+            /*case 1:
 
                 f = StatsFragment.newInstance();
 
                 break;
-
+*/
         }
         return f;
     }

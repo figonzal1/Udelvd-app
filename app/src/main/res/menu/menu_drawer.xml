@@ -73,11 +73,11 @@
                     android:icon="@drawable/ic_list_black_24dp"
                     android:title="@string/MENU_LISTA_ENTREVISTADOS" />
 
-                <item
+                <!--<item
                     android:id="@+id/menu_stats"
                     android:checkable="true"
                     android:icon="@drawable/ic_show_chart_black_24dp"
-                    android:title="@string/MENU_ESTADISTICAS" />
+                    android:title="@string/MENU_ESTADISTICAS" />-->
 
             </group>
         </menu>

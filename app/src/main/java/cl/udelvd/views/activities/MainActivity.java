@@ -215,13 +215,13 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
 
                 return true;
 
-            } else if (menuItem.getItemId() == R.id.menu_stats) {
+            } /*else if (menuItem.getItemId() == R.id.menu_stats) {
 
                 Objects.requireNonNull(tabLayout.getTabAt(1), "get tab 1 cannot be null").select();
                 drawerLayout.closeDrawer(GravityCompat.START, true);
 
                 return true;
-            }
+            }*/
 
             if (menuItem.getItemId() == R.id.menu_actions) {
 
@@ -300,9 +300,7 @@ public class MainActivity extends AppCompatActivity implements DeleteDialogListe
                     navigationView.setCheckedItem(R.id.menu_interviewees);
 
                 } else if (tab.getPosition() == 1) {
-
-                    navigationView.setCheckedItem(R.id.menu_stats);
-
+                    //navigationView.setCheckedItem(R.id.menu_stats);
                 }
             }
 
